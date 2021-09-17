@@ -72,13 +72,4 @@ export class DynamicJsonForm{
 }
 
 
-const forms = document.querySelectorAll('[data-id]');
-const formConfigsList=window.extendedforms;
-if(formConfigsList){
-  const ondigoForms=new DynamicJsonForm(formConfigsList, forms);
-  ondigoForms.componentsDictionary.set('Text', testField)
-  ondigoForms.init();
-}
-
-var dynamicForm=DynamicJsonForm;
 export default DynamicJsonForm;

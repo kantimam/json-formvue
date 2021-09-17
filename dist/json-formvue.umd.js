@@ -1,5 +1,14 @@
-module.exports =
-/******/ (function(modules) { // webpackBootstrap
+(function webpackUniversalModuleDefinition(root, factory) {
+	if(typeof exports === 'object' && typeof module === 'object')
+		module.exports = factory();
+	else if(typeof define === 'function' && define.amd)
+		define([], factory);
+	else if(typeof exports === 'object')
+		exports["json-formvue"] = factory();
+	else
+		root["json-formvue"] = factory();
+})((typeof self !== 'undefined' ? self : this), function() {
+return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
 /******/
@@ -24593,6 +24602,9 @@ var es_string_iterator = __webpack_require__("3ca3");
 // EXTERNAL MODULE: ./node_modules/core-js/modules/web.dom-collections.iterator.js
 var web_dom_collections_iterator = __webpack_require__("ddb0");
 
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.is-array.js
+var es_array_is_array = __webpack_require__("277d");
+
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.slice.js
 var es_array_slice = __webpack_require__("fb6a");
 
@@ -24628,6 +24640,7 @@ function _unsupportedIterableToArray(o, minLen) {
   if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);
 }
 // CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/createForOfIteratorHelper.js
+
 
 
 
@@ -24698,7 +24711,12 @@ function _classCallCheck(instance, Constructor) {
     throw new TypeError("Cannot call a class as a function");
   }
 }
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.define-property.js
+var es_object_define_property = __webpack_require__("7a82");
+
 // CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/createClass.js
+
+
 function _defineProperties(target, props) {
   for (var i = 0; i < props.length; i++) {
     var descriptor = props[i];
@@ -24715,6 +24733,7 @@ function _createClass(Constructor, protoProps, staticProps) {
   return Constructor;
 }
 // CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js
+
 function _defineProperty(obj, key, value) {
   if (key in obj) {
     Object.defineProperty(obj, key, {
@@ -24737,6 +24756,9 @@ var runtime = __webpack_require__("96cf");
 
 // EXTERNAL MODULE: ./node_modules/vue/dist/vue.runtime.esm.js
 var vue_runtime_esm = __webpack_require__("2b0e");
+
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.for-each.js
+var es_array_for_each = __webpack_require__("4160");
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/web.dom-collections.for-each.js
 var web_dom_collections_for_each = __webpack_require__("159b");
@@ -24769,6 +24791,7 @@ var es_array_map = __webpack_require__("d81d");
 var es_string_repeat = __webpack_require__("38cf");
 
 // CONCATENATED MODULE: ./node_modules/vuetify/lib/util/console.js
+
 
 
 
@@ -24956,10 +24979,14 @@ function install(Vue) {
     }
   });
 }
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.index-of.js
+var es_array_index_of = __webpack_require__("c975");
+
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.keys.js
 var es_object_keys = __webpack_require__("b64b");
 
 // CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/objectWithoutPropertiesLoose.js
+
 
 function _objectWithoutPropertiesLoose(source, excluded) {
   if (source == null) return {};
@@ -24976,6 +25003,7 @@ function _objectWithoutPropertiesLoose(source, excluded) {
   return target;
 }
 // CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/objectWithoutProperties.js
+
 
 
 function _objectWithoutProperties(source, excluded) {
@@ -24996,7 +25024,14 @@ function _objectWithoutProperties(source, excluded) {
 
   return target;
 }
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.create.js
+var es_object_create = __webpack_require__("b8bf");
+
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.set-prototype-of.js
+var es_object_set_prototype_of = __webpack_require__("131a");
+
 // CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/setPrototypeOf.js
+
 function _setPrototypeOf(o, p) {
   _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
     o.__proto__ = p;
@@ -25006,6 +25041,7 @@ function _setPrototypeOf(o, p) {
   return _setPrototypeOf(o, p);
 }
 // CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/inherits.js
+
 
 function _inherits(subClass, superClass) {
   if (typeof superClass !== "function" && superClass !== null) {
@@ -25028,6 +25064,7 @@ var es_reflect_construct = __webpack_require__("4ae1");
 var es_object_get_prototype_of = __webpack_require__("3410");
 
 // CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/getPrototypeOf.js
+
 
 function _getPrototypeOf(o) {
   _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
@@ -25200,7 +25237,7 @@ var default_preset = {
   rtl: false,
   theme: {
     dark: false,
-    default: 'light',
+    "default": 'light',
     disable: false,
     options: {
       cspNonce: undefined,
@@ -25232,6 +25269,7 @@ var default_preset = {
   }
 };
 // CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/arrayWithHoles.js
+
 function _arrayWithHoles(arr) {
   if (Array.isArray(arr)) return arr;
 }
@@ -25316,7 +25354,13 @@ var es_object_get_own_property_descriptor = __webpack_require__("e439");
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.get-own-property-descriptors.js
 var es_object_get_own_property_descriptors = __webpack_require__("dbb4");
 
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.define-properties.js
+var es_object_define_properties = __webpack_require__("1d1c");
+
 // CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/objectSpread2.js
+
+
+
 
 
 
@@ -25365,6 +25409,12 @@ function _objectSpread2(target) {
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.trim.js
 var es_string_trim = __webpack_require__("498a");
 
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.date.to-string.js
+var es_date_to_string = __webpack_require__("0d03");
+
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.every.js
+var es_array_every = __webpack_require__("a623");
+
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.split.js
 var es_string_split = __webpack_require__("1276");
 
@@ -25383,6 +25433,15 @@ var es_array_sort = __webpack_require__("4e82");
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.regexp.to-string.js
 var es_regexp_to_string = __webpack_require__("25f0");
 
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.some.js
+var es_array_some = __webpack_require__("45fc");
+
+// EXTERNAL MODULE: ./node_modules/core-js/modules/web.timers.js
+var web_timers = __webpack_require__("4795");
+
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.reduce.js
+var es_array_reduce = __webpack_require__("13d5");
+
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.number.to-fixed.js
 var es_number_to_fixed = __webpack_require__("b680");
 
@@ -25390,6 +25449,14 @@ var es_number_to_fixed = __webpack_require__("b680");
 var es_array_fill = __webpack_require__("cb29");
 
 // CONCATENATED MODULE: ./node_modules/vuetify/lib/util/helpers.js
+
+
+
+
+
+
+
+
 
 
 
@@ -25582,7 +25649,7 @@ function isObject(obj) {
 var keyCodes = Object.freeze({
   enter: 13,
   tab: 9,
-  delete: 46,
+  "delete": 46,
   esc: 27,
   space: 32,
   up: 38,
@@ -25817,8 +25884,9 @@ function clamp(value) {
   return Math.max(min, Math.min(max, value));
 }
 function padEnd(str, length) {
-  var char = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '0';
-  return str + char.repeat(Math.max(0, length - str.length));
+  var _char = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '0';
+
+  return str + _char.repeat(Math.max(0, length - str.length));
 }
 function chunk(str) {
   var size = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
@@ -25949,6 +26017,7 @@ var es_object_values = __webpack_require__("07ac");
 
 
 
+
 // Extensions
 
 var application_Application = /*#__PURE__*/function (_Service) {
@@ -26006,7 +26075,16 @@ var application_Application = /*#__PURE__*/function (_Service) {
   return Application;
 }(service_Service);
 application_Application.property = 'application';
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.function.bind.js
+var es_function_bind = __webpack_require__("c0b6");
+
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.parse-int.js
+var es_parse_int = __webpack_require__("e25e");
+
 // CONCATENATED MODULE: ./node_modules/vuetify/lib/services/breakpoint/index.js
+
+
+
 
 
 
@@ -26372,7 +26450,7 @@ var icons = {
   complete: 'M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z',
   cancel: 'M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z',
   close: 'M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z',
-  delete: 'M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z',
+  "delete": 'M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z',
   clear: 'M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z',
   success: 'M12,2C17.52,2 22,6.48 22,12C22,17.52 17.52,22 12,22C6.48,22 2,17.52 2,12C2,6.48 6.48,2 12,2M11,16.5L18,9.5L16.59,8.09L11,13.67L7.91,10.59L6.5,12L11,16.5Z',
   info: 'M13,9H11V7H13M13,17H11V11H13M12,2C6.48,2 2,6.48 2,12C2,17.52 6.48,22 12,22C17.52,22 22,17.52 22,12C22,6.48 17.52,2 12,2Z',
@@ -26409,7 +26487,7 @@ var md_icons = {
   complete: 'check',
   cancel: 'cancel',
   close: 'close',
-  delete: 'cancel',
+  "delete": 'cancel',
   clear: 'clear',
   success: 'check_circle',
   info: 'info',
@@ -26446,7 +26524,7 @@ var mdi_icons = {
   complete: 'mdi-check',
   cancel: 'mdi-close-circle',
   close: 'mdi-close',
-  delete: 'mdi-close-circle',
+  "delete": 'mdi-close-circle',
   clear: 'mdi-close',
   success: 'mdi-check-circle',
   info: 'mdi-information',
@@ -26483,7 +26561,7 @@ var fa_icons = {
   complete: 'fas fa-check',
   cancel: 'fas fa-times-circle',
   close: 'fas fa-times',
-  delete: 'fas fa-times-circle',
+  "delete": 'fas fa-times-circle',
   clear: 'fas fa-times-circle',
   success: 'fas fa-check-circle',
   info: 'fas fa-info-circle',
@@ -26520,7 +26598,7 @@ var fa4_icons = {
   complete: 'fa fa-check',
   cancel: 'fa fa-times-circle',
   close: 'fa fa-times',
-  delete: 'fa fa-times-circle',
+  "delete": 'fa fa-times-circle',
   clear: 'fa fa-times-circle',
   success: 'fa fa-check-circle',
   info: 'fa fa-info-circle',
@@ -26794,6 +26872,8 @@ function toXYZ(rgb) {
 
 
 
+
+
 // Utilities
 
 
@@ -26810,8 +26890,8 @@ function colorToInt(color) {
     var c = color[0] === '#' ? color.substring(1) : color;
 
     if (c.length === 3) {
-      c = c.split('').map(function (char) {
-        return char + char;
+      c = c.split('').map(function (_char) {
+        return _char + _char;
       }).join('');
     }
 
@@ -27524,6 +27604,7 @@ theme_Theme.property = 'theme';
 
 
 
+
  // Services
 
 
@@ -27597,6 +27678,7 @@ vue_runtime_esm["a" /* default */].use(framework_Vuetify);
 /* harmony default export */ var vuetify = (new framework_Vuetify({}));
 // CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/arrayWithoutHoles.js
 
+
 function _arrayWithoutHoles(arr) {
   if (Array.isArray(arr)) return _arrayLikeToArray(arr);
 }
@@ -27666,10 +27748,15 @@ function _asyncToGenerator(fn) {
 // EXTERNAL MODULE: ./node_modules/vuex/dist/vuex.esm.js
 var vuex_esm = __webpack_require__("2f62");
 
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.parse-float.js
+var es_parse_float = __webpack_require__("acd8");
+
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.regexp.constructor.js
 var es_regexp_constructor = __webpack_require__("4d63");
 
 // CONCATENATED MODULE: ./src/lib/util.js
+
+
 
 
 
@@ -27768,9 +27855,9 @@ var createValidatorByKey = function createValidatorByKey(validatorKey, vArgs, er
     RegularExpression: function RegularExpression(inputValue) {
       return !inputValue.length || validatorRegex(inputValue, errorMessage || "input must match following regular expression ".concat(vArgs.regularExpression), vArgs);
     },
-    default: null
+    "default": null
   };
-  return knownFunctions[validatorKey] || knownFunctions.default;
+  return knownFunctions[validatorKey] || knownFunctions["default"];
 };
 var validatorRequired = function validatorRequired(string, invalidMessage) {
   return !!string || invalidMessage;
@@ -27816,9 +27903,9 @@ var createCallbackList = function createCallbackList(callbacks) {
 var createCallbackByKey = function createCallbackByKey(callbackKey, callbackArgs) {
   // inject payload and error message into the selected validation function
   var knownCallbacks = {
-    default: testCallback(callbackArgs)
+    "default": testCallback(callbackArgs)
   };
-  return knownCallbacks[callbackKey] || knownCallbacks.default;
+  return knownCallbacks[callbackKey] || knownCallbacks["default"];
 };
 var testCallback = function testCallback(callbackArgs) {
   return new Promise(function (res, rej) {
@@ -27831,6 +27918,8 @@ var testCallback = function testCallback(callbackArgs) {
   });
 };
 // CONCATENATED MODULE: ./src/store/index.js
+
+
 
 
 
@@ -27942,7 +28031,7 @@ var store_createStore = function createStore(initialState) {
             throw new Error('invalid status code. Only 200 and 301 allowed');
           }).then(function (json) {
             return context.dispatch('handleSuccessResponse', json);
-          }).catch(function (error) {
+          })["catch"](function (error) {
             // does not catch handleSuccessResponse errors
             console.log(error);
             context.commit('setFormResponse', "<h1>request failed</h1>\n                <h2>".concat(error.message, "</h2>"));
@@ -28215,7 +28304,7 @@ var Themeable = vue_runtime_esm["a" /* default */].extend().extend({
   },
   inject: {
     theme: {
-      default: {
+      "default": {
         isDark: false
       }
     }
@@ -28223,11 +28312,11 @@ var Themeable = vue_runtime_esm["a" /* default */].extend().extend({
   props: {
     dark: {
       type: Boolean,
-      default: null
+      "default": null
     },
     light: {
       type: Boolean,
-      default: null
+      "default": null
     }
   },
   data: function data() {
@@ -28327,15 +28416,15 @@ function mixins() {
   props: {
     dark: {
       type: Boolean,
-      default: undefined
+      "default": undefined
     },
     id: {
       type: String,
-      default: 'app'
+      "default": 'app'
     },
     light: {
       type: Boolean,
-      default: undefined
+      "default": undefined
     }
   },
   computed: {
@@ -28351,10 +28440,10 @@ function mixins() {
   render: function render(h) {
     var wrapper = h('div', {
       staticClass: 'v-application--wrap'
-    }, this.$slots.default);
+    }, this.$slots["default"]);
     return h('div', {
       staticClass: 'v-application',
-      class: _objectSpread2({
+      "class": _objectSpread2({
         'v-application--is-rtl': this.$vuetify.rtl,
         'v-application--is-ltr': !this.$vuetify.rtl
       }, this.themeClasses),
@@ -28433,7 +28522,7 @@ function inject(namespace, child, parent) {
   return vue_runtime_esm["a" /* default */].extend({
     name: 'registrable-inject',
     inject: _defineProperty({}, namespace, {
-      default: defaultImpl
+      "default": defaultImpl
     })
   });
 }
@@ -28450,6 +28539,8 @@ function registrable_provide(namespace) {
   });
 }
 // CONCATENATED MODULE: ./node_modules/vuetify/lib/components/VForm/VForm.js
+
+
 
 
 
@@ -28601,7 +28692,7 @@ function registrable_provide(namespace) {
           return _this3.$emit('submit', e);
         }
       }
-    }, this.$slots.default);
+    }, this.$slots["default"]);
   }
 }));
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.fixed.js
@@ -28614,6 +28705,7 @@ var VBtn = __webpack_require__("86cc");
 var VSheet = __webpack_require__("25a8");
 
 // CONCATENATED MODULE: ./node_modules/vuetify/lib/mixins/colorable/index.js
+
 
 
 
@@ -28641,7 +28733,7 @@ var VSheet = __webpack_require__("25a8");
         return data;
       }
 
-      if (typeof data.class === 'string') {
+      if (typeof data["class"] === 'string') {
         // istanbul ignore next
         consoleError('class must be an object', this); // istanbul ignore next
 
@@ -28654,7 +28746,7 @@ var VSheet = __webpack_require__("25a8");
           'border-color': "".concat(color)
         });
       } else if (color) {
-        data.class = _objectSpread2(_objectSpread2({}, data.class), {}, _defineProperty({}, color, true));
+        data["class"] = _objectSpread2(_objectSpread2({}, data["class"]), {}, _defineProperty({}, color, true));
       }
 
       return data;
@@ -28669,7 +28761,7 @@ var VSheet = __webpack_require__("25a8");
         return data;
       }
 
-      if (typeof data.class === 'string') {
+      if (typeof data["class"] === 'string') {
         // istanbul ignore next
         consoleError('class must be an object', this); // istanbul ignore next
 
@@ -28687,10 +28779,10 @@ var VSheet = __webpack_require__("25a8");
             colorName = _color$toString$trim$2[0],
             colorModifier = _color$toString$trim$2[1];
 
-        data.class = _objectSpread2(_objectSpread2({}, data.class), {}, _defineProperty({}, colorName + '--text', true));
+        data["class"] = _objectSpread2(_objectSpread2({}, data["class"]), {}, _defineProperty({}, colorName + '--text', true));
 
         if (colorModifier) {
-          data.class['text--' + colorModifier] = true;
+          data["class"]['text--' + colorModifier] = true;
         }
       }
 
@@ -28699,6 +28791,7 @@ var VSheet = __webpack_require__("25a8");
   }
 }));
 // CONCATENATED MODULE: ./node_modules/vuetify/lib/mixins/elevatable/index.js
+
 
 
 
@@ -28822,7 +28915,7 @@ var VSheet = __webpack_require__("25a8");
     shaped: Boolean,
     tag: {
       type: String,
-      default: 'div'
+      "default": 'div'
     }
   },
   computed: {
@@ -28839,11 +28932,11 @@ var VSheet = __webpack_require__("25a8");
   },
   render: function render(h) {
     var data = {
-      class: this.classes,
+      "class": this.classes,
       style: this.styles,
       on: this.listeners$
     };
-    return h(this.tag, this.setBackgroundColor(this.color, data), this.$slots.default);
+    return h(this.tag, this.setBackgroundColor(this.color, data), this.$slots["default"]);
   }
 }));
 // CONCATENATED MODULE: ./node_modules/vuetify/lib/components/VSheet/index.js
@@ -28854,6 +28947,7 @@ var VSheet = __webpack_require__("25a8");
 var VProgressCircular = __webpack_require__("8d4f");
 
 // CONCATENATED MODULE: ./node_modules/vuetify/lib/directives/intersect/index.js
+
 
 
 function inserted(el, binding) {
@@ -28910,6 +29004,7 @@ var Intersect = {
 // CONCATENATED MODULE: ./node_modules/vuetify/lib/components/VProgressCircular/VProgressCircular.js
 
 
+
 // Styles
  // Directives
 
@@ -28930,19 +29025,19 @@ var Intersect = {
     indeterminate: Boolean,
     rotate: {
       type: [Number, String],
-      default: 0
+      "default": 0
     },
     size: {
       type: [Number, String],
-      default: 32
+      "default": 32
     },
     width: {
       type: [Number, String],
-      default: 4
+      "default": 4
     },
     value: {
       type: [Number, String],
-      default: 0
+      "default": 0
     }
   },
   data: function data() {
@@ -29003,7 +29098,7 @@ var Intersect = {
   methods: {
     genCircle: function genCircle(name, offset) {
       return this.$createElement('circle', {
-        class: "v-progress-circular__".concat(name),
+        "class": "v-progress-circular__".concat(name),
         attrs: {
           fill: 'transparent',
           cx: 2 * this.viewBoxSize,
@@ -29028,7 +29123,7 @@ var Intersect = {
     genInfo: function genInfo() {
       return this.$createElement('div', {
         staticClass: 'v-progress-circular__info'
-      }, this.$slots.default);
+      }, this.$slots["default"]);
     },
     onObserve: function onObserve(entries, observer, isIntersecting) {
       this.isVisible = isIntersecting;
@@ -29043,7 +29138,7 @@ var Intersect = {
         'aria-valuemax': 100,
         'aria-valuenow': this.indeterminate ? undefined : this.normalizedValue
       },
-      class: this.classes,
+      "class": this.classes,
       directives: [{
         name: 'intersect',
         value: this.onObserve
@@ -29067,7 +29162,7 @@ function factory(namespace, child, parent) {
     props: {
       activeClass: {
         type: String,
-        default: function _default() {
+        "default": function _default() {
           if (!this[namespace]) return undefined;
           return this[namespace].activeClass;
         }
@@ -29195,6 +29290,8 @@ var VRipple = __webpack_require__("7435");
 
 
 
+
+
 // Styles
  // Utilities
 
@@ -29271,8 +29368,8 @@ var ripples = {
     container.appendChild(animation);
     container.className = 'v-ripple__container';
 
-    if (value.class) {
-      container.className += " ".concat(value.class);
+    if (value["class"]) {
+      container.className += " ".concat(value["class"]);
     }
 
     var _calculate = calculate(e, el, value),
@@ -29357,8 +29454,8 @@ function rippleShow(e) {
 
   value.center = element._ripple.centered || isKeyboardEvent(e);
 
-  if (element._ripple.class) {
-    value.class = element._ripple.class;
+  if (element._ripple["class"]) {
+    value["class"] = element._ripple["class"];
   }
 
   if (isTouchEvent(e)) {
@@ -29453,8 +29550,8 @@ function updateRipple(el, binding, wasEnabled) {
     el._ripple.centered = true;
   }
 
-  if (value.class) {
-    el._ripple.class = binding.value.class;
+  if (value["class"]) {
+    el._ripple["class"] = binding.value["class"];
   }
 
   if (value.circle) {
@@ -29552,7 +29649,7 @@ var Ripple = {
     disabled: Boolean,
     exact: {
       type: Boolean,
-      default: undefined
+      "default": undefined
     },
     exactPath: Boolean,
     exactActiveClass: String,
@@ -29563,7 +29660,7 @@ var Ripple = {
     replace: Boolean,
     ripple: {
       type: [Boolean, Object],
-      default: null
+      "default": null
     },
     tag: String,
     target: String
@@ -29614,7 +29711,7 @@ var Ripple = {
         attrs: {
           tabindex: 'tabindex' in this.$attrs ? this.$attrs.tabindex : undefined
         },
-        class: this.classes,
+        "class": this.classes,
         style: this.styles,
         props: {},
         directives: [{
@@ -29713,6 +29810,7 @@ var es_string_small = __webpack_require__("c96a");
 
 
 
+
 // Styles
  // Extensions
 
@@ -29737,7 +29835,7 @@ var baseMixins = mixins(components_VSheet, routable, positionable, sizeable, fac
   props: {
     activeClass: {
       type: String,
-      default: function _default() {
+      "default": function _default() {
         if (!this.btnToggle) return '';
         return this.btnToggle.activeClass;
       }
@@ -29753,13 +29851,13 @@ var baseMixins = mixins(components_VSheet, routable, positionable, sizeable, fac
     rounded: Boolean,
     tag: {
       type: String,
-      default: 'button'
+      "default": 'button'
     },
     text: Boolean,
     tile: Boolean,
     type: {
       type: String,
-      default: 'button'
+      "default": 'button'
     },
     value: null
   },
@@ -29844,11 +29942,11 @@ var baseMixins = mixins(components_VSheet, routable, positionable, sizeable, fac
     genContent: function genContent() {
       return this.$createElement('span', {
         staticClass: 'v-btn__content'
-      }, this.$slots.default);
+      }, this.$slots["default"]);
     },
     genLoader: function genLoader() {
       return this.$createElement('span', {
-        class: 'v-btn__loader'
+        "class": 'v-btn__loader'
       }, this.$slots.loader || [this.$createElement(components_VProgressCircular, {
         props: {
           indeterminate: true,
@@ -30196,6 +30294,7 @@ var fileuploadvue_type_template_id_204d6f89_scoped_true_staticRenderFns = []
 
 
 
+
 //
 //
 //
@@ -30281,6 +30380,9 @@ var VFileInput = __webpack_require__("5803");
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.flat.js
 var es_array_flat = __webpack_require__("0481");
 
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.reverse.js
+var es_array_reverse = __webpack_require__("26e9");
+
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.is.js
 var es_object_is = __webpack_require__("2b19");
 
@@ -30294,6 +30396,8 @@ var VInput = __webpack_require__("d191");
 var VIcon = __webpack_require__("4804");
 
 // CONCATENATED MODULE: ./node_modules/vuetify/lib/components/VIcon/VIcon.js
+
+
 
 
 
@@ -30347,7 +30451,7 @@ var VIcon_VIcon = mixins(binds_attrs, colorable, sizeable, themeable
     tag: {
       type: String,
       required: false,
-      default: 'i'
+      "default": 'i'
     }
   },
   computed: {
@@ -30361,7 +30465,7 @@ var VIcon_VIcon = mixins(binds_attrs, colorable, sizeable, themeable
   methods: {
     getIcon: function getIcon() {
       var iconName = '';
-      if (this.$slots.default) iconName = this.$slots.default[0].text.trim();
+      if (this.$slots["default"]) iconName = this.$slots["default"][0].text.trim();
       return remapInternalIcon(this, iconName);
     },
     getSize: function getSize() {
@@ -30381,7 +30485,7 @@ var VIcon_VIcon = mixins(binds_attrs, colorable, sizeable, themeable
     getDefaultData: function getDefaultData() {
       return {
         staticClass: 'v-icon notranslate',
-        class: {
+        "class": {
           'v-icon--disabled': this.disabled,
           'v-icon--left': this.left,
           'v-icon--link': this.hasClickListener,
@@ -30411,7 +30515,7 @@ var VIcon_VIcon = mixins(binds_attrs, colorable, sizeable, themeable
       return wrapperData;
     },
     applyColors: function applyColors(data) {
-      data.class = _objectSpread2(_objectSpread2({}, data.class), this.themeClasses);
+      data["class"] = _objectSpread2(_objectSpread2({}, data["class"]), this.themeClasses);
       this.setTextColor(this.color, data);
     },
     renderFontIcon: function renderFontIcon(icon, h) {
@@ -30431,8 +30535,8 @@ var VIcon_VIcon = mixins(binds_attrs, colorable, sizeable, themeable
         if (isFontAwesome5(iconType)) iconType = '';
       }
 
-      data.class[iconType] = true;
-      data.class[icon] = !isMaterialIcon;
+      data["class"][iconType] = true;
+      data["class"][icon] = !isMaterialIcon;
       var fontSize = this.getSize();
       if (fontSize) data.style = {
         fontSize: fontSize
@@ -30442,7 +30546,7 @@ var VIcon_VIcon = mixins(binds_attrs, colorable, sizeable, themeable
     },
     renderSvgIcon: function renderSvgIcon(icon, h) {
       var svgData = {
-        class: 'v-icon__svg',
+        "class": 'v-icon__svg',
         attrs: {
           xmlns: 'http://www.w3.org/2000/svg',
           viewBox: '0 0 24 24',
@@ -30468,7 +30572,7 @@ var VIcon_VIcon = mixins(binds_attrs, colorable, sizeable, themeable
     },
     renderSvgIconComponent: function renderSvgIconComponent(icon, h) {
       var data = {
-        class: {
+        "class": {
           'v-icon__component': true
         }
       };
@@ -30550,18 +30654,18 @@ var VLabel = __webpack_require__("1b2c");
     absolute: Boolean,
     color: {
       type: String,
-      default: 'primary'
+      "default": 'primary'
     },
     disabled: Boolean,
     focused: Boolean,
-    for: String,
+    "for": String,
     left: {
       type: [Number, String],
-      default: 0
+      "default": 0
     },
     right: {
       type: [Number, String],
-      default: 'auto'
+      "default": 'auto'
     },
     value: Boolean
   },
@@ -30571,13 +30675,13 @@ var VLabel = __webpack_require__("1b2c");
         props = ctx.props;
     var data = {
       staticClass: 'v-label',
-      class: _objectSpread2({
+      "class": _objectSpread2({
         'v-label--active': props.value,
         'v-label--is-disabled': props.disabled
       }, functionalThemeClasses(ctx)),
       attrs: {
-        for: props.for,
-        'aria-hidden': !props.for
+        "for": props["for"],
+        'aria-hidden': !props["for"]
       },
       on: listeners,
       style: {
@@ -30614,7 +30718,7 @@ var VMessages = __webpack_require__("8ff2");
   props: {
     value: {
       type: Array,
-      default: function _default() {
+      "default": function _default() {
         return [];
       }
     }
@@ -30642,7 +30746,7 @@ var VMessages = __webpack_require__("8ff2");
   render: function render(h) {
     return h('div', this.setTextColor(this.color, {
       staticClass: 'v-messages',
-      class: this.themeClasses
+      "class": this.themeClasses
     }), [this.genChildren()]);
   }
 }));
@@ -30651,6 +30755,8 @@ var VMessages = __webpack_require__("8ff2");
 
 /* harmony default export */ var components_VMessages = (VMessages_VMessages);
 // CONCATENATED MODULE: ./node_modules/vuetify/lib/mixins/validatable/index.js
+
+
 
 
 
@@ -30672,31 +30778,31 @@ var validatable_baseMixins = mixins(colorable, inject('form'), themeable);
     error: Boolean,
     errorCount: {
       type: [Number, String],
-      default: 1
+      "default": 1
     },
     errorMessages: {
       type: [String, Array],
-      default: function _default() {
+      "default": function _default() {
         return [];
       }
     },
     messages: {
       type: [String, Array],
-      default: function _default() {
+      "default": function _default() {
         return [];
       }
     },
     readonly: Boolean,
     rules: {
       type: Array,
-      default: function _default() {
+      "default": function _default() {
         return [];
       }
     },
     success: Boolean,
     successMessages: {
       type: [String, Array],
-      default: function _default() {
+      "default": function _default() {
         return [];
       }
     },
@@ -31101,7 +31207,7 @@ var VInput_baseMixins = mixins(binds_attrs, validatable);
     appendIcon: String,
     backgroundColor: {
       type: String,
-      default: ''
+      "default": ''
     },
     dense: Boolean,
     height: [Number, String],
@@ -31206,7 +31312,7 @@ var VInput_baseMixins = mixins(binds_attrs, validatable);
       }, [this.genInputSlot(), this.genMessages()]);
     },
     genDefaultSlot: function genDefaultSlot() {
-      return [this.genLabel(), this.$slots.default];
+      return [this.genLabel(), this.$slots["default"]];
     },
     genIcon: function genIcon(type, cb) {
       var _this2 = this;
@@ -31242,7 +31348,7 @@ var VInput_baseMixins = mixins(binds_attrs, validatable);
       }, extraData);
       return this.$createElement('div', {
         staticClass: "v-input__icon",
-        class: type ? "v-input__icon--".concat(kebabCase(type)) : undefined
+        "class": type ? "v-input__icon--".concat(kebabCase(type)) : undefined
       }, [this.$createElement(components_VIcon, data, icon)]);
     },
     genInputSlot: function genInputSlot() {
@@ -31267,7 +31373,7 @@ var VInput_baseMixins = mixins(binds_attrs, validatable);
           dark: this.dark,
           disabled: this.isDisabled,
           focused: this.hasState,
-          for: this.computedId,
+          "for": this.computedId,
           light: this.light
         }
       }, this.$slots.label || this.label);
@@ -31287,7 +31393,7 @@ var VInput_baseMixins = mixins(binds_attrs, validatable);
           role: this.hasMessages ? 'alert' : null
         },
         scopedSlots: {
-          default: function _default(props) {
+          "default": function _default(props) {
             return getSlot(_this3, 'message', props);
           }
         }
@@ -31341,7 +31447,7 @@ var VInput_baseMixins = mixins(binds_attrs, validatable);
   render: function render(h) {
     return h('div', this.setTextColor(this.validationState, {
       staticClass: 'v-input',
-      class: this.classes
+      "class": this.classes
     }), this.genContent());
   }
 }));
@@ -31353,6 +31459,7 @@ var VInput_baseMixins = mixins(binds_attrs, validatable);
 var VCounter = __webpack_require__("e9b1");
 
 // CONCATENATED MODULE: ./node_modules/vuetify/lib/components/VCounter/VCounter.js
+
 
 
 
@@ -31369,7 +31476,7 @@ var VCounter = __webpack_require__("e9b1");
   props: {
     value: {
       type: [Number, String],
-      default: ''
+      "default": ''
     },
     max: [Number, String]
   },
@@ -31381,7 +31488,7 @@ var VCounter = __webpack_require__("e9b1");
     var isGreater = max && value > max;
     return h('div', {
       staticClass: 'v-counter',
-      class: _objectSpread2({
+      "class": _objectSpread2({
         'error--text': isGreater
       }, functionalThemeClasses(ctx))
     }, content);
@@ -31457,23 +31564,23 @@ function createSimpleTransition(name) {
     props: {
       group: {
         type: Boolean,
-        default: false
+        "default": false
       },
       hideOnLeave: {
         type: Boolean,
-        default: false
+        "default": false
       },
       leaveAbsolute: {
         type: Boolean,
-        default: false
+        "default": false
       },
       mode: {
         type: String,
-        default: mode
+        "default": mode
       },
       origin: {
         type: String,
-        default: origin
+        "default": origin
       }
     },
     render: function render(h, context) {
@@ -31550,7 +31657,7 @@ function createJavascriptTransition(name, functions) {
     props: {
       mode: {
         type: String,
-        default: mode
+        "default": mode
       }
     },
     render: function render(h, context) {
@@ -31730,6 +31837,8 @@ var Proxyable = proxyable_factory();
 
 
 
+
+
  // Components
 
  // Directives
@@ -31754,27 +31863,27 @@ var VProgressLinear_baseMixins = mixins(colorable, positionable_factory(['absolu
   props: {
     active: {
       type: Boolean,
-      default: true
+      "default": true
     },
     backgroundColor: {
       type: String,
-      default: null
+      "default": null
     },
     backgroundOpacity: {
       type: [Number, String],
-      default: null
+      "default": null
     },
     bufferValue: {
       type: [Number, String],
-      default: 100
+      "default": 100
     },
     color: {
       type: String,
-      default: 'primary'
+      "default": 'primary'
     },
     height: {
       type: [Number, String],
-      default: 4
+      "default": 4
     },
     indeterminate: Boolean,
     query: Boolean,
@@ -31784,7 +31893,7 @@ var VProgressLinear_baseMixins = mixins(colorable, positionable_factory(['absolu
     striped: Boolean,
     value: {
       type: [Number, String],
-      default: 0
+      "default": 0
     }
   },
   data: function data() {
@@ -31823,7 +31932,7 @@ var VProgressLinear_baseMixins = mixins(colorable, positionable_factory(['absolu
     __cachedIndeterminate: function __cachedIndeterminate() {
       return this.$createElement('div', {
         staticClass: 'v-progress-linear__indeterminate',
-        class: {
+        "class": {
           'v-progress-linear__indeterminate--active': this.active
         }
       }, [this.genProgressBar('long'), this.genProgressBar('short')]);
@@ -31908,7 +32017,7 @@ var VProgressLinear_baseMixins = mixins(colorable, positionable_factory(['absolu
     genProgressBar: function genProgressBar(name) {
       return this.$createElement('div', this.setBackgroundColor(this.color, {
         staticClass: 'v-progress-linear__indeterminate',
-        class: _defineProperty({}, name, true)
+        "class": _defineProperty({}, name, true)
       }));
     },
     onClick: function onClick(e) {
@@ -31937,7 +32046,7 @@ var VProgressLinear_baseMixins = mixins(colorable, positionable_factory(['absolu
         'aria-valuemax': this.normalizedBuffer,
         'aria-valuenow': this.indeterminate ? undefined : this.normalizedValue
       },
-      class: this.classes,
+      "class": this.classes,
       directives: [{
         name: 'intersect',
         value: this.onObserve
@@ -31977,11 +32086,11 @@ var VProgressLinear_baseMixins = mixins(colorable, positionable_factory(['absolu
   props: {
     loading: {
       type: [Boolean, String],
-      default: false
+      "default": false
     },
     loaderHeight: {
       type: [Number, String],
-      default: 2
+      "default": 2
     }
   },
   methods: {
@@ -32067,6 +32176,8 @@ var VTextField_excluded = ["title"];
 
 
 
+
+
 // Styles
  // Extensions
 
@@ -32106,7 +32217,7 @@ var dirtyTypes = ['color', 'file', 'time', 'date', 'datetime-local', 'week', 'mo
     clearable: Boolean,
     clearIcon: {
       type: String,
-      default: '$clear'
+      "default": '$clear'
     },
     counter: [Boolean, Number, String],
     counterValue: Function,
@@ -32128,7 +32239,7 @@ var dirtyTypes = ['color', 'file', 'time', 'date', 'datetime-local', 'week', 'mo
     suffix: String,
     type: {
       type: String,
-      default: 'text'
+      "default": 'text'
     }
   },
   data: function data() {
@@ -32387,7 +32498,7 @@ var dirtyTypes = ['color', 'file', 'time', 'date', 'datetime-local', 'week', 'mo
           dark: this.dark,
           disabled: this.isDisabled,
           focused: !this.isSingle && (this.isFocused || !!this.validationState),
-          for: this.computedId,
+          "for": this.computedId,
           left: this.labelPosition.left,
           light: this.light,
           right: this.labelPosition.right,
@@ -32462,7 +32573,7 @@ var dirtyTypes = ['color', 'file', 'time', 'date', 'datetime-local', 'week', 'mo
     },
     genAffix: function genAffix(type) {
       return this.$createElement('div', {
-        class: "v-text-field__".concat(type),
+        "class": "v-text-field__".concat(type),
         ref: type
       }, this[type]);
     },
@@ -32565,6 +32676,7 @@ var VChip = __webpack_require__("8adc");
 
 
 
+
 // Styles
 
  // Components
@@ -32587,11 +32699,11 @@ var VChip = __webpack_require__("8adc");
   props: {
     active: {
       type: Boolean,
-      default: true
+      "default": true
     },
     activeClass: {
       type: String,
-      default: function _default() {
+      "default": function _default() {
         if (!this.chipGroup) return '';
         return this.chipGroup.activeClass;
       }
@@ -32599,18 +32711,18 @@ var VChip = __webpack_require__("8adc");
     close: Boolean,
     closeIcon: {
       type: String,
-      default: '$delete'
+      "default": '$delete'
     },
     closeLabel: {
       type: String,
-      default: '$vuetify.close'
+      "default": '$vuetify.close'
     },
     disabled: Boolean,
     draggable: Boolean,
     filter: Boolean,
     filterIcon: {
       type: String,
-      default: '$complete'
+      "default": '$complete'
     },
     label: Boolean,
     link: Boolean,
@@ -32618,7 +32730,7 @@ var VChip = __webpack_require__("8adc");
     pill: Boolean,
     tag: {
       type: String,
-      default: 'span'
+      "default": 'span'
     },
     textColor: String,
     value: null
@@ -32711,7 +32823,7 @@ var VChip = __webpack_require__("8adc");
     genContent: function genContent() {
       return this.$createElement('span', {
         staticClass: 'v-chip__content'
-      }, [this.filter && this.genFilter(), this.$slots.default, this.hasClose && this.genClose()]);
+      }, [this.filter && this.genFilter(), this.$slots["default"], this.hasClose && this.genClose()]);
     }
   },
   render: function render(h) {
@@ -32746,6 +32858,9 @@ var VChip = __webpack_require__("8adc");
 
 
 
+
+
+
 // Styles
  // Extensions
 
@@ -32766,30 +32881,30 @@ var VChip = __webpack_require__("8adc");
     chips: Boolean,
     clearable: {
       type: Boolean,
-      default: true
+      "default": true
     },
     counterSizeString: {
       type: String,
-      default: '$vuetify.fileInput.counterSize'
+      "default": '$vuetify.fileInput.counterSize'
     },
     counterString: {
       type: String,
-      default: '$vuetify.fileInput.counter'
+      "default": '$vuetify.fileInput.counter'
     },
     hideInput: Boolean,
     multiple: Boolean,
     placeholder: String,
     prependIcon: {
       type: String,
-      default: '$file'
+      "default": '$file'
     },
     readonly: {
       type: Boolean,
-      default: false
+      "default": false
     },
     showSize: {
       type: [Boolean, Number],
-      default: false,
+      "default": false,
       validator: function validator(v) {
         return typeof v === 'boolean' || [1000, 1024].includes(v);
       }
@@ -32797,14 +32912,14 @@ var VChip = __webpack_require__("8adc");
     smallChips: Boolean,
     truncateLength: {
       type: [Number, String],
-      default: 22
+      "default": 22
     },
     type: {
       type: String,
-      default: 'file'
+      "default": 'file'
     },
     value: {
-      default: undefined,
+      "default": undefined,
       validator: function validator(val) {
         return wrapInArray(val).every(function (v) {
           return v != null && _typeof(v) === 'object';
@@ -32973,7 +33088,7 @@ var VChip = __webpack_require__("8adc");
 
       return this.$createElement('div', {
         staticClass: 'v-file-input__text',
-        class: {
+        "class": {
           'v-file-input__text--placeholder': this.placeholder && !this.isDirty,
           'v-file-input__text--chips': this.hasChips && !this.$scopedSlots.selection
         }
@@ -33157,23 +33272,23 @@ var textfieldvue_type_template_id_2893c2c4_staticRenderFns = []
   props: {
     autocomplete: {
       type: String,
-      default: null
+      "default": null
     },
     clearable: {
       type: Boolean,
-      default: false
+      "default": false
     },
     clearicon: {
       type: String,
-      default: null
+      "default": null
     },
     color: {
       type: String,
-      default: null
+      "default": null
     },
     counter: {
       type: [Number, String],
-      default: null,
+      "default": null,
       validator: function validator(value) {
         return /^\d+$/.test(value);
       }
@@ -33184,15 +33299,15 @@ var textfieldvue_type_template_id_2893c2c4_staticRenderFns = []
     },
     disabled: {
       type: Boolean,
-      default: false
+      "default": false
     },
     focused: {
       type: Boolean,
-      default: false
+      "default": false
     },
     hidedetails: {
       type: Boolean,
-      default: false
+      "default": false
     },
     id: {
       type: String,
@@ -33203,27 +33318,27 @@ var textfieldvue_type_template_id_2893c2c4_staticRenderFns = []
     },
     inputmode: {
       type: String,
-      default: null
+      "default": null
     },
     label: {
       type: String,
-      default: null
+      "default": null
     },
     optional: {
       type: Boolean,
-      default: false
+      "default": false
     },
     optionalLabel: {
       type: String,
-      default: 'optional'
+      "default": 'optional'
     },
     placeholder: {
       type: String,
-      default: null
+      "default": null
     },
     prefix: {
       type: String,
-      default: null
+      "default": null
     },
     properties: {
       type: Object | Array,
@@ -33231,25 +33346,25 @@ var textfieldvue_type_template_id_2893c2c4_staticRenderFns = []
     },
     readonly: {
       type: Boolean,
-      default: false
+      "default": false
     },
     requiredLabel: {
       type: String,
-      default: 'required'
+      "default": 'required'
     },
     rules: {
       type: [Object, Array],
-      default: function _default() {
+      "default": function _default() {
         return {} || [];
       }
     },
     type: {
       type: String,
-      default: 'text'
+      "default": 'text'
     },
     value: {
       type: [String, Number],
-      default: null
+      "default": null
     },
     validators: {
       type: Array,
@@ -33573,6 +33688,8 @@ var VGrid = __webpack_require__("4b85");
 
 
 
+
+
  // no xs
 
 var breakpoints = ['sm', 'md', 'lg', 'xl'];
@@ -33592,7 +33709,7 @@ var alignValidator = function alignValidator(str) {
 var alignProps = makeProps('align', function () {
   return {
     type: String,
-    default: null,
+    "default": null,
     validator: alignValidator
   };
 });
@@ -33604,7 +33721,7 @@ var justifyValidator = function justifyValidator(str) {
 var justifyProps = makeProps('justify', function () {
   return {
     type: String,
-    default: null,
+    "default": null,
     validator: justifyValidator
   };
 });
@@ -33616,7 +33733,7 @@ var alignContentValidator = function alignContentValidator(str) {
 var alignContentProps = makeProps('alignContent', function () {
   return {
     type: String,
-    default: null,
+    "default": null,
     validator: alignContentValidator
   };
 });
@@ -33656,25 +33773,25 @@ var cache = new Map();
   props: _objectSpread2(_objectSpread2(_objectSpread2({
     tag: {
       type: String,
-      default: 'div'
+      "default": 'div'
     },
     dense: Boolean,
     noGutters: Boolean,
     align: {
       type: String,
-      default: null,
+      "default": null,
       validator: alignValidator
     }
   }, alignProps), {}, {
     justify: {
       type: String,
-      default: null,
+      "default": null,
       validator: justifyValidator
     }
   }, justifyProps), {}, {
     alignContent: {
       type: String,
-      default: null,
+      "default": null,
       validator: alignContentValidator
     }
   }, alignContentProps),
@@ -33717,7 +33834,7 @@ var cache = new Map();
 
     return h(props.tag, mergeData(data, {
       staticClass: 'row',
-      class: classList
+      "class": classList
     }), children);
   }
 }));
@@ -33746,6 +33863,9 @@ var form_grid_colvue_type_template_id_aa17d168_staticRenderFns = []
 
 
 
+
+
+
  // no xs
 
 var VCol_breakpoints = ['sm', 'md', 'lg', 'xl'];
@@ -33754,7 +33874,7 @@ var breakpointProps = function () {
   return VCol_breakpoints.reduce(function (props, val) {
     props[val] = {
       type: [Boolean, String, Number],
-      default: false
+      "default": false
     };
     return props;
   }, {});
@@ -33764,7 +33884,7 @@ var offsetProps = function () {
   return VCol_breakpoints.reduce(function (props, val) {
     props['offset' + upperFirst(val)] = {
       type: [String, Number],
-      default: null
+      "default": null
     };
     return props;
   }, {});
@@ -33774,7 +33894,7 @@ var orderProps = function () {
   return VCol_breakpoints.reduce(function (props, val) {
     props['order' + upperFirst(val)] = {
       type: [String, Number],
-      default: null
+      "default": null
     };
     return props;
   }, {});
@@ -33818,29 +33938,29 @@ var VCol_cache = new Map();
   props: _objectSpread2(_objectSpread2(_objectSpread2(_objectSpread2({
     cols: {
       type: [Boolean, String, Number],
-      default: false
+      "default": false
     }
   }, breakpointProps), {}, {
     offset: {
       type: [String, Number],
-      default: null
+      "default": null
     }
   }, offsetProps), {}, {
     order: {
       type: [String, Number],
-      default: null
+      "default": null
     }
   }, orderProps), {}, {
     alignSelf: {
       type: String,
-      default: null,
+      "default": null,
       validator: function validator(str) {
         return ['auto', 'start', 'end', 'center', 'baseline', 'stretch'].includes(str);
       }
     },
     tag: {
       type: String,
-      default: 'div'
+      "default": 'div'
     }
   }),
   render: function render(h, _ref) {
@@ -33885,7 +34005,7 @@ var VCol_cache = new Map();
     }
 
     return h(props.tag, mergeData(data, {
-      class: classList
+      "class": classList
     }), children);
   }
 }));
@@ -34114,23 +34234,23 @@ var textareavue_type_template_id_04e59436_staticRenderFns = []
   props: {
     autocomplete: {
       type: String,
-      default: null
+      "default": null
     },
     clearable: {
       type: Boolean,
-      default: false
+      "default": false
     },
     clearicon: {
       type: String,
-      default: null
+      "default": null
     },
     color: {
       type: String,
-      default: null
+      "default": null
     },
     counter: {
       type: [Number, String],
-      default: null,
+      "default": null,
       validator: function validator(value) {
         return /^\d+$/.test(value);
       }
@@ -34141,15 +34261,15 @@ var textareavue_type_template_id_04e59436_staticRenderFns = []
     },
     disabled: {
       type: Boolean,
-      default: false
+      "default": false
     },
     focused: {
       type: Boolean,
-      default: false
+      "default": false
     },
     hidedetails: {
       type: Boolean,
-      default: false
+      "default": false
     },
     id: {
       type: String,
@@ -34160,27 +34280,27 @@ var textareavue_type_template_id_04e59436_staticRenderFns = []
     },
     inputmode: {
       type: String,
-      default: null
+      "default": null
     },
     label: {
       type: String,
-      default: null
+      "default": null
     },
     optional: {
       type: Boolean,
-      default: false
+      "default": false
     },
     optionalLabel: {
       type: String,
-      default: 'optional'
+      "default": 'optional'
     },
     placeholder: {
       type: String,
-      default: null
+      "default": null
     },
     prefix: {
       type: String,
-      default: null
+      "default": null
     },
     properties: {
       type: Object | Array,
@@ -34188,25 +34308,25 @@ var textareavue_type_template_id_04e59436_staticRenderFns = []
     },
     readonly: {
       type: Boolean,
-      default: false
+      "default": false
     },
     requiredLabel: {
       type: String,
-      default: 'required'
+      "default": 'required'
     },
     rules: {
       type: [Object, Array],
-      default: function _default() {
+      "default": function _default() {
         return {} || [];
       }
     },
     type: {
       type: String,
-      default: 'text'
+      "default": 'text'
     },
     value: {
       type: [String, Number],
-      default: null
+      "default": null
     },
     validators: {
       type: Array,
@@ -34266,6 +34386,9 @@ var VTextarea = __webpack_require__("1681");
 // CONCATENATED MODULE: ./node_modules/vuetify/lib/components/VTextarea/VTextarea.js
 
 
+
+
+
 // Styles
  // Extensions
 
@@ -34282,14 +34405,14 @@ var VTextarea_baseMixins = mixins(VTextField_VTextField);
     noResize: Boolean,
     rowHeight: {
       type: [Number, String],
-      default: 24,
+      "default": 24,
       validator: function validator(v) {
         return !isNaN(parseFloat(v));
       }
     },
     rows: {
       type: [Number, String],
-      default: 5,
+      "default": 5,
       validator: function validator(v) {
         return !isNaN(parseInt(v, 10));
       }
@@ -34418,23 +34541,23 @@ var checkboxvue_type_template_id_6ccbb95e_staticRenderFns = []
   props: {
     autocomplete: {
       type: String,
-      default: null
+      "default": null
     },
     clearable: {
       type: Boolean,
-      default: false
+      "default": false
     },
     clearicon: {
       type: String,
-      default: null
+      "default": null
     },
     color: {
       type: String,
-      default: null
+      "default": null
     },
     counter: {
       type: [Number, String],
-      default: null,
+      "default": null,
       validator: function validator(value) {
         return /^\d+$/.test(value);
       }
@@ -34445,15 +34568,15 @@ var checkboxvue_type_template_id_6ccbb95e_staticRenderFns = []
     },
     disabled: {
       type: Boolean,
-      default: false
+      "default": false
     },
     focused: {
       type: Boolean,
-      default: false
+      "default": false
     },
     hidedetails: {
       type: Boolean,
-      default: false
+      "default": false
     },
     id: {
       type: String,
@@ -34464,27 +34587,27 @@ var checkboxvue_type_template_id_6ccbb95e_staticRenderFns = []
     },
     inputmode: {
       type: String,
-      default: null
+      "default": null
     },
     label: {
       type: String,
-      default: null
+      "default": null
     },
     optional: {
       type: Boolean,
-      default: false
+      "default": false
     },
     optionalLabel: {
       type: String,
-      default: 'optional'
+      "default": 'optional'
     },
     placeholder: {
       type: String,
-      default: null
+      "default": null
     },
     prefix: {
       type: String,
-      default: null
+      "default": null
     },
     properties: {
       type: Object | Array,
@@ -34492,25 +34615,25 @@ var checkboxvue_type_template_id_6ccbb95e_staticRenderFns = []
     },
     readonly: {
       type: Boolean,
-      default: false
+      "default": false
     },
     requiredLabel: {
       type: String,
-      default: 'required'
+      "default": 'required'
     },
     rules: {
       type: [Object, Array],
-      default: function _default() {
+      "default": function _default() {
         return {} || [];
       }
     },
     type: {
       type: String,
-      default: 'text'
+      "default": 'text'
     },
     value: {
       type: [String, Number],
-      default: null
+      "default": null
     },
     validators: {
       type: Array,
@@ -34583,7 +34706,7 @@ var _selection_controls = __webpack_require__("ec29");
   props: {
     ripple: {
       type: [Boolean, Object],
-      default: true
+      "default": true
     }
   },
   methods: {
@@ -34610,11 +34733,14 @@ var _selection_controls = __webpack_require__("ec29");
   props: {
     valueComparator: {
       type: Function,
-      default: deepEqual
+      "default": deepEqual
     }
   }
 }));
 // CONCATENATED MODULE: ./node_modules/vuetify/lib/mixins/selectable/index.js
+
+
+
 
 
 
@@ -34644,7 +34770,7 @@ function prevent(e) {
     trueValue: null,
     multiple: {
       type: Boolean,
-      default: null
+      "default": null
     },
     label: String
   },
@@ -34782,6 +34908,7 @@ function prevent(e) {
 var VCheckbox_excluded = ["title"];
 
 
+
 // Styles
 
  // Components
@@ -34798,15 +34925,15 @@ var VCheckbox_excluded = ["title"];
     indeterminate: Boolean,
     indeterminateIcon: {
       type: String,
-      default: '$checkboxIndeterminate'
+      "default": '$checkboxIndeterminate'
     },
     offIcon: {
       type: String,
-      default: '$checkboxOff'
+      "default": '$checkboxOff'
     },
     onIcon: {
       type: String,
-      default: '$checkboxOn'
+      "default": '$checkboxOn'
     }
   },
   data: function data() {
@@ -34949,23 +35076,23 @@ var radio_groupvue_type_template_id_27baa815_staticRenderFns = []
   props: {
     autocomplete: {
       type: String,
-      default: null
+      "default": null
     },
     clearable: {
       type: Boolean,
-      default: false
+      "default": false
     },
     clearicon: {
       type: String,
-      default: null
+      "default": null
     },
     color: {
       type: String,
-      default: null
+      "default": null
     },
     counter: {
       type: [Number, String],
-      default: null,
+      "default": null,
       validator: function validator(value) {
         return /^\d+$/.test(value);
       }
@@ -34976,15 +35103,15 @@ var radio_groupvue_type_template_id_27baa815_staticRenderFns = []
     },
     disabled: {
       type: Boolean,
-      default: false
+      "default": false
     },
     focused: {
       type: Boolean,
-      default: false
+      "default": false
     },
     hidedetails: {
       type: Boolean,
-      default: false
+      "default": false
     },
     id: {
       type: String,
@@ -34995,27 +35122,27 @@ var radio_groupvue_type_template_id_27baa815_staticRenderFns = []
     },
     inputmode: {
       type: String,
-      default: null
+      "default": null
     },
     label: {
       type: String,
-      default: null
+      "default": null
     },
     optional: {
       type: Boolean,
-      default: false
+      "default": false
     },
     optionalLabel: {
       type: String,
-      default: 'optional'
+      "default": 'optional'
     },
     placeholder: {
       type: String,
-      default: null
+      "default": null
     },
     prefix: {
       type: String,
-      default: null
+      "default": null
     },
     properties: {
       type: Object | Array,
@@ -35023,25 +35150,25 @@ var radio_groupvue_type_template_id_27baa815_staticRenderFns = []
     },
     readonly: {
       type: Boolean,
-      default: false
+      "default": false
     },
     requiredLabel: {
       type: String,
-      default: 'required'
+      "default": 'required'
     },
     rules: {
       type: [Object, Array],
-      default: function _default() {
+      "default": function _default() {
         return {} || [];
       }
     },
     type: {
       type: String,
-      default: 'text'
+      "default": 'text'
     },
     value: {
       type: [String, Number],
-      default: null
+      "default": null
     },
     validators: {
       type: Array,
@@ -35147,15 +35274,15 @@ var VRadio_baseMixins = mixins(binds_attrs, colorable, rippleable, factory('radi
     name: String,
     offIcon: {
       type: String,
-      default: '$radioOff'
+      "default": '$radioOff'
     },
     onIcon: {
       type: String,
-      default: '$radioOn'
+      "default": '$radioOn'
     },
     readonly: Boolean,
     value: {
-      default: null
+      "default": null
     }
   },
   data: function data() {
@@ -35218,7 +35345,7 @@ var VRadio_baseMixins = mixins(binds_attrs, colorable, rippleable, factory('radi
           click: prevent
         },
         attrs: {
-          for: this.computedId
+          "for": this.computedId
         },
         props: {
           color: this.validationState,
@@ -35259,7 +35386,7 @@ var VRadio_baseMixins = mixins(binds_attrs, colorable, rippleable, factory('radi
   render: function render(h) {
     var data = {
       staticClass: 'v-radio',
-      class: this.classes,
+      "class": this.classes,
       on: mergeListeners({
         click: this.onChange
       }, this.listeners$),
@@ -35290,6 +35417,10 @@ var VItemGroup = __webpack_require__("166a");
 
 
 
+
+
+
+
 // Styles
 
 
@@ -35302,17 +35433,17 @@ var BaseItemGroup = mixins(proxyable, themeable).extend({
   props: {
     activeClass: {
       type: String,
-      default: 'v-item--active'
+      "default": 'v-item--active'
     },
     mandatory: Boolean,
     max: {
       type: [Number, String],
-      default: null
+      "default": null
     },
     multiple: Boolean,
     tag: {
       type: String,
-      default: 'div'
+      "default": 'div'
     }
   },
   data: function data() {
@@ -35382,7 +35513,7 @@ var BaseItemGroup = mixins(proxyable, themeable).extend({
   methods: {
     genData: function genData() {
       return {
-        class: this.classes
+        "class": this.classes
       };
     },
     getValue: function getValue(item, i) {
@@ -35494,7 +35625,7 @@ var BaseItemGroup = mixins(proxyable, themeable).extend({
     }
   },
   render: function render(h) {
-    return h(this.tag, this.genData(), this.$slots.default);
+    return h(this.tag, this.genData(), this.$slots["default"]);
   }
 });
 /* harmony default export */ var VItemGroup_VItemGroup = (BaseItemGroup.extend({
@@ -35531,11 +35662,11 @@ var VRadioGroup_baseMixins = mixins(comparable, BaseItemGroup, components_VInput
   props: {
     column: {
       type: Boolean,
-      default: true
+      "default": true
     },
     height: {
       type: [Number, String],
-      default: 'auto'
+      "default": 'auto'
     },
     name: String,
     row: Boolean,
@@ -35574,7 +35705,7 @@ var VRadioGroup_baseMixins = mixins(comparable, BaseItemGroup, components_VInput
       if (!label) return null;
       label.data.attrs.id = this.computedId; // WAI considers this an orphaned label
 
-      delete label.data.attrs.for;
+      delete label.data.attrs["for"];
       label.tag = 'legend';
       return label;
     },
@@ -35646,15 +35777,15 @@ var selectvue_type_template_id_3faf87f0_staticRenderFns = []
     },
     disabled: {
       type: Boolean,
-      default: false
+      "default": false
     },
     focused: {
       type: Boolean,
-      default: false
+      "default": false
     },
     hidedetails: {
       type: Boolean,
-      default: false
+      "default": false
     },
     id: {
       type: String,
@@ -35665,7 +35796,7 @@ var selectvue_type_template_id_3faf87f0_staticRenderFns = []
     },
     label: {
       type: String,
-      default: null
+      "default": null
     },
     properties: {
       type: Object | Array,
@@ -35673,13 +35804,13 @@ var selectvue_type_template_id_3faf87f0_staticRenderFns = []
     },
     rules: {
       type: [Object, Array],
-      default: function _default() {
+      "default": function _default() {
         return {} || [];
       }
     },
     value: {
       type: [String, Number],
-      default: null
+      "default": null
     },
     validators: {
       type: Array,
@@ -35776,12 +35907,14 @@ var VMenu = __webpack_require__("ee6f");
   },
   render: function render() {
     /* istanbul ignore next */
-    return this.$slots.default && this.$slots.default.find(function (node) {
+    return this.$slots["default"] && this.$slots["default"].find(function (node) {
       return !node.isComment && node.text !== ' ';
     });
   }
 }));
 // CONCATENATED MODULE: ./node_modules/vuetify/lib/mixins/delayable/index.js
+
+
 
 
 /**
@@ -35797,11 +35930,11 @@ var VMenu = __webpack_require__("ee6f");
   props: {
     openDelay: {
       type: [Number, String],
-      default: 0
+      "default": 0
     },
     closeDelay: {
       type: [Number, String],
-      default: 0
+      "default": 0
     }
   },
   data: function data() {
@@ -35842,6 +35975,7 @@ var VMenu = __webpack_require__("ee6f");
 
 
 
+
 // Mixins
 
  // Utilities
@@ -35856,7 +35990,7 @@ var activatable_baseMixins = mixins(delayable, toggleable);
   name: 'activatable',
   props: {
     activator: {
-      default: null,
+      "default": null,
       validator: function validator(val) {
         return ['string', 'object'].includes(_typeof(val));
       }
@@ -36108,6 +36242,7 @@ function searchChildren(children) {
 
 
 
+
 /* @vue/component */
 
 /* harmony default export */ var stackable = (vue_runtime_esm["a" /* default */].extend().extend({
@@ -36206,6 +36341,8 @@ function searchChildren(children) {
 
 
 
+
+
 // Mixins
  // Utilities
 
@@ -36226,12 +36363,12 @@ function validateAttachTarget(val) {
   name: 'detachable',
   props: {
     attach: {
-      default: false,
+      "default": false,
       validator: validateAttachTarget
     },
     contentClass: {
       type: String,
-      default: ''
+      "default": ''
     }
   },
   data: function data() {
@@ -36330,6 +36467,7 @@ function validateAttachTarget(val) {
 
 
 
+
 // Mixins
 
 
@@ -36349,42 +36487,42 @@ var menuable_baseMixins = mixins(stackable, positionable, activatable, detachabl
     dark: Boolean,
     maxWidth: {
       type: [Number, String],
-      default: 'auto'
+      "default": 'auto'
     },
     minWidth: [Number, String],
     nudgeBottom: {
       type: [Number, String],
-      default: 0
+      "default": 0
     },
     nudgeLeft: {
       type: [Number, String],
-      default: 0
+      "default": 0
     },
     nudgeRight: {
       type: [Number, String],
-      default: 0
+      "default": 0
     },
     nudgeTop: {
       type: [Number, String],
-      default: 0
+      "default": 0
     },
     nudgeWidth: {
       type: [Number, String],
-      default: 0
+      "default": 0
     },
     offsetOverflow: Boolean,
     openOnClick: Boolean,
     positionX: {
       type: Number,
-      default: null
+      "default": null
     },
     positionY: {
       type: Number,
-      default: null
+      "default": null
     },
     zIndex: {
       type: [Number, String],
-      default: null
+      "default": null
     }
   },
   data: function data() {
@@ -36697,6 +36835,7 @@ var menuable_baseMixins = mixins(stackable, positionable, activatable, detachabl
 }));
 // CONCATENATED MODULE: ./node_modules/vuetify/lib/mixins/returnable/index.js
 
+
 /* @vue/component */
 
 /* harmony default export */ var returnable = (vue_runtime_esm["a" /* default */].extend({
@@ -36731,6 +36870,8 @@ var menuable_baseMixins = mixins(stackable, positionable, activatable, detachabl
   }
 }));
 // CONCATENATED MODULE: ./node_modules/vuetify/lib/directives/click-outside/index.js
+
+
 
 
 
@@ -36836,6 +36977,10 @@ var ClickOutside = {
 
 
 
+
+
+
+
 // Styles
  // Components
 
@@ -36876,32 +37021,32 @@ var VMenu_baseMixins = mixins(dependent, delayable, menuable, returnable, rounda
     auto: Boolean,
     closeOnClick: {
       type: Boolean,
-      default: true
+      "default": true
     },
     closeOnContentClick: {
       type: Boolean,
-      default: true
+      "default": true
     },
     disabled: Boolean,
     disableKeys: Boolean,
     maxHeight: {
       type: [Number, String],
-      default: 'auto'
+      "default": 'auto'
     },
     offsetX: Boolean,
     offsetY: Boolean,
     openOnClick: {
       type: Boolean,
-      default: true
+      "default": true
     },
     openOnHover: Boolean,
     origin: {
       type: String,
-      default: 'top left'
+      "default": 'top left'
     },
     transition: {
       type: [Boolean, String],
-      default: 'v-menu-transition'
+      "default": 'v-menu-transition'
     }
   },
   data: function data() {
@@ -37123,7 +37268,7 @@ var VMenu_baseMixins = mixins(dependent, delayable, menuable, returnable, rounda
           role: 'role' in this.$attrs ? this.$attrs.role : 'menu'
         }),
         staticClass: 'v-menu__content',
-        class: _objectSpread2(_objectSpread2(_objectSpread2({}, this.rootThemeClasses), this.roundedClasses), {}, _defineProperty({
+        "class": _objectSpread2(_objectSpread2(_objectSpread2({}, this.rootThemeClasses), this.roundedClasses), {}, _defineProperty({
           'v-menu__content--auto': this.auto,
           'v-menu__content--fixed': this.activatorFixed,
           menuable__content__active: this.isActive
@@ -37263,7 +37408,7 @@ var VMenu_baseMixins = mixins(dependent, delayable, menuable, returnable, rounda
 
     var data = {
       staticClass: 'v-menu',
-      class: {
+      "class": {
         'v-menu--attached': this.attach === '' || this.attach === true || this.attach === 'attach'
       },
       directives: [{
@@ -37296,6 +37441,7 @@ var VSimpleCheckbox = __webpack_require__("cf36");
 
 
 
+
  // Mixins
 
 
@@ -37313,21 +37459,21 @@ var VSimpleCheckbox = __webpack_require__("cf36");
     disabled: Boolean,
     ripple: {
       type: Boolean,
-      default: true
+      "default": true
     },
     value: Boolean,
     indeterminate: Boolean,
     indeterminateIcon: {
       type: String,
-      default: '$checkboxIndeterminate'
+      "default": '$checkboxIndeterminate'
     },
     onIcon: {
       type: String,
-      default: '$checkboxOn'
+      "default": '$checkboxOn'
     },
     offIcon: {
       type: String,
-      default: '$checkboxOff'
+      "default": '$checkboxOff'
     }
   }),
   render: function render(h, _ref) {
@@ -37360,7 +37506,7 @@ var VSimpleCheckbox = __webpack_require__("cf36");
     }
 
     return h('div', mergeData(data, {
-      class: {
+      "class": {
         'v-simple-checkbox': true,
         'v-simple-checkbox--disabled': props.disabled
       },
@@ -37404,7 +37550,7 @@ var VDivider = __webpack_require__("8ce9");
     }
 
     return h('hr', {
-      class: _objectSpread2({
+      "class": _objectSpread2({
         'v-divider': true,
         'v-divider--inset': this.inset,
         'v-divider--vertical': this.vertical
@@ -37441,12 +37587,12 @@ var VSubheader = __webpack_require__("0bc6");
   render: function render(h) {
     return h('div', {
       staticClass: 'v-subheader',
-      class: _objectSpread2({
+      "class": _objectSpread2({
         'v-subheader--inset': this.inset
       }, this.themeClasses),
       attrs: this.$attrs,
       on: this.$listeners
-    }, this.$slots.default);
+    }, this.$slots["default"]);
   }
 }));
 // CONCATENATED MODULE: ./node_modules/vuetify/lib/components/VSubheader/index.js
@@ -37483,23 +37629,23 @@ var VListItem_baseMixins = mixins(colorable, routable, themeable, factory('listI
   },
   inject: {
     isInGroup: {
-      default: false
+      "default": false
     },
     isInList: {
-      default: false
+      "default": false
     },
     isInMenu: {
-      default: false
+      "default": false
     },
     isInNav: {
-      default: false
+      "default": false
     }
   },
   inheritAttrs: false,
   props: {
     activeClass: {
       type: String,
-      default: function _default() {
+      "default": function _default() {
         if (!this.listItemGroup) return '';
         return this.listItemGroup.activeClass;
       }
@@ -37512,7 +37658,7 @@ var VListItem_baseMixins = mixins(colorable, routable, themeable, factory('listI
     },
     tag: {
       type: String,
-      default: 'div'
+      "default": 'div'
     },
     threeLine: Boolean,
     twoLine: Boolean,
@@ -37596,10 +37742,10 @@ var VListItem_baseMixins = mixins(colorable, routable, themeable, factory('listI
       delete data.nativeOn;
     }
 
-    var children = this.$scopedSlots.default ? this.$scopedSlots.default({
+    var children = this.$scopedSlots["default"] ? this.$scopedSlots["default"]({
       active: this.isActive,
       toggle: this.toggle
-    }) : this.$slots.default;
+    }) : this.$slots["default"];
     return h(tag, this.isActive ? this.setTextColor(this.color, data) : data, children);
   }
 }));
@@ -37649,10 +37795,10 @@ var VList = __webpack_require__("3ad0");
   },
   inject: {
     isInMenu: {
-      default: false
+      "default": false
     },
     isInNav: {
-      default: false
+      "default": false
     }
   },
   props: {
@@ -37716,13 +37862,13 @@ var VList = __webpack_require__("3ad0");
   render: function render(h) {
     var data = {
       staticClass: 'v-list',
-      class: this.classes,
+      "class": this.classes,
       style: this.styles,
       attrs: _objectSpread2({
         role: this.isInNav || this.isInMenu ? undefined : 'list'
       }, this.attrs$)
     };
-    return h(this.tag, this.setBackgroundColor(this.color, data), [this.$slots.default]);
+    return h(this.tag, this.setBackgroundColor(this.color, data), [this.$slots["default"]]);
   }
 }));
 // EXTERNAL MODULE: ./node_modules/vuetify/src/components/VList/VListGroup.sass
@@ -37779,15 +37925,15 @@ var VListGroup_baseMixins = mixins(binds_attrs, bootable, colorable, inject('lis
   props: {
     activeClass: {
       type: String,
-      default: ''
+      "default": ''
     },
     appendIcon: {
       type: String,
-      default: '$expand'
+      "default": '$expand'
     },
     color: {
       type: String,
-      default: 'primary'
+      "default": 'primary'
     },
     disabled: Boolean,
     group: [String, RegExp],
@@ -37795,7 +37941,7 @@ var VListGroup_baseMixins = mixins(binds_attrs, bootable, colorable, inject('lis
     prependIcon: String,
     ripple: {
       type: [Boolean, Object],
-      default: true
+      "default": true
     },
     subGroup: Boolean
   },
@@ -37856,7 +38002,7 @@ var VListGroup_baseMixins = mixins(binds_attrs, bootable, colorable, inject('lis
           'aria-expanded': String(this.isActive),
           role: 'button'
         },
-        class: _defineProperty({}, this.activeClass, this.isActive),
+        "class": _defineProperty({}, this.activeClass, this.isActive),
         props: {
           inputValue: this.isActive
         },
@@ -37917,7 +38063,7 @@ var VListGroup_baseMixins = mixins(binds_attrs, bootable, colorable, inject('lis
   render: function render(h) {
     return h('div', this.setTextColor(this.isActive && this.color, {
       staticClass: 'v-list-group',
-      class: this.classes
+      "class": this.classes
     }), [this.genHeader(), h(VExpandTransition, this.genItems())]);
   }
 }));
@@ -37980,7 +38126,7 @@ var VAvatar = __webpack_require__("3408");
     right: Boolean,
     size: {
       type: [Number, String],
-      default: 48
+      "default": 48
     }
   },
   computed: {
@@ -38001,11 +38147,11 @@ var VAvatar = __webpack_require__("3408");
   render: function render(h) {
     var data = {
       staticClass: 'v-avatar',
-      class: this.classes,
+      "class": this.classes,
       style: this.styles,
       on: this.$listeners
     };
-    return h('div', this.setBackgroundColor(this.color, data), this.$slots.default);
+    return h('div', this.setBackgroundColor(this.color, data), this.$slots["default"]);
   }
 }));
 // CONCATENATED MODULE: ./node_modules/vuetify/lib/components/VAvatar/index.js
@@ -38025,7 +38171,7 @@ var VAvatar = __webpack_require__("3408");
     horizontal: Boolean,
     size: {
       type: [Number, String],
-      default: 40
+      "default": 40
     }
   },
   computed: {
@@ -38083,6 +38229,8 @@ var VListItemSubtitle = createSimpleFunctional('v-list-item__subtitle', 'div');
 
 
 
+
+
 // Components
 
 
@@ -38111,28 +38259,28 @@ var VListItemSubtitle = createSimpleFunctional('v-list-item__subtitle', 'div');
     hideSelected: Boolean,
     items: {
       type: Array,
-      default: function _default() {
+      "default": function _default() {
         return [];
       }
     },
     itemDisabled: {
       type: [String, Array, Function],
-      default: 'disabled'
+      "default": 'disabled'
     },
     itemText: {
       type: [String, Array, Function],
-      default: 'text'
+      "default": 'text'
     },
     itemValue: {
       type: [String, Array, Function],
-      default: 'value'
+      "default": 'value'
     },
     noDataText: String,
     noFilter: Boolean,
     searchInput: null,
     selectedItems: {
       type: Array,
-      default: function _default() {
+      "default": function _default() {
         return [];
       }
     }
@@ -38146,7 +38294,7 @@ var VListItemSubtitle = createSimpleFunctional('v-list-item__subtitle', 'div');
       });
     },
     tileActiveClass: function tileActiveClass() {
-      return Object.keys(this.setTextColor(this.color).class || {}).join(' ');
+      return Object.keys(this.setTextColor(this.color)["class"] || {}).join(' ');
     },
     staticNoDataTile: function staticNoDataTile() {
       var tile = {
@@ -38319,7 +38467,7 @@ var VListItemSubtitle = createSimpleFunctional('v-list-item__subtitle', 'div');
     this.$slots['append-item'] && children.push(this.$slots['append-item']);
     return this.$createElement(VList_VList, {
       staticClass: 'v-select-list',
-      class: this.themeClasses,
+      "class": this.themeClasses,
       attrs: {
         role: 'listbox',
         tabindex: -1
@@ -38339,11 +38487,15 @@ var VListItemSubtitle = createSimpleFunctional('v-list-item__subtitle', 'div');
   props: {
     noDataText: {
       type: String,
-      default: '$vuetify.noDataText'
+      "default": '$vuetify.noDataText'
     }
   }
 }));
 // CONCATENATED MODULE: ./node_modules/vuetify/lib/components/VSelect/VSelect.js
+
+
+
+
 
 
 
@@ -38408,11 +38560,11 @@ var VSelect_baseMixins = mixins(VTextField_VTextField, comparable, dependent, fi
   props: {
     appendIcon: {
       type: String,
-      default: '$dropdown'
+      "default": '$dropdown'
     },
     attach: {
       type: null,
-      default: false
+      "default": false
     },
     cacheItems: Boolean,
     chips: Boolean,
@@ -38423,29 +38575,29 @@ var VSelect_baseMixins = mixins(VTextField_VTextField, comparable, dependent, fi
     hideSelected: Boolean,
     items: {
       type: Array,
-      default: function _default() {
+      "default": function _default() {
         return [];
       }
     },
     itemColor: {
       type: String,
-      default: 'primary'
+      "default": 'primary'
     },
     itemDisabled: {
       type: [String, Array, Function],
-      default: 'disabled'
+      "default": 'disabled'
     },
     itemText: {
       type: [String, Array, Function],
-      default: 'text'
+      "default": 'text'
     },
     itemValue: {
       type: [String, Array, Function],
-      default: 'value'
+      "default": 'value'
     },
     menuProps: {
       type: [String, Array, Object],
-      default: function _default() {
+      "default": function _default() {
         return defaultMenuProps;
       }
     },
@@ -38709,7 +38861,7 @@ var VSelect_baseMixins = mixins(VTextField_VTextField, comparable, dependent, fi
       var isDisabled = this.isDisabled || this.getDisabled(item);
       return this.$createElement('div', this.setTextColor(color, {
         staticClass: 'v-select__selection v-select__selection--comma',
-        class: {
+        "class": {
           'v-select__selection--disabled': isDisabled
         },
         key: JSON.stringify(this.getValue(item))
@@ -38871,7 +39023,7 @@ var VSelect_baseMixins = mixins(VTextField_VTextField, comparable, dependent, fi
 
       return this.$scopedSlots.selection({
         attrs: {
-          class: 'v-chip--select'
+          "class": 'v-chip--select'
         },
         parent: this,
         item: item,
@@ -39235,7 +39387,7 @@ installComponents_default()(select_component, {VSelect: VSelect_VSelect})
   SingleSelect: fields_select,
   form: 'form',
   message: 'div',
-  default: 'input'
+  "default": 'input'
 }));
 // CONCATENATED MODULE: ./src/lib/DefaultCallbacks.js
 
@@ -39337,16 +39489,6 @@ var main_DynamicJsonForm = /*#__PURE__*/function () {
 
   return DynamicJsonForm;
 }();
-var main_forms = document.querySelectorAll('[data-id]');
-var main_formConfigsList = window.extendedforms;
-
-if (main_formConfigsList) {
-  var ondigoForms = new main_DynamicJsonForm(main_formConfigsList, main_forms);
-  ondigoForms.componentsDictionary.set('Text', testField);
-  ondigoForms.init();
-}
-
-var dynamicForm = main_DynamicJsonForm;
 /* harmony default export */ var src_main = (main_DynamicJsonForm);
 // CONCATENATED MODULE: ./node_modules/@vue/cli-service/lib/commands/build/entry-lib.js
 
@@ -39564,4 +39706,5 @@ $({ target: 'Math', stat: true, forced: !$cosh || $cosh(710) === Infinity }, {
 /***/ })
 
 /******/ });
-//# sourceMappingURL=index.common.js.map
+});
+//# sourceMappingURL=json-formvue.umd.js.map
