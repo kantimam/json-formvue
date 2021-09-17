@@ -1,7 +1,7 @@
 {
   "name": "formvue-json",
   "version": "0.1.0",
-  "main": "formvue-json.common.js",
+  "main": "dist/formvue-json.common.js",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
