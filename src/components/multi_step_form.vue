@@ -35,26 +35,23 @@
           {{nextButtonLabel}}
         </v-btn>
       </div>
-    
+      <div class="py-4" v-if="loading">
+        <loading-spinner indeterminate/>
+      </div>
     </v-form>
   </div>
  
 </template>
 
 <script>
-  import { VForm, VBtn } from 'vuetify/lib';
-
   export default {
-    name: 'App',
-    components: {
-        VForm,
-        VBtn
-    },
     computed: {
       formConfig(){
         return this.$store.getters.getCurrentSchema
       },
-
+      loading(){
+        return this.$store.state.loading
+      },
       currentStep(){
         return this.$store.state.currentStep
       },

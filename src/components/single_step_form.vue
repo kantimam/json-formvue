@@ -17,21 +17,22 @@
     >
       {{nextButtonLabel}}
     </v-btn>
+
+    <div class="py-4" v-if="loading">
+      <loading-spinner indeterminate/>
+    </div>
   </v-form>
 </template>
 
 <script>
-  import { VForm, VBtn } from 'vuetify/lib';
 
   export default {
-    name: 'App',
-    components: {
-        VForm,
-        VBtn,
-    },
     computed: {
       formConfig(){
         return this.$store.getters.getCurrentSchema
+      },
+      loading(){
+        return this.$store.state.loading
       },
       buttonLabels(){
         return (this.formConfig && 

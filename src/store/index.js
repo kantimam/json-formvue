@@ -6,7 +6,7 @@ import { createCallbackList } from '../lib/util';
 Vue.use(Vuex)
 
 
-/* look into splitting single step and multie step into different modules and conditionally adding them if needed */
+/* look into splitting single step and multi step into different modules and conditionally adding them if needed */
 const createStore=(initialState)=>{
   const debug = process.env.NODE_ENV !== 'production'
 
@@ -63,9 +63,11 @@ const createStore=(initialState)=>{
       },
       setFormResponse (state, response) {
         state.formResponse=response;
+        state.loading=false;
       },
       setFormFinished(state){
         state.formFinished=true;
+        state.loading=false;
       },
       setFormStep(state, formConfig){
         const formConfigStep=formConfig.api.page.current>0? formConfig.api.page.current : 1;
@@ -78,7 +80,11 @@ const createStore=(initialState)=>{
         state.formResponse=null
         
         state.steps[formConfigStep - 1]=createStepFromFormConfig(formConfig)
-        
+        state.loading=false;
+
+      },
+      setLoading(state, isLoading){
+        state.loading=Boolean(isLoading)
       }
     },
 
@@ -88,10 +94,10 @@ const createStore=(initialState)=>{
         const isFormValid=vuetifyForm.validate();
         
         if(vuetifyForm.$el && isFormValid){ // check if form element exists and if it is valid
+          context.commit('setLoading', true);
           const formData=new FormData(vuetifyForm.$el); // parse formdata from underlying form element
           
           const currentModel=context.getters.getCurrentModel;
-          console.log(currentModel)
           // append entries to formdata
           formData.append(context.getters.getCurrentInputName('__currentPage'), currentModel['__currentPage'].value)
           formData.append('tx_form_formframework[__trustedProperties]', currentModel['__trustedProperties'].value)
@@ -117,6 +123,8 @@ const createStore=(initialState)=>{
               `<h1>request failed</h1>
                 <h2>${error.message}</h2>`
             );
+            context.commit('setLoading', false);
+
           })
 
         }
@@ -168,7 +176,6 @@ const createStore=(initialState)=>{
               );
             }
           }
-          console.log("loading next step")
           context.commit('setFormStep', successJson);
         }
         
@@ -197,6 +204,7 @@ function initFormStateFromExtendedForm(formData){
   const state={
     id: formConfig.id,
     currentStep: formConfig.api.page.current || 1,
+    loading: false,
     nextStep: formConfig.api.page.nextPage || 1,
     previousStep: formConfig.api.page.previousPage || 1,
     lastStep: formConfig.api.page.pages || 1,

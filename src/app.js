@@ -13,6 +13,7 @@ import App from './App.vue';
 import DefaultComponents from './lib/DefaultComponents';
 import DefaultCallbacks from './lib/DefaultCallbacks';
 import DefaultValidators from './lib/DefaultValidators';
+import testField from "./components/fields/testField.vue";
 
 
 export class DynamicJsonForm{
@@ -80,5 +81,14 @@ export class DynamicJsonForm{
     }
 
 }
+
+const forms = document.querySelectorAll('[data-id]');
+const formConfigsList=window.extendedforms;
+if(formConfigsList){
+    const ondigoForms=new DynamicJsonForm(formConfigsList, forms);
+    ondigoForms.componentsDictionary.set('Text', testField)
+    ondigoForms.init();
+}
+
 
 export default DynamicJsonForm;
