@@ -8,7 +8,7 @@
     :xs="columnSizes.xs"
   >
       <field-renderer 
-        :fieldData="$props"
+        :fieldData="{...$props, ...$attrs}"
         :formName="formName"
       />
   </v-col>
@@ -23,25 +23,7 @@ export default {
         VCol,
     },
     props: {
-        defaultValue: {
-            type: String,
-        },
         formName:{
-            type: String,
-            required: true
-        },
-        identifier: {
-            type: String,
-            required: true
-        },
-        label: {
-            type: String,
-        },
-        name: {
-            type: String,
-            required: true
-        },
-        type: {
             type: String,
             required: true
         },

@@ -47,7 +47,6 @@ const createStore=(initialState)=>{
 
     mutations: {
       updateInputValue (state, payload){
-        console.log(payload)  
         const validIndex=state.currentStep? state.currentStep - 1 : 0;
         const currentStep=state.steps[validIndex];
         if(!currentStep) return console.log(`could not find the step ${state.currentStep} at the index ${validIndex}`);
@@ -56,7 +55,6 @@ const createStore=(initialState)=>{
         if(!currentModel) return console.log(`the model does not have a field with the key ${payload.key}`);
         
         currentModel.value=payload.value;
-        console.log(currentModel)
       },
       updateFormStep (state, newStep){
         state.currentStep=newStep>0? newStep : 1;

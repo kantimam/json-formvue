@@ -28531,11 +28531,39 @@ var web_timers = __webpack_require__("4795");
 
 
 
+var createInputName = function createInputName(formName, inputName) {
+  return "tx_form_formframework[".concat(formName, "][").concat(inputName, "]");
+};
 var isRequired = function isRequired(properties) {
   return !!properties && properties.fluidAdditionalAttributes && properties.fluidAdditionalAttributes.required && properties.fluidAdditionalAttributes.required === 'required';
 };
-var util_createValidatorList = function createValidatorList(validators) {
-  console.log(validators);
+/*
+export const createValidatorListFromProps=(properties)=>{
+    const fluidAttributes=properties.fluidAdditionalAttributes;
+    if(!fluidAttributes) return {}
+    const validators={};
+
+    for(const attribute in fluidAttributes){
+        const validatorFunction=createSimpleValidatorByKey(attribute, fluidAttributes[attribute])
+        if(validatorFunction) validators[attribute]=validatorFunction;
+    }
+    return validators
+}
+// create a function and wrap it inside the payload
+export const createSimpleValidatorByKey=(validatorKey, payload)=>{
+    // inject payload and error message into the selected validation function
+    const knownFunctions={
+        required: (inputValue)=>!!inputValue || `this field is required`,
+        minlength: (inputValue)=>inputValue.length>=Number(payload) || `min length is ${payload}`,
+        maxlength: (inputValue)=>inputValue.length<Number(payload) || `max length is ${payload}`,
+        default: null
+    }
+    return knownFunctions[validatorKey] || knownFunctions.default;
+}
+
+ */
+
+var util_createValidatorList = function createValidatorList(validators, errors) {
   if (!validators || !validators.length) return {};
   var validatorsMap = {};
 
@@ -28598,7 +28626,6 @@ var createValidatorByKey = function createValidatorByKey(validatorKey, vArgs, er
   return knownFunctions[validatorKey] || knownFunctions["default"];
 };
 var validatorRequired = function validatorRequired(string, invalidMessage) {
-  console.log("tried to validate: " + string);
   return !!string || invalidMessage;
 };
 var validatorLength = function validatorLength(string, invalidMessage, vArgs) {
@@ -28717,14 +28744,12 @@ var store_createStore = function createStore(initialState) {
     },
     mutations: {
       updateInputValue: function updateInputValue(state, payload) {
-        console.log(payload);
         var validIndex = state.currentStep ? state.currentStep - 1 : 0;
         var currentStep = state.steps[validIndex];
         if (!currentStep) return console.log("could not find the step ".concat(state.currentStep, " at the index ").concat(validIndex));
         var currentModel = currentStep.inputModel[payload.key];
         if (!currentModel) return console.log("the model does not have a field with the key ".concat(payload.key));
         currentModel.value = payload.value;
-        console.log(currentModel);
       },
       updateFormStep: function updateFormStep(state, newStep) {
         state.currentStep = newStep > 0 ? newStep : 1;
@@ -33784,12 +33809,12 @@ var cache = new Map();
     }), children);
   }
 }));
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"194bfd08-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/layout/form_grid_col.vue?vue&type=template&id=aa17d168&
-var form_grid_colvue_type_template_id_aa17d168_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('v-col',{attrs:{"cols":"12","xl":_vm.columnSizes.lg,"lg":_vm.columnSizes.lg,"md":_vm.columnSizes.md,"sm":_vm.columnSizes.sm,"xs":_vm.columnSizes.xs}},[_c('field-renderer',{attrs:{"fieldData":_vm.$props,"formName":_vm.formName}})],1)}
-var form_grid_colvue_type_template_id_aa17d168_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"194bfd08-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/layout/form_grid_col.vue?vue&type=template&id=6f3bdb08&
+var form_grid_colvue_type_template_id_6f3bdb08_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('v-col',{attrs:{"cols":"12","xl":_vm.columnSizes.lg,"lg":_vm.columnSizes.lg,"md":_vm.columnSizes.md,"sm":_vm.columnSizes.sm,"xs":_vm.columnSizes.xs}},[_c('field-renderer',{attrs:{"fieldData":Object.assign({}, _vm.$props, _vm.$attrs),"formName":_vm.formName}})],1)}
+var form_grid_colvue_type_template_id_6f3bdb08_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/layout/form_grid_col.vue?vue&type=template&id=aa17d168&
+// CONCATENATED MODULE: ./src/components/layout/form_grid_col.vue?vue&type=template&id=6f3bdb08&
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.starts-with.js
 var es_string_starts_with = __webpack_require__("2ca0");
@@ -33983,25 +34008,7 @@ var VCol_cache = new Map();
     VCol: VCol
   },
   props: {
-    defaultValue: {
-      type: String
-    },
     formName: {
-      type: String,
-      required: true
-    },
-    identifier: {
-      type: String,
-      required: true
-    },
-    label: {
-      type: String
-    },
-    name: {
-      type: String,
-      required: true
-    },
-    type: {
       type: String,
       required: true
     },
@@ -34062,8 +34069,8 @@ var VCol_cache = new Map();
 
 var form_grid_col_component = normalizeComponent(
   layout_form_grid_colvue_type_script_lang_js_,
-  form_grid_colvue_type_template_id_aa17d168_render,
-  form_grid_colvue_type_template_id_aa17d168_staticRenderFns,
+  form_grid_colvue_type_template_id_6f3bdb08_render,
+  form_grid_colvue_type_template_id_6f3bdb08_staticRenderFns,
   false,
   null,
   null,
