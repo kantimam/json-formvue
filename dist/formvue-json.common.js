@@ -28531,39 +28531,11 @@ var web_timers = __webpack_require__("4795");
 
 
 
-var createInputName = function createInputName(formName, inputName) {
-  return "tx_form_formframework[".concat(formName, "][").concat(inputName, "]");
-};
 var isRequired = function isRequired(properties) {
   return !!properties && properties.fluidAdditionalAttributes && properties.fluidAdditionalAttributes.required && properties.fluidAdditionalAttributes.required === 'required';
 };
-/*
-export const createValidatorListFromProps=(properties)=>{
-    const fluidAttributes=properties.fluidAdditionalAttributes;
-    if(!fluidAttributes) return {}
-    const validators={};
-
-    for(const attribute in fluidAttributes){
-        const validatorFunction=createSimpleValidatorByKey(attribute, fluidAttributes[attribute])
-        if(validatorFunction) validators[attribute]=validatorFunction;
-    }
-    return validators
-}
-// create a function and wrap it inside the payload
-export const createSimpleValidatorByKey=(validatorKey, payload)=>{
-    // inject payload and error message into the selected validation function
-    const knownFunctions={
-        required: (inputValue)=>!!inputValue || `this field is required`,
-        minlength: (inputValue)=>inputValue.length>=Number(payload) || `min length is ${payload}`,
-        maxlength: (inputValue)=>inputValue.length<Number(payload) || `max length is ${payload}`,
-        default: null
-    }
-    return knownFunctions[validatorKey] || knownFunctions.default;
-}
-
- */
-
-var util_createValidatorList = function createValidatorList(validators, errors) {
+var util_createValidatorList = function createValidatorList(validators) {
+  console.log(validators);
   if (!validators || !validators.length) return {};
   var validatorsMap = {};
 
@@ -28626,6 +28598,7 @@ var createValidatorByKey = function createValidatorByKey(validatorKey, vArgs, er
   return knownFunctions[validatorKey] || knownFunctions["default"];
 };
 var validatorRequired = function validatorRequired(string, invalidMessage) {
+  console.log("tried to validate: " + string);
   return !!string || invalidMessage;
 };
 var validatorLength = function validatorLength(string, invalidMessage, vArgs) {
