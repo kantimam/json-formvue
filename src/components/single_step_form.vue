@@ -11,16 +11,14 @@
         :formName="formConfig.id"
         :fieldData="fieldData"
     />
-    <v-btn
+    <o-btn
       class="mr-4"
       type="submit"
+      :loading="loading"
     >
       {{nextButtonLabel}}
-    </v-btn>
+    </o-btn>
 
-    <div class="py-4" v-if="loading">
-      <loading-spinner indeterminate/>
-    </div>
   </v-form>
 </template>
 

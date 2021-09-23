@@ -35,6 +35,7 @@ export class DynamicJsonForm{
             if(config.validators) this.validatorsDictionary=new ComponentsMapping(config.validators);
             if(config.callbacks) this.callbacksDictionary=new ComponentsMapping(config.callbacks);
             if(config.customLoadingComponent) this.customLoadingComponent=config.loadingComponent;
+            if(config.customButtonComponent) this.customButtonComponent=config.buttonComponent;
         }
 
 
@@ -44,10 +45,16 @@ export class DynamicJsonForm{
         Vue.config.productionTip = false;
         Vue.component('field-renderer', globalInputRenderer);
         if(this.customLoadingComponent){
-            Vue.component('loading-spinner', this.customLoadingComponent)
+            Vue.component('o-loading', this.customLoadingComponent)
         }else {
             const loading=()=>import('vuetify/lib/components/VProgressCircular');
-            Vue.component('loading-spinner', loading);
+            Vue.component('o-loading', loading);
+        }
+        if(this.customButtonComponent){
+            Vue.component('o-btn', this.customButtonComponent)
+        }else {
+            const loading=()=>import('vuetify/lib/components/VBtn');
+            Vue.component('o-btn', loading);
         }
 
         Vue.prototype.$componentsDictionary=this.componentsDictionary;
