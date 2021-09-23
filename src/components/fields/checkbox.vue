@@ -10,7 +10,8 @@
         :required="required"
         :rules="validateField"
         validate-on-blur
-        :value="defaultValue"
+        :value="inputValue"
+        :checked="inputValue"
         v-model="inputValue"
         color="red"
         :name="name"
