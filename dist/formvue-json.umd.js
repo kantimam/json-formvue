@@ -29481,19 +29481,6 @@ var runtime = __webpack_require__("96cf");
 // EXTERNAL MODULE: ./node_modules/vue/dist/vue.runtime.esm.js
 var vue_runtime_esm = __webpack_require__("2b0e");
 
-// EXTERNAL MODULE: ./node_modules/vuetify/lib/framework.js + 29 modules
-var framework = __webpack_require__("f309");
-
-// CONCATENATED MODULE: ./src/plugins/vuetify.js
-
-
-vue_runtime_esm["a" /* default */].use(framework["a" /* default */]);
-var opts = {
-  icons: {
-    iconfont: 'mdi'
-  }
-};
-/* harmony default export */ var vuetify = (new framework["a" /* default */](opts));
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.is-array.js
 var es_array_is_array = __webpack_require__("277d");
 
@@ -30129,6 +30116,9 @@ var ComponentsMapping_ComponentsMapping = /*#__PURE__*/function () {
   return ComponentsMapping;
 }();
 
+
+// EXTERNAL MODULE: ./node_modules/vuetify/lib/framework.js + 29 modules
+var framework = __webpack_require__("f309");
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"194bfd08-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/App.vue?vue&type=template&id=3fdf9718&
 var Appvue_type_template_id_3fdf9718_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('v-app',[(!_vm.formFinished)?_c('div',[(_vm.isSingleStepForm)?_c('single-step-form'):_c('multi-step-form')],1):_vm._e(),(_vm.formResponse)?_c('div',{domProps:{"innerHTML":_vm._s(_vm.formResponse)}}):_vm._e()])}
@@ -39510,6 +39500,14 @@ var main_DynamicJsonForm = /*#__PURE__*/function () {
 
     Object(defineProperty["a" /* default */])(this, "callbacksDictionary", DefaultValidators);
 
+    Object(defineProperty["a" /* default */])(this, "vuetifyConfig", {
+      icons: {
+        iconfont: 'mdi'
+      }
+    });
+
+    Object(defineProperty["a" /* default */])(this, "vuetifyContext", void 0);
+
     if (!formConfigsList) throw new Error('an object with form configurations needs to be provided');
     if (!formElementsList || !formElementsList.length) throw new Error('a list of dom nodes needs to be provided');
     this.formConfigsList = formConfigsList;
@@ -39522,14 +39520,18 @@ var main_DynamicJsonForm = /*#__PURE__*/function () {
       if (config.callbacks) this.callbacksDictionary = new ComponentsMapping_ComponentsMapping(config.callbacks);
       if (config.customLoadingComponent) this.customLoadingComponent = config.loadingComponent;
       if (config.customButtonComponent) this.customButtonComponent = config.buttonComponent;
+      if (config.vuetifyConfig) this.vuetifyConfig = config.vuetifyConfig;
     }
   }
 
   Object(createClass["a" /* default */])(DynamicJsonForm, [{
     key: "init",
     value: function init() {
+      // init vuetify and use custom config if provided
+      vue_runtime_esm["a" /* default */].use(framework["a" /* default */]);
+      this.vuetifyContext = new framework["a" /* default */](this.vuetifyConfig);
       vue_runtime_esm["a" /* default */].config.productionTip = false;
-      vue_runtime_esm["a" /* default */].component('field-renderer', field_renderer);
+      vue_runtime_esm["a" /* default */].component('field-renderer', field_renderer); // init global components and overwrite them if custom components are provided
 
       if (this.customLoadingComponent) {
         vue_runtime_esm["a" /* default */].component('o-loading', this.customLoadingComponent);
@@ -39578,7 +39580,7 @@ var main_DynamicJsonForm = /*#__PURE__*/function () {
           }
 
           var vueInstance = new vue_runtime_esm["a" /* default */]({
-            vuetify: vuetify,
+            vuetify: this.vuetifyContext,
             store: store(formData),
             render: function render(h) {
               return h(App);

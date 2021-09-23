@@ -2,10 +2,10 @@ import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 
 import Vue from 'vue';
-import vuetify from './plugins/vuetify';
 import createStore from './store/index.js'
 import globalInputRenderer from './components/field_renderer'
 import ComponentsMapping from './lib/ComponentsMapping';
+import Vuetify from 'vuetify/lib/framework';
 
 
 
@@ -21,6 +21,13 @@ export class DynamicJsonForm{
     componentsDictionary=DefaultComponents;
     validatorsDictionary=DefaultCallbacks;
     callbacksDictionary=DefaultValidators;
+    vuetifyConfig={
+        icons: {
+            iconfont: 'mdi'
+        }
+    }
+    vuetifyContext;
+
 
     constructor(formConfigsList, formElementsList, config){
         if(!formConfigsList) throw new Error('an object with form configurations needs to be provided');
@@ -36,14 +43,21 @@ export class DynamicJsonForm{
             if(config.callbacks) this.callbacksDictionary=new ComponentsMapping(config.callbacks);
             if(config.customLoadingComponent) this.customLoadingComponent=config.loadingComponent;
             if(config.customButtonComponent) this.customButtonComponent=config.buttonComponent;
+            if(config.vuetifyConfig) this.vuetifyConfig=config.vuetifyConfig;
         }
 
 
     }
 
     init(){
+        // init vuetify and use custom config if provided
+        Vue.use(Vuetify);
+        this.vuetifyContext=new Vuetify(this.vuetifyConfig)
+
         Vue.config.productionTip = false;
         Vue.component('field-renderer', globalInputRenderer);
+
+        // init global components and overwrite them if custom components are provided
         if(this.customLoadingComponent){
             Vue.component('o-loading', this.customLoadingComponent)
         }else {
@@ -77,7 +91,7 @@ export class DynamicJsonForm{
             }
 
             const vueInstance=new Vue({
-                vuetify,
+                vuetify: this.vuetifyContext,
                 store: createStore(formData),
                 render: h => h(App)
             }).$mount(wrapper);
