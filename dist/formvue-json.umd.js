@@ -28511,6 +28511,9 @@ var web_dom_collections_for_each = __webpack_require__("159b");
 // EXTERNAL MODULE: ./node_modules/vuex/dist/vuex.esm.js
 var vuex_esm = __webpack_require__("2f62");
 
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.trim.js
+var es_string_trim = __webpack_require__("498a");
+
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.parse-float.js
 var es_parse_float = __webpack_require__("acd8");
 
@@ -28540,38 +28543,13 @@ var web_timers = __webpack_require__("4795");
 
 
 
+
 var createInputName = function createInputName(formName, inputName) {
   return "tx_form_formframework[".concat(formName, "][").concat(inputName, "]");
 };
 var isRequired = function isRequired(properties) {
   return !!properties && properties.fluidAdditionalAttributes && properties.fluidAdditionalAttributes.required && properties.fluidAdditionalAttributes.required === 'required';
 };
-/*
-export const createValidatorListFromProps=(properties)=>{
-    const fluidAttributes=properties.fluidAdditionalAttributes;
-    if(!fluidAttributes) return {}
-    const validators={};
-
-    for(const attribute in fluidAttributes){
-        const validatorFunction=createSimpleValidatorByKey(attribute, fluidAttributes[attribute])
-        if(validatorFunction) validators[attribute]=validatorFunction;
-    }
-    return validators
-}
-// create a function and wrap it inside the payload
-export const createSimpleValidatorByKey=(validatorKey, payload)=>{
-    // inject payload and error message into the selected validation function
-    const knownFunctions={
-        required: (inputValue)=>!!inputValue || `this field is required`,
-        minlength: (inputValue)=>inputValue.length>=Number(payload) || `min length is ${payload}`,
-        maxlength: (inputValue)=>inputValue.length<Number(payload) || `max length is ${payload}`,
-        default: null
-    }
-    return knownFunctions[validatorKey] || knownFunctions.default;
-}
-
- */
-
 var util_createValidatorList = function createValidatorList(validators, errors) {
   if (!validators || !validators.length) return {};
   var validatorsMap = {};
@@ -28639,7 +28617,8 @@ var validatorRequired = function validatorRequired(string, invalidMessage) {
 };
 var validatorLength = function validatorLength(string, invalidMessage, vArgs) {
   if (!string.length) return invalidMessage;
-  return string.length >= vArgs.minimum && string.length < vArgs.maximum || invalidMessage;
+  var trimmedString = string.trim();
+  return trimmedString.length >= vArgs.minimum && trimmedString.length <= vArgs.maximum || invalidMessage;
 };
 var validatorAlphanumeric = function validatorAlphanumeric(string, invalidMessage) {
   return /^[a-z0-9]+$/i.test(string) || invalidMessage;
@@ -29777,9 +29756,6 @@ let all = factory().extend({
 /**/
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.link.js
 var es_string_link = __webpack_require__("9911");
-
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.trim.js
-var es_string_trim = __webpack_require__("498a");
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.assign.js
 var es_object_assign = __webpack_require__("cca6");

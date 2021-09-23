@@ -4,33 +4,6 @@ export const createInputName=(formName, inputName)=>`tx_form_formframework[${for
 export const isRequired=(properties)=>!!properties && properties.fluidAdditionalAttributes && properties.fluidAdditionalAttributes.required && properties.fluidAdditionalAttributes.required === 'required';
 
 
-/*
-export const createValidatorListFromProps=(properties)=>{
-    const fluidAttributes=properties.fluidAdditionalAttributes;
-    if(!fluidAttributes) return {}
-    const validators={};
-
-    for(const attribute in fluidAttributes){
-        const validatorFunction=createSimpleValidatorByKey(attribute, fluidAttributes[attribute])
-        if(validatorFunction) validators[attribute]=validatorFunction;
-    }
-    return validators
-}
-// create a function and wrap it inside the payload
-export const createSimpleValidatorByKey=(validatorKey, payload)=>{
-    // inject payload and error message into the selected validation function
-    const knownFunctions={
-        required: (inputValue)=>!!inputValue || `this field is required`,
-        minlength: (inputValue)=>inputValue.length>=Number(payload) || `min length is ${payload}`,
-        maxlength: (inputValue)=>inputValue.length<Number(payload) || `max length is ${payload}`,
-        default: null
-    }
-    return knownFunctions[validatorKey] || knownFunctions.default;
-}
-
- */
-
-
 export const createValidatorList=(validators, errors)=>{
     if(!validators || !validators.length) return {}
     const validatorsMap={};
@@ -68,7 +41,8 @@ export const createValidatorByKey=(validatorKey, vArgs, errorMessage)=>{
 export const validatorRequired=(string, invalidMessage)=>!!string || invalidMessage;
 export const validatorLength=(string, invalidMessage, vArgs)=>{
     if(!string.length) return invalidMessage;
-    return (string.length>=vArgs.minimum && string.length<vArgs.maximum) || invalidMessage;
+    const trimmedString=string.trim();
+    return (trimmedString.length>=vArgs.minimum && trimmedString.length<=vArgs.maximum) || invalidMessage;
 };
 export const validatorAlphanumeric=(string, invalidMessage)=>/^[a-z0-9]+$/i.test(string) || invalidMessage
 export const validatorEmail=(string, invalidMessage)=>{
