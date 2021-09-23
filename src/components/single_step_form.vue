@@ -11,13 +11,13 @@
         :formName="formConfig.id"
         :fieldData="fieldData"
     />
-    <o-btn
+    <v-btn
       class="mr-4"
       type="submit"
       :loading="loading"
     >
       {{nextButtonLabel}}
-    </o-btn>
+    </v-btn>
 
   </v-form>
 </template>

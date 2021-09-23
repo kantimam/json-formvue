@@ -14,29 +14,29 @@
           :fieldData="fieldData"
       />
       <div class="d-flex justify-space-between mt-4">
-        <o-btn
+        <v-btn
           type="button"
           v-if="currentStep>1"
           @click="loadPreviousStep"
         >
           {{previousButtonLabel}}
-        </o-btn>
+        </v-btn>
 
 
-        <o-btn
+        <v-btn
             type="submit"
             v-if="isLastStep"
             :loading="loading"
         >
           {{nextButtonLabel}}
-        </o-btn>
-        <o-btn
+        </v-btn>
+        <v-btn
             type="submit"
             v-else
             :loading="loading"
         >
           {{nextButtonLabel}}
-        </o-btn>
+        </v-btn>
       </div>
     </v-form>
   </div>
