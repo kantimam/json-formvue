@@ -13,17 +13,18 @@
       :name="name"
   >
     <div v-if="properties.link" class="ondigo-label-wrapper" slot="label">
-      <a
-          @click.stop
-          class="ondigo-label-a"
-          v-bind:target="properties.openInNewWindow? '_blank' : '_self'"
-          v-bind:data-overlay="properties.openInOverlay=='true'? 1 : null"
-          :href="properties.link"
-      >
-        {{ properties.linkText }}
-      </a>
       <p class="ondigo-label-p">
         {{ label }}
+        {{" "}}
+        <a
+            @click.stop
+            class="ondigo-label-a"
+            v-bind:target="properties.openInNewWindow? '_blank' : '_self'"
+            v-bind:data-overlay="properties.openInOverlay=='true'? 1 : null"
+            :href="properties.link"
+        >
+          {{ properties.linkText }}
+        </a>
       </p>
     </div>
   </v-checkbox>
