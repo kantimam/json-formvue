@@ -1,7 +1,8 @@
 <template>
-  <div>
-    <h2 class="mb-4">step {{currentStep}} of {{lastStep}}</h2>
-    <v-form 
+  <div class="ondigo-multistep-form-wrapper">
+    <h2 class="mb-4 ondigo-form-header">step {{currentStep}} of {{lastStep}}</h2>
+    <v-form
+      class="ondigo-multi-step-form ondigo-form"
       :id="formConfig.id" 
       @submit.prevent="handleFormSubmit" 
       ref="form"

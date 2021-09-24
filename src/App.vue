@@ -1,11 +1,11 @@
 <template>
-    <v-app>
-      <div v-if="!formFinished">
+    <div class="ondigo-formvue">
+      <div class="ondigo-form-wrapper" v-if="!formFinished">
         <single-step-form v-if="isSingleStepForm"/>
         <multi-step-form  v-else/>
       </div>
       <div v-if="formResponse" v-html="formResponse"></div>
-    </v-app>
+    </div>
 </template>
 
 <script>
