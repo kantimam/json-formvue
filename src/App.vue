@@ -1,4 +1,5 @@
 <template>
+  <v-app class="ondigo-formvue-app">
     <div class="ondigo-formvue">
       <div class="ondigo-form-wrapper" v-if="!formFinished">
         <single-step-form v-if="isSingleStepForm"/>
@@ -6,6 +7,7 @@
       </div>
       <div v-if="formResponse" v-html="formResponse"></div>
     </div>
+  </v-app>
 </template>
 
 <script>
@@ -30,3 +32,8 @@
     }
   }
 </script>
+<style scoped>
+  ::v-deep .v-application--wrap {
+    min-height: fit-content;
+  }
+</style>
