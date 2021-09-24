@@ -1,30 +1,41 @@
 <template>
-    <v-checkbox 
-        @blur="blur"
-        @change="change"
-        @focus="focus"
-        :id="id"
-        @input="input"
-        :label="label"
-        :ref="'ref-' + id"
-        :required="required"
-        :rules="validateField"
-        validate-on-blur
-        :value="inputValue"
-        :checked="inputValue"
-        v-model="inputValue"
-        color="red"
-        :name="name"
-    >
-    </v-checkbox>
+  <v-checkbox
+      class="ondigo-checkbox"
+      :id="id"
+      :label="label"
+      :ref="'ref-' + id"
+      :required="required"
+      :rules="validateField"
+      validate-on-blur
+      v-model="inputValue"
+      :value="inputValue"
+      :checked="inputValue"
+      :name="name"
+  >
+    <div v-if="properties.link" class="ondigo-label-wrapper" slot="label">
+      <a
+          @click.stop
+          class="ondigo-label-a"
+          v-bind:target="properties.openInNewWindow? '_blank' : '_self'"
+          v-bind:data-overlay="properties.openInOverlay=='true'? 1 : null"
+          :href="properties.link"
+      >
+        {{ properties.linkText }}
+      </a>
+      <p class="ondigo-label-p">
+        {{ label }}
+      </p>
+    </div>
+  </v-checkbox>
 </template>
 
 <script>
-  import {createValidatorList, isRequired} from '../../lib/util'
 
-  export default {
+import {createValidatorList, isRequired} from '../../lib/util'
+
+export default {
   name: "OnCheckbox",
- 
+
   props: {
     autocomplete: {
       type: String,
@@ -104,7 +115,7 @@
       type: Boolean,
       default: false
     },
-    
+
     requiredLabel: {
       type: String,
       default: 'required'
@@ -151,28 +162,14 @@
     },
     inputValue: {
       get(){
-        return this.$store.getters.getCurrentInputValue(this.id) || ""
+        return this.$store.getters.getCurrentInputValue(this.id)? true : false
       },
       set(value){
+        console.log(value)
         this.$store.commit('updateInputValue', {key: this.id, value: value})
       }
     }
   },
-  
 
-  methods: {
-    change(e) {
-      this.$emit("change", e);
-    },
-    input(e) {
-      this.$emit("input", e);
-    },
-    focus(e) {
-      this.$emit("focus", e);
-    },
-    blur(e) {
-      this.$emit("blur", e);
-    }
-  }
 };
 </script>

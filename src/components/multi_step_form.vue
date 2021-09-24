@@ -19,6 +19,7 @@
           type="button"
           v-if="currentStep>1"
           @click="loadPreviousStep"
+          color="secondary"
         >
           {{previousButtonLabel}}
         </v-btn>
@@ -28,6 +29,7 @@
             type="submit"
             v-if="isLastStep"
             :loading="loading"
+            color="primary"
         >
           {{nextButtonLabel}}
         </v-btn>
@@ -35,6 +37,7 @@
             type="submit"
             v-else
             :loading="loading"
+            color="primary"
         >
           {{nextButtonLabel}}
         </v-btn>

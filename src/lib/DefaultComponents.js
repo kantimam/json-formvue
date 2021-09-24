@@ -21,6 +21,7 @@ export default new ComponentsMapping({
     GridRow: FormGridRow,
     Textarea: OnTextArea,
     Checkbox: OnCheckBox,
+    LinkedCheckbox: OnCheckBox,
     RadioButton: OnRadioGroup,
     SingleSelect: OnSelect,
     form: 'form',

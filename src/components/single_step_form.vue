@@ -16,6 +16,7 @@
       class="mr-4"
       type="submit"
       :loading="loading"
+      color="primary"
     >
       {{nextButtonLabel}}
     </v-btn>
