@@ -7,6 +7,7 @@
         :label="label"
         :name="name"
         outlined
+        dense
         :ref="'ref-' + id"
         :required="required"
         :rules="validateField"

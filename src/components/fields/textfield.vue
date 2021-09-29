@@ -5,7 +5,8 @@
                 :color="$vuetify.theme.themes.light.primary"
                 :counter="counter"
                 :disabled="disabled"
-                filled
+                outlined
+                dense
                 @focus="focus"
                 :id="id"
                 @input="input"

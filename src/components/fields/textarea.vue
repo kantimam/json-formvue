@@ -5,7 +5,6 @@
                 :color="$vuetify.theme.themes.light.primary"
                 :counter="counter"
                 :disabled="disabled"
-                filled
                 @focus="focus"
                 :id="id"
                 @input="input"
@@ -20,7 +19,10 @@
                 v-model="inputValue"
                 validate-on-blur
                 :value="defaultValue"
+                outlined
+                dense
                 :name="name"
+
     >
   </v-textarea>
 </template>
