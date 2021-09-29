@@ -18,7 +18,6 @@ import DefaultValidators from './lib/DefaultValidators';
 export class DynamicJsonForm{
     formViews={};
     appName='tx_form_formframework';
-    componentsDictionary=DefaultComponents;
     validatorsDictionary=DefaultCallbacks;
     callbacksDictionary=DefaultValidators;
     vuetifyConfig={
@@ -38,14 +37,21 @@ export class DynamicJsonForm{
 
         if(config){
             if(config.appName) this.appName=config.appName;
-            if(config.components) this.componentsDictionary=new ComponentsMapping(config.components);
+            if(config.vuetifyConfig) this.vuetifyConfig=config.vuetifyConfig;
+
             if(config.validators) this.validatorsDictionary=new ComponentsMapping(config.validators);
             if(config.callbacks) this.callbacksDictionary=new ComponentsMapping(config.callbacks);
+
             if(config.customLoadingComponent) this.customLoadingComponent=config.loadingComponent;
             if(config.customButtonComponent) this.customButtonComponent=config.buttonComponent;
-            if(config.vuetifyConfig) this.vuetifyConfig=config.vuetifyConfig;
         }
 
+        // create with an object containing your components or fallback to default
+        if(config && config.components){
+            this.componentsDictionary=new ComponentsMapping(config.components);
+        }else{
+            this.componentsDictionary=DefaultComponents;
+        }
 
     }
 

@@ -13,6 +13,7 @@
         v-model="inputValue"
         color="red"
         :name="name"
+        hide-details="auto"
     >
         <v-radio
             v-for="option in radioOptions"

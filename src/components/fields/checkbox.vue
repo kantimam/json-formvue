@@ -11,6 +11,7 @@
       :value="inputValue"
       :checked="inputValue"
       :name="name"
+      hide-details="auto"
   >
     <div v-if="properties.link" class="ondigo-label-wrapper" slot="label">
       <p class="ondigo-label-p">

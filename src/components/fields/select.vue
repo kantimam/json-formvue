@@ -13,7 +13,8 @@
         :rules="validateField"
         :value="defaultValue"
         v-model="inputValue"
-        
+        hide-details="auto"
+
     ></v-select>
 </template>
 

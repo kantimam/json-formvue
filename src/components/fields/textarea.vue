@@ -22,6 +22,7 @@
                 outlined
                 dense
                 :name="name"
+                hide-details="auto"
 
     >
   </v-textarea>

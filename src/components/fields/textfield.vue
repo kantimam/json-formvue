@@ -22,7 +22,8 @@
                 validate-on-blur
                 :value="defaultValue"
                 :name="name"
-    >
+                hide-details="auto"
+  >
   </v-text-field>
 </template>
 
