@@ -11,7 +11,7 @@
                 :disabled="disabled"
                 filled
                 @focus="focus"
-                :hide-details="hidedetails"
+                hide-details="auto"
                 :id="id"
                 :inputmode="inputmode"
                 :label="label"

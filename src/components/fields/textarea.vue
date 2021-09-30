@@ -6,7 +6,7 @@
                 :counter="counter"
                 :disabled="disabled"
                 @focus="focus"
-                :class="`o-input-${id} o-textarea`"
+                :class="`ondigo-input-${id} ondigo-input ondigo-textarea`"
                 @input="input"
                 :label="label"
                 :placeholder="placeholder"
@@ -19,11 +19,12 @@
                 v-model="inputValue"
                 validate-on-blur
                 :value="defaultValue"
-                outlined
-                dense
+                filled
                 :name="name"
+                hide-details="auto"
 
-    >
+
+  >
   </v-textarea>
 </template>
 

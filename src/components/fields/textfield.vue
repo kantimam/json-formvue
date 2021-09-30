@@ -8,7 +8,7 @@
                 outlined
                 dense
                 @focus="focus"
-                :class="`o-input-${id} o-textfield`"
+                :class="`ondigo-input-${id} odnigo-input ondigo-textfield`"
                 @input="input"
                 :label="label"
                 :placeholder="placeholder"

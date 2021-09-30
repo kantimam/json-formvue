@@ -1,7 +1,7 @@
 <template>
   <v-checkbox
       class="ondigo-checkbox"
-      :class="`o-input-${id} o-checkbox`"
+      :class="`ondigo-input-${id} ondigo-checkbox`"
       :label="label"
       :ref="'ref-' + id"
       :required="required"
@@ -11,6 +11,7 @@
       :value="inputValue"
       :checked="inputValue"
       :name="name"
+      hide-details="auto"
   >
     <div v-if="properties.link" class="ondigo-label-wrapper" slot="label">
       <p class="ondigo-label-p">

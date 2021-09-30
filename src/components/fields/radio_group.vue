@@ -3,7 +3,7 @@
         @blur="blur"
         @change="change"
         @focus="focus"
-        :class="`o-input-${id} o-radio`"
+        :class="`ondigo-input-${id} ondigo-radio`"
         @input="input"
         :label="label"
         :ref="'ref-' + id"
@@ -13,6 +13,8 @@
         v-model="inputValue"
         color="red"
         :name="name"
+        hide-details="auto"
+
     >
         <v-radio
             v-for="option in radioOptions"

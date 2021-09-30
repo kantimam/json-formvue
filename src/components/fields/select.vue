@@ -3,16 +3,16 @@
         :items="selectItems"
         item-text="label"
         item-value="value"
-        :id="id"
+        :class="`ondigo-select ondigo-select ondigo-select-${id}`"
         :label="label"
         :name="name"
-        outlined
-        dense
+        filled
         :ref="'ref-' + id"
         :required="required"
         :rules="validateField"
         :value="defaultValue"
         v-model="inputValue"
+        hide-details="auto"
 
     ></v-select>
 </template>
