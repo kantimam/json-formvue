@@ -14,7 +14,7 @@
         :fieldData="fieldData"
     />
     <v-btn
-      class="mr-4 ondigo-btn-submit ondigo-o-btn"
+      :class="`ondigo-btn-submit ondigo-btn ${nextButtonAlignment}`"
       type="submit"
       :loading="loading"
       color="primary"
@@ -43,6 +43,12 @@
       },
       nextButtonLabel(){
         return this.buttonLabels && this.buttonLabels.nextButtonLabel || "submit"
+      },
+      nextButtonAlignment(){
+        return (this.formConfig &&
+                this.formConfig.api &&
+                this.formConfig.api.page &&
+                this.formConfig.api.page.submitButtonAlignment) || "left"
       }
     },
     methods: {
