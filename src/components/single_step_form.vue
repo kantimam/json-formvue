@@ -5,6 +5,7 @@
     @submit.prevent="handleFormSubmit" 
     ref="form"
     :name="formConfig.identifier"
+    :loading="loading"
   >
     <field-renderer 
         v-for="fieldData in formConfig.elements"
@@ -13,7 +14,7 @@
         :fieldData="fieldData"
     />
     <v-btn
-      class="mr-4"
+      class="mr-4 o-btn-submit o-btn"
       type="submit"
       :loading="loading"
       color="primary"

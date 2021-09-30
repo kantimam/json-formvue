@@ -7,6 +7,7 @@
       @submit.prevent="handleFormSubmit" 
       ref="form"
       :name="formConfig.identifier"
+      :loading="loading"
     >
       <field-renderer
           v-for="fieldData in formConfig.elements"
@@ -20,6 +21,8 @@
           v-if="currentStep>1"
           @click="loadPreviousStep"
           color="secondary"
+          class="o-btn o-btn-back"
+
         >
           {{previousButtonLabel}}
         </v-btn>
@@ -30,6 +33,7 @@
             v-if="isLastStep"
             :loading="loading"
             color="primary"
+            class="o-btn o-btn-submit"
         >
           {{nextButtonLabel}}
         </v-btn>
@@ -38,6 +42,7 @@
             v-else
             :loading="loading"
             color="primary"
+            class="o-btn o-btn-next"
         >
           {{nextButtonLabel}}
         </v-btn>

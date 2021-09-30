@@ -8,7 +8,7 @@
                 outlined
                 dense
                 @focus="focus"
-                :id="id"
+                :class="`o-input-${id} o-textfield`"
                 @input="input"
                 :label="label"
                 :placeholder="placeholder"
@@ -22,7 +22,6 @@
                 validate-on-blur
                 :value="defaultValue"
                 :name="name"
-                hide-details="auto"
   >
   </v-text-field>
 </template>

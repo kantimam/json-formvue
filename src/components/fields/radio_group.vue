@@ -3,7 +3,7 @@
         @blur="blur"
         @change="change"
         @focus="focus"
-        :id="id"
+        :class="`o-input-${id} o-radio`"
         @input="input"
         :label="label"
         :ref="'ref-' + id"
@@ -13,7 +13,6 @@
         v-model="inputValue"
         color="red"
         :name="name"
-        hide-details="auto"
     >
         <v-radio
             v-for="option in radioOptions"

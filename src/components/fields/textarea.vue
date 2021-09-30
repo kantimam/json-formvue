@@ -6,7 +6,7 @@
                 :counter="counter"
                 :disabled="disabled"
                 @focus="focus"
-                :id="id"
+                :class="`o-input-${id} o-textarea`"
                 @input="input"
                 :label="label"
                 :placeholder="placeholder"
@@ -22,7 +22,6 @@
                 outlined
                 dense
                 :name="name"
-                hide-details="auto"
 
     >
   </v-textarea>
