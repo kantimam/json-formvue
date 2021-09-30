@@ -1,2 +1,0 @@
-(("undefined"!==typeof self?self:this)["webpackJsonpformvue_json"]=("undefined"!==typeof self?self:this)["webpackJsonpformvue_json"]||[]).push([[1],{afdd:function(e,f,n){"use strict";n.r(f);var s=n("8336");n.d(f,"VBtn",(function(){return s["a"]})),f["default"]=s["a"]}}]);
-//# sourceMappingURL=formvue-json.umd.min.1.js.map

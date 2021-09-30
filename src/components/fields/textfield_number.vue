@@ -2,7 +2,7 @@
   <text-field v-bind="$attrs" v-on="$listeners" type="number"/>
 </template>
 <script>
-  import TextField from './textfield.vue'
+import TextField from './extended_text_field'
   export default {
   name: "OnTextfieldText",
   components: {

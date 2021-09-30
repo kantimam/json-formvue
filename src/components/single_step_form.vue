@@ -14,7 +14,7 @@
         :fieldData="fieldData"
     />
     <v-btn
-      class="mr-4 o-btn-submit o-btn"
+      class="mr-4 ondigo-btn-submit ondigo-o-btn"
       type="submit"
       :loading="loading"
       color="primary"

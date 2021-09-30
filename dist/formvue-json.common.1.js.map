@@ -1,1 +1,0 @@
-{"version":3,"sources":["webpack://formvue-json/../../../src/components/VBtn/index.ts"],"names":[],"mappings":";;;;;;AAAA;AAAA;AAAA;AAAA;AAAA;AAEA;AACA,sH","file":"formvue-json.common.1.js","sourcesContent":["import VBtn from './VBtn'\n\nexport { VBtn }\nexport default VBtn\n"],"sourceRoot":""}

@@ -21,7 +21,7 @@
           v-if="currentStep>1"
           @click="loadPreviousStep"
           color="secondary"
-          class="o-btn o-btn-back"
+          class="ondigo-btn ondigo-btn-back"
 
         >
           {{previousButtonLabel}}
@@ -33,7 +33,7 @@
             v-if="isLastStep"
             :loading="loading"
             color="primary"
-            class="o-btn o-btn-submit"
+            class="ondigo-btn ondigo-btn-submit"
         >
           {{nextButtonLabel}}
         </v-btn>
@@ -42,7 +42,7 @@
             v-else
             :loading="loading"
             color="primary"
-            class="o-btn o-btn-next"
+            class="ondigo-btn ondigo-btn-next"
         >
           {{nextButtonLabel}}
         </v-btn>

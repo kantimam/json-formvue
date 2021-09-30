@@ -63,6 +63,7 @@ export class DynamicJsonForm{
         Vue.config.productionTip = false;
         Vue.component('field-renderer', globalInputRenderer);
 
+        /*
         // init global components and overwrite them if custom components are provided
         if(this.customLoadingComponent){
             Vue.component('o-loading', this.customLoadingComponent)
@@ -76,6 +77,8 @@ export class DynamicJsonForm{
             const loading=()=>import('vuetify/lib/components/VBtn');
             Vue.component('o-btn', loading);
         }
+        
+         */
 
         Vue.prototype.$componentsDictionary=this.componentsDictionary;
         Vue.prototype.$validatorsDictionary=this.validatorsDictionary;
