@@ -1,54 +1,82 @@
 <template>
-  <v-text-field :autocomplete="autocomplete"
-                @blur="blur"
-                :class="`ondigo-input ondigo-textfield ondigo-input-${id}`"
-                :clearable="clearable"
-                clear-icon="mdi-close"
-                @click="click"
-                @click:clear="clear"
-                :color="color"
-                :counter="counter"
-                :disabled="disabled"
-                filled
-                @focus="focus"
-                hide-details="auto"
-                :id="id"
-                :inputmode="inputmode"
-                :label="label"
-                :loading="loading"
-                :name="name"
-                :placeholder="placeholder"
-                :prefix="prefix"
-                v-model="inputValue"
-                :readonly="readonly"
-                :ref="'ref-' + id"
-                :required="required"
-                :rules="validateField"
-                :suffix="suffix"
-                :type="type"
-                v-bind:class="{'v-text-field--required' : required, 'v-text-field--optional' : optional, 'v-text-field--counting' : counter, 'v-text-field--updated' : updated }"
-                validate-on-blur>
-    <template slot="prepend-outer"><slot name="prepend"></slot></template>
+  <v-select :allow-overflow="false"
+            :append-icon="appendicon || $vuetify.icons.values.dropdown"
+            :autocomplete="autocomplete || 'chrome-off'"
+            @blur="blur"
+            @change="change"
+            @click="click"
+            @click:clear="clear"
+            :clearable="clearable"
+            :clear-icon="clearicon || $vuetify.icons.values.clear"
+            :color="color || $vuetify.theme.themes.light.primary"
+            :disabled="disabled"
+            filled
+            @focus="focus"
+            :hide-details="hidedetails"
+            :id="id"
+            @input="input"
+            inputmode="none"
+            :items="selectItems"
+            item-text="label"
+            item-value="value"
+            :label="label"
+            :loading="loading"
+            :menu-props="{
+              'bottom': dropDown,
+              'contentClass': 'v-select__dropdown',
+              'maxHeight': menuMaxHeight,
+              'offsetY': true,
+              'tile': true,
+              'top': !dropDown,
+              'value': menu
+            }"
+            :name="name"
+            :no-data-text="nodatatext"
+            :placeholder="placeholder"
+            :prefix="prefix"
+            :readonly="readonly"
+            :ref="'ref-' + id"
+            :required="required"
+            return-object
+            :rules="validateField"
+            :suffix="suffix"
+            v-bind:class="{'v-text-field--required' : required, 'v-text-field--optional' : optional, 'v-text-field--updated' : updated }"
+            v-model="inputValue"
+            validate-on-blur
+            :value="defaultValue">
+    <template slot="prepend-outer" v-if="!!$slots.prepend"><slot name="prepend"></slot></template>
+    <template slot="prepend-item" v-if="!!$slots.info"><div class="v-select__dropdown-info"><slot name="info"></slot></div></template>
     <template slot="prepend-inner" v-if="optional"><span class="v-input__label-optional">{{ optionalLabel }}</span></template>
     <template slot="prepend-inner" v-if="required"><span class="v-input__label-required">{{ requiredLabel }}</span></template>
-    <template slot="append">
-      <div @click="menu = !menu"
-           v-if="isTouchDevice && !!$slots.info"
-           class="v-input__info">
-        <v-icon color="primary">mdi-information-outline</v-icon>
-      </div>
-    </template>
-    <template slot="append-outer"><slot name="append"></slot></template>
-  </v-text-field>
+    <template slot="append-item"><span class="v-select__shadow"></span></template>
+    <template slot="append-outer" v-if="!!$slots.append"><slot name="append"></slot></template>
+
+  </v-select>
 </template>
 
 <script>
-import utils from "../../plugins/utils";
+import { VSelect, VListItemTitle, VListItemContent, VListItemSubtitle } from "vuetify/lib";
 import {createValidatorList, isRequired} from "../../lib/util";
 
 export default {
-  name: "OnTextfieldText",
+  name: "OnSelect",
+
+  components: {
+    VSelect,
+    VListItemTitle,
+    VListItemContent,
+    VListItemSubtitle,
+  },
+
   props: {
+    defaultValue: {
+      type: String,
+      required: false
+    },
+    appendicon: {
+      type: String,
+      default: null
+    },
     autocomplete: {
       type: String,
       default: null
@@ -57,20 +85,13 @@ export default {
       type: Boolean,
       default: false
     },
-    type:  {
+    clearicon: {
       type: String,
-      default: 'text'
+      default: null
     },
     color: {
       type: String,
       default: null
-    },
-    counter: {
-      type: [Number, String],
-      default: null,
-      validator: function(value) {
-        return /^\d+$/.test(value);
-      }
     },
     disabled: {
       type: Boolean,
@@ -88,25 +109,26 @@ export default {
       type: String,
       required: true
     },
-    name: {
-      type: String,
-      required: true
-    },
-    defaultValue: {
-      type: String,
-      required: false
-    },
-    inputmode: {
-      type: String,
-      default: "text"
-    },
+
     label: {
       type: String,
       default: null
     },
+    lazyMaxHeight: {
+      type: Number,
+      default: 800
+    },
     loading: {
       type: Boolean,
       default: false
+    },
+    name: {
+      type: String,
+      required: true
+    },
+    nodatatext: {
+      type: String,
+      default: "No Data available"
     },
     optional: {
       type: Boolean,
@@ -128,6 +150,11 @@ export default {
       type: Boolean,
       default: false
     },
+
+    properties: {
+      type: Object | Array,
+      required: true
+    },
     rules: {
       type: [Object, Array],
       default() {
@@ -138,26 +165,39 @@ export default {
       type: String,
       default: null
     },
-    validators: {
-      type: Array,
-      required: false
-    },
-    properties: {
-      type: Object | Array,
-      required: true
-    }
+
   },
 
   data() {
     return {
       menu: false,
+      markWidth: 0,
       menuMaxHeight: 304,
       updated: false,
-      dialog: null,
       dropDown: true,
+      dialog: null,
       scrollPos: 0,
-      isTouchDevice: utils.isTouchDevice(),
       windowHeight: window.innerHeight
+    }
+  },
+
+  watch: {
+    focused(focused) {
+      // set focus to input tag
+      this.$nextTick(() => {
+
+        if (focused) {
+          this.$refs['ref-' + this.id].focus();
+
+          if (!this.readonly) {
+            this.setMenuMaxHeight();
+            this.$refs['ref-' + this.id].activateMenu();
+          }
+        } else {
+          this.$refs['ref-' + this.id].blur();
+          this.menu = false;
+        }
+      });
     }
   },
 
@@ -185,22 +225,6 @@ export default {
 
     if(!!this.dialog) {
       this.dialog.removeEventListener('scroll', this.onScroll);
-    }
-  },
-
-  watch: {
-    focused(focused) {
-      // set focus to input tag
-      if (focused) {
-        this.$refs["ref-" + this.id].$refs.input.focus();
-
-        if(!this.readonly && !this.isTouchDevice) {
-          this.menu = true;
-        }
-      } else {
-        this.$refs["ref-" + this.id].$refs.input.blur();
-        this.menu = false;
-      }
     }
   },
 
@@ -240,6 +264,22 @@ export default {
       set(value){
         this.$store.commit('updateInputValue', {key: this.id, value: value})
       }
+    },
+    selectItems(){
+      const optionsArray=[];
+      if(!this.properties || !this.properties.options) return optionsArray;
+
+      const options=this.properties.options;
+      console.log(options)
+      for(const prop in options){
+        optionsArray.push({
+          value: prop,
+          label: options[prop]
+        })
+      }
+
+
+      return optionsArray;
     }
   },
 
@@ -264,44 +304,41 @@ export default {
       this.$emit("focus", e);
       this.windowHeight = window.innerHeight;
 
-      if(!this.readonly && !this.isTouchDevice) {
+      if(!this.readonly) {
         this.setMenuMaxHeight();
         this.menu = true;
       }
     },
     input (e) {
       this.$emit("input", e);
+      this.blur(e);
     },
     onResize () {
       this.setMenuMaxHeight();
     },
     onScroll () {
-      // remove focus only if menu exisits
-      if(!!this.$slots.info) {
-        // only need to close menu if in overlay (do not attach!)
-        if(this.menu && !!this.dialog) {
-          if(this.dialog.scrollTop > (this.scrollPos + 50) || this.dialog.scrollTop < (this.scrollPos - 50)) {
-            this.$refs['ref-' + this.id].blur();
-            this.menu = false;
-          }
+      // only need to close menu if in overlay (do not attach!)
+      if(this.menu && !!this.dialog) {
+        if(this.dialog.scrollTop > (this.scrollPos + 25) || this.dialog.scrollTop < (this.scrollPos - 25)) {
+          this.$refs['ref-' + this.id].blur();
+          this.menu = false;
         }
       }
     },
     setMenuMaxHeight () {
-      let keyboardHeight = this.isTouchDevice ? (this.windowHeight / 2) : this.windowHeight, // assumed keyboard height
-          fieldHeight = this.$refs['ref-' + this.id].$el.clientHeight,
-          maxHeight = this.menuMaxHeight,
+      let fieldHeight = this.$refs['ref-' + this.id].$el.clientHeight,
+          maxHeight = (this.menuMaxHeight <= this.lazyMaxHeight) ? this.menuMaxHeight : this.lazyMaxHeight,
           offset = 10;
 
-      if((this.$refs['ref-' + this.id].$el.getBoundingClientRect().top + fieldHeight + 100) < keyboardHeight) {
+      if((this.$refs['ref-' + this.id].$el.getBoundingClientRect().top + fieldHeight + 100) < this.windowHeight) {
         this.dropDown = true;
-        maxHeight = keyboardHeight - this.$refs['ref-' + this.id].$el.getBoundingClientRect().top - fieldHeight - offset;
+        maxHeight = this.windowHeight - this.$refs['ref-' + this.id].$el.getBoundingClientRect().top - fieldHeight - offset;
       } else {
         this.dropDown = false;
         maxHeight = this.$refs['ref-' + this.id].$el.getBoundingClientRect().top - offset;
       }
 
-      this.menuMaxHeight = maxHeight;
+      this.menuMaxHeight = (maxHeight <= this.lazyMaxHeight) ? maxHeight : this.lazyMaxHeight;
     },
     update () {
       let _scope = this;

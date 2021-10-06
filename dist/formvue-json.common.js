@@ -30563,12 +30563,12 @@ var textfield_textvue_type_template_id_42f7a776_staticRenderFns = []
 
 // CONCATENATED MODULE: ./src/components/fields/textfield_text.vue?vue&type=template&id=42f7a776&
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"13512818-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/extended_text_field.vue?vue&type=template&id=c89e4002&
-var extended_text_fieldvue_type_template_id_c89e4002_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('v-text-field',{ref:'ref-' + _vm.id,class:("ondigo-input ondigo-textfield ondigo-input-" + _vm.id),attrs:{"autocomplete":_vm.autocomplete,"clearable":_vm.clearable,"clear-icon":"mdi-close","color":_vm.color,"counter":_vm.counter,"disabled":_vm.disabled,"filled":"","hide-details":"auto","id":_vm.id,"inputmode":_vm.inputmode,"label":_vm.label,"loading":_vm.loading,"name":_vm.name,"placeholder":_vm.placeholder,"prefix":_vm.prefix,"readonly":_vm.readonly,"required":_vm.required,"rules":_vm.validateField,"suffix":_vm.suffix,"type":"text","class":{'v-text-field--required' : _vm.required, 'v-text-field--optional' : _vm.optional, 'v-text-field--counting' : _vm.counter, 'v-text-field--updated' : _vm.updated },"validate-on-blur":""},on:{"blur":_vm.blur,"click":_vm.click,"click:clear":_vm.clear,"focus":_vm.focus},model:{value:(_vm.inputValue),callback:function ($$v) {_vm.inputValue=$$v},expression:"inputValue"}},[_c('template',{slot:"prepend-outer"},[_vm._t("prepend")],2),(_vm.optional)?_c('template',{slot:"prepend-inner"},[_c('span',{staticClass:"v-input__label-optional"},[_vm._v(_vm._s(_vm.optionalLabel))])]):_vm._e(),(_vm.required)?_c('template',{slot:"prepend-inner"},[_c('span',{staticClass:"v-input__label-required"},[_vm._v(_vm._s(_vm.requiredLabel))])]):_vm._e(),_c('template',{slot:"append"},[(_vm.isTouchDevice && !!_vm.$slots.info)?_c('div',{staticClass:"v-input__info",on:{"click":function($event){_vm.menu = !_vm.menu}}},[_c('v-icon',{attrs:{"color":"primary"}},[_vm._v("mdi-information-outline")])],1):_vm._e()]),_c('template',{slot:"append-outer"},[_vm._t("append")],2)],2)}
-var extended_text_fieldvue_type_template_id_c89e4002_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"13512818-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/extended_text_field.vue?vue&type=template&id=343d5e82&
+var extended_text_fieldvue_type_template_id_343d5e82_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('v-text-field',{ref:'ref-' + _vm.id,class:("ondigo-input ondigo-textfield ondigo-input-" + _vm.id),attrs:{"autocomplete":_vm.autocomplete,"clearable":_vm.clearable,"clear-icon":"mdi-close","color":_vm.color,"counter":_vm.counter,"disabled":_vm.disabled,"filled":"","hide-details":"auto","id":_vm.id,"inputmode":_vm.inputmode,"label":_vm.label,"loading":_vm.loading,"name":_vm.name,"placeholder":_vm.placeholder,"prefix":_vm.prefix,"readonly":_vm.readonly,"required":_vm.required,"rules":_vm.validateField,"suffix":_vm.suffix,"type":_vm.type,"class":{'v-text-field--required' : _vm.required, 'v-text-field--optional' : _vm.optional, 'v-text-field--counting' : _vm.counter, 'v-text-field--updated' : _vm.updated },"validate-on-blur":""},on:{"blur":_vm.blur,"click":_vm.click,"click:clear":_vm.clear,"focus":_vm.focus},model:{value:(_vm.inputValue),callback:function ($$v) {_vm.inputValue=$$v},expression:"inputValue"}},[_c('template',{slot:"prepend-outer"},[_vm._t("prepend")],2),(_vm.optional)?_c('template',{slot:"prepend-inner"},[_c('span',{staticClass:"v-input__label-optional"},[_vm._v(_vm._s(_vm.optionalLabel))])]):_vm._e(),(_vm.required)?_c('template',{slot:"prepend-inner"},[_c('span',{staticClass:"v-input__label-required"},[_vm._v(_vm._s(_vm.requiredLabel))])]):_vm._e(),_c('template',{slot:"append"},[(_vm.isTouchDevice && !!_vm.$slots.info)?_c('div',{staticClass:"v-input__info",on:{"click":function($event){_vm.menu = !_vm.menu}}},[_c('v-icon',{attrs:{"color":"primary"}},[_vm._v("mdi-information-outline")])],1):_vm._e()]),_c('template',{slot:"append-outer"},[_vm._t("append")],2)],2)}
+var extended_text_fieldvue_type_template_id_343d5e82_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/fields/extended_text_field.vue?vue&type=template&id=c89e4002&
+// CONCATENATED MODULE: ./src/components/fields/extended_text_field.vue?vue&type=template&id=343d5e82&
 
 // CONCATENATED MODULE: ./src/plugins/utils.js
 
@@ -30674,6 +30674,10 @@ var utils = {
     clearable: {
       type: Boolean,
       "default": false
+    },
+    type: {
+      type: String,
+      "default": 'text'
     },
     color: {
       type: String,
@@ -33227,8 +33231,8 @@ var dirtyTypes = ['color', 'file', 'time', 'date', 'datetime-local', 'week', 'mo
 
 var extended_text_field_component = normalizeComponent(
   fields_extended_text_fieldvue_type_script_lang_js_,
-  extended_text_fieldvue_type_template_id_c89e4002_render,
-  extended_text_fieldvue_type_template_id_c89e4002_staticRenderFns,
+  extended_text_fieldvue_type_template_id_343d5e82_render,
+  extended_text_fieldvue_type_template_id_343d5e82_staticRenderFns,
   false,
   null,
   null,
@@ -35529,147 +35533,21 @@ var radio_group_component = normalizeComponent(
 
 installComponents_default()(radio_group_component, {VRadio: VRadioGroup_VRadio,VRadioGroup: VRadioGroup_VRadioGroup})
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"13512818-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/select.vue?vue&type=template&id=6aa15930&
-var selectvue_type_template_id_6aa15930_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('v-select',{ref:'ref-' + _vm.id,class:("ondigo-select ondigo-select ondigo-select-" + _vm.id),attrs:{"items":_vm.selectItems,"item-text":"label","item-value":"value","label":_vm.label,"name":_vm.name,"filled":"","required":_vm.required,"rules":_vm.validateField,"value":_vm.defaultValue,"hide-details":"auto"},model:{value:(_vm.inputValue),callback:function ($$v) {_vm.inputValue=$$v},expression:"inputValue"}})}
-var selectvue_type_template_id_6aa15930_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"13512818-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/extended_select.vue?vue&type=template&id=5ca72df9&
+var extended_selectvue_type_template_id_5ca72df9_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('v-select',{ref:'ref-' + _vm.id,class:{'v-text-field--required' : _vm.required, 'v-text-field--optional' : _vm.optional, 'v-text-field--updated' : _vm.updated },attrs:{"allow-overflow":false,"append-icon":_vm.appendicon || _vm.$vuetify.icons.values.dropdown,"autocomplete":_vm.autocomplete || 'chrome-off',"clearable":_vm.clearable,"clear-icon":_vm.clearicon || _vm.$vuetify.icons.values.clear,"color":_vm.color || _vm.$vuetify.theme.themes.light.primary,"disabled":_vm.disabled,"filled":"","hide-details":_vm.hidedetails,"id":_vm.id,"inputmode":"none","items":_vm.selectItems,"item-text":"label","item-value":"value","label":_vm.label,"loading":_vm.loading,"menu-props":{
+            'bottom': _vm.dropDown,
+            'contentClass': 'v-select__dropdown',
+            'maxHeight': _vm.menuMaxHeight,
+            'offsetY': true,
+            'tile': true,
+            'top': !_vm.dropDown,
+            'value': _vm.menu
+          },"name":_vm.name,"no-data-text":_vm.nodatatext,"placeholder":_vm.placeholder,"prefix":_vm.prefix,"readonly":_vm.readonly,"required":_vm.required,"return-object":"","rules":_vm.validateField,"suffix":_vm.suffix,"validate-on-blur":"","value":_vm.defaultValue},on:{"blur":_vm.blur,"change":_vm.change,"click":_vm.click,"click:clear":_vm.clear,"focus":_vm.focus,"input":_vm.input},model:{value:(_vm.inputValue),callback:function ($$v) {_vm.inputValue=$$v},expression:"inputValue"}},[(!!_vm.$slots.prepend)?_c('template',{slot:"prepend-outer"},[_vm._t("prepend")],2):_vm._e(),(!!_vm.$slots.info)?_c('template',{slot:"prepend-item"},[_c('div',{staticClass:"v-select__dropdown-info"},[_vm._t("info")],2)]):_vm._e(),(_vm.optional)?_c('template',{slot:"prepend-inner"},[_c('span',{staticClass:"v-input__label-optional"},[_vm._v(_vm._s(_vm.optionalLabel))])]):_vm._e(),(_vm.required)?_c('template',{slot:"prepend-inner"},[_c('span',{staticClass:"v-input__label-required"},[_vm._v(_vm._s(_vm.requiredLabel))])]):_vm._e(),_c('template',{slot:"append-item"},[_c('span',{staticClass:"v-select__shadow"})]),(!!_vm.$slots.append)?_c('template',{slot:"append-outer"},[_vm._t("append")],2):_vm._e()],2)}
+var extended_selectvue_type_template_id_5ca72df9_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/fields/select.vue?vue&type=template&id=6aa15930&
+// CONCATENATED MODULE: ./src/components/fields/extended_select.vue?vue&type=template&id=5ca72df9&
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/select.vue?vue&type=script&lang=js&
-
-
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-/* harmony default export */ var selectvue_type_script_lang_js_ = ({
-  name: "OnRadio",
-  props: {
-    defaultValue: {
-      type: String,
-      required: false
-    },
-    disabled: {
-      type: Boolean,
-      "default": false
-    },
-    focused: {
-      type: Boolean,
-      "default": false
-    },
-    hidedetails: {
-      type: Boolean,
-      "default": false
-    },
-    id: {
-      type: String,
-      required: true
-    },
-    name: {
-      type: String
-    },
-    label: {
-      type: String,
-      "default": null
-    },
-    properties: {
-      type: Object | Array,
-      required: true
-    },
-    rules: {
-      type: [Object, Array],
-      "default": function _default() {
-        return {} || [];
-      }
-    },
-    value: {
-      type: [String, Number],
-      "default": null
-    },
-    validators: {
-      type: Array,
-      required: false
-    }
-  },
-  computed: {
-    required: function required() {
-      return isRequired(this.properties);
-    },
-    validateField: function validateField() {
-      //if(!this.required) return []
-      var r = {};
-      var validate = [];
-      var propsValidationMap = util_createValidatorList(this.validators); // combine default validation and custom validation
-
-      r = Object.assign(r, this.rules, propsValidationMap); // create array for text-field syntax
-
-      for (var key in r) {
-        validate.push(r[key]);
-      }
-
-      return validate;
-    },
-    inputValue: {
-      get: function get() {
-        return this.$store.getters.getCurrentInputValue(this.id) || "";
-      },
-      set: function set(value) {
-        this.$store.commit('updateInputValue', {
-          key: this.id,
-          value: value
-        });
-      }
-    },
-    selectItems: function selectItems() {
-      var optionsArray = [];
-      if (!this.properties || !this.properties.options) return optionsArray;
-      var options = this.properties.options;
-      console.log(options);
-
-      for (var prop in options) {
-        optionsArray.push({
-          value: prop,
-          label: options[prop]
-        });
-      }
-
-      return optionsArray;
-    }
-  },
-  methods: {
-    change: function change(e) {
-      this.$emit("change", e);
-    },
-    input: function input(e) {
-      this.$emit("input", e);
-    },
-    focus: function focus(e) {
-      this.$emit("focus", e);
-    },
-    blur: function blur(e) {
-      this.$emit("blur", e);
-    }
-  }
-});
-// CONCATENATED MODULE: ./src/components/fields/select.vue?vue&type=script&lang=js&
- /* harmony default export */ var fields_selectvue_type_script_lang_js_ = (selectvue_type_script_lang_js_); 
 // EXTERNAL MODULE: ./node_modules/vuetify/src/components/VSelect/VSelect.sass
 var VSelect = __webpack_require__("68dd");
 
@@ -39329,7 +39207,361 @@ var VSelect_baseMixins = mixins(VTextField_VTextField, comparable, dependent, fi
     }
   }
 }));
-// CONCATENATED MODULE: ./src/components/fields/select.vue
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/extended_select.vue?vue&type=script&lang=js&
+
+
+
+
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+/* harmony default export */ var extended_selectvue_type_script_lang_js_ = ({
+  name: "OnSelect",
+  components: {
+    VSelect: VSelect_VSelect,
+    VListItemTitle: VListItemTitle,
+    VListItemContent: VListItemContent,
+    VListItemSubtitle: VListItemSubtitle
+  },
+  props: {
+    defaultValue: {
+      type: String,
+      required: false
+    },
+    appendicon: {
+      type: String,
+      "default": null
+    },
+    autocomplete: {
+      type: String,
+      "default": null
+    },
+    clearable: {
+      type: Boolean,
+      "default": false
+    },
+    clearicon: {
+      type: String,
+      "default": null
+    },
+    color: {
+      type: String,
+      "default": null
+    },
+    disabled: {
+      type: Boolean,
+      "default": false
+    },
+    focused: {
+      type: Boolean,
+      "default": false
+    },
+    hidedetails: {
+      type: Boolean,
+      "default": false
+    },
+    id: {
+      type: String,
+      required: true
+    },
+    label: {
+      type: String,
+      "default": null
+    },
+    lazyMaxHeight: {
+      type: Number,
+      "default": 800
+    },
+    loading: {
+      type: Boolean,
+      "default": false
+    },
+    name: {
+      type: String,
+      required: true
+    },
+    nodatatext: {
+      type: String,
+      "default": "No Data available"
+    },
+    optional: {
+      type: Boolean,
+      "default": false
+    },
+    optionalLabel: {
+      type: String,
+      "default": 'optional'
+    },
+    placeholder: {
+      type: String,
+      "default": null
+    },
+    prefix: {
+      type: String,
+      "default": null
+    },
+    readonly: {
+      type: Boolean,
+      "default": false
+    },
+    properties: {
+      type: Object | Array,
+      required: true
+    },
+    rules: {
+      type: [Object, Array],
+      "default": function _default() {
+        return {} || [];
+      }
+    },
+    suffix: {
+      type: String,
+      "default": null
+    }
+  },
+  data: function data() {
+    return {
+      menu: false,
+      markWidth: 0,
+      menuMaxHeight: 304,
+      updated: false,
+      dropDown: true,
+      dialog: null,
+      scrollPos: 0,
+      windowHeight: window.innerHeight
+    };
+  },
+  watch: {
+    focused: function focused(_focused) {
+      var _this = this;
+
+      // set focus to input tag
+      this.$nextTick(function () {
+        if (_focused) {
+          _this.$refs['ref-' + _this.id].focus();
+
+          if (!_this.readonly) {
+            _this.setMenuMaxHeight();
+
+            _this.$refs['ref-' + _this.id].activateMenu();
+          }
+        } else {
+          _this.$refs['ref-' + _this.id].blur();
+
+          _this.menu = false;
+        }
+      });
+    }
+  },
+  mounted: function mounted() {
+    this.dialog = this.$refs["ref-" + this.id].$el.closest('.v-dialog');
+
+    if (this.isTouchDevice) {
+      window.addEventListener('orientationchange', this.onResize);
+    } else {
+      window.addEventListener('resize', this.onResize);
+    }
+
+    if (!!this.dialog) {
+      this.scrollPos = this.dialog.scrollTop;
+      this.dialog.addEventListener('scroll', this.onScroll, true);
+    }
+  },
+  beforeDestroy: function beforeDestroy() {
+    if (this.isTouchDevice) {
+      window.removeEventListener('orientationchange', this.onResize);
+    } else {
+      window.removeEventListener('resize', this.onResize);
+    }
+
+    if (!!this.dialog) {
+      this.dialog.removeEventListener('scroll', this.onScroll);
+    }
+  },
+  computed: {
+    required: function required() {
+      return isRequired(this.properties);
+    },
+    requiredLabel: function requiredLabel() {
+      if (!this.validators || !this.validators.length) return "required";
+      var notEmptyValidator = this.validators.find(function (v) {
+        return v.identifier === 'NotEmpty';
+      });
+      return notEmptyValidator && notEmptyValidator.errorMessage || "required";
+    },
+    validateField: function validateField() {
+      var r = {};
+      var validate = []; // default validation
+
+      if (!!this.required) {
+        r.required = function (v) {
+          return !!v;
+        };
+      }
+
+      var propsValidationMap = util_createValidatorList(this.validators); // combine default validation and custom validation
+
+      r = Object.assign(r, propsValidationMap); // create array for text-field syntax
+
+      for (var _i = 0, _Object$keys = Object.keys(r); _i < _Object$keys.length; _i++) {
+        var key = _Object$keys[_i];
+        validate.push(r[key]);
+      }
+
+      return validate;
+    },
+    inputValue: {
+      get: function get() {
+        return this.$store.getters.getCurrentInputValue(this.id) || "";
+      },
+      set: function set(value) {
+        this.$store.commit('updateInputValue', {
+          key: this.id,
+          value: value
+        });
+      }
+    },
+    selectItems: function selectItems() {
+      var optionsArray = [];
+      if (!this.properties || !this.properties.options) return optionsArray;
+      var options = this.properties.options;
+      console.log(options);
+
+      for (var prop in options) {
+        optionsArray.push({
+          value: prop,
+          label: options[prop]
+        });
+      }
+
+      return optionsArray;
+    }
+  },
+  methods: {
+    blur: function blur(e) {
+      this.$emit("blur", e);
+      this.$refs['ref-' + this.id].blur();
+      this.menu = false;
+    },
+    change: function change(e) {
+      this.$emit("change", e);
+    },
+    clear: function clear(e) {
+      this.$emit("clear", e);
+      this.blur(e);
+    },
+    click: function click(e) {
+      this.$emit("click", e);
+    },
+    focus: function focus(e) {
+      this.$emit("focus", e);
+      this.windowHeight = window.innerHeight;
+
+      if (!this.readonly) {
+        this.setMenuMaxHeight();
+        this.menu = true;
+      }
+    },
+    input: function input(e) {
+      this.$emit("input", e);
+      this.blur(e);
+    },
+    onResize: function onResize() {
+      this.setMenuMaxHeight();
+    },
+    onScroll: function onScroll() {
+      // only need to close menu if in overlay (do not attach!)
+      if (this.menu && !!this.dialog) {
+        if (this.dialog.scrollTop > this.scrollPos + 25 || this.dialog.scrollTop < this.scrollPos - 25) {
+          this.$refs['ref-' + this.id].blur();
+          this.menu = false;
+        }
+      }
+    },
+    setMenuMaxHeight: function setMenuMaxHeight() {
+      var fieldHeight = this.$refs['ref-' + this.id].$el.clientHeight,
+          maxHeight = this.menuMaxHeight <= this.lazyMaxHeight ? this.menuMaxHeight : this.lazyMaxHeight,
+          offset = 10;
+
+      if (this.$refs['ref-' + this.id].$el.getBoundingClientRect().top + fieldHeight + 100 < this.windowHeight) {
+        this.dropDown = true;
+        maxHeight = this.windowHeight - this.$refs['ref-' + this.id].$el.getBoundingClientRect().top - fieldHeight - offset;
+      } else {
+        this.dropDown = false;
+        maxHeight = this.$refs['ref-' + this.id].$el.getBoundingClientRect().top - offset;
+      }
+
+      this.menuMaxHeight = maxHeight <= this.lazyMaxHeight ? maxHeight : this.lazyMaxHeight;
+    },
+    update: function update() {
+      var _scope = this;
+
+      this.updated = true;
+      setTimeout(function () {
+        _scope.updated = false;
+      }, 1500);
+    }
+  }
+});
+// CONCATENATED MODULE: ./src/components/fields/extended_select.vue?vue&type=script&lang=js&
+ /* harmony default export */ var fields_extended_selectvue_type_script_lang_js_ = (extended_selectvue_type_script_lang_js_); 
+// CONCATENATED MODULE: ./src/components/fields/extended_select.vue
 
 
 
@@ -39337,10 +39569,10 @@ var VSelect_baseMixins = mixins(VTextField_VTextField, comparable, dependent, fi
 
 /* normalize component */
 
-var select_component = normalizeComponent(
-  fields_selectvue_type_script_lang_js_,
-  selectvue_type_template_id_6aa15930_render,
-  selectvue_type_template_id_6aa15930_staticRenderFns,
+var extended_select_component = normalizeComponent(
+  fields_extended_selectvue_type_script_lang_js_,
+  extended_selectvue_type_template_id_5ca72df9_render,
+  extended_selectvue_type_template_id_5ca72df9_staticRenderFns,
   false,
   null,
   null,
@@ -39348,12 +39580,12 @@ var select_component = normalizeComponent(
   
 )
 
-/* harmony default export */ var fields_select = (select_component.exports);
+/* harmony default export */ var extended_select = (extended_select_component.exports);
 
 /* vuetify-loader */
 
 
-installComponents_default()(select_component, {VSelect: VSelect_VSelect})
+installComponents_default()(extended_select_component, {VSelect: VSelect_VSelect})
 
 // CONCATENATED MODULE: ./src/lib/DefaultComponents.js
 
@@ -39365,6 +39597,7 @@ installComponents_default()(select_component, {VSelect: VSelect_VSelect})
 
 
 
+ //import OnSelect from '../components/fields/select.vue'
 
 
 /* harmony default export */ var DefaultComponents = (new ComponentsMapping_ComponentsMapping({
@@ -39378,7 +39611,7 @@ installComponents_default()(select_component, {VSelect: VSelect_VSelect})
   Checkbox: fields_checkbox,
   LinkedCheckbox: fields_checkbox,
   RadioButton: radio_group,
-  SingleSelect: fields_select,
+  SingleSelect: extended_select,
   form: 'form',
   message: 'div',
   "default": 'input'
