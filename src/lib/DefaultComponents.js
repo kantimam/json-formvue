@@ -11,6 +11,7 @@ import OnCheckBox from '../components/fields/checkbox.vue'
 import OnRadioGroup from '../components/fields/radio_group.vue'
 //import OnSelect from '../components/fields/select.vue'
 import OnSelect from '../components/fields/extended_select.vue'
+//import OnSelect from '../components/fields/extended_select_full.vue'
 
 
 export default new ComponentsMapping({

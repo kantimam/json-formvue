@@ -12,6 +12,7 @@
       :checked="inputValue"
       :name="name"
       hide-details="auto"
+      off-icon="mdi-checkbox-blank"
   >
     <div v-if="properties.link" class="ondigo-label-wrapper" slot="label">
       <p class="ondigo-label-p">
@@ -174,4 +175,29 @@ export default {
   },
 
 };
+/*
+
+  <template v-slot:label>
+      <div>
+        {{label}}
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on }">
+            <a
+                @click.stop
+                class="ondigo-label-a"
+                v-bind:target="properties.openInNewWindow? '_blank' : '_self'"
+                v-bind:data-overlay="properties.openInOverlay=='true'? 1 : null"
+                :href="properties.link"
+                v-on="on"
+            >
+              {{ properties.linkText }}
+            </a>
+          </template>
+          Opens in  window
+        </v-tooltip>
+      </div>
+    </template>
+*/
 </script>
+
+
