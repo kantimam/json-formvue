@@ -14,9 +14,11 @@ export default {
     },
     render: function(h){
         const componentsMap=this.$componentsDictionary;
+        const globalProps=this.$globalDefaultProps;
         const element=componentsMap.get(this.fieldData.type);
 
         const propsAndAttributes={
+            ...globalProps,
             ...this.fieldData,
             id: this.fieldData.identifier,
             formName: this.formName,  // this really needs to go

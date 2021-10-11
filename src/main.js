@@ -26,6 +26,8 @@ export class DynamicJsonForm{
         }
     }
     vuetifyContext;
+    globalDefaultProps={};
+
 
 
     constructor(formConfigsList, formElementsList, config){
@@ -44,6 +46,8 @@ export class DynamicJsonForm{
 
             if(config.customLoadingComponent) this.customLoadingComponent=config.loadingComponent;
             if(config.customButtonComponent) this.customButtonComponent=config.buttonComponent;
+
+            if(config.globalDefaultProps) this.globalDefaultProps=config.globalDefaultProps;
         }
 
         // create with an object containing your components or fallback to default
@@ -63,27 +67,13 @@ export class DynamicJsonForm{
         Vue.config.productionTip = false;
         Vue.component('field-renderer', globalInputRenderer);
 
-        /*
-        // init global components and overwrite them if custom components are provided
-        if(this.customLoadingComponent){
-            Vue.component('o-loading', this.customLoadingComponent)
-        }else {
-            const loading=()=>import('vuetify/lib/components/VProgressCircular');
-            Vue.component('o-loading', loading);
-        }
-        if(this.customButtonComponent){
-            Vue.component('o-btn', this.customButtonComponent)
-        }else {
-            const loading=()=>import('vuetify/lib/components/VBtn');
-            Vue.component('o-btn', loading);
-        }
-        
-         */
 
         Vue.prototype.$componentsDictionary=this.componentsDictionary;
         Vue.prototype.$validatorsDictionary=this.validatorsDictionary;
         Vue.prototype.$callbacksDictionary=this.callbacksDictionary;
         Vue.prototype.$appName = this.appName;
+        Vue.prototype.$globalDefaultProps=this.globalDefaultProps;
+
 
         for(let form of this.formElementsList) {
             const id = form.getAttribute('data-id');

@@ -5,8 +5,9 @@
                 :color="$vuetify.theme.themes.light.primary"
                 :counter="counter"
                 :disabled="disabled"
-                outlined
-                dense
+                :filled="filled"
+                :outlined="outlined"
+                :solor="solo"
                 @focus="focus"
                 :class="`ondigo-input-${id} odnigo-input ondigo-textfield`"
                 @input="input"
@@ -64,6 +65,18 @@
       required: false
     },
     disabled: {
+      type: Boolean,
+      default: false
+    },
+    filled: {
+      type: Boolean,
+      default: false
+    },
+    outlined: {
+      type: Boolean,
+      default: false
+    },
+    solo: {
       type: Boolean,
       default: false
     },

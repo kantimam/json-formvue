@@ -9,7 +9,9 @@
                 :color="color"
                 :counter="counter"
                 :disabled="disabled"
-                filled
+                :filled="filled"
+                :outlined="outlined"
+                :solor="solo"
                 @focus="focus"
                 hide-details="auto"
                 :id="id"
@@ -73,6 +75,18 @@ export default {
       }
     },
     disabled: {
+      type: Boolean,
+      default: false
+    },
+    filled: {
+      type: Boolean,
+      default: false
+    },
+    outlined: {
+      type: Boolean,
+      default: false
+    },
+    solo: {
       type: Boolean,
       default: false
     },

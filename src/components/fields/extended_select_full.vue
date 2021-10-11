@@ -10,7 +10,9 @@
             :clear-icon="clearicon || $vuetify.icons.values.clear"
             :color="color || $vuetify.theme.themes.light.primary"
             :disabled="disabled"
-            filled
+            :filled="filled"
+            :outlined="outlined"
+            :solor="solo"
             @focus="focus"
             :hide-details="hidedetails"
             :id="id"
@@ -104,6 +106,18 @@ export default {
       default: null
     },
     disabled: {
+      type: Boolean,
+      default: false
+    },
+    filled: {
+      type: Boolean,
+      default: false
+    },
+    outlined: {
+      type: Boolean,
+      default: false
+    },
+    solo: {
       type: Boolean,
       default: false
     },

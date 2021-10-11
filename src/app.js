@@ -21,6 +21,7 @@ export class DynamicJsonForm{
     componentsDictionary=DefaultComponents;
     validatorsDictionary=DefaultCallbacks;
     callbacksDictionary=DefaultValidators;
+    globalDefaultProps={};
     vuetifyConfig={
         icons: {
             iconfont: 'mdi'
@@ -44,6 +45,7 @@ export class DynamicJsonForm{
             if(config.customLoadingComponent) this.customLoadingComponent=config.loadingComponent;
             if(config.customButtonComponent) this.customButtonComponent=config.buttonComponent;
             if(config.vuetifyConfig) this.vuetifyConfig=config.vuetifyConfig;
+            if(config.globalDefaultProps) this.globalDefaultProps=config.globalDefaultProps;
         }
 
 
@@ -74,6 +76,7 @@ export class DynamicJsonForm{
         Vue.prototype.$componentsDictionary=this.componentsDictionary;
         Vue.prototype.$validatorsDictionary=this.validatorsDictionary;
         Vue.prototype.$callbacksDictionary=this.callbacksDictionary;
+        Vue.prototype.$globalDefaultProps=this.globalDefaultProps;
         Vue.prototype.$appName = this.appName;
 
         for(let form of this.formElementsList) {
