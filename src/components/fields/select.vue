@@ -21,7 +21,7 @@
   import {createValidatorList, isRequired} from '../../lib/util'
 
   export default {
-  name: "OnRadio",
+  name: "OnSelect",
  
   props: {
     
