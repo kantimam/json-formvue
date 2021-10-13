@@ -48,7 +48,6 @@
             :value="defaultValue">
     <template slot="prepend-outer" v-if="!!$slots.prepend"><slot name="prepend"></slot></template>
     <template slot="prepend-item" v-if="!!$slots.info"><div class="v-select__dropdown-info"><slot name="info"></slot></div></template>
-    <template slot="prepend-inner" v-if="optional"><span class="v-input__label-optional">{{ optionalLabel }}</span></template>
     <template slot="prepend-inner" v-if="required"><span class="v-input__label-required">{{ requiredLabel }}</span></template>
     <template slot="append-item"><span class="v-select__shadow"></span></template>
     <template slot="append-outer" v-if="!!$slots.append"><slot name="append"></slot></template>
@@ -178,6 +177,10 @@ export default {
     suffix: {
       type: String,
       default: null
+    },
+    validators: {
+      type: Array,
+      required: false
     },
 
   },

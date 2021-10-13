@@ -6,7 +6,7 @@ import OnTextfieldNumber from "../components/fields/textfield_number.vue";
 import OnTextfieldPassword from "../components/fields/textfield_password.vue";
 import HiddenfieldHoneypot from "../components/fields/hiddenfield_honeypot.vue";
 import FormGridRow from "../components/layout/form_grid_row.vue";
-import OnTextArea from '../components/fields/textarea.vue'
+import OnTextArea from '../components/fields/extended_textarea.vue'
 import OnCheckBox from '../components/fields/checkbox.vue'
 import OnRadioGroup from '../components/fields/radio_group.vue'
 //import OnSelect from '../components/fields/select.vue'
