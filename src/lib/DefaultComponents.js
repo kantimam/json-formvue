@@ -27,6 +27,7 @@ export default new ComponentsMapping({
     LinkedCheckbox: OnCheckBox,
     RadioButton: OnRadioGroup,
     SingleSelect: OnSelect,
+    EmailSingleSelect: OnSelect,
     Oncaptcha: OnCaptcha,
     form: 'form',
     message: 'div',

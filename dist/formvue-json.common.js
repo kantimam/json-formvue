@@ -39790,6 +39790,7 @@ var onCaptcha_component = normalizeComponent(
   LinkedCheckbox: fields_checkbox,
   RadioButton: radio_group,
   SingleSelect: extended_select,
+  EmailSingleSelect: extended_select,
   Oncaptcha: onCaptcha,
   form: 'form',
   message: 'div',
