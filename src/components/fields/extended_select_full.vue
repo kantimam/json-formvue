@@ -39,7 +39,6 @@
             :readonly="readonly"
             :ref="'ref-' + id"
             :required="required"
-            return-object
             :rules="validateField"
             :suffix="suffix"
             v-bind:class="{'v-text-field--required' : required, 'v-text-field--optional' : optional, 'v-text-field--updated' : updated }"
