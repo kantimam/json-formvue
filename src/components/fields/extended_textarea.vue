@@ -1,5 +1,6 @@
 <template>
   <v-textarea :autocomplete="autocomplete"
+              auto-size
               @blur="blur"
               :class="`ondigo-input ondigo-textarea ondigo-input-${id}`"
               :color="color"

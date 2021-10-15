@@ -1,6 +1,6 @@
 {
   "name": "formvue-json",
-  "version": "0.2.8",
+  "version": "0.2.9",
   "main": "dist/formvue-json.common.js",
   "private": true,
   "scripts": {
