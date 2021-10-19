@@ -5,6 +5,7 @@
             @blur="blur"
             @change="change"
             @click="click"
+            @click:append="append"
             @click:clear="clear"
             :clearable="clearable"
             :clear-icon="clearicon || $vuetify.icons.values.clear"
@@ -300,6 +301,19 @@ export default {
   },
 
   methods: {
+    append () {
+      if(this.menu) {
+        this.$refs['ref-' + this.id].blur();
+        this.menu = false;
+      } else {
+        this.$refs['ref-' + this.id].focus();
+
+        if (!this.readonly) {
+          this.setMenuMaxHeight();
+          this.$refs['ref-' + this.id].activateMenu();
+        }
+      }
+    },
     blur (e) {
       this.$emit("blur", e);
 
