@@ -10,7 +10,8 @@
     <template v-slot:activator="{ on, attrs }">
       <v-text-field
         v-model="date"
-        label="Birthday date"
+        :label="label"
+	    	:placeholder="placeholder"
         readonly
         v-bind="attrs"
         v-on="on"
