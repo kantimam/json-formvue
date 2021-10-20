@@ -32,6 +32,7 @@ export const createValidatorByKey=(validatorKey, vArgs, errorMessage)=>{
         Text: (inputValue)=>validatorRequired(inputValue, errorMessage || `this field is required`),
         NumberRange: (inputValue)=>!inputValue.length || validatorNumberRange(inputValue, errorMessage || `number must be between ${vArgs.minimum} and ${vArgs.maximum}`, vArgs),
         RegularExpression: (inputValue)=>!inputValue.length || validatorRegex(inputValue, errorMessage || `input must match following regular expression ${vArgs.regularExpression}`, vArgs),
+        MinimumNumber: (inputValue) => !inputValue.length || validatorMinimumNumber(inputValue, errorMessage || `number must be greater thant ${vArgs.minimum}`, vArgs),
         default: null
     }
     return knownFunctions[validatorKey] || knownFunctions.default;
@@ -65,6 +66,11 @@ export const validatorRegex=(string, invalidMessage, vArgs)=>{
     } catch (error) {
         return true;
     }
+}
+export const validatorMinimumNumber=(string, invalidMessage, vArgs)=>{
+    if(isNaN(string)) return invalidMessage;
+    const num=parseFloat(string);
+    return (num>=vArgs.minimum) || invalidMessage;
 }
 
 
