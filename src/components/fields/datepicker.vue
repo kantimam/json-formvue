@@ -14,9 +14,15 @@
 	    	:placeholder="placeholder"
         :filled="filled"
         :class="`ondigo-input ondigo-textfield ondigo-input-${id}`"
+      ></v-text-field>
+      <v-btn
+        icon
+        color="gray"
         v-bind="attrs"
         v-on="on"
-      ></v-text-field>
+      >
+        <v-icon>mdi-calendar</v-icon>
+      </v-btn>
     </template>
     <v-date-picker
       v-model="date"
