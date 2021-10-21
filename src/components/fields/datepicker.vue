@@ -9,10 +9,11 @@
   >
     <template v-slot:activator="{ on, attrs }">
       <v-text-field
-        v-model="date"
+        v-model="dateFormatted"
         :label="label"
 	    	:placeholder="placeholder"
-        readonly
+        :filled="filled"
+        :class="`ondigo-input ondigo-textfield ondigo-input-${id}`"
         v-bind="attrs"
         v-on="on"
       ></v-text-field>
@@ -39,38 +40,42 @@ export default {
   data: () => ({
     activePicker: null,
     date: null,
+    dateFormatted: null, // the user input
     menu: false,
   }),
   watch: {
     menu(val) {
       val && setTimeout(() => (this.activePicker = "YEAR"));
     },
+    date() {
+      this.dateFormatted = this.formatDate(this.date)
+    },
+    dateFormatted(val) {
+      const parsed = this.parseDate(val);
+      if (parsed && parsed !== this.date) this.date = parsed; 
+    }
   },
   methods: {
     save(date) {
       this.$refs.menu.save(date);
     },
+    formatDate (date) {
+      if (!date) return null
+
+      const [year, month, day] = date.split('-')
+      return `${day}.${month}.${year}`
+    },
+    parseDate (date) {
+      if (!date) return null;
+
+      const match = /^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/g.exec(date);
+      if (!match) return null;
+
+      const [_match, day, month, year] = match;
+      return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+    },
   },
   props: {
-    clearicon: {
-      type: String,
-      default: null,
-    },
-    counter: {
-      type: [Number, String],
-      default: null,
-      validator: function (value) {
-        return /^\d+$/.test(value);
-      },
-    },
-    defaultValue: {
-      type: String,
-      required: false,
-    },
-    disabled: {
-      type: Boolean,
-      default: false,
-    },
     focused: {
       type: Boolean,
       default: false,
@@ -89,6 +94,10 @@ export default {
     label: {
       type: String,
       default: null,
+    },
+    filled: {
+      type: Boolean,
+      default: false
     },
     placeholder: {
       type: String,
@@ -149,5 +158,3 @@ export default {
   },
 };
 </script>
-
-
