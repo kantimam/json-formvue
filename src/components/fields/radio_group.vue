@@ -168,7 +168,6 @@
         if(!this.properties || !this.properties.options) return optionsArray;
 
         const options=this.properties.options;
-        console.log(options)
         for(const prop in options){
             optionsArray.push({
                 value: prop,

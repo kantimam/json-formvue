@@ -56,7 +56,6 @@ export default {
       if(droppedFiles && droppedFiles.length){
         const fileArray=[];
         droppedFiles.forEach(file=>fileArray.push(file))
-        console.log(fileArray)
         this.files=[...this.files, ...fileArray];
         e.dataTransfer.clearData()
       }

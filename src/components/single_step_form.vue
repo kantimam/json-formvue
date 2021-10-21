@@ -58,7 +58,6 @@
       handleFormSubmit(){
         const form=this.$refs.form;
         if(form) this.$store.dispatch('submitStep', form);
-        else console.log("could not find form element")
       }
       
     }

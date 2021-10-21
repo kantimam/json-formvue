@@ -168,7 +168,6 @@ export default {
         return this.$store.getters.getCurrentInputValue(this.id)? true : false
       },
       set(value){
-        console.log(value)
         this.$store.commit('updateInputValue', {key: this.id, value: value})
       }
     }

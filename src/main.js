@@ -79,15 +79,9 @@ export class DynamicJsonForm{
             const id = form.getAttribute('data-id');
             const wrapper = document.querySelector('[data-id="' + id + '"]');
 
-            if(!wrapper){
-                console.log(`could not find wrapper with data-id ${id}`);
-                continue;
-            }
+            if(!wrapper) continue;
             const formData=this.formConfigsList[id];
-            if(!formData || !formData.configuration){
-                console.log(`could not find form with the id ${id}`);
-                continue;
-            }
+            if(!formData || !formData.configuration) continue;
 
             const vueInstance=new Vue({
                 vuetify: this.vuetifyContext,

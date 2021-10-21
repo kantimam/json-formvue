@@ -49,10 +49,10 @@ const createStore=(initialState)=>{
       updateInputValue (state, payload){
         const validIndex=state.currentStep? state.currentStep - 1 : 0;
         const currentStep=state.steps[validIndex];
-        if(!currentStep) return console.log(`could not find the step ${state.currentStep} at the index ${validIndex}`);
+        if(!currentStep) return;
         
         const currentModel=currentStep.inputModel[payload.key];
-        if(!currentModel) return console.log(`the model does not have a field with the key ${payload.key}`);
+        if(!currentModel) return;
         
         currentModel.value=payload.value;
       },
@@ -102,7 +102,7 @@ const createStore=(initialState)=>{
           formData.append(context.getters.getCurrentInputName('__state'), currentModel['__state'].value)
 
           const currentAction=context.getters.getCurrentStep.formAction;
-          if(!currentAction) return console.log("could not find valid action for the current step")
+          if(!currentAction) return;
 
           fetch(currentAction,{ 
             method: "POST",
@@ -115,7 +115,6 @@ const createStore=(initialState)=>{
           )
           .then(json=> context.dispatch('handleSuccessResponse', json))
           .catch(error=>{ // does not catch handleSuccessResponse errors
-            console.log(error);
             context.commit(
               'setFormResponse', 
               `<h1>request failed</h1>
@@ -130,7 +129,6 @@ const createStore=(initialState)=>{
 
 
       async handleSuccessResponse(context, successJson){
-        console.log(successJson);
         if(!successJson) throw new Error('could not find valid json');
         
         // handle redirect on success
@@ -145,7 +143,6 @@ const createStore=(initialState)=>{
             // if the response contains callbacks handle them before proceeding
             try {
               await context.dispatch('handleSuccessCallbacks', successJson.callbacks);
-              console.log("successfully executed all form callbacks")
             } catch (error) {
               // if a callback fails return early 
               return context.commit(
@@ -165,7 +162,6 @@ const createStore=(initialState)=>{
           if(successJson.api.callbacks && successJson.api.callbacks.length){
             try {
               await context.dispatch('handleSuccessCallbacks', successJson.api.callbacks);
-              console.log("successfully executed all step callbacks")
             } catch (error) {
               return context.commit(
                 'setFormResponse', 
@@ -219,7 +215,6 @@ function initFormStateFromExtendedForm(formData){
 
 
 function createStepFromFormConfig(formConfig){
-  console.log(formConfig)
   return {
     schema: Object.freeze(formConfig), // the original shape of the form with all the nesting for reconstruction
     inputModel: createModelFromFormConfig(inputArrayFromSchema(formConfig.elements)),  // actually reactive form state

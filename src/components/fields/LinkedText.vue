@@ -2,6 +2,7 @@
   <p class="ondigo-linktext ondigo-field">
     <template v-for="(text) in textWithLink">
       <a
+          :key="text"
           class="ondigo-linktext-link"
           v-if="text==='$$ondigo_link_replacer$$'"
           :href="properties.link" v-bind:target="properties.openInNewWindow? '_blank' : '_self'"
@@ -9,7 +10,7 @@
       >
         {{properties.linkText}}
       </a>
-      <span v-else-if="text">
+      <span :key="text + '_2'" v-else-if="text">
         {{text}}
       </span>
     </template>
@@ -35,7 +36,6 @@ export default {
           nonLinkTextParts.splice(i, 0, '$$ondigo_link_replacer$$')
         }
       }
-      console.log(nonLinkTextParts)
       return nonLinkTextParts;
     }
   },

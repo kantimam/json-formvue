@@ -94,9 +94,6 @@ export const testCallback=(callbackArgs)=>(
     new Promise((res, rej)=>{
         setTimeout(()=>{
             if(Math.random()<0) return rej(`failed testCallback with the arguments ${JSON.stringify(callbackArgs)}`)
-            
-            console.log(`successfully executed testCallback with the arguments`)
-            console.log(callbackArgs)
             res(callbackArgs)
         }, 1200);
     })
