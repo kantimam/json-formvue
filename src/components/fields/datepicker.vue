@@ -8,10 +8,12 @@
     min-width="auto">
     <template v-slot:activator="{ on, attrs }">
       <v-text-field
-        v-model="dateFormatted"
+        v-model="inputValue"
         :label="label"
 	    	:placeholder="placeholder"
         :filled="filled"
+        :name="name"
+        :id="id"
         :class="`ondigo-input ondigo-textfield ondigo-input-${id}`">
       <template slot="append">
         <div
@@ -44,7 +46,6 @@ export default {
   data: () => ({
     activePicker: null,
     date: null,
-    dateFormatted: null, // the user input
     menu: false,
   }),
   watch: {
@@ -52,9 +53,9 @@ export default {
       val && setTimeout(() => (this.activePicker = "YEAR"));
     },
     date() {
-      this.dateFormatted = this.formatDate(this.date)
+      this.inputValue = this.formatDate(this.date)
     },
-    dateFormatted(val) {
+    inputValue(val) {
       const parsed = this.parseDate(val);
       if (parsed && parsed !== this.date) this.date = parsed; 
     }
