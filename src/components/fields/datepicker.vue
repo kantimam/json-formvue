@@ -5,24 +5,22 @@
     :close-on-content-click="false"
     transition="scale-transition"
     offset-y
-    min-width="auto"
-  >
+    min-width="auto">
     <template v-slot:activator="{ on, attrs }">
       <v-text-field
         v-model="dateFormatted"
         :label="label"
 	    	:placeholder="placeholder"
         :filled="filled"
-        :class="`ondigo-input ondigo-textfield ondigo-input-${id}`"
-      ></v-text-field>
-      <v-btn
-        icon
-        color="gray"
-        v-bind="attrs"
-        v-on="on"
-      >
-        <v-icon>mdi-calendar</v-icon>
-      </v-btn>
+        :class="`ondigo-input ondigo-textfield ondigo-input-${id}`">
+      <template slot="append">
+        <div
+          v-bind="attrs"
+          v-on="on">
+          <v-icon :color="menu ? 'primary' : ''">mdi-calendar</v-icon>
+        </div>
+        </template>
+      </v-text-field>
     </template>
     <v-date-picker
       v-model="date"
@@ -33,8 +31,8 @@
           .substr(0, 10)
       "
       min="1900-01-01"
-      @change="save"
-    ></v-date-picker>
+      @change="save">
+    </v-date-picker>
   </v-menu>
 </template>
 
