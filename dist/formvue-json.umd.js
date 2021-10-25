@@ -25296,8 +25296,6 @@ var testCallback = function testCallback(callbackArgs) {
 
 
 
-
-
 vue_runtime_esm["a" /* default */].use(vuex_esm["a" /* default */]);
 /* look into splitting single step and multi step into different modules and conditionally adding them if needed */
 
@@ -30665,7 +30663,6 @@ var utils = {
 };
 /* harmony default export */ var plugins_utils = (utils);
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/extended_text_field.vue?vue&type=script&lang=js&
-
 
 
 
@@ -39903,22 +39900,37 @@ var onCaptcha_component = normalizeComponent(
 )
 
 /* harmony default export */ var onCaptcha = (onCaptcha_component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"2c4de0fc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/datepicker.vue?vue&type=template&id=44ecbf4e&
-var datepickervue_type_template_id_44ecbf4e_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('v-menu',{ref:"menu",attrs:{"close-on-content-click":false,"transition":"scale-transition","offset-y":"","min-width":"auto"},scopedSlots:_vm._u([{key:"activator",fn:function(ref){
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"2c4de0fc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/datepicker.vue?vue&type=template&id=545339af&
+var datepickervue_type_template_id_545339af_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('v-menu',{ref:"menu",attrs:{"close-on-content-click":false,"transition":"scale-transition","offset-y":"","min-width":"auto"},scopedSlots:_vm._u([{key:"activator",fn:function(ref){
 var on = ref.on;
 var attrs = ref.attrs;
-return [_c('v-text-field',_vm._g(_vm._b({attrs:{"label":_vm.label,"placeholder":_vm.placeholder,"readonly":""},model:{value:(_vm.date),callback:function ($$v) {_vm.date=$$v},expression:"date"}},'v-text-field',attrs,false),on))]}}]),model:{value:(_vm.menu),callback:function ($$v) {_vm.menu=$$v},expression:"menu"}},[_c('v-date-picker',{attrs:{"active-picker":_vm.activePicker,"max":new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
+return [_c('v-text-field',{class:("ondigo-input ondigo-textfield ondigo-input-" + _vm.id),attrs:{"label":_vm.label,"placeholder":_vm.placeholder,"filled":_vm.filled,"name":_vm.name,"id":_vm.id},model:{value:(_vm.inputValue),callback:function ($$v) {_vm.inputValue=$$v},expression:"inputValue"}},[_c('template',{slot:"append"},[_c('div',_vm._g(_vm._b({},'div',attrs,false),on),[_c('v-icon',{attrs:{"color":_vm.menu ? 'primary' : ''}},[_vm._v("mdi-calendar")])],1)])],2)]}}]),model:{value:(_vm.menu),callback:function ($$v) {_vm.menu=$$v},expression:"menu"}},[_c('v-date-picker',{attrs:{"active-picker":_vm.activePicker,"max":new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
           .toISOString()
           .substr(0, 10),"min":"1900-01-01"},on:{"update:activePicker":function($event){_vm.activePicker=$event},"update:active-picker":function($event){_vm.activePicker=$event},"change":_vm.save},model:{value:(_vm.date),callback:function ($$v) {_vm.date=$$v},expression:"date"}})],1)}
-var datepickervue_type_template_id_44ecbf4e_staticRenderFns = []
+var datepickervue_type_template_id_545339af_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/fields/datepicker.vue?vue&type=template&id=44ecbf4e&
+// CONCATENATED MODULE: ./src/components/fields/datepicker.vue?vue&type=template&id=545339af&
+
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.pad-start.js
+var es_string_pad_start = __webpack_require__("4d90");
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/datepicker.vue?vue&type=script&lang=js&
 
 
 
+
+
+
+
+
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -39969,33 +39981,45 @@ var datepickervue_type_template_id_44ecbf4e_staticRenderFns = []
       val && setTimeout(function () {
         return _this.activePicker = "YEAR";
       });
+    },
+    date: function date() {
+      this.inputValue = this.formatDate(this.date);
+    },
+    inputValue: function inputValue(val) {
+      var parsed = this.parseDate(val);
+      if (parsed && parsed !== this.date) this.date = parsed;
     }
   },
   methods: {
     save: function save(date) {
       this.$refs.menu.save(date);
+    },
+    formatDate: function formatDate(date) {
+      if (!date) return null;
+
+      var _date$split = date.split('-'),
+          _date$split2 = _slicedToArray(_date$split, 3),
+          year = _date$split2[0],
+          month = _date$split2[1],
+          day = _date$split2[2];
+
+      return "".concat(day, ".").concat(month, ".").concat(year);
+    },
+    parseDate: function parseDate(date) {
+      if (!date) return null;
+      var match = /^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/g.exec(date);
+      if (!match) return null;
+
+      var _match2 = _slicedToArray(match, 4),
+          _match = _match2[0],
+          day = _match2[1],
+          month = _match2[2],
+          year = _match2[3];
+
+      return "".concat(year, "-").concat(month.padStart(2, '0'), "-").concat(day.padStart(2, '0'));
     }
   },
   props: {
-    clearicon: {
-      type: String,
-      "default": null
-    },
-    counter: {
-      type: [Number, String],
-      "default": null,
-      validator: function validator(value) {
-        return /^\d+$/.test(value);
-      }
-    },
-    defaultValue: {
-      type: String,
-      required: false
-    },
-    disabled: {
-      type: Boolean,
-      "default": false
-    },
     focused: {
       type: Boolean,
       "default": false
@@ -40014,6 +40038,10 @@ var datepickervue_type_template_id_44ecbf4e_staticRenderFns = []
     label: {
       type: String,
       "default": null
+    },
+    filled: {
+      type: Boolean,
+      "default": false
     },
     placeholder: {
       type: String,
@@ -40463,9 +40491,6 @@ function createNativeLocaleFormatter(locale, options) {
 }));
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.math.sign.js
 var es_math_sign = __webpack_require__("2af1");
-
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.pad-start.js
-var es_string_pad_start = __webpack_require__("4d90");
 
 // EXTERNAL MODULE: ./node_modules/vuetify/src/components/VDatePicker/VDatePickerTable.sass
 var VDatePickerTable = __webpack_require__("c982");
@@ -41515,7 +41540,7 @@ function parseTimestamp(input) {
   }
 
   if (input instanceof Date) {
-    var date = parseDate(input);
+    var date = timestamp_parseDate(input);
 
     if (now) {
       updateRelative(date, now, date.hasTime);
@@ -41567,7 +41592,7 @@ function parseTimestamp(input) {
 
   return timestamp;
 }
-function parseDate(date) {
+function timestamp_parseDate(date) {
   return updateFormatted({
     date: '',
     time: '',
@@ -42438,8 +42463,8 @@ function timestamp_createNativeLocaleFormatter(locale, getOptions) {
 
 var datepicker_component = normalizeComponent(
   fields_datepickervue_type_script_lang_js_,
-  datepickervue_type_template_id_44ecbf4e_render,
-  datepickervue_type_template_id_44ecbf4e_staticRenderFns,
+  datepickervue_type_template_id_545339af_render,
+  datepickervue_type_template_id_545339af_staticRenderFns,
   false,
   null,
   null,
@@ -42454,7 +42479,8 @@ var datepicker_component = normalizeComponent(
 
 
 
-installComponents_default()(datepicker_component, {VDatePicker: VDatePicker,VMenu: VMenu_VMenu,VTextField: VTextField_VTextField})
+
+installComponents_default()(datepicker_component, {VDatePicker: VDatePicker,VIcon: components_VIcon_VIcon,VMenu: VMenu_VMenu,VTextField: VTextField_VTextField})
 
 // CONCATENATED MODULE: ./src/lib/DefaultComponents.js
 
