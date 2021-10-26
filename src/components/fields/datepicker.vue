@@ -17,6 +17,7 @@
         :class="`ondigo-input ondigo-textfield ondigo-input-${id}`">
       <template slot="append">
         <div
+          class="ondigo-icon-button"
           v-bind="attrs"
           v-on="on">
           <v-icon :color="menu ? 'primary' : ''">mdi-calendar</v-icon>
