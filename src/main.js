@@ -6,6 +6,7 @@ import createStore from './store/index.js'
 import globalInputRenderer from './components/field_renderer'
 import ComponentsMapping from './lib/ComponentsMapping';
 import Vuetify from 'vuetify/lib/framework';
+import VueTheMask from 'vue-the-mask'
 
 
 
@@ -62,6 +63,7 @@ export class DynamicJsonForm{
     init(){
         // init vuetify and use custom config if provided
         Vue.use(Vuetify);
+        Vue.use(VueTheMask);
         this.vuetifyContext=new Vuetify(this.vuetifyConfig)
 
         Vue.config.productionTip = false;

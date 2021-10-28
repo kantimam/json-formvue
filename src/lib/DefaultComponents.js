@@ -14,6 +14,7 @@ import OnSelect from '../components/fields/extended_select.vue'
 import OnLinkedText  from '../components/fields/LinkedText.vue';
 import OnCaptcha from "../components/fields/onCaptcha.vue";
 import DatePicker from "../components/fields/datepicker.vue";
+import MaskedText from "../components/fields/textfield_masked.vue";
 
 //import OnSelect from '../components/fields/extended_select_full.vue'
 
@@ -34,6 +35,7 @@ export default new ComponentsMapping({
     Oncaptcha: OnCaptcha,
     LinkedText: OnLinkedText,
     DatePicker: DatePicker,
+    MaskedText: MaskedText,
     form: 'form',
     message: 'div',
     default: 'input'
