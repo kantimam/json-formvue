@@ -134,7 +134,7 @@ export default {
       default: 'text'
     },
     value: {
-      type: [String, Number],
+      type: [String, Number, Boolean],
       default: null
     },
     validators: {
