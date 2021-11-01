@@ -15,6 +15,8 @@ import OnLinkedText  from '../components/fields/LinkedText.vue';
 import OnCaptcha from "../components/fields/onCaptcha.vue";
 import DatePicker from "../components/fields/datepicker.vue";
 import MaskedText from "../components/fields/textfield_masked.vue";
+import ConditionalProvider from "../components/layout/conditional_provider.vue";
+import ConditionalContent from "../components/layout/conditional_content.vue";
 
 //import OnSelect from '../components/fields/extended_select_full.vue'
 
@@ -36,6 +38,8 @@ export default new ComponentsMapping({
     LinkedText: OnLinkedText,
     DatePicker: DatePicker,
     MaskedText: MaskedText,
+    ConditionalProvider: ConditionalProvider,
+    ConditionalContent: ConditionalContent,
     form: 'form',
     message: 'div',
     default: 'input'
