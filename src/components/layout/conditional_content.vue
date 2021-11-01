@@ -1,5 +1,5 @@
 <template>
-  <div v-if="properties.conditionValue === conditionalValue">
+  <div v-if="shouldRender()">
     <field-renderer 
       v-for="element in renderables"
       :key="element.identifier"
@@ -18,6 +18,10 @@ export default {
     save(date) {
       this.$refs.menu.save(date);
     },
+    shouldRender() {
+      const conditionApplies = this.properties.conditionValue === this.conditionalValue;
+      return !!this.properties.invertCondition ? !conditionApplies : conditionApplies;
+    }
   },
   props: {
     conditionalValue: {
