@@ -1,6 +1,6 @@
 <template>
   <div>
-    <radio-select v-model="inputValue" v-bind="$attrs" v-on="$listeners" />
+    <checkbox v-model="inputValue" v-bind="$attrs" v-on="$listeners" />
     <field-renderer 
       v-for="element in renderables"
       :key="element.identifier"
@@ -11,13 +11,13 @@
 
 <script>
 import { isRequired } from "../../lib/util";
-import RadioSelect from '../fields/radio_group.vue';
+import Checkbox from '../fields/checkbox.vue';
 
 export default {
-  name: "ConditionalProvider",
+  name: "ConditionCheckbox",
   data: () => ({}),
   components: {
-      RadioSelect
+      Checkbox
   },
   methods: {
     save(date) {

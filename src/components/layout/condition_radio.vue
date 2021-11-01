@@ -1,29 +1,30 @@
 <template>
-  <div v-if="properties.conditionValue === conditionalValue">
+  <div>
+    <radio-select v-model="inputValue" v-bind="$attrs" v-on="$listeners" />
     <field-renderer 
       v-for="element in renderables"
       :key="element.identifier"
-      :fieldData="element"
+      :fieldData="{ conditionalValue: inputValue, ...element }"
       :formName="formName" />
   </div>
 </template>
 
 <script>
 import { isRequired } from "../../lib/util";
+import RadioSelect from '../fields/radio_group.vue';
 
 export default {
-  name: "ConditionalContent",
+  name: "ConditionRadio",
   data: () => ({}),
+  components: {
+      RadioSelect
+  },
   methods: {
     save(date) {
       this.$refs.menu.save(date);
     },
   },
   props: {
-    conditionalValue: {
-      type: String | Boolean | Number,
-      required: true
-    },
     focused: {
       type: Boolean,
       default: false,
