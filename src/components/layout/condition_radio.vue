@@ -1,24 +1,37 @@
 <template>
   <div>
-    <radio-select v-model="inputValue" v-bind="$attrs" v-on="$listeners" />
-    <field-renderer 
+    <v-radio-group
+      :class="`ondigo-input-${id} ondigo-radio`"
+      :label="label"
+      :ref="'ref-' + id"
+      :required="required"
+      v-model="selected"
+      hide-details="auto"
+    >
+      <v-radio
+        v-for="option in radioOptions"
+        :key="option.value"
+        :label="option.label"
+        :value="option.value"
+      ></v-radio>
+    </v-radio-group>
+    <field-renderer
       v-for="element in renderables"
       :key="element.identifier"
-      :fieldData="{ conditionalValue: inputValue, ...element }"
-      :formName="formName" />
+      :fieldData="{ conditionalValue: selected, ...element }"
+      :formName="formName"
+    />
   </div>
 </template>
 
 <script>
 import { isRequired } from "../../lib/util";
-import RadioSelect from '../fields/radio_group.vue';
 
 export default {
   name: "ConditionRadio",
-  data: () => ({}),
-  components: {
-      RadioSelect
-  },
+  data: () => ({
+    selected: ''
+  }),
   methods: {
     save(date) {
       this.$refs.menu.save(date);
@@ -29,9 +42,9 @@ export default {
       type: Boolean,
       default: false,
     },
-    formName:{
-        type: String,
-        required: true
+    formName: {
+      type: String,
+      required: true,
     },
     id: {
       type: String,
@@ -49,7 +62,7 @@ export default {
       required: true,
     },
     renderables: {
-        type: Array
+      type: Array,
     },
     value: {
       type: [String, Number],
@@ -65,14 +78,19 @@ export default {
     required() {
       return isRequired(this.properties);
     },
-    inputValue: {
-      get() {
-        return this.$store.getters.getCurrentInputValue(this.id) || "";
-      },
-      set(value) {
-        this.$store.commit("updateInputValue", { key: this.id, value: value });
-      },
-    },
+    radioOptions(){
+        const optionsArray=[];
+        if(!this.properties || !this.properties.options) return optionsArray;
+
+        const options=this.properties.options;
+        for(const prop in options){
+            optionsArray.push({
+                value: prop,
+                label: options[prop]
+            });
+        }
+        return optionsArray;
+    }
   },
 };
 </script>

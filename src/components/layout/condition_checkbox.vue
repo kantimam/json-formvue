@@ -1,24 +1,30 @@
 <template>
   <div>
-    <checkbox v-model="inputValue" v-bind="$attrs" v-on="$listeners" />
+    <v-checkbox
+      class="ondigo-checkbox"
+      :class="`ondigo-input-${id} ondigo-checkbox`"
+      :label="label"
+      :ref="'ref-' + id"
+      v-model="checked"
+      hide-details="auto"
+      off-icon="mdi-checkbox-blank"
+    />
     <field-renderer 
       v-for="element in renderables"
       :key="element.identifier"
-      :fieldData="{ conditionalValue: inputValue, ...element }"
+      :fieldData="{ conditionalValue: checked, ...element }"
       :formName="formName" />
   </div>
 </template>
 
 <script>
 import { isRequired } from "../../lib/util";
-import Checkbox from '../fields/checkbox.vue';
 
 export default {
   name: "ConditionCheckbox",
-  data: () => ({}),
-  components: {
-      Checkbox
-  },
+  data: () => ({
+    checked: false
+  }),
   methods: {
     save(date) {
       this.$refs.menu.save(date);
@@ -64,14 +70,6 @@ export default {
   computed: {
     required() {
       return isRequired(this.properties);
-    },
-    inputValue: {
-      get() {
-        return this.$store.getters.getCurrentInputValue(this.id) || "";
-      },
-      set(value) {
-        this.$store.commit("updateInputValue", { key: this.id, value: value });
-      },
     },
   },
 };
