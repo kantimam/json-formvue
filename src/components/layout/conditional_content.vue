@@ -1,7 +1,7 @@
 <template>
   <div v-if="shouldRender()">
     <field-renderer 
-      v-for="element in renderables"
+      v-for="element in elements"
       :key="element.identifier"
       :fieldData="element"
       :formName="formName" />

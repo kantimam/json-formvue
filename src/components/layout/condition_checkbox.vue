@@ -10,7 +10,7 @@
       off-icon="mdi-checkbox-blank"
     />
     <field-renderer 
-      v-for="element in renderables"
+      v-for="element in elements"
       :key="element.identifier"
       :fieldData="{ conditionalValue: checked, ...element }"
       :formName="formName" />
