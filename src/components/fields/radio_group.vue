@@ -5,6 +5,7 @@
     @focus="focus"
     :class="`ondigo-input-${id} ondigo-radio`"
     :messages="inputError"
+    :error="inputError !== ''"
     @input="input"
     :label="label"
     :ref="'ref-' + id"

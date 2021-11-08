@@ -94,6 +94,7 @@ const createStore=(initialState)=>{
         state.loading=Boolean(isLoading)
       },
       setModelErrors(state, model){
+        if(!model) return;
         const validIndex=state.currentStep? state.currentStep - 1 : 0;
         const currentStep=state.steps[validIndex];
         if(!currentStep) return;
@@ -106,6 +107,7 @@ const createStore=(initialState)=>{
             inputModel.error=model[inputKey];
           }
         }
+        state.errorCount=Object.keys(model).length || 0;
         
       },
       setFormErrorCount(state, count){
@@ -120,6 +122,7 @@ const createStore=(initialState)=>{
         
         if(vuetifyForm.$el && isFormValid){ // check if form element exists and if it is valid
           context.commit('setLoading', true);
+          context.commit('setFormErrorCount', 0);
           const formData=new FormData(vuetifyForm.$el); // parse formdata from underlying form element
           
           const currentModel=context.getters.getCurrentModel;

@@ -14,9 +14,7 @@
       :fieldData="fieldData"
     />
     <div v-show="errorCount > 0" class="error-summary">
-      <a
-        class="text-decoration-underline error--text"
-        @click.prevent="errorCount = 0"
+      <a class="text-decoration-underline error--text"
         >Please check {{ errorCount }} fields</a
       >
     </div>

@@ -7,6 +7,7 @@
     :color="color"
     :counter="counter"
     :disabled="disabled"
+    :error="inputError !== ''"
     :filled="filled"
     :outlined="outlined"
     :solor="solo"

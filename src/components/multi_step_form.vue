@@ -17,6 +17,11 @@
         :formName="formConfig.id"
         :fieldData="fieldData"
       />
+      <div v-show="errorCount > 0" class="error-summary">
+        <a class="text-decoration-underline error--text"
+          >Please check {{ errorCount }} fields</a
+        >
+      </div>
       <div class="d-flex justify-space-between mt-4">
         <v-btn
           type="button"

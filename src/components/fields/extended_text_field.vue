@@ -10,6 +10,7 @@
     :counter="counter"
     :disabled="disabled"
     :messages="inputError"
+    :error="inputError !== ''"
     :filled="filled"
     :outlined="outlined"
     :solor="solo"

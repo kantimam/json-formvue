@@ -4,6 +4,7 @@
     :append-icon="appendicon || $vuetify.icons.values.dropdown"
     :autocomplete="autocomplete || 'chrome-off'"
     :messages="inputError"
+    :error="inputError !== ''"
     @blur="blur"
     @change="change"
     @click="click"

@@ -11,7 +11,6 @@
       }"
       tabindex="-1"
       aria-hidden="true"
-      value="test"
     />
   </div>
 </template>

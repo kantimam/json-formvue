@@ -3,6 +3,7 @@
     class="ondigo-checkbox"
     :class="`ondigo-input-${id} ondigo-checkbox`"
     :messages="inputError"
+    :error="inputError !== ''"
     :label="label"
     :ref="'ref-' + id"
     :required="required"
