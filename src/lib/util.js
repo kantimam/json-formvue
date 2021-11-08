@@ -93,7 +93,7 @@ export const validatorTimeFormat = (string, invalidMessage, vArgs) => {
     for (let i = 1; i < match.length; i++) {
         const num = Number(match[i]);
         const [min, max] = mapping[order[i - 1]];
-        if (num < min || num > max) return invalidMessage;
+        if (num < min || (max !== undefined && num > max)) return invalidMessage;
     }
     return true;
 }
