@@ -21,6 +21,9 @@ import ConditionalContent from "../components/layout/conditional_content.vue";
 
 //import OnSelect from '../components/fields/extended_select_full.vue'
 
+export const componentRenames = {
+    'Honeypot': 'HP'
+};
 
 export default new ComponentsMapping({
     Text: OnTextfieldText,

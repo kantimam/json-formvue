@@ -1,6 +1,4 @@
-
-
-
+import { componentRenames } from "../lib/DefaultComponents";
 
 export default {
     props: {
@@ -23,6 +21,8 @@ export default {
             id: this.fieldData.identifier,
             formName: this.formName,  // this really needs to go
         }
+
+        if (propsAndAttributes.type in componentRenames) propsAndAttributes.type = componentRenames[propsAndAttributes.type];
 
         if(element){
             return h(element, {
