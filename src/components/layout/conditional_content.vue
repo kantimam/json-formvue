@@ -51,7 +51,7 @@ export default {
       type: Object | Array,
       required: true,
     },
-    renderables: {
+    elements: {
         type: Array
     },
     value: {
