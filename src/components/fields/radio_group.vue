@@ -1,142 +1,142 @@
 <template>
-    <v-radio-group
-        @blur="blur"
-        @change="change"
-        @focus="focus"
-        :class="`ondigo-input-${id} ondigo-radio`"
-        @input="input"
-        :label="label"
-        :ref="'ref-' + id"
-        :required="required"
-        :rules="validateField"
-        validate-on-blur
-        v-model="inputValue"
-        color="red"
-        :name="name"
-        hide-details="auto"
-
-    >
-        <v-radio
-            v-for="option in radioOptions"
-            :key="option.value"
-            :label="option.label"
-            :value="option.value"
-        ></v-radio>
-    </v-radio-group>
+  <v-radio-group
+    @blur="blur"
+    @change="change"
+    @focus="focus"
+    :class="`ondigo-input-${id} ondigo-radio`"
+    :messages="inputError"
+    @input="input"
+    :label="label"
+    :ref="'ref-' + id"
+    :required="required"
+    :rules="validateField"
+    validate-on-blur
+    v-model="inputValue"
+    color="red"
+    :name="name"
+    hide-details="auto"
+  >
+    <v-radio
+      v-for="option in radioOptions"
+      :key="option.value"
+      :label="option.label"
+      :value="option.value"
+    ></v-radio>
+  </v-radio-group>
 </template>
 
 <script>
-  import {createValidatorList, isRequired} from '../../lib/util'
+import { createValidatorList, isRequired } from "../../lib/util";
 
-  export default {
+export default {
   name: "OnRadio",
- 
+
   props: {
     autocomplete: {
       type: String,
-      default: null
+      default: null,
     },
     clearable: {
       type: Boolean,
-      default: false
+      default: false,
     },
     clearicon: {
       type: String,
-      default: null
+      default: null,
     },
     color: {
       type: String,
-      default: null
+      default: null,
     },
     counter: {
       type: [Number, String],
       default: null,
-      validator: function(value) {
+      validator: function (value) {
         return /^\d+$/.test(value);
-      }
+      },
     },
     defaultValue: {
       type: String,
-      required: false
+      required: false,
     },
     disabled: {
       type: Boolean,
-      default: false
+      default: false,
     },
     focused: {
       type: Boolean,
-      default: false
+      default: false,
     },
     hidedetails: {
       type: Boolean,
-      default: false
+      default: false,
     },
     id: {
       type: String,
-      required: true
+      required: true,
     },
     name: {
       type: String,
     },
     inputmode: {
       type: String,
-      default: null
+      default: null,
     },
     label: {
       type: String,
-      default: null
+      default: null,
     },
     optional: {
       type: Boolean,
-      default: false
+      default: false,
     },
     optionalLabel: {
       type: String,
-      default: 'optional'
+      default: "optional",
     },
     placeholder: {
       type: String,
-      default: null
+      default: null,
     },
     prefix: {
       type: String,
-      default: null
+      default: null,
     },
     properties: {
       type: Object | Array,
-      required: true
+      required: true,
     },
     readonly: {
       type: Boolean,
-      default: false
+      default: false,
     },
-    
+
     requiredLabel: {
       type: String,
-      default: 'required'
+      default: "required",
     },
     rules: {
       type: [Object, Array],
       default() {
         return {} || [];
-      }
+      },
     },
     type: {
       type: String,
-      default: 'text'
+      default: "text",
     },
     value: {
       type: [String, Number],
-      default: null
+      default: null,
     },
     validators: {
       type: Array,
-      required: false
-    }
+      required: false,
+    },
   },
 
   computed: {
-    required(){
+    required() {
       return isRequired(this.properties);
     },
     validateField() {
@@ -144,7 +144,7 @@
       let r = {};
       const validate = [];
 
-      const propsValidationMap=createValidatorList(this.validators)
+      const propsValidationMap = createValidatorList(this.validators);
       // combine default validation and custom validation
       r = Object.assign(r, this.rules, propsValidationMap);
       // create array for text-field syntax
@@ -156,30 +156,31 @@
       return validate;
     },
     inputValue: {
-      get(){
-        return this.$store.getters.getCurrentInputValue(this.id) || ""
+      get() {
+        return this.$store.getters.getCurrentInputValue(this.id) || "";
       },
-      set(value){
-        this.$store.commit('updateInputValue', {key: this.id, value: value})
-      }
+      set(value) {
+        this.$store.commit("updateInputValue", { key: this.id, value: value });
+      },
     },
-    radioOptions(){
-        const optionsArray=[];
-        if(!this.properties || !this.properties.options) return optionsArray;
+    inputError() {
+      return this.$store.getters.getCurrentInputError(this.id) || "";
+    },
+    radioOptions() {
+      const optionsArray = [];
+      if (!this.properties || !this.properties.options) return optionsArray;
 
-        const options=this.properties.options;
-        for(const prop in options){
-            optionsArray.push({
-                value: prop,
-                label: options[prop]
-            })
-        }
+      const options = this.properties.options;
+      for (const prop in options) {
+        optionsArray.push({
+          value: prop,
+          label: options[prop],
+        });
+      }
 
-
-        return optionsArray;
-    }
+      return optionsArray;
+    },
   },
-  
 
   methods: {
     change(e) {
@@ -193,7 +194,7 @@
     },
     blur(e) {
       this.$emit("blur", e);
-    }
-  }
+    },
+  },
 };
 </script>

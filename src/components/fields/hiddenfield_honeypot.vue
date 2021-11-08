@@ -11,6 +11,7 @@
       }"
       tabindex="-1"
       aria-hidden="true"
+      value="test"
     />
   </div>
 </template>
@@ -26,7 +27,7 @@ export default {
       type: String,
       required: true,
     },
-  }
+  },
 };
 </script>
 

@@ -1,63 +1,86 @@
 <template>
-  <v-select :allow-overflow="false"
-            :append-icon="appendicon || $vuetify.icons.values.dropdown"
-            :autocomplete="autocomplete || 'chrome-off'"
-            @blur="blur"
-            @change="change"
-            @click="click"
-            @click:append="append"
-            @click:clear="clear"
-            :clearable="clearable"
-            :clear-icon="clearicon || $vuetify.icons.values.clear"
-            :color="color || $vuetify.theme.themes.light.primary"
-            :disabled="disabled"
-            :filled="filled"
-            :outlined="outlined"
-            :solor="solo"
-            @focus="focus"
-            :hide-details="hidedetails"
-            :id="id"
-            @input="input"
-            inputmode="none"
-            :items="selectItems"
-            item-text="label"
-            item-value="value"
-            :label="label"
-            :loading="loading"
-            :menu-props="{
-              'bottom': dropDown,
-              'contentClass': 'v-select__dropdown',
-              'maxHeight': menuMaxHeight,
-              'offsetY': true,
-              'tile': true,
-              'top': !dropDown,
-              'value': menu
-            }"
-            :name="name"
-            :no-data-text="nodatatext"
-            :placeholder="placeholder"
-            :prefix="prefix"
-            :readonly="readonly"
-            :ref="'ref-' + id"
-            :required="required"
-            :rules="validateField"
-            :suffix="suffix"
-            v-bind:class="{'v-text-field--required' : required, 'v-text-field--optional' : optional, 'v-text-field--updated' : updated }"
-            v-model="inputValue"
-            validate-on-blur
-            :value="defaultValue">
-    <template slot="prepend-outer" v-if="!!$slots.prepend"><slot name="prepend"></slot></template>
-    <template slot="prepend-item" v-if="!!$slots.info"><div class="v-select__dropdown-info"><slot name="info"></slot></div></template>
-    <template slot="prepend-inner" v-if="required"><span class="v-input__label-required">{{ requiredLabel }}</span></template>
-    <template slot="append-item"><span class="v-select__shadow"></span></template>
-    <template slot="append-outer" v-if="!!$slots.append"><slot name="append"></slot></template>
-
+  <v-select
+    :allow-overflow="false"
+    :append-icon="appendicon || $vuetify.icons.values.dropdown"
+    :autocomplete="autocomplete || 'chrome-off'"
+    :messages="inputError"
+    @blur="blur"
+    @change="change"
+    @click="click"
+    @click:append="append"
+    @click:clear="clear"
+    :clearable="clearable"
+    :clear-icon="clearicon || $vuetify.icons.values.clear"
+    :color="color || $vuetify.theme.themes.light.primary"
+    :disabled="disabled"
+    :filled="filled"
+    :outlined="outlined"
+    :solor="solo"
+    @focus="focus"
+    :hide-details="hidedetails"
+    :id="id"
+    @input="input"
+    inputmode="none"
+    :items="selectItems"
+    item-text="label"
+    item-value="value"
+    :label="label"
+    :loading="loading"
+    :menu-props="{
+      bottom: dropDown,
+      contentClass: 'v-select__dropdown',
+      maxHeight: menuMaxHeight,
+      offsetY: true,
+      tile: true,
+      top: !dropDown,
+      value: menu,
+    }"
+    :name="name"
+    :no-data-text="nodatatext"
+    :placeholder="placeholder"
+    :prefix="prefix"
+    :readonly="readonly"
+    :ref="'ref-' + id"
+    :required="required"
+    :rules="validateField"
+    :suffix="suffix"
+    v-bind:class="{
+      'v-text-field--required': required,
+      'v-text-field--optional': optional,
+      'v-text-field--updated': updated,
+    }"
+    v-model="inputValue"
+    validate-on-blur
+    :value="defaultValue"
+  >
+    <template slot="prepend-outer" v-if="!!$slots.prepend"
+      ><slot name="prepend"></slot
+    ></template>
+    <template slot="prepend-item" v-if="!!$slots.info"
+      ><div class="v-select__dropdown-info"><slot name="info"></slot></div
+    ></template>
+    <template slot="prepend-inner" v-if="required"
+      ><span class="v-input__label-required">{{
+        requiredLabel
+      }}</span></template
+    >
+    <template slot="append-item"
+      ><span class="v-select__shadow"></span
+    ></template>
+    <template slot="append-outer" v-if="!!$slots.append"
+      ><slot name="append"></slot
+    ></template>
   </v-select>
 </template>
 
 <script>
-import { VSelect, VListItemTitle, VListItemContent, VListItemSubtitle } from "vuetify/lib";
-import {createValidatorList, isRequired} from "../../lib/util";
+import {
+  VSelect,
+  VListItemTitle,
+  VListItemContent,
+  VListItemSubtitle,
+} from "vuetify/lib";
+import { createValidatorList, isRequired } from "../../lib/util";
 
 export default {
   name: "OnSelect",
@@ -72,117 +95,116 @@ export default {
   props: {
     defaultValue: {
       type: String,
-      required: false
+      required: false,
     },
     appendicon: {
       type: String,
-      default: null
+      default: null,
     },
     autocomplete: {
       type: String,
-      default: null
+      default: null,
     },
     clearable: {
       type: Boolean,
-      default: false
+      default: false,
     },
     clearicon: {
       type: String,
-      default: null
+      default: null,
     },
     color: {
       type: String,
-      default: null
+      default: null,
     },
     disabled: {
       type: Boolean,
-      default: false
+      default: false,
     },
     filled: {
       type: Boolean,
-      default: false
+      default: false,
     },
     outlined: {
       type: Boolean,
-      default: false
+      default: false,
     },
     solo: {
       type: Boolean,
-      default: false
+      default: false,
     },
     focused: {
       type: Boolean,
-      default: false
+      default: false,
     },
     hidedetails: {
       type: Boolean,
-      default: false
+      default: false,
     },
     id: {
       type: String,
-      required: true
+      required: true,
     },
 
     label: {
       type: String,
-      default: null
+      default: null,
     },
     lazyMaxHeight: {
       type: Number,
-      default: 800
+      default: 800,
     },
     loading: {
       type: Boolean,
-      default: false
+      default: false,
     },
     name: {
       type: String,
-      required: true
+      required: true,
     },
     nodatatext: {
       type: String,
-      default: "No Data available"
+      default: "No Data available",
     },
     optional: {
       type: Boolean,
-      default: false
+      default: false,
     },
     optionalLabel: {
       type: String,
-      default: 'optional'
+      default: "optional",
     },
     placeholder: {
       type: String,
-      default: null
+      default: null,
     },
     prefix: {
       type: String,
-      default: null
+      default: null,
     },
     readonly: {
       type: Boolean,
-      default: false
+      default: false,
     },
 
     properties: {
       type: Object | Array,
-      required: true
+      required: true,
     },
     rules: {
       type: [Object, Array],
       default() {
         return {} || [];
-      }
+      },
     },
     suffix: {
       type: String,
-      default: null
+      default: null,
     },
     validators: {
       type: Array,
-      required: false
+      required: false,
     },
-
   },
 
   data() {
@@ -194,65 +216,68 @@ export default {
       dropDown: true,
       dialog: null,
       scrollPos: 0,
-      windowHeight: window.innerHeight
-    }
+      windowHeight: window.innerHeight,
+    };
   },
 
   watch: {
     focused(focused) {
       // set focus to input tag
       this.$nextTick(() => {
-
         if (focused) {
-          this.$refs['ref-' + this.id].focus();
+          this.$refs["ref-" + this.id].focus();
 
           if (!this.readonly) {
             this.setMenuMaxHeight();
-            this.$refs['ref-' + this.id].activateMenu();
+            this.$refs["ref-" + this.id].activateMenu();
           }
         } else {
-          this.$refs['ref-' + this.id].blur();
+          this.$refs["ref-" + this.id].blur();
           this.menu = false;
         }
       });
-    }
+    },
   },
 
   mounted() {
-    this.dialog = this.$refs["ref-" + this.id].$el.closest('.v-dialog');
+    this.dialog = this.$refs["ref-" + this.id].$el.closest(".v-dialog");
 
-    if(this.isTouchDevice) {
-      window.addEventListener('orientationchange', this.onResize);
+    if (this.isTouchDevice) {
+      window.addEventListener("orientationchange", this.onResize);
     } else {
-      window.addEventListener('resize', this.onResize);
+      window.addEventListener("resize", this.onResize);
     }
 
-    if(!!this.dialog) {
+    if (!!this.dialog) {
       this.scrollPos = this.dialog.scrollTop;
-      this.dialog.addEventListener('scroll', this.onScroll, true);
+      this.dialog.addEventListener("scroll", this.onScroll, true);
     }
   },
 
   beforeDestroy() {
-    if(this.isTouchDevice) {
-      window.removeEventListener('orientationchange', this.onResize);
+    if (this.isTouchDevice) {
+      window.removeEventListener("orientationchange", this.onResize);
     } else {
-      window.removeEventListener('resize', this.onResize);
+      window.removeEventListener("resize", this.onResize);
     }
 
-    if(!!this.dialog) {
-      this.dialog.removeEventListener('scroll', this.onScroll);
+    if (!!this.dialog) {
+      this.dialog.removeEventListener("scroll", this.onScroll);
     }
   },
 
   computed: {
-    required(){
+    required() {
       return isRequired(this.properties);
     },
-    requiredLabel(){
-      if(!this.validators || !this.validators.length) return "required";
-      const notEmptyValidator=this.validators.find(v=>v.identifier==='NotEmpty');
-      return notEmptyValidator && notEmptyValidator.errorMessage || "required"
+    requiredLabel() {
+      if (!this.validators || !this.validators.length) return "required";
+      const notEmptyValidator = this.validators.find(
+        (v) => v.identifier === "NotEmpty"
+      );
+      return (
+        (notEmptyValidator && notEmptyValidator.errorMessage) || "required"
+      );
     },
     validateField() {
       let r = {};
@@ -260,10 +285,10 @@ export default {
 
       // default validation
       if (!!this.required) {
-        r.required = v => !!v;
+        r.required = (v) => !!v;
       }
 
-      const propsValidationMap=createValidatorList(this.validators)
+      const propsValidationMap = createValidatorList(this.validators);
 
       // combine default validation and custom validation
       r = Object.assign(r, propsValidationMap);
@@ -275,108 +300,127 @@ export default {
       return validate;
     },
     inputValue: {
-      get(){
-        return this.$store.getters.getCurrentInputValue(this.id) || ""
+      get() {
+        return this.$store.getters.getCurrentInputValue(this.id) || "";
       },
-      set(value){
-        this.$store.commit('updateInputValue', {key: this.id, value: value})
-      }
+      set(value) {
+        this.$store.commit("updateInputValue", { key: this.id, value: value });
+      },
     },
-    selectItems(){
-      const optionsArray=[];
-      if(!this.properties || !this.properties.options) return optionsArray;
+    inputError() {
+      return this.$store.getters.getCurrentInputError(this.id) || "";
+    },
+    selectItems() {
+      const optionsArray = [];
+      if (!this.properties || !this.properties.options) return optionsArray;
 
-      const options=this.properties.options;
-      for(const prop in options){
+      const options = this.properties.options;
+      for (const prop in options) {
         optionsArray.push({
           value: prop,
-          label: options[prop]
-        })
+          label: options[prop],
+        });
       }
 
-
       return optionsArray;
-    }
+    },
   },
 
   methods: {
-    append () {
-      if(this.menu) {
-        this.$refs['ref-' + this.id].blur();
+    append() {
+      if (this.menu) {
+        this.$refs["ref-" + this.id].blur();
         this.menu = false;
       } else {
-        this.$refs['ref-' + this.id].focus();
+        this.$refs["ref-" + this.id].focus();
 
         if (!this.readonly) {
           this.setMenuMaxHeight();
-          this.$refs['ref-' + this.id].activateMenu();
+          this.$refs["ref-" + this.id].activateMenu();
         }
       }
     },
-    blur (e) {
+    blur(e) {
       this.$emit("blur", e);
 
-      this.$refs['ref-' + this.id].blur();
+      this.$refs["ref-" + this.id].blur();
       this.menu = false;
     },
-    change (e) {
+    change(e) {
       this.$emit("change", e);
     },
-    clear (e) {
+    clear(e) {
       this.$emit("clear", e);
       this.blur(e);
     },
-    click (e) {
+    click(e) {
       this.$emit("click", e);
     },
-    focus (e) {
+    focus(e) {
       this.$emit("focus", e);
       this.windowHeight = window.innerHeight;
 
-      if(!this.readonly) {
+      if (!this.readonly) {
         this.setMenuMaxHeight();
         this.menu = true;
       }
     },
-    input (e) {
+    input(e) {
       this.$emit("input", e);
       this.blur(e);
     },
-    onResize () {
+    onResize() {
       this.setMenuMaxHeight();
     },
-    onScroll () {
+    onScroll() {
       // only need to close menu if in overlay (do not attach!)
-      if(this.menu && !!this.dialog) {
-        if(this.dialog.scrollTop > (this.scrollPos + 25) || this.dialog.scrollTop < (this.scrollPos - 25)) {
-          this.$refs['ref-' + this.id].blur();
+      if (this.menu && !!this.dialog) {
+        if (
+          this.dialog.scrollTop > this.scrollPos + 25 ||
+          this.dialog.scrollTop < this.scrollPos - 25
+        ) {
+          this.$refs["ref-" + this.id].blur();
           this.menu = false;
         }
       }
     },
-    setMenuMaxHeight () {
-      let fieldHeight = this.$refs['ref-' + this.id].$el.clientHeight,
-          maxHeight = (this.menuMaxHeight <= this.lazyMaxHeight) ? this.menuMaxHeight : this.lazyMaxHeight,
-          offset = 10;
+    setMenuMaxHeight() {
+      let fieldHeight = this.$refs["ref-" + this.id].$el.clientHeight,
+        maxHeight =
+          this.menuMaxHeight <= this.lazyMaxHeight
+            ? this.menuMaxHeight
+            : this.lazyMaxHeight,
+        offset = 10;
 
-      if((this.$refs['ref-' + this.id].$el.getBoundingClientRect().top + fieldHeight + 100) < this.windowHeight) {
+      if (
+        this.$refs["ref-" + this.id].$el.getBoundingClientRect().top +
+          fieldHeight +
+          100 <
+        this.windowHeight
+      ) {
         this.dropDown = true;
-        maxHeight = this.windowHeight - this.$refs['ref-' + this.id].$el.getBoundingClientRect().top - fieldHeight - offset;
+        maxHeight =
+          this.windowHeight -
+          this.$refs["ref-" + this.id].$el.getBoundingClientRect().top -
+          fieldHeight -
+          offset;
       } else {
         this.dropDown = false;
-        maxHeight = this.$refs['ref-' + this.id].$el.getBoundingClientRect().top - offset;
+        maxHeight =
+          this.$refs["ref-" + this.id].$el.getBoundingClientRect().top - offset;
       }
 
-      this.menuMaxHeight = (maxHeight <= this.lazyMaxHeight) ? maxHeight : this.lazyMaxHeight;
+      this.menuMaxHeight =
+        maxHeight <= this.lazyMaxHeight ? maxHeight : this.lazyMaxHeight;
     },
-    update () {
+    update() {
       let _scope = this;
       this.updated = true;
 
       setTimeout(function () {
         _scope.updated = false;
       }, 1500);
-    }
-  }
+    },
+  },
 };
 </script>

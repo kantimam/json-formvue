@@ -1,13 +1,19 @@
 <template>
   <!-- <text-field v-bind="$attrs" v-on="$listeners" type="text" v-mask="{mask: 'G#:G#', tokens: {G: {pattern: /[0-2]/}, '#': {pattern: /\d/}}}" /> -->
-  <text-field v-model="inputValue" v-bind="$attrs" v-on="$listeners" type="text" v-mask="properties.pattern" />
+  <text-field
+    v-model="inputValue"
+    v-bind="$attrs"
+    v-on="$listeners"
+    type="text"
+    v-mask="properties.pattern"
+  />
 </template>
 <script>
-import TextField from './extended_text_field.vue'
-  export default {
+import TextField from "./extended_text_field.vue";
+export default {
   name: "OnTextfieldMasked",
   components: {
-    TextField
+    TextField,
   },
   methods: {
     save(date) {
@@ -27,7 +33,7 @@ import TextField from './extended_text_field.vue'
       type: [Object, Array],
       default() {
         return {} || [];
-      }
+      },
     },
     value: {
       type: [String, Number],

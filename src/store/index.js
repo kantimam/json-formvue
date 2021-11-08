@@ -38,6 +38,13 @@ const createStore=(initialState)=>{
         if(!inputModel || !inputModel.value) return ""
         return inputModel.value; 
       },
+      getCurrentInputError: (_, getters) => inputKey =>{
+        const model=getters.getCurrentModel;
+        if(!model) return ""
+        const inputModel=model[inputKey];
+        if(!inputModel || !inputModel.error) return ""
+        return inputModel.error; 
+      },
       getCurrentInputName: (_, getters) => inputKey =>{
         const step=getters.getCurrentStep;
         if(!step || !step.formId) return `tx_form_formframework[${inputKey}]`
@@ -55,6 +62,8 @@ const createStore=(initialState)=>{
         if(!currentModel) return;
         
         currentModel.value=payload.value;
+        currentModel.error='';
+        context.commit('setFormErrorCount', errorCount || 0);
       },
       updateFormStep (state, newStep){
         state.currentStep=newStep>0? newStep : 1;
@@ -83,6 +92,24 @@ const createStore=(initialState)=>{
       },
       setLoading(state, isLoading){
         state.loading=Boolean(isLoading)
+      },
+      setModelErrors(state, model){
+        const validIndex=state.currentStep? state.currentStep - 1 : 0;
+        const currentStep=state.steps[validIndex];
+        if(!currentStep) return;
+        const currentModel=currentStep.inputModel;
+        if(!currentModel) return;
+
+        for(const inputKey in model){
+          const inputModel=currentModel[inputKey];
+          if(inputModel){
+            inputModel.error=model[inputKey];
+          }
+        }
+        
+      },
+      setFormErrorCount(state, count){
+        state.errorCount=count;
       }
     },
 
@@ -90,6 +117,8 @@ const createStore=(initialState)=>{
 
       submitStep(context, vuetifyForm){
         const isFormValid=vuetifyForm.validate();
+        
+
         
         if(vuetifyForm.$el && isFormValid){ // check if form element exists and if it is valid
           context.commit('setLoading', true);
@@ -124,6 +153,13 @@ const createStore=(initialState)=>{
 
           })
 
+        }else{
+          requestAnimationFrame(function(){
+            const errorCount = vuetifyForm.$el.querySelectorAll(
+              ".v-input.error--text"
+            ).length;
+            context.commit('setFormErrorCount', errorCount || 0);
+          })
         }
       },
 
@@ -132,7 +168,7 @@ const createStore=(initialState)=>{
         if(!successJson) throw new Error('could not find valid json');
         
         // handle redirect on success
-        if(successJson.status===301 && successJson.redirectUri){
+        if(successJson.status===301 && !successJson.redirectUri){
           window.location=successJson.redirectUri;
           return;
         } 
@@ -159,6 +195,9 @@ const createStore=(initialState)=>{
 
         // handle loading next page after finishing callbacks if needed
         if(successJson.api){
+          if(successJson.api.status='failure'){
+            context.commit('setModelErrors', successJson.api.errors);
+          }
           if(successJson.api.callbacks && successJson.api.callbacks.length){
             try {
               await context.dispatch('handleSuccessCallbacks', successJson.api.callbacks);
@@ -199,12 +238,12 @@ function initFormStateFromExtendedForm(formData){
     id: formConfig.id,
     currentStep: formConfig.api.page.current || 1,
     loading: false,
+    errorCount: 0,
     nextStep: formConfig.api.page.nextPage || 1,
     previousStep: formConfig.api.page.previousPage || 1,
     lastStep: formConfig.api.page.pages || 1,
     formResponse: null,
     formFinished: false,
-
 
     steps: [
       createStepFromFormConfig(formConfig)
@@ -233,9 +272,8 @@ function createModelFromFormConfig(elements){
   elements.forEach(element=>{
     model[element.identifier]={
       id: element.identifier,
-      value: element.defaultValue || "",
-      hasError: false,
-      errorList: []
+      value: element.defaultValue || '',
+      error: ''
     }
   })
   return model;

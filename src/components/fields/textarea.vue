@@ -1,145 +1,148 @@
 <template>
-  <v-textarea :autocomplete="autocomplete"
-                @blur="blur"
-                @change="change"
-                :color="$vuetify.theme.themes.light.primary"
-                :counter="counter"
-                :disabled="disabled"
-                @focus="focus"
-                :class="`ondigo-input-${id} ondigo-input ondigo-textarea`"
-                @input="input"
-                :label="label"
-                :placeholder="placeholder"
-                :readonly="readonly"
-                :ref="'ref-' + id"
-                :required="required"
-                :rules="validateField"
-                :type="type"
-                v-bind:class="{'v-text-field--required' : required, 'v-text-field--optional' : optional }"
-                v-model="inputValue"
-                validate-on-blur
-                :value="defaultValue"
-                filled
-                :name="name"
-                hide-details="auto"
-
-
+  <v-textarea
+    :autocomplete="autocomplete"
+    @blur="blur"
+    @change="change"
+    :color="$vuetify.theme.themes.light.primary"
+    :counter="counter"
+    :disabled="disabled"
+    @focus="focus"
+    :class="`ondigo-input-${id} ondigo-input ondigo-textarea`"
+    @input="input"
+    :label="label"
+    :messages="inputError"
+    :placeholder="placeholder"
+    :readonly="readonly"
+    :ref="'ref-' + id"
+    :required="required"
+    :rules="validateField"
+    :type="type"
+    v-bind:class="{
+      'v-text-field--required': required,
+      'v-text-field--optional': optional,
+    }"
+    v-model="inputValue"
+    validate-on-blur
+    :value="defaultValue"
+    filled
+    :name="name"
+    hide-details="auto"
   >
   </v-textarea>
 </template>
 
 <script>
-  import {createValidatorList, isRequired} from '../../lib/util'
+import { createValidatorList, isRequired } from "../../lib/util";
 
-  export default {
+export default {
   name: "OnTextarea",
- 
+
   props: {
     autocomplete: {
       type: String,
-      default: null
+      default: null,
     },
     clearable: {
       type: Boolean,
-      default: false
+      default: false,
     },
     clearicon: {
       type: String,
-      default: null
+      default: null,
     },
     color: {
       type: String,
-      default: null
+      default: null,
     },
     counter: {
       type: [Number, String],
       default: null,
-      validator: function(value) {
+      validator: function (value) {
         return /^\d+$/.test(value);
-      }
+      },
     },
     defaultValue: {
       type: String,
-      required: false
+      required: false,
     },
     disabled: {
       type: Boolean,
-      default: false
+      default: false,
     },
     focused: {
       type: Boolean,
-      default: false
+      default: false,
     },
     hidedetails: {
       type: Boolean,
-      default: false
+      default: false,
     },
     id: {
       type: String,
-      required: true
+      required: true,
     },
     name: {
       type: String,
     },
     inputmode: {
       type: String,
-      default: null
+      default: null,
     },
     label: {
       type: String,
-      default: null
+      default: null,
     },
     optional: {
       type: Boolean,
-      default: false
+      default: false,
     },
     optionalLabel: {
       type: String,
-      default: 'optional'
+      default: "optional",
     },
     placeholder: {
       type: String,
-      default: null
+      default: null,
     },
     prefix: {
       type: String,
-      default: null
+      default: null,
     },
     properties: {
       type: Object | Array,
-      required: true
+      required: true,
     },
     readonly: {
       type: Boolean,
-      default: false
+      default: false,
     },
-    
+
     requiredLabel: {
       type: String,
-      default: 'required'
+      default: "required",
     },
     rules: {
       type: [Object, Array],
       default() {
         return {} || [];
-      }
+      },
     },
     type: {
       type: String,
-      default: 'text'
+      default: "text",
     },
     value: {
       type: [String, Number],
-      default: null
+      default: null,
     },
     validators: {
       type: Array,
-      required: false
-    }
+      required: false,
+    },
   },
 
   computed: {
-    required(){
+    required() {
       return isRequired(this.properties);
     },
     validateField() {
@@ -147,7 +150,7 @@
       let r = {};
       const validate = [];
 
-      const propsValidationMap=createValidatorList(this.validators)
+      const propsValidationMap = createValidatorList(this.validators);
       // combine default validation and custom validation
       r = Object.assign(r, this.rules, propsValidationMap);
       // create array for text-field syntax
@@ -159,15 +162,17 @@
       return validate;
     },
     inputValue: {
-      get(){
-        return this.$store.getters.getCurrentInputValue(this.id) || ""
+      get() {
+        return this.$store.getters.getCurrentInputValue(this.id) || "";
       },
-      set(value){
-        this.$store.commit('updateInputValue', {key: this.id, value: value})
-      }
-    }
+      set(value) {
+        this.$store.commit("updateInputValue", { key: this.id, value: value });
+      },
+    },
+    inputError() {
+      return this.$store.getters.getCurrentInputError(this.id) || "";
+    },
   },
-  
 
   methods: {
     change(e) {
@@ -181,7 +186,7 @@
     },
     blur(e) {
       this.$emit("blur", e);
-    }
-  }
+    },
+  },
 };
 </script>
