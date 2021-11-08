@@ -33,6 +33,7 @@ export const createValidatorByKey=(validatorKey, vArgs, errorMessage)=>{
         NumberRange: (inputValue)=>!inputValue.length || validatorNumberRange(inputValue, errorMessage || `number must be between ${vArgs.minimum} and ${vArgs.maximum}`, vArgs),
         RegularExpression: (inputValue)=>!inputValue.length || validatorRegex(inputValue, errorMessage || `input must match following regular expression ${vArgs.regularExpression}`, vArgs),
         MinimumNumber: (inputValue) => !inputValue.length || validatorMinimumNumber(inputValue, errorMessage || `number must be greater thant ${vArgs.minimum}`, vArgs),
+        TimeFormat: (inputValue) => !inputValue.length || validatorTimeFormat(inputValue, errorMessage || `the datetime must be in this format: '${vArgs.format}'`, vArgs),
         default: null
     }
     return knownFunctions[validatorKey] || knownFunctions.default;
@@ -73,6 +74,29 @@ export const validatorMinimumNumber=(string, invalidMessage, vArgs)=>{
     return (num>=vArgs.minimum) || invalidMessage;
 }
 
+export const validatorTimeFormat = (string, invalidMessage, vArgs) => {
+    const mapping = {
+        'H': [0, 23, 1], // min_value, max_value, min_digits
+        'i': [0, 59, 1],
+        'd': [0, 31, 1],
+        'm': [1, 12, 1],
+        'Y': [0, undefined] // omit min_digits to set to max_digits (derived by given format)
+    };
+
+    const [pattern, order] = convertTimeFormatToPattern(vArgs.format, mapping);
+    const regex = new RegExp(pattern);
+
+    const match = string.match(regex);
+    if (!match) return invalidMessage;
+
+    // validate each pattern group
+    for (let i = 1; i < match.length; i++) {
+        const num = Number(match[i]);
+        const [min, max] = mapping[order[i - 1]];
+        if (num < min || (max !== undefined && num > max)) return invalidMessage;
+    }
+    return true;
+}
 
 export const createCallbackList=(callbacks)=>{
     return callbacks.map(callback=>(
@@ -98,3 +122,31 @@ export const testCallback=(callbackArgs)=>(
         }, 1200);
     })
 )
+
+const convertTimeFormatToPattern = (format, mapping) => {
+    const intermediaryPattern = Object.keys(mapping)
+        .map(c => c.concat('+'))
+        .join('|');
+    const intermediaryRegex = new RegExp(intermediaryPattern, 'g');
+    const matches = Array.from(format.matchAll(intermediaryRegex));
+
+    let cursor = 0;
+    const patternSegments = [];
+    const groupOrder = [];
+
+    matches.forEach(match => {
+        const str = match[0];
+        const len = str.length;
+        const firstChar = str[0];
+        const [_min, _max, minDigits] = mapping[firstChar];
+        groupOrder.push(firstChar);
+
+        const group = `([0-9]{${minDigits || len},${len}})`;
+        patternSegments.push(format.slice(cursor, match.index), group);
+        cursor = match.index + len;
+    });
+
+    if (cursor < format.length) patternSegments.push(format.slice(cursor, format.length));
+
+    return [patternSegments.join(''), groupOrder];
+}
