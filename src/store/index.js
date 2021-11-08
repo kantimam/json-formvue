@@ -63,7 +63,7 @@ const createStore=(initialState)=>{
         
         currentModel.value=payload.value;
         currentModel.error='';
-        context.commit('setFormErrorCount', errorCount || 0);
+        state.errorCount=0;
       },
       updateFormStep (state, newStep){
         state.currentStep=newStep>0? newStep : 1;
@@ -117,8 +117,6 @@ const createStore=(initialState)=>{
 
       submitStep(context, vuetifyForm){
         const isFormValid=vuetifyForm.validate();
-        
-
         
         if(vuetifyForm.$el && isFormValid){ // check if form element exists and if it is valid
           context.commit('setLoading', true);
