@@ -3,11 +3,9 @@
     :autocomplete="autocomplete"
     auto-size
     @blur="blur"
-    :class="`ondigo-input ondigo-textarea ondigo-input-${id}`"
     :color="color"
     :counter="counter"
     :disabled="disabled"
-    :error="inputError !== ''"
     :filled="filled"
     :outlined="outlined"
     :solor="solo"
@@ -17,7 +15,7 @@
     :inputmode="inputmode"
     :label="label"
     :loading="loading"
-    :messages="inputError"
+    :error-messages="inputError"
     :name="name"
     :placeholder="placeholder"
     :prefix="prefix"
@@ -28,12 +26,17 @@
     :rules="validateField"
     :suffix="suffix"
     :type="type"
-    v-bind:class="{
-      'v-text-field--required': required,
-      'v-text-field--optional': optional,
-      'v-text-field--counting': counter,
-      'v-text-field--updated': updated,
-    }"
+    v-bind:class="
+      ({
+        'v-text-field--required': required,
+        'v-text-field--optional': optional,
+        'v-text-field--counting': counter,
+        'v-text-field--updated': updated,
+      },
+      'ondigo-input',
+      'ondigo-textarea',
+      `ondigo-input-${id}`)
+    "
     validate-on-blur
   >
     <template slot="prepend-outer"><slot name="prepend"></slot></template>

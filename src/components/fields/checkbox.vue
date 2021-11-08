@@ -2,8 +2,7 @@
   <v-checkbox
     class="ondigo-checkbox"
     :class="`ondigo-input-${id} ondigo-checkbox`"
-    :messages="inputError"
-    :error="inputError !== ''"
+    :error-messages="inputError"
     :label="label"
     :ref="'ref-' + id"
     :required="required"
