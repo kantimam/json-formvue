@@ -2,7 +2,9 @@
 
 <template>
   <div v-if="properties && properties.gencaptchaUri" class="ondigo-captcha-container">
-    <div class="ondigo-captcha-img-container" ref="captchaImgContainer" />
+    <div class="ondigo-captcha-img-container">
+      <img :src="data" alt="Captcha">
+    </div>
     <div class="ondigo-captcha-refresh-container">
       <a 
         v-if="!loading"
@@ -42,11 +44,14 @@ export default {
   data: () => ({
     loading: false,
     error: null,
+    data: null
   }),
   created: function() {
     this.preloadImage()
-      .then(img => this.setImg(img))
-      .catch(() => this.error = 'Failed to fetch image.');
+      .catch((err) => {
+        console.error(err);
+        this.error = 'Failed to fetch image.'
+      });
   },
   methods: {
     refresh(event) {
@@ -55,29 +60,15 @@ export default {
 
       this.loading = true;
       this.preloadImage()
-        .then(img => {
-          this.setImg(img);
-          this.loading = false;
-        })
+        .then(() => this.loading = false)
         .catch(() => {
           this.error = 'Failed to fetch image.';
           this.loading = false;
-        });
+      });
     },
-    preloadImage() {
-      return new Promise((resolve, reject) => {
-        const image = new Image();
-        image.addEventListener('load', () => resolve(image));
-        image.addEventListener('error', err => reject(err));
-
-        image.src = this.properties.gencaptchaUri;
-      });  
-    },
-    setImg(img) {
-      const container = this.$refs.captchaImgContainer;
-      while (container.lastElementChild) container.removeChild(container.lastElementChild);
-
-      container.appendChild(img);
+    async preloadImage() {
+      const response = await fetch(this.properties.gencaptchaUri);
+      this.data = URL.createObjectURL(await response.blob());
     },
   },
   props: {
