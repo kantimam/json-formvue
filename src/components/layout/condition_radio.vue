@@ -11,6 +11,7 @@
       <v-radio
         v-for="option in radioOptions"
         :key="option.value"
+        :name="name"
         :label="option.label"
         :value="option.value"
       ></v-radio>

@@ -5,7 +5,9 @@
       :class="`ondigo-input-${id} ondigo-checkbox`"
       :label="label"
       :ref="'ref-' + id"
+      :name="name"
       v-model="checked"
+      :value="checked ? true : false"
       hide-details="auto"
       off-icon="mdi-checkbox-blank"
     />
