@@ -1,30 +1,70 @@
 <template>
-  <!-- <text-field v-bind="$attrs" v-on="$listeners" type="text" v-mask="{mask: 'G#:G#', tokens: {G: {pattern: /[0-2]/}, '#': {pattern: /\d/}}}" /> -->
-  <text-field
-    v-model="inputValue"
+  <!-- Inspired by https://github.com/rafaelkendrik/imask-vuetify/blob/4b02dffc656c18926df374e3522c6446b1e86c51/components/html/ImaskField.vue -->
+  <v-text-field
+    ref="field"
+    :value="value"
+    @input="input"
+    @focus="focus"
+    @blur="checkNormalize"
     v-bind="$attrs"
-    v-on="$listeners"
-    type="text"
-    v-mask="properties.pattern"
   />
 </template>
 <script>
-import TextField from "./extended_text_field.vue";
+import IMask from "imask";
+
 export default {
   name: "OnTextfieldMasked",
-  components: {
-    TextField,
+  model: {
+    prop: 'value',
+    event: 'input',
   },
+  data: () => ({
+    value: '',
+    element: {},
+    masked: {},
+  }),
   methods: {
     save(date) {
       this.$refs.menu.save(date);
     },
+    init() {
+      this.element = this.$refs.field.$el.querySelector("input");
+      this.masked = IMask(this.element, this.mask);
+    },
+    input(value) {
+      this.$emit('input', value);
+      this.inputValue = this.masked.value;
+    },
+    focus() {
+      if (this.element.value.length <= 0) {
+        this.element.value = this.masked.value;
+        this.element.dispatchEvent(new Event('input'));
+
+        // move caret to first index, because this sometimes doesn't happen
+        if (this.element.setSelectionRange) {
+          this.element.setSelectionRange(0, 0);
+        }
+        else if (this.element.createTextRange) {
+          const range = this.element.createTextRange();
+          range.collapse(true);
+          range.moveEnd('character', 0);
+          range.moveStart('character', 0);
+          range.select();
+        }
+      }
+    },
+    checkNormalize() {
+      const isNormalized = this.element.value === this.masked.value;
+      if (!isNormalized) {
+        this.element.value = this.masked.value;
+        this.element.dispatchEvent(new Event('input'));
+      }
+    },
+  },
+  mounted() {
+    this.init();
   },
   props: {
-    pattern: {
-      type: String,
-      default: null,
-    },
     properties: {
       type: Object | Array,
       required: true,
@@ -35,16 +75,19 @@ export default {
         return {} || [];
       },
     },
-    value: {
-      type: [String, Number],
-      default: null,
-    },
     validators: {
       type: Array,
       required: false,
     },
   },
   computed: {
+    mask() {
+      return {
+        mask: this.properties.pattern,
+        placeholderChar: '_',
+        lazy: false
+      };
+    },
     required() {
       return isRequired(this.properties);
     },
@@ -64,7 +107,7 @@ export default {
 
       return validate;
     },
-    inputValue: {
+    inputValue: { // TODO integrate
       get() {
         return this.$store.getters.getCurrentInputValue(this.id) || "";
       },
