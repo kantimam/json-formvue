@@ -13,8 +13,10 @@
       :formName="formConfig.id"
       :fieldData="fieldData"
     />
-    <div v-show="errorCount > 0" class="error-summary">
-      <a class="text-decoration-underline error--text"
+    <div v-show="errorCount > 0" class="error-summary my-8">
+      <a
+        class="text-decoration-underline error--text"
+        @click.prevent="scrollToFirstError"
         >Please check {{ errorCount }} fields</a
       >
     </div>
@@ -64,21 +66,23 @@ export default {
       );
     },
   },
-
+  inject: ["scrollToErrorCallback"],
   methods: {
-    generateFormFieldName(inputName) {
-      return `tx_form_formframework[${this.formConfig.id}][${inputName}]`;
-    },
     handleFormSubmit() {
       const form = this.$refs.form;
       if (form) this.$store.dispatch("submitStep", form);
+    },
+    scrollToFirstError() {
+      const firstInputWithError = this.$refs.form.$el.querySelector(
+        ".v-input.error--text"
+      );
+      if (firstInputWithError) {
+        if (this.scrollToErrorCallback) {
+          this.scrollToErrorCallback(firstInputWithError);
+        }
+      }
     },
   },
 };
 </script>
 
-<style >
-.error-summary {
-  margin: 8px 0;
-}
-</style>

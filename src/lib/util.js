@@ -150,3 +150,15 @@ const convertTimeFormatToPattern = (format, mapping) => {
 
     return [patternSegments.join(''), groupOrder];
 }
+
+
+/* export const scrollToFirstFormError=(formElement)=>{
+    console.log(formElement)
+    const firstInputWithError=formElement.querySelector(".v-input.error--text");
+    if(firstInputWithError){
+        firstInputWithError.scrollIntoView({
+            behavior: "smooth",
+            block: "end"
+        })
+    }
+} */

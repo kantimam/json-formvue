@@ -6,9 +6,11 @@ import { createCallbackList } from '../lib/util';
 Vue.use(Vuex)
 
 
+
 /* look into splitting single step and multi step into different modules and conditionally adding them if needed */
 const createStore=(initialState)=>{
   const debug = process.env.NODE_ENV !== 'production'
+
 
   return new Vuex.Store({
     state: initFormStateFromExtendedForm(initialState),
@@ -63,7 +65,11 @@ const createStore=(initialState)=>{
         
         currentModel.value=payload.value;
         currentModel.error='';
-        state.errorCount=0;
+        if(currentModel.hasError && state.errorCount>0){
+          state.errorCount=state.errorCount - 1;
+          currentModel.hasError=false;
+        }
+        
       },
       updateFormStep (state, newStep){
         state.currentStep=newStep>0? newStep : 1;
@@ -105,24 +111,56 @@ const createStore=(initialState)=>{
           const inputModel=currentModel[inputKey];
           if(inputModel){
             inputModel.error=model[inputKey];
+            inputModel.hasError=true;
           }
         }
         state.errorCount=Object.keys(model).length || 0;
         
       },
-      setFormErrorCount(state, count){
-        state.errorCount=count;
-      }
+      calcFormErrorCount(state, formElement){
+        const validIndex=state.currentStep? state.currentStep - 1 : 0;
+        const currentStep=state.steps[validIndex];
+        if(!currentStep) return;
+        
+        const formModel=currentStep.inputModel;
+        if(!formModel) return;
+
+        for(const inputKey in formModel){
+          formModel[inputKey].hasError=false;
+        }
+
+        const errorFormElements = formElement.querySelectorAll(
+          ".v-input.error--text"
+        );
+
+        errorFormElements.forEach(element=>{
+          formModel[element.id].hasError=true;
+        })
+
+        state.errorCount=errorFormElements.length;
+      },
+      resetFormErrorCount(state){
+        const validIndex=state.currentStep? state.currentStep - 1 : 0;
+        const currentStep=state.steps[validIndex];
+        if(!currentStep) return;
+        const formModel=currentStep.inputModel;
+        if(!formModel) return;
+        for(const inputKey in formModel){
+          formModel[inputKey].hasError=false;
+        }
+        
+        state.errorCount=0;
+      },
     },
 
     actions: {
-
+     
       submitStep(context, vuetifyForm){
         const isFormValid=vuetifyForm.validate();
         
         if(vuetifyForm.$el && isFormValid){ // check if form element exists and if it is valid
           context.commit('setLoading', true);
-          context.commit('setFormErrorCount', 0);
+          context.commit('resetFormErrorCount');
           const formData=new FormData(vuetifyForm.$el); // parse formdata from underlying form element
           
           const currentModel=context.getters.getCurrentModel;
@@ -156,10 +194,7 @@ const createStore=(initialState)=>{
 
         }else{
           requestAnimationFrame(function(){
-            const errorCount = vuetifyForm.$el.querySelectorAll(
-              ".v-input.error--text"
-            ).length;
-            context.commit('setFormErrorCount', errorCount || 0);
+            context.commit('calcFormErrorCount', vuetifyForm.$el);
           })
         }
       },
@@ -169,7 +204,7 @@ const createStore=(initialState)=>{
         if(!successJson) throw new Error('could not find valid json');
         
         // handle redirect on success
-        if(successJson.status===301 && !successJson.redirectUri){
+        if(successJson.status===301 && successJson.redirectUri){
           window.location=successJson.redirectUri;
           return;
         } 
@@ -274,7 +309,8 @@ function createModelFromFormConfig(elements){
     model[element.identifier]={
       id: element.identifier,
       value: element.defaultValue || '',
-      error: ''
+      error: '',
+      hasError: false,
     }
   })
   return model;

@@ -28,7 +28,10 @@ export class DynamicJsonForm{
     }
     vuetifyContext;
     globalDefaultProps={};
-
+    /* scrollToErrorCallback=(_inputWithError)=>{
+        console.warn('config.scrollToErrorCallback needs to contain a function that takes DOM Node and scrolls it into view')
+    } */
+    
 
 
     constructor(formConfigsList, formElementsList, config){
@@ -49,6 +52,7 @@ export class DynamicJsonForm{
             if(config.customButtonComponent) this.customButtonComponent=config.buttonComponent;
 
             if(config.globalDefaultProps) this.globalDefaultProps=config.globalDefaultProps;
+            if(config.scrollToErrorCallback) this.scrollToErrorCallback=config.scrollToErrorCallback;
         }
 
         // create with an object containing your components or fallback to default
@@ -88,6 +92,9 @@ export class DynamicJsonForm{
             const vueInstance=new Vue({
                 vuetify: this.vuetifyContext,
                 store: createStore(formData),
+                provide: {
+                    scrollToErrorCallback: this.scrollToErrorCallback
+                },
                 render: h => h(App)
             }).$mount(wrapper);
 

@@ -16188,13 +16188,6 @@ module.exports = {
 
 /***/ }),
 
-/***/ "6ffa":
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-
 /***/ "7037":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -17753,17 +17746,6 @@ var isInteger = __webpack_require__("5e89");
 $({ target: 'Number', stat: true }, {
   isInteger: isInteger
 });
-
-
-/***/ }),
-
-/***/ "8cc4":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_single_step_form_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("6ffa");
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_single_step_form_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_single_step_form_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__);
-/* unused harmony reexport * */
 
 
 /***/ }),
@@ -25122,14 +25104,14 @@ var es_array_concat = __webpack_require__("99af");
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.keys.js
 var es_object_keys = __webpack_require__("b64b");
 
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.freeze.js
-var es_object_freeze = __webpack_require__("dca8");
-
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.for-each.js
 var es_array_for_each = __webpack_require__("4160");
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/web.dom-collections.for-each.js
 var web_dom_collections_for_each = __webpack_require__("159b");
+
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.freeze.js
+var es_object_freeze = __webpack_require__("dca8");
 
 // EXTERNAL MODULE: ./node_modules/vuex/dist/vuex.esm.js
 var vuex_esm = __webpack_require__("2f62");
@@ -25440,6 +25422,16 @@ var util_convertTimeFormatToPattern = function convertTimeFormatToPattern(format
   if (cursor < format.length) patternSegments.push(format.slice(cursor, format.length));
   return [patternSegments.join(''), groupOrder];
 };
+/* export const scrollToFirstFormError=(formElement)=>{
+    console.log(formElement)
+    const firstInputWithError=formElement.querySelector(".v-input.error--text");
+    if(firstInputWithError){
+        firstInputWithError.scrollIntoView({
+            behavior: "smooth",
+            block: "end"
+        })
+    }
+} */
 // CONCATENATED MODULE: ./src/store/index.js
 
 
@@ -25518,7 +25510,11 @@ var store_createStore = function createStore(initialState) {
         if (!currentModel) return;
         currentModel.value = payload.value;
         currentModel.error = '';
-        state.errorCount = 0;
+
+        if (currentModel.hasError && state.errorCount > 0) {
+          state.errorCount = state.errorCount - 1;
+          currentModel.hasError = false;
+        }
       },
       updateFormStep: function updateFormStep(state, newStep) {
         state.currentStep = newStep > 0 ? newStep : 1;
@@ -25558,13 +25554,41 @@ var store_createStore = function createStore(initialState) {
 
           if (inputModel) {
             inputModel.error = model[inputKey];
+            inputModel.hasError = true;
           }
         }
 
         state.errorCount = Object.keys(model).length || 0;
       },
-      setFormErrorCount: function setFormErrorCount(state, count) {
-        state.errorCount = count;
+      calcFormErrorCount: function calcFormErrorCount(state, formElement) {
+        var validIndex = state.currentStep ? state.currentStep - 1 : 0;
+        var currentStep = state.steps[validIndex];
+        if (!currentStep) return;
+        var formModel = currentStep.inputModel;
+        if (!formModel) return;
+
+        for (var inputKey in formModel) {
+          formModel[inputKey].hasError = false;
+        }
+
+        var errorFormElements = formElement.querySelectorAll(".v-input.error--text");
+        errorFormElements.forEach(function (element) {
+          formModel[element.id].hasError = true;
+        });
+        state.errorCount = errorFormElements.length;
+      },
+      resetFormErrorCount: function resetFormErrorCount(state) {
+        var validIndex = state.currentStep ? state.currentStep - 1 : 0;
+        var currentStep = state.steps[validIndex];
+        if (!currentStep) return;
+        var formModel = currentStep.inputModel;
+        if (!formModel) return;
+
+        for (var inputKey in formModel) {
+          formModel[inputKey].hasError = false;
+        }
+
+        state.errorCount = 0;
       }
     },
     actions: {
@@ -25574,7 +25598,7 @@ var store_createStore = function createStore(initialState) {
         if (vuetifyForm.$el && isFormValid) {
           // check if form element exists and if it is valid
           context.commit('setLoading', true);
-          context.commit('setFormErrorCount', 0);
+          context.commit('resetFormErrorCount');
           var formData = new FormData(vuetifyForm.$el); // parse formdata from underlying form element
 
           var currentModel = context.getters.getCurrentModel; // append entries to formdata
@@ -25599,8 +25623,7 @@ var store_createStore = function createStore(initialState) {
           });
         } else {
           requestAnimationFrame(function () {
-            var errorCount = vuetifyForm.$el.querySelectorAll(".v-input.error--text").length;
-            context.commit('setFormErrorCount', errorCount || 0);
+            context.commit('calcFormErrorCount', vuetifyForm.$el);
           });
         }
       },
@@ -25618,7 +25641,7 @@ var store_createStore = function createStore(initialState) {
                   throw new Error('could not find valid json');
 
                 case 2:
-                  if (!(successJson.status === 301 && !successJson.redirectUri)) {
+                  if (!(successJson.status === 301 && successJson.redirectUri)) {
                     _context2.next = 5;
                     break;
                   }
@@ -25767,7 +25790,8 @@ function createModelFromFormConfig(elements) {
     model[element.identifier] = {
       id: element.identifier,
       value: element.defaultValue || '',
-      error: ''
+      error: '',
+      hasError: false
     };
   });
   return model;
@@ -42838,15 +42862,16 @@ var Appvue_type_template_id_b1145740_scoped_true_staticRenderFns = []
 
 // CONCATENATED MODULE: ./src/App.vue?vue&type=template&id=b1145740&scoped=true&
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"8aeb6e9a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/multi_step_form.vue?vue&type=template&id=6cc378e6&
-var multi_step_formvue_type_template_id_6cc378e6_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"ondigo-multistep-form-wrapper"},[_c('h2',{staticClass:"mb-4 ondigo-form-header"},[_vm._v(" step "+_vm._s(_vm.currentStep)+" of "+_vm._s(_vm.lastStep)+" ")]),_c('v-form',{ref:"form",staticClass:"ondigo-multi-step-form ondigo-form",attrs:{"id":_vm.formConfig.id,"name":_vm.formConfig.identifier,"loading":_vm.loading},on:{"submit":function($event){$event.preventDefault();return _vm.handleFormSubmit.apply(null, arguments)}}},[_vm._l((_vm.formConfig.elements),function(fieldData){return _c('field-renderer',{key:fieldData.identifier,attrs:{"formName":_vm.formConfig.id,"fieldData":fieldData}})}),_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.errorCount > 0),expression:"errorCount > 0"}],staticClass:"error-summary"},[_c('a',{staticClass:"text-decoration-underline error--text"},[_vm._v("Please check "+_vm._s(_vm.errorCount)+" fields")])]),_c('div',{staticClass:"d-flex justify-space-between mt-4"},[(_vm.currentStep > 1)?_c('v-btn',{staticClass:"ondigo-btn ondigo-btn-back",attrs:{"type":"button","color":"secondary"},on:{"click":_vm.loadPreviousStep}},[_vm._v(" "+_vm._s(_vm.previousButtonLabel)+" ")]):_vm._e(),(_vm.isLastStep)?_c('v-btn',{staticClass:"ondigo-btn ondigo-btn-submit",attrs:{"type":"submit","loading":_vm.loading,"color":"primary"}},[_vm._v(" "+_vm._s(_vm.nextButtonLabel)+" ")]):_c('v-btn',{staticClass:"ondigo-btn ondigo-btn-next",attrs:{"type":"submit","loading":_vm.loading,"color":"primary"}},[_vm._v(" "+_vm._s(_vm.nextButtonLabel)+" ")])],1)],2)],1)}
-var multi_step_formvue_type_template_id_6cc378e6_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"8aeb6e9a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/multi_step_form.vue?vue&type=template&id=7ea2688f&
+var multi_step_formvue_type_template_id_7ea2688f_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"ondigo-multistep-form-wrapper"},[_c('h2',{staticClass:"mb-4 ondigo-form-header"},[_vm._v(" step "+_vm._s(_vm.currentStep)+" of "+_vm._s(_vm.lastStep)+" ")]),_c('v-form',{ref:"form",staticClass:"ondigo-multi-step-form ondigo-form",attrs:{"id":_vm.formConfig.id,"name":_vm.formConfig.identifier,"loading":_vm.loading},on:{"submit":function($event){$event.preventDefault();return _vm.handleFormSubmit.apply(null, arguments)}}},[_vm._l((_vm.formConfig.elements),function(fieldData){return _c('field-renderer',{key:fieldData.identifier,attrs:{"formName":_vm.formConfig.id,"fieldData":fieldData}})}),_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.errorCount > 0),expression:"errorCount > 0"}],staticClass:"error-summary my-8"},[_c('a',{staticClass:"text-decoration-underline error--text",on:{"click":function($event){$event.preventDefault();return _vm.scrollToFirstError.apply(null, arguments)}}},[_vm._v("Please check "+_vm._s(_vm.errorCount)+" fields")])]),_c('div',{staticClass:"d-flex justify-space-between mt-4"},[(_vm.currentStep > 1)?_c('v-btn',{staticClass:"ondigo-btn ondigo-btn-back",attrs:{"type":"button","color":"secondary"},on:{"click":_vm.loadPreviousStep}},[_vm._v(" "+_vm._s(_vm.previousButtonLabel)+" ")]):_vm._e(),(_vm.isLastStep)?_c('v-btn',{staticClass:"ondigo-btn ondigo-btn-submit",attrs:{"type":"submit","loading":_vm.loading,"color":"primary"}},[_vm._v(" "+_vm._s(_vm.nextButtonLabel)+" ")]):_c('v-btn',{staticClass:"ondigo-btn ondigo-btn-next",attrs:{"type":"submit","loading":_vm.loading,"color":"primary"}},[_vm._v(" "+_vm._s(_vm.nextButtonLabel)+" ")])],1)],2)],1)}
+var multi_step_formvue_type_template_id_7ea2688f_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/multi_step_form.vue?vue&type=template&id=6cc378e6&
+// CONCATENATED MODULE: ./src/components/multi_step_form.vue?vue&type=template&id=7ea2688f&
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/multi_step_form.vue?vue&type=script&lang=js&
-
+//
+//
 //
 //
 //
@@ -42935,16 +42960,23 @@ var multi_step_formvue_type_template_id_6cc378e6_staticRenderFns = []
       return this.buttonLabels && this.buttonLabels.nextButtonLabel || "next step";
     }
   },
+  inject: ["scrollToErrorCallback"],
   methods: {
-    generateFormFieldName: function generateFormFieldName(inputName) {
-      return "tx_form_formframework[".concat(this.formConfig.id, "][").concat(inputName, "]");
-    },
     handleFormSubmit: function handleFormSubmit() {
       var form = this.$refs.form;
       if (form) this.$store.dispatch("submitStep", form);
     },
     loadPreviousStep: function loadPreviousStep() {
       this.$store.commit("updateFormStep", this.currentStep - 1);
+    },
+    scrollToFirstError: function scrollToFirstError(scrollToErrorCallback) {
+      var firstInputWithError = this.$refs.form.$el.querySelector(".v-input.error--text");
+
+      if (firstInputWithError) {
+        if (scrollToErrorCallback) {
+          scrollToErrorCallback(firstInputWithError);
+        }
+      }
     }
   }
 });
@@ -43117,8 +43149,8 @@ var multi_step_formvue_type_template_id_6cc378e6_staticRenderFns = []
 
 var multi_step_form_component = normalizeComponent(
   components_multi_step_formvue_type_script_lang_js_,
-  multi_step_formvue_type_template_id_6cc378e6_render,
-  multi_step_formvue_type_template_id_6cc378e6_staticRenderFns,
+  multi_step_formvue_type_template_id_7ea2688f_render,
+  multi_step_formvue_type_template_id_7ea2688f_staticRenderFns,
   false,
   null,
   null,
@@ -43134,15 +43166,16 @@ var multi_step_form_component = normalizeComponent(
 
 installComponents_default()(multi_step_form_component, {VBtn: VBtn_VBtn,VForm: VForm})
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"8aeb6e9a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/single_step_form.vue?vue&type=template&id=085489c7&
-var single_step_formvue_type_template_id_085489c7_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('v-form',{ref:"form",staticClass:"ondigo-form",attrs:{"id":_vm.formConfig.id,"name":_vm.formConfig.identifier,"loading":_vm.loading},on:{"submit":function($event){$event.preventDefault();return _vm.handleFormSubmit.apply(null, arguments)}}},[_vm._l((_vm.formConfig.elements),function(fieldData){return _c('field-renderer',{key:fieldData.identifier,attrs:{"formName":_vm.formConfig.id,"fieldData":fieldData}})}),_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.errorCount > 0),expression:"errorCount > 0"}],staticClass:"error-summary"},[_c('a',{staticClass:"text-decoration-underline error--text"},[_vm._v("Please check "+_vm._s(_vm.errorCount)+" fields")])]),_c('v-btn',{class:("ondigo-btn-submit ondigo-btn " + _vm.nextButtonAlignment),attrs:{"type":"submit","loading":_vm.loading,"color":"primary"}},[_vm._v(" "+_vm._s(_vm.nextButtonLabel)+" ")])],2)}
-var single_step_formvue_type_template_id_085489c7_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"8aeb6e9a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/single_step_form.vue?vue&type=template&id=de4268ec&
+var single_step_formvue_type_template_id_de4268ec_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('v-form',{ref:"form",staticClass:"ondigo-form",attrs:{"id":_vm.formConfig.id,"name":_vm.formConfig.identifier,"loading":_vm.loading},on:{"submit":function($event){$event.preventDefault();return _vm.handleFormSubmit.apply(null, arguments)}}},[_vm._l((_vm.formConfig.elements),function(fieldData){return _c('field-renderer',{key:fieldData.identifier,attrs:{"formName":_vm.formConfig.id,"fieldData":fieldData}})}),_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.errorCount > 0),expression:"errorCount > 0"}],staticClass:"error-summary my-8"},[_c('a',{staticClass:"text-decoration-underline error--text",on:{"click":function($event){$event.preventDefault();return _vm.scrollToFirstError.apply(null, arguments)}}},[_vm._v("Please check "+_vm._s(_vm.errorCount)+" fields")])]),_c('v-btn',{class:("ondigo-btn-submit ondigo-btn " + _vm.nextButtonAlignment),attrs:{"type":"submit","loading":_vm.loading,"color":"primary"}},[_vm._v(" "+_vm._s(_vm.nextButtonLabel)+" ")])],2)}
+var single_step_formvue_type_template_id_de4268ec_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/single_step_form.vue?vue&type=template&id=085489c7&
+// CONCATENATED MODULE: ./src/components/single_step_form.vue?vue&type=template&id=de4268ec&
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/single_step_form.vue?vue&type=script&lang=js&
-
+//
+//
 //
 //
 //
@@ -43195,23 +43228,26 @@ var single_step_formvue_type_template_id_085489c7_staticRenderFns = []
       return this.formConfig && this.formConfig.api && this.formConfig.api.page && this.formConfig.api.page.submitButtonAlignment || "left";
     }
   },
+  inject: ["scrollToErrorCallback"],
   methods: {
-    generateFormFieldName: function generateFormFieldName(inputName) {
-      return "tx_form_formframework[".concat(this.formConfig.id, "][").concat(inputName, "]");
-    },
     handleFormSubmit: function handleFormSubmit() {
       var form = this.$refs.form;
       if (form) this.$store.dispatch("submitStep", form);
+    },
+    scrollToFirstError: function scrollToFirstError() {
+      var firstInputWithError = this.$refs.form.$el.querySelector(".v-input.error--text");
+
+      if (firstInputWithError) {
+        if (this.scrollToErrorCallback) {
+          this.scrollToErrorCallback(firstInputWithError);
+        }
+      }
     }
   }
 });
 // CONCATENATED MODULE: ./src/components/single_step_form.vue?vue&type=script&lang=js&
  /* harmony default export */ var components_single_step_formvue_type_script_lang_js_ = (single_step_formvue_type_script_lang_js_); 
-// EXTERNAL MODULE: ./src/components/single_step_form.vue?vue&type=style&index=0&lang=css&
-var single_step_formvue_type_style_index_0_lang_css_ = __webpack_require__("8cc4");
-
 // CONCATENATED MODULE: ./src/components/single_step_form.vue
-
 
 
 
@@ -43221,8 +43257,8 @@ var single_step_formvue_type_style_index_0_lang_css_ = __webpack_require__("8cc4
 
 var single_step_form_component = normalizeComponent(
   components_single_step_formvue_type_script_lang_js_,
-  single_step_formvue_type_template_id_085489c7_render,
-  single_step_formvue_type_template_id_085489c7_staticRenderFns,
+  single_step_formvue_type_template_id_de4268ec_render,
+  single_step_formvue_type_template_id_de4268ec_staticRenderFns,
   false,
   null,
   null,
@@ -43384,6 +43420,9 @@ installComponents_default()(App_component, {VApp: VApp_VApp})
 
 
 var main_DynamicJsonForm = /*#__PURE__*/function () {
+  /* scrollToErrorCallback=(_inputWithError)=>{
+      console.warn('config.scrollToErrorCallback needs to contain a function that takes DOM Node and scrolls it into view')
+  } */
   function DynamicJsonForm(formConfigsList, formElementsList, config) {
     _classCallCheck(this, DynamicJsonForm);
 
@@ -43418,6 +43457,7 @@ var main_DynamicJsonForm = /*#__PURE__*/function () {
       if (config.customLoadingComponent) this.customLoadingComponent = config.loadingComponent;
       if (config.customButtonComponent) this.customButtonComponent = config.buttonComponent;
       if (config.globalDefaultProps) this.globalDefaultProps = config.globalDefaultProps;
+      if (config.scrollToErrorCallback) this.scrollToErrorCallback = config.scrollToErrorCallback;
     } // create with an object containing your components or fallback to default
 
 
@@ -43457,6 +43497,9 @@ var main_DynamicJsonForm = /*#__PURE__*/function () {
           var vueInstance = new vue_runtime_esm["a" /* default */]({
             vuetify: this.vuetifyContext,
             store: store(formData),
+            provide: {
+              scrollToErrorCallback: this.scrollToErrorCallback
+            },
             render: function render(h) {
               return h(App);
             }
