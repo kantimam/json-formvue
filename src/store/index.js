@@ -51,6 +51,17 @@ const createStore=(initialState)=>{
         const step=getters.getCurrentStep;
         if(!step || !step.formId) return `tx_form_formframework[${inputKey}]`
         return `tx_form_formframework[${step.formId}][${inputKey}]`
+      },
+      getErrorLabel: (state, getters) =>{
+        const schema=getters.getCurrentSchema;
+        const errorCount=state.errorCount;
+        if(errorCount>0) return null;
+        const defaultMessage=`Please check ${errorCount} fields`
+        if(schema && schema.api && schema.api.page && schema.api.page.errorHint){
+          const errorHintWithCount=schema.api.page.errorHint.replace("%s", errorCount);
+          return errorHintWithCount;
+        }
+        return defaultMessage;
       }
     },
 

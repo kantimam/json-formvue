@@ -17,11 +17,11 @@
         :formName="formConfig.id"
         :fieldData="fieldData"
       />
-      <div v-show="errorCount > 0" class="error-summary my-8">
+      <div v-show="errorCountLabel" class="error-summary my-8">
         <a
-          class="text-decoration-underline error--text"
-          @click.prevent="scrollToFirstError"
-          >Please check {{ errorCount }} fields</a
+            class="text-decoration-underline error--text"
+            @click.prevent="scrollToFirstError"
+        >{{ errorCountLabel }}</a
         >
       </div>
       <div class="d-flex justify-space-between mt-4">
@@ -67,8 +67,8 @@ export default {
     loading() {
       return this.$store.state.loading;
     },
-    errorCount() {
-      return this.$store.state.errorCount;
+    errorCountLabel(){
+      return this.$store.getters.getErrorLabel;
     },
     currentStep() {
       return this.$store.state.currentStep;
