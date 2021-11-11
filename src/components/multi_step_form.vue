@@ -17,12 +17,8 @@
         :formName="formConfig.id"
         :fieldData="fieldData"
       />
-      <div v-show="errorCountLabel" class="error-summary my-8">
-        <a
-            class="text-decoration-underline error--text"
-            @click.prevent="scrollToFirstError"
-        >{{ errorCountLabel }}</a
-        >
+      <div v-show="errorCountLabel" class="error-summary">
+        <a target="#" @click.prevent="scrollToFirstError">{{ errorCountLabel }}</a>
       </div>
       <div class="d-flex justify-space-between mt-4">
         <v-btn

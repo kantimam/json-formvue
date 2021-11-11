@@ -55,13 +55,11 @@ const createStore=(initialState)=>{
       getErrorLabel: (state, getters) =>{
         const schema=getters.getCurrentSchema;
         const errorCount=state.errorCount;
-        if(errorCount>0) return null;
-        const defaultMessage=`Please check ${errorCount} fields`
-        if(schema && schema.api && schema.api.page && schema.api.page.errorHint){
+        if(errorCount>0 && schema && schema.api && schema.api.page && schema.api.page.errorHint){
           const errorHintWithCount=schema.api.page.errorHint.replace("%s", errorCount);
           return errorHintWithCount;
         }
-        return defaultMessage;
+        return null;
       }
     },
 
