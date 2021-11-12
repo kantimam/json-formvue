@@ -152,7 +152,7 @@ export default {
         r.required = (v) => !!v;
       }
 
-      const propsValidationMap = createValidatorList(this.validators, undefined, this);
+      const propsValidationMap = createValidatorList(this.validators, undefined, this.properties);
 
       // combine default validation and custom validation
       r = Object.assign(r, propsValidationMap);

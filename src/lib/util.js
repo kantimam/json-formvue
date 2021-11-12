@@ -100,10 +100,10 @@ export const validatorTimeFormat = (string, invalidMessage, vArgs) => {
 }
 
 export const validatorMaskComplete = (string, invalidMessage, _vArgs, context) => {
-    const maskPattern = context.properties.pattern;
+    const maskPattern = context.pattern;
     if (!maskPattern) return true; // invalid validator for element
 
-    const placeholder = '_'; // TODO substitute with context.properties.placeholder, when implemented
+    const placeholder = '_'; // TODO substitute with context.placeholder, when implemented
     const pattern = `\\${placeholder}`;
 
     const patternPlaceholderOcurrences = (maskPattern.match(new RegExp(pattern, 'g')) || []).length;
