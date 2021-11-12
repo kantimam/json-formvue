@@ -4,7 +4,7 @@ export const createInputName=(formName, inputName)=>`tx_form_formframework[${for
 export const isRequired=(properties)=>!!properties && properties.fluidAdditionalAttributes && properties.fluidAdditionalAttributes.required && properties.fluidAdditionalAttributes.required === 'required';
 
 
-export const createValidatorList=(validators, errors)=>{
+export const createValidatorList=(validators, errors, context)=>{
     if(!validators || !validators.length) return {}
     const validatorsMap={};
 
@@ -12,14 +12,14 @@ export const createValidatorList=(validators, errors)=>{
         const id=validator.identifier;
         const validatorArguments=validator.options;
         const errorMessage=validator.errorMessage;
-        const validatorFunction=createValidatorByKey(id, validatorArguments, errorMessage)
+        const validatorFunction=createValidatorByKey(id, validatorArguments, errorMessage, context)
         if(validatorFunction) validatorsMap[id]=validatorFunction;
     }
     return validatorsMap;
     
 }
 // create a function and wrap it inside the payload
-export const createValidatorByKey=(validatorKey, vArgs, errorMessage)=>{
+export const createValidatorByKey=(validatorKey, vArgs, errorMessage, context)=>{
     // inject payload and error message into the selected validation function
     const knownFunctions={
         required: (inputValue)=>validatorRequired(inputValue,  errorMessage || `this field is required`),
@@ -34,6 +34,7 @@ export const createValidatorByKey=(validatorKey, vArgs, errorMessage)=>{
         RegularExpression: (inputValue)=>!inputValue.length || validatorRegex(inputValue, errorMessage || `input must match following regular expression ${vArgs.regularExpression}`, vArgs),
         MinimumNumber: (inputValue) => !inputValue.length || validatorMinimumNumber(inputValue, errorMessage || `number must be greater thant ${vArgs.minimum}`, vArgs),
         TimeFormat: (inputValue) => !inputValue.length || validatorTimeFormat(inputValue, errorMessage || `the datetime must be in this format: '${vArgs.format}'`, vArgs),
+        MaskComplete: (inputValue) => !inputValue.length || validatorMaskComplete(inputValue, errorMessage || `please complete the input`, vArgs, context),
         default: null
     }
     return knownFunctions[validatorKey] || knownFunctions.default;
@@ -96,6 +97,19 @@ export const validatorTimeFormat = (string, invalidMessage, vArgs) => {
         if (num < min || (max !== undefined && num > max)) return invalidMessage;
     }
     return true;
+}
+
+export const validatorMaskComplete = (string, invalidMessage, _vArgs, context) => {
+    const maskPattern = context.pattern;
+    if (!maskPattern) return true; // invalid validator for element
+
+    const placeholder = '_'; // TODO substitute with context.placeholder, when implemented
+    const pattern = `\\${placeholder}`;
+
+    const patternPlaceholderOcurrences = (maskPattern.match(new RegExp(pattern, 'g')) || []).length;
+    const inputPlaceholderOcurrences = (string.match(new RegExp(pattern, 'g')) || []).length;
+
+    return inputPlaceholderOcurrences - patternPlaceholderOcurrences <= 0 ? true : invalidMessage; // completed, when there are no placeholders left
 }
 
 export const createCallbackList=(callbacks)=>{
