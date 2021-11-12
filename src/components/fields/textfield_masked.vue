@@ -105,6 +105,12 @@ export default {
         mask: this.properties.pattern,
         placeholderChar: '_',
         lazy: false,
+        // custom character definitions
+        definitions: {
+          'X': /[0-9a-zA-Z]/,
+          'C': /[A-Z]/,
+          'c': /[a-z]/
+        },
         // custom character block definitions
         blocks: {
           'YYYY': {
