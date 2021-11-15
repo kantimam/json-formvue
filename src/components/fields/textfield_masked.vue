@@ -101,10 +101,8 @@ export default {
       );
     },
     mask() {
-      return {
+      const mask = {
         mask: this.properties.pattern,
-        placeholderChar: '_',
-        lazy: false,
         // custom character definitions
         definitions: {
           'X': /[0-9a-zA-Z]/,
@@ -145,6 +143,15 @@ export default {
           }
         }
       };
+
+      let placeholderChar = this.properties.placeholder ? this.properties.placeholder.trim() : '';
+      if (placeholderChar && placeholderChar.length > 0) {
+        placeholderChar = placeholderChar.substring(0, 1); // in case someone put more than one character
+        mask.placeholderChar = placeholderChar;
+        mask.lazy = false;
+      }
+
+      return mask;
     },
     required() {
       return isRequired(this.properties);
@@ -186,6 +193,7 @@ export default {
       this.$refs.menu.save(date);
     },
     init() {
+      if (this.masked && this.masked.destroy) this.masked.destroy();
       this.element = this.$refs.field.$el.querySelector("input");
       this.masked = IMask(this.element, this.mask);
     },
@@ -194,6 +202,8 @@ export default {
     },
     focus() {
       if (this.element.value.length <= 0) {
+        this.init();
+
         this.element.value = this.masked.value;
         this.element.dispatchEvent(new Event('input'));
 
@@ -214,6 +224,12 @@ export default {
       const isNormalized = this.element.value === this.masked.value;
       if (!isNormalized) {
         this.element.value = this.masked.value;
+        this.element.dispatchEvent(new Event('input'));
+      }
+
+      if (this.masked.unmaskedValue.length <= 0 && !this.required) {
+        this.masked.destroy();
+        this.element.value = '';
         this.element.dispatchEvent(new Event('input'));
       }
     },

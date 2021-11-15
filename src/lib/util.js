@@ -103,7 +103,10 @@ export const validatorMaskComplete = (string, invalidMessage, _vArgs, context) =
     const maskPattern = context.pattern;
     if (!maskPattern) return true; // invalid validator for element
 
-    const placeholder = '_'; // TODO substitute with context.placeholder, when implemented
+    let placeholder = context.placeholder ? context.placeholder.trim() : '';
+    if (!placeholder || placeholder.length <= 0) return true; // disabled
+    placeholder = placeholder.substring(0, 1); // in case someone put more than one character
+
     const pattern = `\\${placeholder}`;
 
     const patternPlaceholderOcurrences = (maskPattern.match(new RegExp(pattern, 'g')) || []).length;
