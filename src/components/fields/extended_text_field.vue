@@ -254,7 +254,7 @@ export default {
     },
     validateField() {
       let r = {};
-      const validate = [];
+      const validate = this.rules ? Object.values(this.rules) : [];
 
       // default validation
       if (!!this.required) {
