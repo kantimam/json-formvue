@@ -86,6 +86,10 @@ export default {
       type: String,
       required: true,
     },
+    maskActive: {
+      type: Boolean,
+      default: true
+    }
   },
   computed: {
     required() {
@@ -193,6 +197,8 @@ export default {
       this.$refs.menu.save(date);
     },
     init() {
+      if (!this.maskActive) return;
+
       if (this.masked && this.masked.destroy) this.masked.destroy();
       this.element = this.$refs.field.$el.querySelector("input");
       this.masked = IMask(this.element, this.mask);
@@ -201,7 +207,7 @@ export default {
       this.$emit('input', value);
     },
     focus() {
-      if (this.element.value.length <= 0) {
+      if (this.maskActive && this.element.value.length <= 0) {
         this.init();
 
         this.element.value = this.masked.value;
@@ -221,6 +227,8 @@ export default {
       }
     },
     checkNormalize() {
+      if (!this.maskActive) return;
+      
       const isNormalized = this.element.value === this.masked.value;
       if (!isNormalized) {
         this.element.value = this.masked.value;

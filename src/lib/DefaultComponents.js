@@ -17,6 +17,7 @@ import MaskedText from "../components/fields/textfield_masked.vue";
 import ConditionRadio from "../components/layout/condition_radio.vue";
 import ConditionCheckbox from "../components/layout/condition_checkbox.vue";
 import ConditionalContent from "../components/layout/conditional_content.vue";
+import Telephone from '../components/fields/textfield_telephone.vue';
 
 
 export const componentRenames = {
@@ -43,6 +44,7 @@ export default new ComponentsMapping({
     ConditionRadio: ConditionRadio,
     ConditionCheckbox: ConditionCheckbox,
     ConditionalContent: ConditionalContent,
+    Telephone: Telephone,
     form: 'form',
     message: 'div',
     default: 'input'
