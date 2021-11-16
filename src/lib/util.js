@@ -1,8 +1,12 @@
 export const createInputName=(formName, inputName)=>`tx_form_formframework[${formName}][${inputName}]`
 
+export function isRequired(properties) {
+    return properties?.fluidAdditionalAttributes?.required === 'required';
+}
 
-export const isRequired=(properties)=>!!properties && properties.fluidAdditionalAttributes && properties.fluidAdditionalAttributes.required && properties.fluidAdditionalAttributes.required === 'required';
-
+export function getPlaceholder(properties) {
+    return properties?.fluidAdditionalAttributes?.placeholder;
+}
 
 export const createValidatorList=(validators, errors, context)=>{
     if(!validators || !validators.length) return {}

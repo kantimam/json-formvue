@@ -18,7 +18,7 @@ import ConditionRadio from "../components/layout/condition_radio.vue";
 import ConditionCheckbox from "../components/layout/condition_checkbox.vue";
 import ConditionalContent from "../components/layout/conditional_content.vue";
 import Telephone from '../components/fields/textfield_telephone.vue';
-
+import Url from '../components/fields/textfield_url.vue';
 
 export const componentRenames = {
     'Honeypot': 'HP'
@@ -45,6 +45,7 @@ export default new ComponentsMapping({
     ConditionCheckbox: ConditionCheckbox,
     ConditionalContent: ConditionalContent,
     Telephone: Telephone,
+    Url: Url,
     form: 'form',
     message: 'div',
     default: 'input'
