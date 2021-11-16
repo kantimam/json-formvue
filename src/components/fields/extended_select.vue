@@ -37,7 +37,6 @@
     }"
     :name="name"
     :no-data-text="nodatatext"
-    :placeholder="placeholder"
     :prefix="prefix"
     :readonly="readonly"
     :ref="'ref-' + id"
@@ -173,10 +172,6 @@ export default {
     optionalLabel: {
       type: String,
       default: "optional",
-    },
-    placeholder: {
-      type: String,
-      default: null,
     },
     prefix: {
       type: String,

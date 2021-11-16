@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import { createValidatorList, isRequired } from "../../lib/util";
+import { createValidatorList, isRequired, getPlaceholder } from "../../lib/util";
 
 export default {
   name: "DatePicker",
@@ -105,10 +105,6 @@ export default {
       type: Boolean,
       default: false
     },
-    placeholder: {
-      type: String,
-      default: null,
-    },
     properties: {
       type: Object | Array,
       required: true,
@@ -136,6 +132,9 @@ export default {
   computed: {
     required() {
       return isRequired(this.properties);
+    },
+    placeholder() {
+      return getPlaceholder(this.properties);
     },
     validateField() {
       //if(!this.required) return []

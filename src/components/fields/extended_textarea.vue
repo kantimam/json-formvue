@@ -56,7 +56,7 @@
 
 <script>
 import { VTextarea } from "vuetify/lib";
-import { createValidatorList, isRequired } from "../../lib/util";
+import { createValidatorList, isRequired, getPlaceholder } from "../../lib/util";
 
 export default {
   name: "OnTextarea",
@@ -145,10 +145,6 @@ export default {
       type: String,
       default: "optional",
     },
-    placeholder: {
-      type: String,
-      default: null,
-    },
     prefix: {
       type: String,
       default: null,
@@ -200,6 +196,9 @@ export default {
   computed: {
     required() {
       return isRequired(this.properties);
+    },
+    placeholder() {
+      return getPlaceholder(this.properties);
     },
     requiredLabel() {
       if (!this.validators || !this.validators.length) return "required";

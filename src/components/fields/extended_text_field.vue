@@ -152,10 +152,6 @@ export default {
       type: String,
       default: "optional",
     },
-    placeholder: {
-      type: String,
-      default: null,
-    },
     prefix: {
       type: String,
       default: null,

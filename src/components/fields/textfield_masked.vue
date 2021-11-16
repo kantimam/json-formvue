@@ -8,6 +8,7 @@
     @focus="focus"
     @blur="checkNormalize"
     v-bind="$attrs"
+    :placeholder="placeholder"
     :filled="filled"
     :required="required"
     :rules="validateField"
@@ -38,7 +39,7 @@
 <script>
 import IMask from "imask";
 import utils from "../../plugins/utils";
-import { createValidatorList, isRequired } from "../../lib/util";
+import { createValidatorList, isRequired, getPlaceholder } from "../../lib/util";
 
 export default {
   name: "OnTextfieldMasked",
@@ -94,6 +95,9 @@ export default {
   computed: {
     required() {
       return isRequired(this.properties);
+    },
+    placeholder() {
+      return getPlaceholder(this.properties);
     },
     requiredLabel() {
       if (!this.validators || !this.validators.length) return "required";
