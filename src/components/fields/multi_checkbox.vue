@@ -1,0 +1,169 @@
+<template>
+  <div>
+    <!-- These are not the checkboxes to sent -->
+    <v-checkbox
+      v-for="option in Object.entries(properties.options)"
+      :key="option[0]"
+      class="ondigo-checkbox"
+      :class="`ondigo-input-${id}-${option[0]} ondigo-checkbox`"
+      :label="option[1]"
+      :ref="`ref-${id}-${option[0]}`"
+      v-model="checked[option[0]]"
+      hide-details="auto"
+      off-icon="mdi-checkbox-blank"
+    />
+    <input
+      v-for="option in selectedOptions"
+      type="hidden"
+      :key="'val-'.concat(option)"
+      :name="name.concat('[]')"
+      :value="option"
+    />
+  </div>
+</template>
+
+<script>
+import { createValidatorList } from "../../lib/util";
+
+export default {
+  name: "OnMultiCheckbox",
+
+  data() {
+    return {
+      checked: Object.entries(this.properties.options).reduce( // initialize all values to false
+        (prev, [key]) => ({ ...prev, [key]: false }),
+        {}
+      ),
+    };
+  },
+
+  props: {
+    autocomplete: {
+      type: String,
+      default: null,
+    },
+    clearable: {
+      type: Boolean,
+      default: false,
+    },
+    clearicon: {
+      type: String,
+      default: null,
+    },
+    color: {
+      type: String,
+      default: null,
+    },
+    counter: {
+      type: [Number, String],
+      default: null,
+      validator: function (value) {
+        return /^\d+$/.test(value);
+      },
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
+    focused: {
+      type: Boolean,
+      default: false,
+    },
+    hidedetails: {
+      type: Boolean,
+      default: false,
+    },
+    id: {
+      type: String,
+      required: true,
+    },
+    name: {
+      type: String,
+    },
+    inputmode: {
+      type: String,
+      default: null,
+    },
+    label: {
+      type: String,
+      default: null,
+    },
+    optional: {
+      type: Boolean,
+      default: false,
+    },
+    optionalLabel: {
+      type: String,
+      default: "optional",
+    },
+    placeholder: {
+      type: String,
+      default: null,
+    },
+    prefix: {
+      type: String,
+      default: null,
+    },
+    properties: {
+      type: Object | Array,
+      required: true,
+    },
+    readonly: {
+      type: Boolean,
+      default: false,
+    },
+    rules: {
+      type: [Object, Array],
+      default() {
+        return {} || [];
+      },
+    },
+    type: {
+      type: String,
+      default: "text",
+    },
+    value: {
+      type: [String, Number, Boolean],
+      default: null,
+    },
+    validators: {
+      type: Array,
+      required: false,
+    },
+  },
+
+  computed: {
+    validateField() {
+      let r = {};
+      const validate = [];
+
+      const propsValidationMap = createValidatorList(this.validators);
+      // combine default validation and custom validation
+      r = Object.assign(r, this.rules, propsValidationMap);
+      // create array for text-field syntax
+
+      for (const key in r) {
+        validate.push(r[key]);
+      }
+
+      return validate;
+    },
+    // inputValue: {
+    //   get() {
+    //     return this.$store.getters.getCurrentInputValue(this.id) ? true : false;
+    //   },
+    //   set(value) {
+    //     this.$store.commit("updateInputValue", { key: this.id, value: value });
+    //   },
+    // },
+    selectedOptions() {
+      return Object.keys(this.properties.options).filter(val => this.checked[val]);
+    },
+    inputError() {
+      return this.$store.getters.getCurrentInputError(this.id) || "";
+    },
+  },
+};
+</script>
+
+

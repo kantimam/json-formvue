@@ -20,6 +20,7 @@ import ConditionalContent from "../components/layout/conditional_content.vue";
 import Telephone from '../components/fields/textfield_telephone.vue';
 import Url from '../components/fields/textfield_url.vue';
 import MultiSelect from '../components/fields/extended_multiselect.vue';
+import MultiCheckbox from '../components/fields/multi_checkbox.vue';
 
 export const componentRenames = {
     'Honeypot': 'HP'
@@ -48,6 +49,7 @@ export default new ComponentsMapping({
     Telephone: Telephone,
     Url: Url,
     MultiSelect: MultiSelect,
+    MultiCheckbox: MultiCheckbox,
     form: 'form',
     message: 'div',
     default: 'input'
