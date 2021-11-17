@@ -11,6 +11,7 @@
       v-model="checked[option[0]]"
       hide-details="auto"
       off-icon="mdi-checkbox-blank"
+      :rules="validateField"
     />
     <input
       v-for="option in selectedOptions"
