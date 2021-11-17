@@ -1,5 +1,5 @@
 <template>
-  <masked-text v-bind="{ ...$attrs }" :mask-active="maskActive" v-on="$listeners" />
+  <masked-text v-bind="$attrs" :mask-active="maskActive" v-on="$listeners" />
 </template>
 <script>
 import MaskedText from "./textfield_masked.vue";
