@@ -1,3 +1,5 @@
+import { getMaskPatternMapping, matchMaskPattern } from "./pattern";
+
 export const createInputName=(formName, inputName)=>`tx_form_formframework[${formName}][${inputName}]`
 
 export function isRequired(properties) {
@@ -80,19 +82,12 @@ export const validatorMinimumNumber=(string, invalidMessage, vArgs)=>{
 }
 
 export const validatorTimeFormat = (string, invalidMessage, vArgs) => {
-    const mapping = {
-        'H': [0, 23, 1], // min_value, max_value, min_digits
-        'i': [0, 59, 1],
-        'd': [0, 31, 1],
-        'm': [1, 12, 1],
-        'Y': [0, undefined] // omit min_digits to set to max_digits (derived by given format)
-    };
+    const mapping = getMaskPatternMapping();
 
-    const [pattern, order] = convertTimeFormatToPattern(vArgs.format, mapping);
-    const regex = new RegExp(pattern);
+    const res = matchMaskPattern(string, vArgs.format, mapping);
+    if (!res) return invalidMessage;
 
-    const match = string.match(regex);
-    if (!match) return invalidMessage;
+    const [match, order] = res;
 
     // validate each pattern group
     for (let i = 1; i < match.length; i++) {
@@ -125,7 +120,6 @@ export const createCallbackList=(callbacks)=>{
     ))
 }
 
-
 export const createCallbackByKey=(callbackKey, callbackArgs)=>{
     // inject payload and error message into the selected validation function
     const knownCallbacks={
@@ -133,7 +127,6 @@ export const createCallbackByKey=(callbackKey, callbackArgs)=>{
     }
     return knownCallbacks[callbackKey] || knownCallbacks.default;
 } 
-
 
 export const testCallback=(callbackArgs)=>(
     new Promise((res, rej)=>{
@@ -143,35 +136,6 @@ export const testCallback=(callbackArgs)=>(
         }, 1200);
     })
 )
-
-const convertTimeFormatToPattern = (format, mapping) => {
-    const intermediaryPattern = Object.keys(mapping)
-        .map(c => c.concat('+'))
-        .join('|');
-    const intermediaryRegex = new RegExp(intermediaryPattern, 'g');
-    const matches = Array.from(format.matchAll(intermediaryRegex));
-
-    let cursor = 0;
-    const patternSegments = [];
-    const groupOrder = [];
-
-    matches.forEach(match => {
-        const str = match[0];
-        const len = str.length;
-        const firstChar = str[0];
-        const [_min, _max, minDigits] = mapping[firstChar];
-        groupOrder.push(firstChar);
-
-        const group = `([0-9]{${minDigits || len},${len}})`;
-        patternSegments.push(format.slice(cursor, match.index), group);
-        cursor = match.index + len;
-    });
-
-    if (cursor < format.length) patternSegments.push(format.slice(cursor, format.length));
-
-    return [patternSegments.join(''), groupOrder];
-}
-
 
 /* export const scrollToFirstFormError=(formElement)=>{
     console.log(formElement)

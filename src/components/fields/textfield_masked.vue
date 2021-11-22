@@ -6,14 +6,15 @@
     :value="value"
     @input="input"
     @focus="focus"
-    @blur="checkNormalize"
+    @blur="blur"
     v-bind="$attrs"
     :placeholder="placeholder"
     :filled="filled"
     :required="required"
     :rules="validateField"
     :error-messages="inputError"
-    validate-on-blur>
+    validate-on-blur
+  >
     <template slot="prepend-outer"><slot name="prepend"></slot></template>
     <template slot="prepend-inner" v-if="optional">
       <span class="v-input__label-optional">
@@ -26,12 +27,15 @@
       </span>
     </template>
     <template slot="append">
-      <div
-        @click="menu = !menu"
-        v-if="isTouchDevice && !!$slots.info"
-        class="v-input__info">
-        <v-icon color="primary">mdi-information-outline</v-icon>
-      </div>
+      <slot name="append-masked">
+        <div
+          @click="menu = !menu"
+          v-if="isTouchDevice && !!$slots.info"
+          class="v-input__info"
+        >
+          <v-icon color="primary">mdi-information-outline</v-icon>
+        </div>
+      </slot>
     </template>
     <template slot="append-outer"><slot name="append"></slot></template>
   </v-text-field>
@@ -39,19 +43,23 @@
 <script>
 import IMask from "imask";
 import utils from "../../plugins/utils";
-import { createValidatorList, isRequired, getPlaceholder } from "../../lib/util";
+import {
+  createValidatorList,
+  isRequired,
+  getPlaceholder,
+} from "../../lib/util";
 
 export default {
   name: "OnTextfieldMasked",
   mounted() {
-    this.init();
+    this.initElement();
   },
   model: {
-    prop: 'value',
-    event: 'input',
+    prop: "value",
+    event: "input",
   },
   data: () => ({
-    value: '',
+    value: "",
     element: {},
     masked: {},
     isTouchDevice: utils.isTouchDevice(),
@@ -89,7 +97,21 @@ export default {
     },
     maskActive: {
       type: Boolean,
-      default: true
+      default: true,
+    },
+    inputBridge: {
+      type: String,
+      required: false
+    }
+  },
+  watch: {
+    inputBridge(val) {
+      if (!this.maskActive) return;
+
+      if (!this.masked || !this.element) this.initMask();
+
+      this.element.value = val;
+      this.element.dispatchEvent(new Event("input"));
     }
   },
   computed: {
@@ -113,46 +135,48 @@ export default {
         mask: this.properties.pattern,
         // custom character definitions
         definitions: {
-          'X': /[0-9a-zA-Z]/,
-          'C': /[A-Z]/,
-          'c': /[a-z]/
+          X: /[0-9a-zA-Z]/,
+          C: /[A-Z]/,
+          c: /[a-z]/,
         },
         // custom character block definitions
         blocks: {
-          'YYYY': {
+          YYYY: {
             mask: IMask.MaskedRange,
             from: 1900,
             to: 9999,
-            autofix: true
+            autofix: true,
           },
-          'mm': {
+          mm: {
             mask: IMask.MaskedRange,
             from: 1,
             to: 12,
-            autofix: true
+            autofix: true,
           },
-          'dd': {
+          dd: {
             mask: IMask.MaskedRange,
             from: 1,
             to: 31,
-            autofix: true
+            autofix: true,
           },
-          'HH': {
+          HH: {
             mask: IMask.MaskedRange,
             from: 0,
             to: 23,
-            autofix: true
+            autofix: true,
           },
-          'ii': {
+          ii: {
             mask: IMask.MaskedRange,
             from: 0,
             to: 59,
-            autofix: true
-          }
-        }
+            autofix: true,
+          },
+        },
       };
 
-      let placeholderChar = this.properties.placeholder ? this.properties.placeholder.trim() : '';
+      let placeholderChar = this.properties.placeholder
+        ? this.properties.placeholder.trim()
+        : "";
       if (placeholderChar && placeholderChar.length > 0) {
         placeholderChar = placeholderChar.substring(0, 1); // in case someone put more than one character
         mask.placeholderChar = placeholderChar;
@@ -173,7 +197,11 @@ export default {
         r.required = (v) => !!v;
       }
 
-      const propsValidationMap = createValidatorList(this.validators, undefined, this.properties);
+      const propsValidationMap = createValidatorList(
+        this.validators,
+        undefined,
+        this.properties
+      );
 
       // combine default validation and custom validation
       r = Object.assign(r, propsValidationMap);
@@ -200,51 +228,59 @@ export default {
     save(date) {
       this.$refs.menu.save(date);
     },
-    init() {
+    initElement() {
+      this.element = this.$refs.field.$el.querySelector("input");
+    },
+    initMask() {
       if (!this.maskActive) return;
 
-      if (this.masked && this.masked.destroy) this.masked.destroy();
-      this.element = this.$refs.field.$el.querySelector("input");
+      if (this.masked && this.masked.destroy) this.destroyMask();
+      
       this.masked = IMask(this.element, this.mask);
     },
+    destroyMask() {
+      this.masked.destroy();
+      this.masked = null;
+    },
+    // Event listeners
     input(value) {
-      this.$emit('input', value);
+      this.$emit("input", value);
     },
     focus() {
       if (this.maskActive && this.element.value.length <= 0) {
-        this.init();
+        this.initMask();
 
         this.element.value = this.masked.value;
-        this.element.dispatchEvent(new Event('input'));
+        this.element.dispatchEvent(new Event("input"));
 
         // move caret to first index, because this sometimes doesn't happen
         if (this.element.setSelectionRange) {
           this.element.setSelectionRange(0, 0);
-        }
-        else if (this.element.createTextRange) {
+        } else if (this.element.createTextRange) {
           const range = this.element.createTextRange();
           range.collapse(true);
-          range.moveEnd('character', 0);
-          range.moveStart('character', 0);
+          range.moveEnd("character", 0);
+          range.moveStart("character", 0);
           range.select();
         }
       }
     },
-    checkNormalize() {
+    blur() {
       if (!this.maskActive) return;
-      
+
       const isNormalized = this.element.value === this.masked.value;
       if (!isNormalized) {
         this.element.value = this.masked.value;
-        this.element.dispatchEvent(new Event('input'));
+        this.element.dispatchEvent(new Event("input"));
       }
 
+      // Destroy mask, when element is not required, so that the element will look like before
       if (this.masked.unmaskedValue.length <= 0 && !this.required) {
-        this.masked.destroy();
-        this.element.value = '';
-        this.element.dispatchEvent(new Event('input'));
+        this.destroyMask();
+        this.element.value = "";
+        this.element.dispatchEvent(new Event("input"));
       }
-    },
-  }
+    }
+  },
 };
 </script>
