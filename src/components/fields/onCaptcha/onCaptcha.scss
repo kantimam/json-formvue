@@ -1,0 +1,48 @@
+.ondigo-captcha-img-container {
+    border: 1px solid $border-color;
+    border-radius: 4px 4px 0 0;
+    overflow: hidden;
+    position: relative;
+
+    img, .ondigo-captcha-img-overlay {
+        width: 100%;
+    }
+
+    .ondigo-captcha-img-overlay {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        transition: background-color 0.4s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        // height is set dynamically via JS
+
+        &.show {
+            background-color: rgba(0, 0, 0, 0.20);
+            // backdrop-filter: blur(8px);
+        }
+    }
+}
+
+.ondigo-captcha-refresh-container {
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+
+    * {
+        color: #757575;
+    }
+
+    .ondigo-captcha-refresh-text {
+        font-size: 14px;
+
+        &.disabled {
+            pointer-events: none;
+            cursor: default;
+            opacity: 0.75;
+            text-decoration: none;
+        }
+    }
+}
