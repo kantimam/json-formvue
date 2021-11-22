@@ -1,6 +1,4 @@
 .ondigo-captcha-img-container {
-    border: 1px solid $border-color;
-    border-radius: 4px 4px 0 0;
     overflow: hidden;
     position: relative;
 
@@ -20,20 +18,14 @@
 
         &.show {
             background-color: rgba(0, 0, 0, 0.20);
-            // backdrop-filter: blur(8px);
         }
     }
 }
 
 .ondigo-captcha-refresh-container {
-    margin-bottom: 12px;
     display: flex;
     align-items: center;
     justify-content: start;
-
-    * {
-        color: #757575;
-    }
 
     .ondigo-captcha-refresh-text {
         font-size: 14px;
