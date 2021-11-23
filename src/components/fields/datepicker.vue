@@ -1,50 +1,52 @@
 <template>
-  <v-menu
-    ref="menu"
-    v-model="menu"
-    :close-on-content-click="false"
-    transition="scale-transition"
-    offset-y
-    min-width="auto"
-  >
-    <template v-slot:activator="{ on, attrs }">
-      <masked-text
-        :mask-active="maskActive"
-        :label="label"
-        :placeholder="placeholder"
-        :filled="filled"
-        :name="name"
-        :id="id"
-        ref="masked"
-        :class="`ondigo-input ondigo-textfield ondigo-input-${id}`"
-        :inputBridge="inputBridge"
-        v-bind="{
-          ...$attrs,
-          properties: {
-            ...$attrs.properties,
-            // mixin generated MaskedText properties
-            pattern: maskPattern,
-            placeholder: '_',
-          },
-        }"
-        v-on="$listeners"
-      >
-        <template slot="append-masked">
-          <div class="ondigo-icon-button" v-bind="attrs" v-on="on">
-            <v-icon :color="menu ? 'primary' : ''">mdi-calendar</v-icon>
-          </div>
-        </template>
-      </masked-text>
-    </template>
-    <v-date-picker
-      v-model="date"
-      :active-picker.sync="activePicker"
-      :max="maxDate"
-      :min="minDate"
-      @change="save"
+  <div>
+    <input type="hidden" :name="name" v-model="formattedInput" />
+    <v-menu
+      ref="menu"
+      v-model="menu"
+      :close-on-content-click="false"
+      transition="scale-transition"
+      offset-y
+      min-width="auto"
     >
-    </v-date-picker>
-  </v-menu>
+      <template v-slot:activator="{ on, attrs }">
+        <masked-text
+          :mask-active="maskActive"
+          :label="label"
+          :placeholder="placeholder"
+          :filled="filled"
+          :id="id"
+          ref="masked"
+          :class="`ondigo-input ondigo-textfield ondigo-input-${id}`"
+          :inputBridge="inputBridge"
+          v-bind="{
+            ...$attrs,
+            name: undefined,
+            properties: {
+              ...$attrs.properties,
+              // mixin generated MaskedText properties
+              pattern: maskPattern,
+              placeholder: '_',
+            },
+          }"
+          v-on="$listeners"
+        >
+          <template slot="append-masked">
+            <div class="ondigo-icon-button" v-bind="attrs" v-on="on">
+              <v-icon :color="menu ? 'primary' : ''">mdi-calendar</v-icon>
+            </div>
+          </template>
+        </masked-text>
+      </template>
+      <v-date-picker
+        v-model="date"
+        :active-picker.sync="activePicker"
+        :max="maxDate"
+        :min="minDate"
+        @change="save"
+      />
+    </v-menu>
+  </div>
 </template>
 
 <script>
@@ -68,6 +70,7 @@ export default {
     activePicker: null,
     date: null,
     menu: false,
+    formattedInput: null,
   }),
   watch: {
     menu(val) {
@@ -79,23 +82,43 @@ export default {
     inputBridge(val) {
       const parsed = this.parseDate(val);
       if (parsed && parsed !== this.date) this.date = parsed;
+
+      console.log(val, parsed);
+      this.formattedInput = parsed || this.date || val;
     },
   },
   methods: {
     save(date) {
       this.$refs.menu.save(date);
     },
+    /**
+     * @param {string} dateString The date string to split
+     * @returns {string[]} The date components
+     */
+    splitDate(dateString) {
+      return dateString.split("-").map((x) => Number(x));
+    },
+    /**
+     * @param {string} date The date string of the date to check.
+     * @param {number[]} maxDate A tuple of year, month and day.
+     * @returns {boolean} True, if 'date' is before, or the same as 'maxDate'.
+     */
+    isBeforeOrSame(date, maxDate) {
+      const [cYear, cMonth, cDay] = this.splitDate(date);
+
+      return maxDate[0] <= cYear && maxDate[1] <= cMonth && maxDate[2] <= cDay;
+    },
     formatDate(date) {
       if (!date) return null;
 
-      const [year, month, day] = date.split("-");
+      const [year, month, day] = this.splitDate(date);
       const now = new Date();
       const substitutes = {
-        d: day,
-        m: month,
+        d: String(day).padStart(2, '0'),
+        m: String(month).padStart(2, '0'),
         Y: year,
-        H: now.getHours(),
-        i: now.getMinutes(),
+        H: String(now.getHours()).padStart(2, '0'),
+        i: String(now.getMinutes()).padStart(2, '0'),
       };
 
       const format = this.maskPattern;
@@ -140,10 +163,28 @@ export default {
       const month = getOrDefault("m", () => now.getMonth() + 1);
       const day = getOrDefault("d", () => now.getDate());
 
-      if (month < 1 || month > 12 || day < 1 || day > 31 || year < 1000 || year > 9999) return null; // invalid date
-      // TODO check minDate, maxDate 
+      if (
+        month < 1 ||
+        month > 12 ||
+        day < 1 ||
+        day > 31 ||
+        year < 1000 ||
+        year > 9999
+      )
+        return null; // invalid date
 
-      return `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+      if (
+        (this.minDate &&
+          this.isBeforeOrSame(this.minDate, [year, month, day])) ||
+        (this.maxDate && !this.isBeforeOrSame(this.maxDate, [year, month, day]))
+      ) {
+        return null; // date out of selectable range
+      }
+
+      return `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(
+        2,
+        "0"
+      )}`;
     },
     currentDate() {
       return new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
@@ -220,7 +261,7 @@ export default {
       return !isNaN(date) ? minDate : undefined;
     },
     maxDate() {
-      const minDate = this.properties.minDate;
+      const minDate = this.properties.maxDate;
       if (!minDate) return undefined;
 
       if (minDate === "now") return this.currentDate();
