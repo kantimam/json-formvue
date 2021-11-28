@@ -1,47 +1,37 @@
-<template>
-  <text-field
-    v-bind="$attrs"
-    :id="id"
-    :rules="inputRules"
-    v-model="inputValue"
-    :required="required"
-    :requiredLabel="requiredLabel"
-    outlined
-  />
-</template>
-
 <script>
 import {
   createInputRules,
   isRequired,
   createRequiredLabel,
 } from "../../lib/util";
-import TextField from "./textfield.vue";
 
 export default {
-  name: "OnTextfieldText",
-  components: { TextField },
+  name: "BaseInput",
   props: {
     id: {
       type: String,
       required: true,
     },
-    properties: {
-      type: Object | Array,
+    name: {
+      type: String,
       required: true,
+    },
+    label: {
+      type: String,
+      default: null,
     },
     validators: {
       type: Array,
       required: false,
     },
+    properties: {
+      type: Object | Array,
+      required: true,
+    },
   },
-
   computed: {
     required() {
       return isRequired(this.properties);
-    },
-    placeholder() {
-      return getPlaceholder(this.properties);
     },
     requiredLabel() {
       return createRequiredLabel(this.validators);
@@ -63,4 +53,3 @@ export default {
   },
 };
 </script>
-

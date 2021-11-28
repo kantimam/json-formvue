@@ -11,9 +11,10 @@
     :placeholder="placeholder"
     :filled="filled"
     :required="required"
-    :rules="validateField"
+    :rules="inputRules"
     :error-messages="inputError"
-    validate-on-blur>
+    validate-on-blur
+  >
     <template slot="prepend-outer"><slot name="prepend"></slot></template>
     <template slot="prepend-inner" v-if="optional">
       <span class="v-input__label-optional">
@@ -29,7 +30,8 @@
       <div
         @click="menu = !menu"
         v-if="isTouchDevice && !!$slots.info"
-        class="v-input__info">
+        class="v-input__info"
+      >
         <v-icon color="primary">mdi-information-outline</v-icon>
       </div>
     </template>
@@ -39,7 +41,7 @@
 <script>
 import IMask from "imask";
 import utils from "../../plugins/utils";
-import { createValidatorList, isRequired, getPlaceholder } from "../../lib/util";
+import { isRequired, getPlaceholder, createInputRules } from "../../lib/util";
 
 export default {
   name: "OnTextfieldMasked",
@@ -47,11 +49,11 @@ export default {
     this.init();
   },
   model: {
-    prop: 'value',
-    event: 'input',
+    prop: "value",
+    event: "input",
   },
   data: () => ({
-    value: '',
+    value: "",
     element: {},
     masked: {},
     isTouchDevice: utils.isTouchDevice(),
@@ -89,8 +91,8 @@ export default {
     },
     maskActive: {
       type: Boolean,
-      default: true
-    }
+      default: true,
+    },
   },
   computed: {
     required() {
@@ -113,46 +115,48 @@ export default {
         mask: this.properties.pattern,
         // custom character definitions
         definitions: {
-          'X': /[0-9a-zA-Z]/,
-          'C': /[A-Z]/,
-          'c': /[a-z]/
+          X: /[0-9a-zA-Z]/,
+          C: /[A-Z]/,
+          c: /[a-z]/,
         },
         // custom character block definitions
         blocks: {
-          'YYYY': {
+          YYYY: {
             mask: IMask.MaskedRange,
             from: 1900,
             to: 9999,
-            autofix: true
+            autofix: true,
           },
-          'mm': {
+          mm: {
             mask: IMask.MaskedRange,
             from: 1,
             to: 12,
-            autofix: true
+            autofix: true,
           },
-          'dd': {
+          dd: {
             mask: IMask.MaskedRange,
             from: 1,
             to: 31,
-            autofix: true
+            autofix: true,
           },
-          'HH': {
+          HH: {
             mask: IMask.MaskedRange,
             from: 0,
             to: 23,
-            autofix: true
+            autofix: true,
           },
-          'ii': {
+          ii: {
             mask: IMask.MaskedRange,
             from: 0,
             to: 59,
-            autofix: true
-          }
-        }
+            autofix: true,
+          },
+        },
       };
 
-      let placeholderChar = this.properties.placeholder ? this.properties.placeholder.trim() : '';
+      let placeholderChar = this.properties.placeholder
+        ? this.properties.placeholder.trim()
+        : "";
       if (placeholderChar && placeholderChar.length > 0) {
         placeholderChar = placeholderChar.substring(0, 1); // in case someone put more than one character
         mask.placeholderChar = placeholderChar;
@@ -164,25 +168,8 @@ export default {
     required() {
       return isRequired(this.properties);
     },
-    validateField() {
-      let r = {};
-      const validate = [];
-
-      // default validation
-      if (!!this.required) {
-        r.required = (v) => !!v;
-      }
-
-      const propsValidationMap = createValidatorList(this.validators, undefined, this.properties);
-
-      // combine default validation and custom validation
-      r = Object.assign(r, propsValidationMap);
-
-      // create array for text-field syntax
-      for (const key of Object.keys(r)) {
-        validate.push(r[key]);
-      }
-      return validate;
+    inputRules() {
+      return createInputRules(this.required, this.validators, this.properties);
     },
     inputValue: {
       get() {
@@ -208,43 +195,42 @@ export default {
       this.masked = IMask(this.element, this.mask);
     },
     input(value) {
-      this.$emit('input', value);
+      this.$emit("input", value);
     },
     focus() {
       if (this.maskActive && this.element.value.length <= 0) {
         this.init();
 
         this.element.value = this.masked.value;
-        this.element.dispatchEvent(new Event('input'));
+        this.element.dispatchEvent(new Event("input"));
 
         // move caret to first index, because this sometimes doesn't happen
         if (this.element.setSelectionRange) {
           this.element.setSelectionRange(0, 0);
-        }
-        else if (this.element.createTextRange) {
+        } else if (this.element.createTextRange) {
           const range = this.element.createTextRange();
           range.collapse(true);
-          range.moveEnd('character', 0);
-          range.moveStart('character', 0);
+          range.moveEnd("character", 0);
+          range.moveStart("character", 0);
           range.select();
         }
       }
     },
     checkNormalize() {
       if (!this.maskActive) return;
-      
+
       const isNormalized = this.element.value === this.masked.value;
       if (!isNormalized) {
         this.element.value = this.masked.value;
-        this.element.dispatchEvent(new Event('input'));
+        this.element.dispatchEvent(new Event("input"));
       }
 
       if (this.masked.unmaskedValue.length <= 0 && !this.required) {
         this.masked.destroy();
-        this.element.value = '';
-        this.element.dispatchEvent(new Event('input'));
+        this.element.value = "";
+        this.element.dispatchEvent(new Event("input"));
       }
     },
-  }
+  },
 };
 </script>
