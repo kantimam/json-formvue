@@ -6,10 +6,11 @@
     :class="`ondigo-input-${id} ondigo-radio`"
     :error-messages="inputError"
     @input="input"
+    :id="id"
     :label="label"
     :ref="'ref-' + id"
     :required="required"
-    :rules="validateField"
+    :rules="inputRules"
     validate-on-blur
     v-model="inputValue"
     color="red"
@@ -26,7 +27,11 @@
 </template>
 
 <script>
-import { createValidatorList, isRequired } from "../../lib/util";
+import {
+  createInputRules,
+  isRequired,
+  createRequiredLabel,
+} from "../../lib/util";
 
 export default {
   name: "OnRadio",
@@ -139,21 +144,11 @@ export default {
     required() {
       return isRequired(this.properties);
     },
-    validateField() {
-      //if(!this.required) return []
-      let r = {};
-      const validate = [];
-
-      const propsValidationMap = createValidatorList(this.validators);
-      // combine default validation and custom validation
-      r = Object.assign(r, this.rules, propsValidationMap);
-      // create array for text-field syntax
-
-      for (const key in r) {
-        validate.push(r[key]);
-      }
-
-      return validate;
+    requiredLabel() {
+      return createRequiredLabel(this.validators);
+    },
+    inputRules() {
+      return createInputRules(this.required, this.validators, this.properties);
     },
     inputValue: {
       get() {

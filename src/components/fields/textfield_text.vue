@@ -10,3 +10,4 @@ import TextField from './extended_text_field.vue'
   },
 };
 </script>
+'

@@ -35,13 +35,14 @@
       top: !dropDown,
       value: menu,
     }"
-    :name="multiple ? undefined : name"
+    :name="name"
     :no-data-text="nodatatext"
+    :placeholder="placeholder"
     :prefix="prefix"
     :readonly="readonly"
     :ref="'ref-' + id"
     :required="required"
-    :rules="validateField"
+    :rules="inputRules"
     :suffix="suffix"
     v-bind:class="{
       'v-text-field--required': required,
@@ -51,7 +52,6 @@
     v-model="inputValue"
     validate-on-blur
     :value="defaultValue"
-    :multiple="multiple"
   >
     <template slot="prepend-outer" v-if="!!$slots.prepend"
       ><slot name="prepend"></slot
@@ -80,7 +80,11 @@ import {
   VListItemContent,
   VListItemSubtitle,
 } from "vuetify/lib";
-import { createValidatorList, isRequired } from "../../lib/util";
+import {
+  createInputRules,
+  isRequired,
+  createRequiredLabel,
+} from "../../lib/util";
 
 export default {
   name: "OnSelect",
@@ -127,7 +131,7 @@ export default {
     },
     outlined: {
       type: Boolean,
-      default: false,
+      default: true,
     },
     solo: {
       type: Boolean,
@@ -174,6 +178,10 @@ export default {
       type: String,
       default: "optional",
     },
+    placeholder: {
+      type: String,
+      default: null,
+    },
     prefix: {
       type: String,
       default: null,
@@ -181,10 +189,6 @@ export default {
     readonly: {
       type: Boolean,
       default: false,
-    },
-    multiple: {
-      type: Boolean,
-      default: false
     },
 
     properties: {
@@ -271,33 +275,10 @@ export default {
       return isRequired(this.properties);
     },
     requiredLabel() {
-      if (!this.validators || !this.validators.length) return "required";
-      const notEmptyValidator = this.validators.find(
-        (v) => v.identifier === "NotEmpty"
-      );
-      return (
-        (notEmptyValidator && notEmptyValidator.errorMessage) || "required"
-      );
+      return createRequiredLabel(this.validators);
     },
-    validateField() {
-      let r = {};
-      const validate = [];
-
-      // default validation
-      if (!!this.required) {
-        r.required = (v) => !!v;
-      }
-
-      const propsValidationMap = createValidatorList(this.validators);
-
-      // combine default validation and custom validation
-      r = Object.assign(r, propsValidationMap);
-
-      // create array for text-field syntax
-      for (const key of Object.keys(r)) {
-        validate.push(r[key]);
-      }
-      return validate;
+    inputRules() {
+      return createInputRules(this.required, this.validators, this.properties);
     },
     inputValue: {
       get() {
@@ -367,7 +348,7 @@ export default {
     },
     input(e) {
       this.$emit("input", e);
-      if (!this.multiple) this.blur(e);
+      this.blur(e);
     },
     onResize() {
       this.setMenuMaxHeight();

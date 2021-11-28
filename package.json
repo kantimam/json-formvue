@@ -1,12 +1,12 @@
 {
   "name": "formvue-json",
-  "version": "1.2.14",
+  "version": "1.2.15",
   "main": "dist/formvue-json.common.js",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "build-lib": "vue-cli-service build --target lib --inline-vue src/main.js"
+    "build-lib": "vue-cli-service build --target lib src/main.js"
   },
   "dependencies": {
     "core-js": "^3.6.5",

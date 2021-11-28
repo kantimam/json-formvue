@@ -11,15 +11,19 @@
       :name="formConfig.identifier"
       :loading="loading"
     >
-      <field-renderer
-        v-for="fieldData in formConfig.elements"
-        :key="fieldData.identifier"
-        :formName="formConfig.id"
-        :fieldData="fieldData"
-      />
-      <div v-show="errorCountLabel" class="error-summary">
-        <a target="#" @click.prevent="scrollToFirstError">{{ errorCountLabel }}</a>
-      </div>
+	<dynamic-element
+		v-for="element in formConfig.elements"
+		:key="element.identifier"
+		:formName="formConfig.id"
+		:element="element"
+	/>
+	<div v-show="errorCountLabel" class="error-summary my-8">
+		<a
+			class="text-decoration-underline error--text"
+			@click.prevent="scrollToFirstError"
+		>{{ errorCountLabel }}</a
+		>
+	</div>
       <div class="d-flex justify-space-between mt-4">
         <v-btn
           type="button"
@@ -63,9 +67,9 @@ export default {
     loading() {
       return this.$store.state.loading;
     },
-    errorCountLabel(){
-      return this.$store.getters.getErrorLabel;
-    },
+	  errorCountLabel(){
+		  return this.$store.getters.getErrorLabel;
+	  },
     currentStep() {
       return this.$store.state.currentStep;
     },

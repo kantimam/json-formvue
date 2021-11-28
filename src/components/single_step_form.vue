@@ -7,12 +7,12 @@
     :name="formConfig.identifier"
     :loading="loading"
   >
-    <field-renderer
-      v-for="fieldData in formConfig.elements"
-      :key="fieldData.identifier"
-      :formName="formConfig.id"
-      :fieldData="fieldData"
-    />
+	  <dynamic-element
+		  v-for="element in formConfig.elements"
+		  :key="element.identifier"
+		  :formName="formConfig.id"
+		  :element="element"
+	  />
     <div v-show="errorCountLabel" class="error-summary">
       <a target="#" @click.prevent="scrollToFirstError">{{ errorCountLabel }}</a>
     </div>
@@ -28,17 +28,22 @@
 </template>
 
 <script>
+import dynamic_element from "./dynamic_element.vue";
 export default {
+	components:{
+		'dynamic-element': dynamic_element
+	},
   computed: {
     formConfig() {
       return this.$store.getters.getCurrentSchema;
     },
+	  errorCountLabel(){
+		  return this.$store.getters.getErrorLabel;
+	  },
     loading() {
       return this.$store.state.loading;
     },
-    errorCountLabel(){
-      return this.$store.getters.getErrorLabel;
-    },
+
     buttonLabels() {
       return (
         this.formConfig &&
@@ -61,6 +66,15 @@ export default {
         "left"
       );
     },
+  },
+  data(){
+    return {
+      formModel: {
+
+      },
+      formErrorCount: 0,
+      errorSummary: ""
+    }
   },
   inject: ["scrollToErrorCallback"],
   methods: {

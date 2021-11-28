@@ -56,7 +56,11 @@
 
 <script>
 import { VTextarea } from "vuetify/lib";
-import { createValidatorList, isRequired, getPlaceholder } from "../../lib/util";
+import {
+  createInputRules,
+  isRequired,
+  createRequiredLabel,
+} from "../../lib/util";
 
 export default {
   name: "OnTextarea",
@@ -145,6 +149,10 @@ export default {
       type: String,
       default: "optional",
     },
+    placeholder: {
+      type: String,
+      default: null,
+    },
     prefix: {
       type: String,
       default: null,
@@ -197,37 +205,11 @@ export default {
     required() {
       return isRequired(this.properties);
     },
-    placeholder() {
-      return getPlaceholder(this.properties);
-    },
     requiredLabel() {
-      if (!this.validators || !this.validators.length) return "required";
-      const notEmptyValidator = this.validators.find(
-        (v) => v.identifier === "NotEmpty"
-      );
-      return (
-        (notEmptyValidator && notEmptyValidator.errorMessage) || "required"
-      );
+      return createRequiredLabel(this.validators);
     },
-    validateField() {
-      let r = {};
-      const validate = [];
-
-      // default validation
-      if (!!this.required) {
-        r.required = (v) => !!v;
-      }
-
-      const propsValidationMap = createValidatorList(this.validators);
-
-      // combine default validation and custom validation
-      r = Object.assign(r, propsValidationMap);
-
-      // create array for text-field syntax
-      for (const key of Object.keys(r)) {
-        validate.push(r[key]);
-      }
-      return validate;
+    inputRules() {
+      return createInputRules(this.required, this.validators, this.properties);
     },
     inputValue: {
       get() {

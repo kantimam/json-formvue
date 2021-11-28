@@ -1,102 +1,62 @@
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 
-import Vue from 'vue';
-import createStore from './store/index.js'
-import globalInputRenderer from './components/field_renderer'
-import ComponentsMapping from './lib/ComponentsMapping';
-import Vuetify from 'vuetify/lib/framework';
-import App from './App.vue';
-import DefaultComponents from './lib/DefaultComponents';
-import DefaultCallbacks from './lib/DefaultCallbacks';
-import DefaultValidators from './lib/DefaultValidators';
+import createStore from './store'
+
+import FormVue from './FormVue.vue';
+import BaseInput from './components/fields/base_input.vue';
+import OnTextfieldText from "./components/fields/textfield_text.vue";
+import OnTextfieldEmail from "./components/fields/textfield_email.vue";
+import OnTextfieldNumber from "./components/fields/textfield_number.vue";
+import OnTextfieldPassword from "./components/fields/textfield_password.vue";
+import HiddenfieldHoneypot from "./components/fields/hiddenfield_honeypot.vue";
+import FormGridRow from "./components/containers/form_grid_row.vue";
+import OnTextArea from './components/fields/extended_textarea.vue'
+import OnCheckBox from './components/fields/checkbox.vue'
+import OnRadioGroup from './components/fields/radio_group.vue'
+import OnSelect from './components/fields/extended_select.vue'
+import AdvancedPassword from "./components/fields/advanced_password.vue";
+import FileUpload from "./components/fields/file_upload.vue";
+import StaticText from "./components/fields/static_text.vue";
+import OnCaptcha from "./components/fields/onCaptcha/onCaptcha.vue";
+import DatePicker from "./components/fields/datepicker.vue";
+import MaskedText from "./components/fields/textfield_masked.vue";
+import ConditionRadio from "./components/containers/condition_radio.vue";
+import ConditionCheckbox from "./components/containers/condition_checkbox.vue";
+import ConditionalContent from "./components/containers/conditional_content.vue";
+import Telephone from './components/fields/textfield_telephone.vue';
+import Url from './components/fields/textfield_url.vue';
+import MultiSelect from './components/fields/extended_multiselect.vue';
+import MultiCheckbox from './components/fields/multi_checkbox.vue';
 
 
-export class DynamicJsonForm{
-    formViews={};
-    appName='tx_form_formframework';
-    validatorsDictionary=DefaultCallbacks;
-    callbacksDictionary=DefaultValidators;
-    vuetifyConfig={
-        icons: {
-            iconfont: 'mdi'
-        }
-    }
-    vuetifyContext;
-    globalDefaultProps={};
-    /* scrollToErrorCallback=(_inputWithError)=>{
-        console.warn('config.scrollToErrorCallback needs to contain a function that takes DOM Node and scrolls it into view')
-    } */
-    
-
-
-    constructor(formConfigsList, formElementsList, config){
-        if(!formConfigsList) throw new Error('an object with form configurations needs to be provided');
-        if(!formElementsList || !formElementsList.length) throw new Error('a list of dom nodes needs to be provided');
-
-        this.formConfigsList=formConfigsList;
-        this.formElementsList=formElementsList;
-
-        if(config){
-            if(config.appName) this.appName=config.appName;
-            if(config.vuetifyConfig) this.vuetifyConfig=config.vuetifyConfig;
-
-            if(config.validators) this.validatorsDictionary=new ComponentsMapping(config.validators);
-            if(config.callbacks) this.callbacksDictionary=new ComponentsMapping(config.callbacks);
-
-            if(config.customLoadingComponent) this.customLoadingComponent=config.loadingComponent;
-            if(config.customButtonComponent) this.customButtonComponent=config.buttonComponent;
-
-            if(config.globalDefaultProps) this.globalDefaultProps=config.globalDefaultProps;
-            if(config.scrollToErrorCallback) this.scrollToErrorCallback=config.scrollToErrorCallback;
-        }
-
-        // create with an object containing your components or fallback to default
-        if(config && config.components){
-            this.componentsDictionary=new ComponentsMapping(config.components);
-        }else{
-            this.componentsDictionary=DefaultComponents;
-        }
-
-    }
-
-    init(){
-        // init vuetify and use custom config if provided
-        Vue.use(Vuetify);
-        this.vuetifyContext=new Vuetify(this.vuetifyConfig)
-
-        Vue.config.productionTip = false;
-        Vue.component('field-renderer', globalInputRenderer);
-
-
-        Vue.prototype.$componentsDictionary=this.componentsDictionary;
-        Vue.prototype.$validatorsDictionary=this.validatorsDictionary;
-        Vue.prototype.$callbacksDictionary=this.callbacksDictionary;
-        Vue.prototype.$appName = this.appName;
-        Vue.prototype.$globalDefaultProps=this.globalDefaultProps;
-
-
-        for(let form of this.formElementsList) {
-            const id = form.getAttribute('data-id');
-            const wrapper = document.querySelector('[data-id="' + id + '"]');
-
-            if(!wrapper) continue;
-            const formData=this.formConfigsList[id];
-            if(!formData || !formData.configuration) continue;
-
-            const vueInstance=new Vue({
-                vuetify: this.vuetifyContext,
-                store: createStore(formData),
-                provide: {
-                    scrollToErrorCallback: this.scrollToErrorCallback
-                },
-                render: h => h(App)
-            }).$mount(wrapper);
-
-            this.formViews[id]=vueInstance;
-        }
-    }
-
+export {
+    FormVue,
+    createStore,
+    BaseInput,
+    OnTextfieldText,
+    OnTextfieldEmail,
+    OnTextfieldNumber,
+    OnTextfieldPassword,
+    HiddenfieldHoneypot,
+    FormGridRow,
+    OnTextArea,
+    OnCheckBox,
+    OnRadioGroup,
+    OnSelect,
+    OnCaptcha,
+    AdvancedPassword,
+    FileUpload,
+    StaticText,
+    MaskedText,
+    ConditionRadio,
+    ConditionCheckbox,
+    ConditionalContent,
+    Telephone,
+    Url,
+    MultiSelect,
+    MultiCheckbox,
+    DatePicker
 }
 
-export default DynamicJsonForm
+export default FormVue;

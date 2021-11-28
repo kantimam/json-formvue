@@ -11,7 +11,7 @@
       v-model="checked[option[0]]"
       hide-details="auto"
       off-icon="mdi-checkbox-blank"
-      :rules="validateField"
+      :rules="inputRules"
     />
     <input
       v-for="option in selectedOptions"
@@ -24,14 +24,15 @@
 </template>
 
 <script>
-import { createValidatorList } from "../../lib/util";
+import { createInputRules } from "../../lib/util";
 
 export default {
   name: "OnMultiCheckbox",
 
   data() {
     return {
-      checked: Object.entries(this.properties.options).reduce( // initialize all values to false
+      checked: Object.entries(this.properties.options).reduce(
+        // initialize all values to false
         (prev, [key]) => ({ ...prev, [key]: false }),
         {}
       ),
@@ -134,31 +135,13 @@ export default {
   },
 
   computed: {
-    validateField() {
-      let r = {};
-      const validate = [];
-
-      const propsValidationMap = createValidatorList(this.validators);
-      // combine default validation and custom validation
-      r = Object.assign(r, this.rules, propsValidationMap);
-      // create array for text-field syntax
-
-      for (const key in r) {
-        validate.push(r[key]);
-      }
-
-      return validate;
+    inputRules() {
+      return createInputRules(this.required, this.validators, this.properties);
     },
-    // inputValue: {
-    //   get() {
-    //     return this.$store.getters.getCurrentInputValue(this.id) ? true : false;
-    //   },
-    //   set(value) {
-    //     this.$store.commit("updateInputValue", { key: this.id, value: value });
-    //   },
-    // },
     selectedOptions() {
-      return Object.keys(this.properties.options).filter(val => this.checked[val]);
+      return Object.keys(this.properties.options).filter(
+        (val) => this.checked[val]
+      );
     },
     inputError() {
       return this.$store.getters.getCurrentInputError(this.id) || "";
