@@ -60,6 +60,7 @@ import {
   getPlaceholder,
 } from "../../lib/util";
 import MaskedText from "./textfield_masked.vue";
+import { toIsoFormatWithOffset } from '../../lib/time';
 
 export default {
   name: "DatePicker",
@@ -83,8 +84,10 @@ export default {
       const parsed = this.parseDate(val);
       if (parsed && parsed !== this.date) this.date = parsed;
 
-      console.log(val, parsed);
-      this.formattedInput = parsed || this.date || val;
+      const time = Date.parse(parsed);
+      if (isNaN(time)) return;
+
+      this.formattedInput = toIsoFormatWithOffset(new Date(time));
     },
   },
   methods: {
