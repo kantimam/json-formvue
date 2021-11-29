@@ -6,6 +6,7 @@
     v-model="inputValue"
     :required="required"
     :requiredLabel="requiredLabel"
+    :errorMessages="inputError"
   />
 </template>
 

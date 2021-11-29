@@ -9,7 +9,11 @@
       debounce="2000"
       :error-messages="errorMessages"
       @focus="focus"
-      hide-details="auto"
+      :hide-details="hidedetails"
+      :disabled="disabled"
+      :filled="filled"
+      :outlined="outlined"
+      :solor="solo"
       :id="id"
       :inputmode="inputmode"
       @input="input"
@@ -22,18 +26,12 @@
       :required="required"
       :rules="rules"
       :suffix="suffix"
-      v-bind:class="
-      ({
+      v-bind:class="{
         'v-text-field--required': required,
         'v-text-field--optional': optional,
         'v-text-field--counting': counter,
         'v-text-field--updated': updated,
-      },
-      'ondigo-input',
-      'ondigo-textfield',
-      `ondigo-input-${id}`)
-    "
-      v-bind="$attrs"
+      }"
       validate-on-blur
   >
     <template slot="prepend-outer"><slot name="prepend"></slot></template>
@@ -88,6 +86,26 @@ export default {
     id: {
       type: String,
       required: true,
+    },
+    hidedetails: {
+      type: Boolean,
+      default: false,
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
+    filled: {
+      type: Boolean,
+      default: false,
+    },
+    outlined: {
+      type: Boolean,
+      default: false,
+    },
+    solo: {
+      type: Boolean,
+      default: false,
     },
     name: {
       type: String,
