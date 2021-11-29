@@ -44,6 +44,7 @@
         :max="maxDate"
         :min="minDate"
         @change="save"
+        :locale="locale || navigator.language || 'en-US'"
       />
     </v-menu>
   </div>
@@ -290,6 +291,9 @@ export default {
       }).forEach(([from, to]) => (format = format.replace(from, to)));
 
       return format; // is now pattern
+    },
+    locale() {
+      return this.$store.getters.getCurrentSchema?.i18n;
     },
     validateField() {
       //if(!this.required) return []
