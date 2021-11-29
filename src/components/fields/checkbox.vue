@@ -85,15 +85,7 @@ export default {
       return isRequired(this.properties);
     },
     inputRules() {
-      createInputRules(this.required, this.validators, this.properties);
-    },
-    inputValue: {
-      get() {
-        return this.$store.getters.getCurrentInputValue(this.id) || "";
-      },
-      set(value) {
-        this.$store.commit("updateInputValue", { key: this.id, value: value });
-      },
+      return createInputRules(this.required, this.validators, this.properties);
     },
     inputValue: {
       get() {
