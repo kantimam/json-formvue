@@ -1,29 +1,32 @@
 <template>
   <v-select
-      :allow-overflow="false"
-      :append-icon="appendicon || $vuetify.icons.values.dropdown"
-      :autocomplete="autocomplete || 'chrome-off'"
-      :error-messages="inputError"
-      @blur="blur"
-      @change="change"
-      @click="click"
-      @click:append="append"
-      @click:clear="clear"
-      :clearable="clearable"
-      :clear-icon="clearicon || $vuetify.icons.values.clear"
-      :color="color || $vuetify.theme.themes.light.primary"
-      :disabled="disabled"
-      @focus="focus"
-      :hide-details="hidedetails"
-      :id="id"
-      @input="input"
-      inputmode="none"
-      :items="selectItems"
-      item-text="label"
-      item-value="value"
-      :label="label"
-      :loading="loading"
-      :menu-props="{
+    :allow-overflow="false"
+    :append-icon="appendicon || $vuetify.icons.values.dropdown"
+    :autocomplete="autocomplete || 'chrome-off'"
+    :error-messages="inputError"
+    @blur="blur"
+    @change="change"
+    @click="click"
+    @click:append="append"
+    @click:clear="clear"
+    :clearable="clearable"
+    :clear-icon="clearicon || $vuetify.icons.values.clear"
+    :color="color || $vuetify.theme.themes.light.primary"
+    :disabled="disabled"
+    :filled="filled"
+    :outlined="outlined"
+    :solor="solo"
+    @focus="focus"
+    :hide-details="hidedetails"
+    :id="id"
+    @input="input"
+    inputmode="none"
+    :items="selectItems"
+    item-text="label"
+    item-value="value"
+    :label="label"
+    :loading="loading"
+    :menu-props="{
       bottom: dropDown,
       contentClass: 'v-select__dropdown',
       maxHeight: menuMaxHeight,
@@ -32,40 +35,40 @@
       top: !dropDown,
       value: menu,
     }"
-      :name="name"
-      :no-data-text="nodatatext"
-      :placeholder="placeholder"
-      :prefix="prefix"
-      :readonly="readonly"
-      :ref="'ref-' + id"
-      :required="required"
-      :rules="inputRules"
-      :suffix="suffix"
-      v-bind:class="{
+    :name="name"
+    :no-data-text="nodatatext"
+    :placeholder="placeholder"
+    :prefix="prefix"
+    :readonly="readonly"
+    :ref="'ref-' + id"
+    :required="required"
+    :rules="inputRules"
+    :suffix="suffix"
+    v-bind:class="{
       'v-text-field--required': required,
       'v-text-field--optional': optional,
       'v-text-field--updated': updated,
     }"
-      v-model="inputValue"
-      validate-on-blur
-      :value="defaultValue"
+    v-model="inputValue"
+    validate-on-blur
+    :value="defaultValue"
   >
     <template slot="prepend-outer" v-if="!!$slots.prepend"
-    ><slot name="prepend"></slot
+      ><slot name="prepend"></slot
     ></template>
     <template slot="prepend-item" v-if="!!$slots.info"
-    ><div class="v-select__dropdown-info"><slot name="info"></slot></div
+      ><div class="v-select__dropdown-info"><slot name="info"></slot></div
     ></template>
     <template slot="prepend-inner" v-if="required"
-    ><span class="v-input__label-required">{{
+      ><span class="v-input__label-required">{{
         requiredLabel
       }}</span></template
     >
     <template slot="append-item"
-    ><span class="v-select__shadow"></span
+      ><span class="v-select__shadow"></span
     ></template>
     <template slot="append-outer" v-if="!!$slots.append"
-    ><slot name="append"></slot
+      ><slot name="append"></slot
     ></template>
   </v-select>
 </template>
@@ -119,6 +122,18 @@ export default {
       default: null,
     },
     disabled: {
+      type: Boolean,
+      default: false,
+    },
+    filled: {
+      type: Boolean,
+      default: false,
+    },
+    outlined: {
+      type: Boolean,
+      default: false,
+    },
+    solo: {
       type: Boolean,
       default: false,
     },
@@ -342,8 +357,8 @@ export default {
       // only need to close menu if in overlay (do not attach!)
       if (this.menu && !!this.dialog) {
         if (
-            this.dialog.scrollTop > this.scrollPos + 25 ||
-            this.dialog.scrollTop < this.scrollPos - 25
+          this.dialog.scrollTop > this.scrollPos + 25 ||
+          this.dialog.scrollTop < this.scrollPos - 25
         ) {
           this.$refs["ref-" + this.id].blur();
           this.menu = false;
@@ -352,32 +367,32 @@ export default {
     },
     setMenuMaxHeight() {
       let fieldHeight = this.$refs["ref-" + this.id].$el.clientHeight,
-          maxHeight =
-              this.menuMaxHeight <= this.lazyMaxHeight
-                  ? this.menuMaxHeight
-                  : this.lazyMaxHeight,
-          offset = 10;
+        maxHeight =
+          this.menuMaxHeight <= this.lazyMaxHeight
+            ? this.menuMaxHeight
+            : this.lazyMaxHeight,
+        offset = 10;
 
       if (
-          this.$refs["ref-" + this.id].$el.getBoundingClientRect().top +
+        this.$refs["ref-" + this.id].$el.getBoundingClientRect().top +
           fieldHeight +
           100 <
-          this.windowHeight
+        this.windowHeight
       ) {
         this.dropDown = true;
         maxHeight =
-            this.windowHeight -
-            this.$refs["ref-" + this.id].$el.getBoundingClientRect().top -
-            fieldHeight -
-            offset;
+          this.windowHeight -
+          this.$refs["ref-" + this.id].$el.getBoundingClientRect().top -
+          fieldHeight -
+          offset;
       } else {
         this.dropDown = false;
         maxHeight =
-            this.$refs["ref-" + this.id].$el.getBoundingClientRect().top - offset;
+          this.$refs["ref-" + this.id].$el.getBoundingClientRect().top - offset;
       }
 
       this.menuMaxHeight =
-          maxHeight <= this.lazyMaxHeight ? maxHeight : this.lazyMaxHeight;
+        maxHeight <= this.lazyMaxHeight ? maxHeight : this.lazyMaxHeight;
     },
     update() {
       let _scope = this;
