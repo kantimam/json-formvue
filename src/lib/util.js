@@ -1,4 +1,6 @@
-export const createInputName = (formName, inputName) => `tx_form_formframework[${formName}][${inputName}]`
+import { getMaskPatternMapping, matchMaskPattern } from "./pattern";
+
+export const createInputName = (formName, inputName) => `tx_form_formframework[${formName}][${inputName}]`;
 
 export function isRequired(properties) {
     return properties?.fluidAdditionalAttributes?.required === 'required';
@@ -103,19 +105,12 @@ export const validatorMinimumNumber = (string, invalidMessage, vArgs) => {
 }
 
 export const validatorTimeFormat = (string, invalidMessage, vArgs) => {
-    const mapping = {
-        'H': [0, 23, 1], // min_value, max_value, min_digits
-        'i': [0, 59, 1],
-        'd': [0, 31, 1],
-        'm': [1, 12, 1],
-        'Y': [0, undefined] // omit min_digits to set to max_digits (derived by given format)
-    };
+    const mapping = getMaskPatternMapping();
 
-    const [pattern, order] = convertTimeFormatToPattern(vArgs.format, mapping);
-    const regex = new RegExp(pattern);
+    const res = matchMaskPattern(string, vArgs.format, mapping);
+    if (!res) return invalidMessage;
 
-    const match = string.match(regex);
-    if (!match) return invalidMessage;
+    const [match, order] = res;
 
     // validate each pattern group
     for (let i = 1; i < match.length; i++) {
@@ -193,7 +188,6 @@ export const createCallbackList = (callbacks) => {
     ))
 }
 
-
 export const createCallbackByKey = (callbackKey, callbackArgs) => {
     // inject payload and error message into the selected validation function
     const knownCallbacks = {
@@ -202,11 +196,10 @@ export const createCallbackByKey = (callbackKey, callbackArgs) => {
     return knownCallbacks[callbackKey] || knownCallbacks.default;
 }
 
-
-export const testCallback = (callbackArgs) => (
-    new Promise((res, rej) => {
-        setTimeout(() => {
-            if (Math.random() < 0) return rej(`failed testCallback with the arguments ${JSON.stringify(callbackArgs)}`)
+export const testCallback=(callbackArgs)=>(
+    new Promise((res, rej)=>{
+        setTimeout(()=>{
+            if(Math.random()<0) return rej(`failed testCallback with the arguments ${JSON.stringify(callbackArgs)}`)
             res(callbackArgs)
         }, 1200);
     })

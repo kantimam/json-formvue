@@ -6,7 +6,7 @@
     :value="value"
     @input="input"
     @focus="focus"
-    @blur="checkNormalize"
+    @blur="blur"
     v-bind="$attrs"
     :placeholder="placeholder"
     :filled="filled"
@@ -27,13 +27,15 @@
       </span>
     </template>
     <template slot="append">
-      <div
-        @click="menu = !menu"
-        v-if="isTouchDevice && !!$slots.info"
-        class="v-input__info"
-      >
-        <v-icon color="primary">mdi-information-outline</v-icon>
-      </div>
+      <slot name="append-masked">
+        <div
+          @click="menu = !menu"
+          v-if="isTouchDevice && !!$slots.info"
+          class="v-input__info"
+        >
+          <v-icon color="primary">mdi-information-outline</v-icon>
+        </div>
+      </slot>
     </template>
     <template slot="append-outer"><slot name="append"></slot></template>
   </v-text-field>
@@ -46,7 +48,7 @@ import { isRequired, getPlaceholder, createInputRules } from "../../lib/util";
 export default {
   name: "OnTextfieldMasked",
   mounted() {
-    this.init();
+    this.initElement();
   },
   model: {
     prop: "value",
@@ -93,6 +95,20 @@ export default {
       type: Boolean,
       default: true,
     },
+    inputBridge: {
+      type: String,
+      required: false
+    }
+  },
+  watch: {
+    inputBridge(val) {
+      if (!this.maskActive) return;
+
+      if (!this.masked || !this.element) this.initMask();
+
+      this.element.value = val;
+      this.element.dispatchEvent(new Event("input"));
+    }
   },
   computed: {
     required() {
@@ -187,19 +203,27 @@ export default {
     save(date) {
       this.$refs.menu.save(date);
     },
-    init() {
+    initElement() {
+      this.element = this.$refs.field.$el.querySelector("input");
+    },
+    initMask() {
       if (!this.maskActive) return;
 
-      if (this.masked && this.masked.destroy) this.masked.destroy();
-      this.element = this.$refs.field.$el.querySelector("input");
+      if (this.masked && this.masked.destroy) this.destroyMask();
+      
       this.masked = IMask(this.element, this.mask);
     },
+    destroyMask() {
+      this.masked.destroy();
+      this.masked = null;
+    },
+    // Event listeners
     input(value) {
       this.$emit("input", value);
     },
     focus() {
       if (this.maskActive && this.element.value.length <= 0) {
-        this.init();
+        this.initMask();
 
         this.element.value = this.masked.value;
         this.element.dispatchEvent(new Event("input"));
@@ -216,7 +240,7 @@ export default {
         }
       }
     },
-    checkNormalize() {
+    blur() {
       if (!this.maskActive) return;
 
       const isNormalized = this.element.value === this.masked.value;
@@ -225,12 +249,13 @@ export default {
         this.element.dispatchEvent(new Event("input"));
       }
 
+      // Destroy mask, when element is not required, so that the element will look like before
       if (this.masked.unmaskedValue.length <= 0 && !this.required) {
-        this.masked.destroy();
+        this.destroyMask();
         this.element.value = "";
         this.element.dispatchEvent(new Event("input"));
       }
-    },
+    }
   },
 };
 </script>
