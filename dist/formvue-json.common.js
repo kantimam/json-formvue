@@ -22063,17 +22063,17 @@ var extended_text_fieldvue_type_template_id_6c2aafbe_staticRenderFns = []
 
 // CONCATENATED MODULE: ./src/components/fields/extended_text_field.vue?vue&type=template&id=6c2aafbe&
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"2f738cb0-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/textfield.vue?vue&type=template&id=e17a7e9c&
-var textfieldvue_type_template_id_e17a7e9c_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('v-text-field',{ref:'ref-' + _vm.id,class:{
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"2f738cb0-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/textfield.vue?vue&type=template&id=944fb542&
+var textfieldvue_type_template_id_944fb542_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('v-text-field',{ref:'ref-' + _vm.id,class:{
       'v-text-field--required': _vm.required,
       'v-text-field--optional': _vm.optional,
       'v-text-field--counting': _vm.counter,
       'v-text-field--updated': _vm.updated,
-    },attrs:{"clear-icon":"mdi-close","counter":_vm.counter,"debounce":"2000","error-messages":_vm.errorMessages,"hide-details":_vm.hidedetails,"disabled":_vm.disabled,"filled":_vm.filled,"outlined":_vm.outlined,"solor":_vm.solo,"id":_vm.id,"inputmode":_vm.inputmode,"label":_vm.label,"loading":_vm.loading,"name":_vm.name,"prefix":_vm.prefix,"value":_vm.value,"required":_vm.required,"rules":_vm.rules,"suffix":_vm.suffix,"validate-on-blur":""},on:{"blur":_vm.blur,"change":_vm.change,"click":_vm.click,"click:clear":_vm.clear,"focus":_vm.focus,"input":_vm.input}},[_c('template',{slot:"prepend-outer"},[_vm._t("prepend")],2),(_vm.optional)?_c('template',{slot:"prepend-inner"},[_c('span',{staticClass:"v-input__label-optional"},[_vm._v(_vm._s(_vm.optionalLabel))])]):_vm._e(),(_vm.required)?_c('template',{slot:"prepend-inner"},[_c('span',{staticClass:"v-input__label-required"},[_vm._v(_vm._s(_vm.requiredLabel))])]):_vm._e(),_c('template',{slot:"append"},[(_vm.isTouchDevice && !!_vm.$slots.info)?_c('div',{staticClass:"v-input__info",on:{"click":function($event){_vm.menu = !_vm.menu}}},[_c('v-icon',{attrs:{"color":"primary"}},[_vm._v("mdi-information-outline")])],1):_vm._e()]),_c('template',{slot:"append-outer"},[_vm._t("append")],2)],2)}
-var textfieldvue_type_template_id_e17a7e9c_staticRenderFns = []
+    },attrs:{"type":_vm.type,"clear-icon":"mdi-close","counter":_vm.counter,"debounce":"2000","error-messages":_vm.errorMessages,"hide-details":_vm.hidedetails,"disabled":_vm.disabled,"filled":_vm.filled,"outlined":_vm.outlined,"solor":_vm.solo,"id":_vm.id,"inputmode":_vm.inputmode,"label":_vm.label,"loading":_vm.loading,"name":_vm.name,"prefix":_vm.prefix,"value":_vm.value,"required":_vm.required,"rules":_vm.rules,"suffix":_vm.suffix,"validate-on-blur":""},on:{"blur":_vm.blur,"change":_vm.change,"click":_vm.click,"click:clear":_vm.clear,"focus":_vm.focus,"input":_vm.input}},[_c('template',{slot:"prepend-outer"},[_vm._t("prepend")],2),(_vm.optional)?_c('template',{slot:"prepend-inner"},[_c('span',{staticClass:"v-input__label-optional"},[_vm._v(_vm._s(_vm.optionalLabel))])]):_vm._e(),(_vm.required)?_c('template',{slot:"prepend-inner"},[_c('span',{staticClass:"v-input__label-required"},[_vm._v(_vm._s(_vm.requiredLabel))])]):_vm._e(),_c('template',{slot:"append"},[(_vm.isTouchDevice && !!_vm.$slots.info)?_c('div',{staticClass:"v-input__info",on:{"click":function($event){_vm.menu = !_vm.menu}}},[_c('v-icon',{attrs:{"color":"primary"}},[_vm._v("mdi-information-outline")])],1):_vm._e()]),_c('template',{slot:"append-outer"},[_vm._t("append")],2)],2)}
+var textfieldvue_type_template_id_944fb542_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/fields/textfield.vue?vue&type=template&id=e17a7e9c&
+// CONCATENATED MODULE: ./src/components/fields/textfield.vue?vue&type=template&id=944fb542&
 
 // CONCATENATED MODULE: ./src/plugins/utils.js
 
@@ -22120,6 +22120,7 @@ var utils = {
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/textfield.vue?vue&type=script&lang=js&
 
 
+//
 //
 //
 //
@@ -22278,6 +22279,10 @@ var utils = {
     value: {
       type: String | Number,
       "default": ""
+    },
+    type: {
+      value: String,
+      "default": 'text'
     }
   },
   data: function data() {
@@ -24702,8 +24707,8 @@ var dirtyTypes = ['color', 'file', 'time', 'date', 'datetime-local', 'week', 'mo
 
 var textfield_component = normalizeComponent(
   fields_textfieldvue_type_script_lang_js_,
-  textfieldvue_type_template_id_e17a7e9c_render,
-  textfieldvue_type_template_id_e17a7e9c_staticRenderFns,
+  textfieldvue_type_template_id_944fb542_render,
+  textfieldvue_type_template_id_944fb542_staticRenderFns,
   false,
   null,
   null,

@@ -1,5 +1,6 @@
 <template>
   <v-text-field
+      :type="type"
       @blur="blur"
       @change="change"
       clear-icon="mdi-close"
@@ -160,6 +161,10 @@ export default {
       type: String | Number,
       default: ""
     },
+    type: {
+      value: String,
+      default: 'text'
+    }
 
   },
 
