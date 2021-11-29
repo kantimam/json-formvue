@@ -22065,15 +22065,15 @@ var textfield_textvue_type_template_id_497b066a_staticRenderFns = []
 
 // CONCATENATED MODULE: ./src/components/fields/textfield_text.vue?vue&type=template&id=497b066a&
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"2f738cb0-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/extended_text_field.vue?vue&type=template&id=75c067d5&
-var extended_text_fieldvue_type_template_id_75c067d5_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('text-field',_vm._b({attrs:{"id":_vm.id,"rules":_vm.inputRules,"required":_vm.required,"requiredLabel":_vm.requiredLabel,"outlined":""},model:{value:(_vm.inputValue),callback:function ($$v) {_vm.inputValue=$$v},expression:"inputValue"}},'text-field',_vm.$attrs,false))}
-var extended_text_fieldvue_type_template_id_75c067d5_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"2f738cb0-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/extended_text_field.vue?vue&type=template&id=d9a146ba&
+var extended_text_fieldvue_type_template_id_d9a146ba_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('text-field',_vm._b({attrs:{"id":_vm.id,"rules":_vm.inputRules,"required":_vm.required,"requiredLabel":_vm.requiredLabel},model:{value:(_vm.inputValue),callback:function ($$v) {_vm.inputValue=$$v},expression:"inputValue"}},'text-field',_vm.$attrs,false))}
+var extended_text_fieldvue_type_template_id_d9a146ba_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/fields/extended_text_field.vue?vue&type=template&id=75c067d5&
+// CONCATENATED MODULE: ./src/components/fields/extended_text_field.vue?vue&type=template&id=d9a146ba&
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"2f738cb0-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/textfield.vue?vue&type=template&id=c4a50c0a&
-var textfieldvue_type_template_id_c4a50c0a_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('v-text-field',{ref:'ref-' + _vm.id,class:({
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"2f738cb0-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/textfield.vue?vue&type=template&id=85e9ec40&
+var textfieldvue_type_template_id_85e9ec40_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('v-text-field',_vm._b({ref:'ref-' + _vm.id,class:({
       'v-text-field--required': _vm.required,
       'v-text-field--optional': _vm.optional,
       'v-text-field--counting': _vm.counter,
@@ -22081,11 +22081,11 @@ var textfieldvue_type_template_id_c4a50c0a_render = function () {var _vm=this;va
     },
     'ondigo-input',
     'ondigo-textfield',
-    ("ondigo-input-" + _vm.id)),attrs:{"autocomplete":_vm.autocomplete,"clearable":_vm.clearable,"clear-icon":"mdi-close","color":_vm.color,"counter":_vm.counter,"debounce":"2000","disabled":_vm.disabled,"error-messages":_vm.errorMessages,"filled":_vm.filled,"outlined":_vm.outlined,"solor":_vm.solo,"hide-details":"auto","id":_vm.id,"inputmode":_vm.inputmode,"label":_vm.label,"loading":_vm.loading,"name":_vm.name,"placeholder":_vm.placeholder,"prefix":_vm.prefix,"value":_vm.value,"readonly":_vm.readonly,"required":_vm.required,"rules":_vm.rules,"suffix":_vm.suffix,"type":_vm.type,"validate-on-blur":""},on:{"blur":_vm.blur,"change":_vm.change,"click":_vm.click,"click:clear":_vm.clear,"focus":_vm.focus,"input":_vm.input}},[_c('template',{slot:"prepend-outer"},[_vm._t("prepend")],2),(_vm.optional)?_c('template',{slot:"prepend-inner"},[_c('span',{staticClass:"v-input__label-optional"},[_vm._v(_vm._s(_vm.optionalLabel))])]):_vm._e(),(_vm.required)?_c('template',{slot:"prepend-inner"},[_c('span',{staticClass:"v-input__label-required"},[_vm._v(_vm._s(_vm.requiredLabel))])]):_vm._e(),_c('template',{slot:"append"},[(_vm.isTouchDevice && !!_vm.$slots.info)?_c('div',{staticClass:"v-input__info",on:{"click":function($event){_vm.menu = !_vm.menu}}},[_c('v-icon',{attrs:{"color":"primary"}},[_vm._v("mdi-information-outline")])],1):_vm._e()]),_c('template',{slot:"append-outer"},[_vm._t("append")],2)],2)}
-var textfieldvue_type_template_id_c4a50c0a_staticRenderFns = []
+    ("ondigo-input-" + _vm.id)),attrs:{"clear-icon":"mdi-close","counter":_vm.counter,"debounce":"2000","error-messages":_vm.errorMessages,"hide-details":"auto","id":_vm.id,"inputmode":_vm.inputmode,"label":_vm.label,"loading":_vm.loading,"name":_vm.name,"prefix":_vm.prefix,"value":_vm.value,"required":_vm.required,"rules":_vm.rules,"suffix":_vm.suffix,"validate-on-blur":""},on:{"blur":_vm.blur,"change":_vm.change,"click":_vm.click,"click:clear":_vm.clear,"focus":_vm.focus,"input":_vm.input}},'v-text-field',_vm.$attrs,false),[_c('template',{slot:"prepend-outer"},[_vm._t("prepend")],2),(_vm.optional)?_c('template',{slot:"prepend-inner"},[_c('span',{staticClass:"v-input__label-optional"},[_vm._v(_vm._s(_vm.optionalLabel))])]):_vm._e(),(_vm.required)?_c('template',{slot:"prepend-inner"},[_c('span',{staticClass:"v-input__label-required"},[_vm._v(_vm._s(_vm.requiredLabel))])]):_vm._e(),_c('template',{slot:"append"},[(_vm.isTouchDevice && !!_vm.$slots.info)?_c('div',{staticClass:"v-input__info",on:{"click":function($event){_vm.menu = !_vm.menu}}},[_c('v-icon',{attrs:{"color":"primary"}},[_vm._v("mdi-information-outline")])],1):_vm._e()]),_c('template',{slot:"append-outer"},[_vm._t("append")],2)],2)}
+var textfieldvue_type_template_id_85e9ec40_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/fields/textfield.vue?vue&type=template&id=c4a50c0a&
+// CONCATENATED MODULE: ./src/components/fields/textfield.vue?vue&type=template&id=85e9ec40&
 
 // CONCATENATED MODULE: ./src/plugins/utils.js
 
@@ -22194,15 +22194,6 @@ var utils = {
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ var textfieldvue_type_script_lang_js_ = ({
   model: {
@@ -22211,22 +22202,6 @@ var utils = {
   },
   name: "TextField",
   props: {
-    autocomplete: {
-      type: String,
-      "default": null
-    },
-    clearable: {
-      type: Boolean,
-      "default": false
-    },
-    type: {
-      type: String,
-      "default": "text"
-    },
-    color: {
-      type: String,
-      "default": null
-    },
     counter: {
       type: [Number, String],
       "default": null,
@@ -22234,30 +22209,10 @@ var utils = {
         return /^\d+$/.test(value);
       }
     },
-    disabled: {
-      type: Boolean,
-      "default": false
-    },
     errorMessages: {
       type: String | null
     },
-    filled: {
-      type: Boolean,
-      "default": false
-    },
-    outlined: {
-      type: Boolean,
-      "default": false
-    },
-    solo: {
-      type: Boolean,
-      "default": false
-    },
     focused: {
-      type: Boolean,
-      "default": false
-    },
-    hidedetails: {
       type: Boolean,
       "default": false
     },
@@ -22296,10 +22251,6 @@ var utils = {
     prefix: {
       type: String,
       "default": null
-    },
-    readonly: {
-      type: Boolean,
-      "default": false
     },
     required: {
       type: Boolean,
@@ -24745,8 +24696,8 @@ var dirtyTypes = ['color', 'file', 'time', 'date', 'datetime-local', 'week', 'mo
 
 var textfield_component = normalizeComponent(
   fields_textfieldvue_type_script_lang_js_,
-  textfieldvue_type_template_id_c4a50c0a_render,
-  textfieldvue_type_template_id_c4a50c0a_staticRenderFns,
+  textfieldvue_type_template_id_85e9ec40_render,
+  textfieldvue_type_template_id_85e9ec40_staticRenderFns,
   false,
   null,
   null,
@@ -24763,7 +24714,6 @@ var textfield_component = normalizeComponent(
 installComponents_default()(textfield_component, {VIcon: components_VIcon_VIcon,VTextField: VTextField_VTextField})
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/extended_text_field.vue?vue&type=script&lang=js&
-//
 //
 //
 //
@@ -24837,8 +24787,8 @@ installComponents_default()(textfield_component, {VIcon: components_VIcon_VIcon,
 
 var extended_text_field_component = normalizeComponent(
   fields_extended_text_fieldvue_type_script_lang_js_,
-  extended_text_fieldvue_type_template_id_75c067d5_render,
-  extended_text_fieldvue_type_template_id_75c067d5_staticRenderFns,
+  extended_text_fieldvue_type_template_id_d9a146ba_render,
+  extended_text_fieldvue_type_template_id_d9a146ba_staticRenderFns,
   false,
   null,
   null,

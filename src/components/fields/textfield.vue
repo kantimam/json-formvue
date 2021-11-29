@@ -1,20 +1,13 @@
 <template>
   <v-text-field
-      :autocomplete="autocomplete"
       @blur="blur"
       @change="change"
-      :clearable="clearable"
       clear-icon="mdi-close"
       @click="click"
       @click:clear="clear"
-      :color="color"
       :counter="counter"
       debounce="2000"
-      :disabled="disabled"
       :error-messages="errorMessages"
-      :filled="filled"
-      :outlined="outlined"
-      :solor="solo"
       @focus="focus"
       hide-details="auto"
       :id="id"
@@ -23,15 +16,12 @@
       :label="label"
       :loading="loading"
       :name="name"
-      :placeholder="placeholder"
       :prefix="prefix"
       :value="value"
-      :readonly="readonly"
       :ref="'ref-' + id"
       :required="required"
       :rules="rules"
       :suffix="suffix"
-      :type="type"
       v-bind:class="
       ({
         'v-text-field--required': required,
@@ -43,6 +33,7 @@
       'ondigo-textfield',
       `ondigo-input-${id}`)
     "
+      v-bind="$attrs"
       validate-on-blur
   >
     <template slot="prepend-outer"><slot name="prepend"></slot></template>
@@ -79,22 +70,6 @@ export default {
   },
   name: "TextField",
   props: {
-    autocomplete: {
-      type: String,
-      default: null,
-    },
-    clearable: {
-      type: Boolean,
-      default: false,
-    },
-    type: {
-      type: String,
-      default: "text",
-    },
-    color: {
-      type: String,
-      default: null,
-    },
     counter: {
       type: [Number, String],
       default: null,
@@ -102,30 +77,11 @@ export default {
         return /^\d+$/.test(value);
       },
     },
-    disabled: {
-      type: Boolean,
-      default: false,
-    },
+
     errorMessages: {
       type: String | null,
     },
-    filled: {
-      type: Boolean,
-      default: false,
-    },
-    outlined: {
-      type: Boolean,
-      default: false,
-    },
-    solo: {
-      type: Boolean,
-      default: false,
-    },
     focused: {
-      type: Boolean,
-      default: false,
-    },
-    hidedetails: {
       type: Boolean,
       default: false,
     },
@@ -164,10 +120,6 @@ export default {
     prefix: {
       type: String,
       default: null,
-    },
-    readonly: {
-      type: Boolean,
-      default: false,
     },
     required: {
       type: Boolean,

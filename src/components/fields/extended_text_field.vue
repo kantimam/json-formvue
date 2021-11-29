@@ -6,7 +6,6 @@
     v-model="inputValue"
     :required="required"
     :requiredLabel="requiredLabel"
-    outlined
   />
 </template>
 
