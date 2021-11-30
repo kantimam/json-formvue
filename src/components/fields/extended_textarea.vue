@@ -23,7 +23,7 @@
     :readonly="readonly"
     :ref="'ref-' + id"
     :required="required"
-    :rules="validateField"
+    :rules="inputRules"
     :suffix="suffix"
     :type="type"
     v-bind:class="

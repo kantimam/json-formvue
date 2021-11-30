@@ -56,7 +56,7 @@ import {
   matchMaskPattern,
 } from "../../lib/pattern";
 import {
-  createValidatorList,
+  createInputRules,
   isRequired,
   getPlaceholder,
 } from "../../lib/util";
@@ -295,21 +295,8 @@ export default {
     locale() {
       return this.$store.getters.getCurrentSchema?.i18n;
     },
-    validateField() {
-      //if(!this.required) return []
-      let r = {};
-      const validate = [];
-
-      const propsValidationMap = createValidatorList(this.validators);
-      // combine default validation and custom validation
-      r = Object.assign(r, this.rules, propsValidationMap);
-      // create array for text-field syntax
-
-      for (const key in r) {
-        validate.push(r[key]);
-      }
-
-      return validate;
+    inputRules() {
+      return createInputRules(this.required, this.validators, this.properties);
     },
     inputBridge: {
       get() {

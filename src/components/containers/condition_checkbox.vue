@@ -14,7 +14,7 @@
 
     <child-dynamic-element
       v-for="element in elements"
-      :element="{ conditionalValue: selected, ...element }"
+      :element="{ conditionalValue: checked, ...element }"
       :key="element.identifier"
       :formName="formName"
     />

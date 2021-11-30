@@ -115,11 +115,6 @@ export default {
       type: Boolean,
       default: false,
     },
-
-    requiredLabel: {
-      type: String,
-      default: "required",
-    },
     rules: {
       type: [Object, Array],
       default() {
