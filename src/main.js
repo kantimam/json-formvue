@@ -17,7 +17,7 @@ import OnRadioGroup from './components/fields/radio_group.vue'
 import OnSelect from './components/fields/extended_select.vue'
 import AdvancedPassword from "./components/fields/advanced_password.vue";
 import FileUpload from "./components/fields/file_upload.vue";
-import StaticText from "./components/fields/static_text.vue";
+import StaticText from "./components/fields/static_text/static_text.vue";
 import OnCaptcha from "./components/fields/onCaptcha/onCaptcha.vue";
 import DatePicker from "./components/fields/datepicker.vue";
 import MaskedText from "./components/fields/textfield_masked.vue";

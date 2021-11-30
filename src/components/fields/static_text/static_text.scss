@@ -1,0 +1,9 @@
+div[type="StaticText"] {
+    & > .ondigo-text-label {
+        font-size: 24px;
+        margin-bottom: 0.25em;
+    }
+    & > .ondigo-text-content {
+        white-space: pre-wrap;
+    }
+}
