@@ -15,7 +15,7 @@
     :disabled="disabled"
     :filled="filled"
     :outlined="outlined"
-    :solor="solo"
+    :solo="solo"
     @focus="focus"
     :hide-details="hidedetails"
     :id="id"
@@ -35,7 +35,7 @@
       top: !dropDown,
       value: menu,
     }"
-    :name="name"
+    :name="multiple ? undefined : name"
     :no-data-text="nodatatext"
     :placeholder="placeholder"
     :prefix="prefix"
@@ -52,6 +52,7 @@
     v-model="inputValue"
     validate-on-blur
     :value="defaultValue"
+    :multiple="multiple"
   >
     <template slot="prepend-outer" v-if="!!$slots.prepend"
       ><slot name="prepend"></slot
@@ -189,6 +190,10 @@ export default {
     readonly: {
       type: Boolean,
       default: false,
+    },
+    multiple: {
+      type: Boolean,
+      default: false
     },
 
     properties: {
@@ -348,7 +353,7 @@ export default {
     },
     input(e) {
       this.$emit("input", e);
-      this.blur(e);
+      if (!this.multiple) this.blur(e);
     },
     onResize() {
       this.setMenuMaxHeight();
