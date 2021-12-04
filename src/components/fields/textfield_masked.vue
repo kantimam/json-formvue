@@ -185,7 +185,8 @@ export default {
       return isRequired(this.properties);
     },
     inputRules() {
-      return createInputRules(this.required, this.validators, this.properties);
+      if (this.rules) return this.rules;
+      else return createInputRules(this.required, this.validators, this.properties);
     },
     inputValue: {
       get() {

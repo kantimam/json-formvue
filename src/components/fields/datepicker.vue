@@ -17,6 +17,7 @@
           :filled="filled"
           :id="id"
           ref="masked"
+          :rules="inputRules"
           :class="`ondigo-input ondigo-textfield ondigo-input-${id}`"
           :inputBridge="inputBridge"
           v-bind="{
@@ -296,7 +297,7 @@ export default {
       return this.$store.getters.getCurrentSchema?.i18n;
     },
     inputRules() {
-      return createInputRules(this.required, this.validators, this.properties);
+      return createInputRules(this.required, this.validators, {...this.properties, 'pattern': this.maskPattern});
     },
     inputBridge: {
       get() {
