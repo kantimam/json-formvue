@@ -225,7 +225,6 @@ const createStore = (Vuex, initialState) => {
 
 
       async handleSuccessResponse(context, successJson) {
-        console.log("reached suc")
         if (!successJson) throw new Error('could not find valid json');
         console.log(successJson)
         // handle redirect on success
