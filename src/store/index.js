@@ -205,8 +205,7 @@ const createStore = (Vuex, initialState) => {
             )
             .then(json => context.dispatch('handleSuccessResponse', json))
             .catch(error => { // does not catch handleSuccessResponse errors
-              console.log("catche an error");
-              console.log(error);
+              console.error(error);
               context.commit(
                 'setFormResponse',
                 `<h1>request failed</h1>
@@ -226,7 +225,6 @@ const createStore = (Vuex, initialState) => {
 
       async handleSuccessResponse(context, successJson) {
         if (!successJson) throw new Error('could not find valid json');
-        console.log(successJson)
         // handle redirect on success
         if (successJson.status === 301 && successJson.redirectUri) {
           window.location = successJson.redirectUri;
