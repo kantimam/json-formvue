@@ -17,7 +17,7 @@
           :filled="filled"
           :id="id"
           ref="masked"
-          :rules="inputRules"
+          :rules="menu ? [] : inputRules"
           :class="`ondigo-input ondigo-textfield ondigo-input-${id}`"
           :inputBridge="inputBridge"
           v-bind="{
@@ -52,10 +52,6 @@
 </template>
 
 <script>
-import {
-  getMaskPatternToRegexMatches,
-  matchMaskPattern,
-} from "../../lib/pattern";
 import { createInputRules, isRequired, getPlaceholder } from "../../lib/util";
 import MaskedText from "./textfield_masked.vue";
 import {
@@ -79,6 +75,7 @@ export default {
   watch: {
     menu(val) {
       val && setTimeout(() => (this.activePicker = "YEAR"));
+      this.$store.commit("setFormDisabled", val);
     },
     date() {
       this.inputBridge = this.formatDate(this.date);

@@ -92,6 +92,9 @@ const createStore = (Vuex, initialState) => {
         state.formFinished = true;
         state.loading = false;
       },
+      setFormDisabled(state, disabled) {
+        state.formDisabled = disabled;
+      },
       setFormStep(state, formConfig) {
         const formConfigStep = formConfig.api.page.current > 0 ? formConfig.api.page.current : 1;
 
@@ -296,6 +299,7 @@ function initFormStateFromExtendedForm(formData) {
     id: formConfig.id,
     currentStep: formConfig.api.page.current || 1,
     loading: false,
+    formDisabled: false,
     errorCount: 0,
     nextStep: formConfig.api.page.nextPage || 1,
     previousStep: formConfig.api.page.previousPage || 1,

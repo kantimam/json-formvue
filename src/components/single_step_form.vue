@@ -6,6 +6,7 @@
     ref="form"
     :name="formConfig.identifier"
     :loading="loading"
+    :disabled="disabled"
   >
 	  <dynamic-element
 		  v-for="element in formConfig.elements"
@@ -21,6 +22,7 @@
       type="submit"
       :loading="loading"
       color="primary"
+      :disabled="disabled"
     >
       {{ nextButtonLabel }}
     </v-btn>
@@ -43,7 +45,9 @@ export default {
     loading() {
       return this.$store.state.loading;
     },
-
+    disabled() {
+      return this.$store.state.formDisabled;
+    },
     buttonLabels() {
       return (
         this.formConfig &&
