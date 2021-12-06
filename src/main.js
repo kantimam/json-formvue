@@ -12,7 +12,7 @@ import OnTextfieldPassword from "./components/fields/textfield_password.vue";
 import HiddenfieldHoneypot from "./components/fields/hiddenfield_honeypot.vue";
 import FormGridRow from "./components/containers/form_grid_row.vue";
 import OnTextArea from './components/fields/extended_textarea.vue'
-import OnCheckBox from './components/fields/checkbox.vue'
+import OnCheckBox from './components/fields/checkbox/checkbox.vue'
 import OnRadioGroup from './components/fields/radio_group.vue'
 import OnSelect from './components/fields/extended_select.vue'
 import AdvancedPassword from "./components/fields/advanced_password.vue";
@@ -28,7 +28,7 @@ import Telephone from './components/fields/textfield_telephone.vue';
 import Url from './components/fields/textfield_url.vue';
 import MultiSelect from './components/fields/extended_multiselect.vue';
 import MultiCheckbox from './components/fields/multi_checkbox.vue';
-
+import ContentElement from './components/fields/content_element/content_element.vue';
 
 export {
     FormVue,
@@ -56,7 +56,8 @@ export {
     Url,
     MultiSelect,
     MultiCheckbox,
-    DatePicker
+    DatePicker,
+    ContentElement
 }
 
 export default FormVue;

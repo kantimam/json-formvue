@@ -16,30 +16,16 @@
     hide-details="auto"
     off-icon="mdi-checkbox-blank"
   >
-    <div v-if="properties.link" class="ondigo-label-wrapper" slot="label">
-      <p class="ondigo-label-p">
-        {{ label }}
-        {{ " " }}
-        <a
-          @click.stop
-          class="ondigo-label-a"
-          v-bind:target="properties.openInNewWindow ? '_blank' : '_self'"
-          v-bind:data-overlay="properties.openInOverlay == 'true' ? 1 : null"
-          :href="properties.link"
-        >
-          {{ properties.linkText }}
-        </a>
-      </p>
-    </div>
+    <div v-if="properties.content" slot="label" class="ondigo-content-element-wrapper" v-html="properties.content" />
   </v-checkbox>
 </template>
 
 <script>
-import { createInputRules, isRequired } from "../../lib/util";
+import { createInputRules, isRequired } from "../../../lib/util";
 
 export default {
   name: "OnCheckbox",
-
+  
   props: {
     id: {
       type: String,
