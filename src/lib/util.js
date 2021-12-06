@@ -1,4 +1,5 @@
 import { getMaskPatternMapping, matchMaskPattern } from "./pattern";
+import { compareDateTimes, currentIsoTime, parseISODateFromPattern } from "./time";
 
 export const createInputName = (formName, inputName) => `tx_form_formframework[${formName}][${inputName}]`;
 
@@ -62,6 +63,7 @@ export const createValidatorByKey = (validatorKey, vArgs, errorMessage, context)
         TimeFormat: (inputValue) => !inputValue.length || validatorTimeFormat(inputValue, errorMessage || `the datetime must be in this format: '${vArgs.format}'`, vArgs),
         MaskComplete: (inputValue) => !inputValue.length || validatorMaskComplete(inputValue, errorMessage || `please complete the input`, vArgs, context),
         FileSize: (inputValue) => validatorFileSize(inputValue, errorMessage, vArgs),
+        DateInterval: (inputValue) => validatorDateInterval(inputValue, errorMessage, vArgs, context),
         default: null
     }
     return knownFunctions[validatorKey] || knownFunctions.default;
@@ -134,7 +136,21 @@ export const validatorMaskComplete = (string, invalidMessage, _vArgs, context) =
     return inputPlaceholderOcurrences - patternPlaceholderOcurrences <= 0 ? true : invalidMessage; // completed, when there are no placeholders left
 }
 
-export const validatorFileSize = (fileInput, invalidMessage, vArgs, context) => {
+export const validatorDateInterval = (string, invalidMessage, vArgs, context) => {
+    let { minDate, maxDate } = vArgs;
+    if ((!minDate || !minDate.length) && (!maxDate || !maxDate.length)) return true; // no validation required
+
+    const parsed = parseISODateFromPattern(string, context.pattern)
+    if (!parsed) return invalidMessage; // invalid date
+
+    // take 'today' into account
+    minDate = minDate && minDate === 'today' ? currentIsoTime() : minDate;
+    maxDate = maxDate && maxDate === 'today' ? currentIsoTime() : maxDate;
+
+    return (minDate && compareDateTimes(parsed, minDate) < 0) || (maxDate && compareDateTimes(parsed, maxDate) > 0) ? invalidMessage : true;
+}
+
+export const validatorFileSize = (fileInput, invalidMessage, vArgs) => {
     let valid = true;
     if (!fileInput) return valid // if fileList is empty this is valid
     const minSize = typo3FileSizeToBytes(vArgs.minimum);
@@ -191,45 +207,7 @@ export const createCallbackList = (callbacks) => {
 export const createCallbackByKey = (callbackKey, callbackArgs) => {
     // inject payload and error message into the selected validation function
     const knownCallbacks = {
-        default: testCallback(callbackArgs)
+        default: Promise.resolve(callbackArgs)
     }
     return knownCallbacks[callbackKey] || knownCallbacks.default;
 }
-
-export const testCallback=(callbackArgs)=>(
-    new Promise((res, rej)=>{
-        setTimeout(()=>{
-            if(Math.random()<0) return rej(`failed testCallback with the arguments ${JSON.stringify(callbackArgs)}`)
-            res(callbackArgs)
-        }, 1200);
-    })
-)
-
-const convertTimeFormatToPattern = (format, mapping) => {
-    const intermediaryPattern = Object.keys(mapping)
-        .map(c => c.concat('+'))
-        .join('|');
-    const intermediaryRegex = new RegExp(intermediaryPattern, 'g');
-    const matches = Array.from(format.matchAll(intermediaryRegex));
-
-    let cursor = 0;
-    const patternSegments = [];
-    const groupOrder = [];
-
-    matches.forEach(match => {
-        const str = match[0];
-        const len = str.length;
-        const firstChar = str[0];
-        const [_min, _max, minDigits] = mapping[firstChar];
-        groupOrder.push(firstChar);
-
-        const group = `([0-9]{${minDigits || len},${len}})`;
-        patternSegments.push(format.slice(cursor, match.index), group);
-        cursor = match.index + len;
-    });
-
-    if (cursor < format.length) patternSegments.push(format.slice(cursor, format.length));
-
-    return [patternSegments.join(''), groupOrder];
-}
-

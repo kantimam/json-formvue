@@ -56,13 +56,14 @@ import {
   getMaskPatternToRegexMatches,
   matchMaskPattern,
 } from "../../lib/pattern";
-import {
-  createInputRules,
-  isRequired,
-  getPlaceholder,
-} from "../../lib/util";
+import { createInputRules, isRequired, getPlaceholder } from "../../lib/util";
 import MaskedText from "./textfield_masked.vue";
-import { toIsoFormatWithOffset } from '../../lib/time';
+import {
+  compareDateTimes,
+  formatISODateFromPattern,
+  parseISODateFromPattern,
+  toIsoFormatWithOffset,
+} from "../../lib/time";
 
 export default {
   name: "DatePicker",
@@ -96,100 +97,64 @@ export default {
     save(date) {
       this.$refs.menu.save(date);
     },
-    /**
-     * @param {string} dateString The date string to split
-     * @returns {string[]} The date components
-     */
-    splitDate(dateString) {
-      return dateString.split("-").map((x) => Number(x));
-    },
-    /**
-     * @param {string} date The date string of the date to check.
-     * @param {number[]} maxDate A tuple of year, month and day.
-     * @returns {boolean} True, if 'date' is before, or the same as 'maxDate'.
-     */
-    isBeforeOrSame(date, maxDate) {
-      const [cYear, cMonth, cDay] = this.splitDate(date);
-
-      return maxDate[0] <= cYear && maxDate[1] <= cMonth && maxDate[2] <= cDay;
-    },
     formatDate(date) {
       if (!date) return null;
 
-      const [year, month, day] = this.splitDate(date);
       const now = new Date();
-      const substitutes = {
-        d: String(day).padStart(2, '0'),
-        m: String(month).padStart(2, '0'),
-        Y: year,
-        H: String(now.getHours()).padStart(2, '0'),
-        i: String(now.getMinutes()).padStart(2, '0'),
-      };
-
-      const format = this.maskPattern;
-      const matches = getMaskPatternToRegexMatches(format);
-
-      let cursor = 0;
-      const patternSegments = [];
-
-      matches.forEach((match) => {
-        const str = match[0];
-        const len = str.length;
-        const firstChar = str[0];
-
-        const group = firstChar in substitutes ? substitutes[firstChar] : str;
-        const preRemainder = format.slice(cursor, match.index);
-        patternSegments.push(preRemainder, group);
-        cursor = match.index + len;
+      return formatISODateFromPattern(date, this.maskPattern, {
+        // additional mappings for hour, minute
+        H: String(now.getHours()).padStart(2, "0"),
+        i: String(now.getMinutes()).padStart(2, "0"),
       });
-
-      if (cursor < format.length) {
-        const remainder = format.slice(cursor, format.length);
-        patternSegments.push(remainder);
-      }
-
-      return patternSegments.join("");
     },
     parseDate(date) {
       if (!date) return null;
 
-      const res = matchMaskPattern(date, this.maskPattern);
-      if (!res) return null;
+      return parseISODateFromPattern(
+        date,
+        this.maskPattern,
+        // Getter for date components
+        (match, order, identifier) => {
+          const idx = order.indexOf(identifier);
+          if (idx >= 0) return Number(match[idx + 1]); // order[i] = match[i + 1]
 
-      const [match, order] = res;
-      const now = new Date();
+          // default values
+          const now = new Date();
+          switch (identifier) {
+            case "Y":
+              return now.getFullYear();
+            case "m":
+              return now.getMonth() + 1;
+            case "d":
+              return now.getDate();
+            default:
+              return undefined;
+          }
+        },
+        // Interceptor, ensures invalid dates are not set
+        (year, month, day) => {
+          // check if date components are in allowed ranges
+          if (
+            month < 1 ||
+            month > 12 ||
+            day < 1 ||
+            day > 31 ||
+            year < 1000 ||
+            year > 9999
+          )
+            return [null, true]; // invalid date, override with null
 
-      const getOrDefault = (identifier, defaultSupplier) => {
-        const idx = order.indexOf(identifier);
-        return idx >= 0 ? Number(match[idx + 1]) : defaultSupplier(); // order[i] = match[i + 1]
-      };
-
-      const year = getOrDefault("Y", () => now.getFullYear());
-      const month = getOrDefault("m", () => now.getMonth() + 1);
-      const day = getOrDefault("d", () => now.getDate());
-
-      if (
-        month < 1 ||
-        month > 12 ||
-        day < 1 ||
-        day > 31 ||
-        year < 1000 ||
-        year > 9999
-      )
-        return null; // invalid date
-
-      if (
-        (this.minDate &&
-          this.isBeforeOrSame(this.minDate, [year, month, day])) ||
-        (this.maxDate && !this.isBeforeOrSame(this.maxDate, [year, month, day]))
-      ) {
-        return null; // date out of selectable range
-      }
-
-      return `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(
-        2,
-        "0"
-      )}`;
+          // check if date components are in given min/max range (to prevent vuetify error throw)
+          const inputDate = [year, month, day];
+          if (
+            (this.minDate && compareDateTimes(inputDate, this.minDate) < 0) /* date is before minDate */ ||
+            (this.maxDate && compareDateTimes(inputDate, this.maxDate) > 0) /* date is after maxDate */
+          ) {
+            return [null, true]; // date out of selectable range, override with null
+          }
+          return [null, false]; // do not override
+        }
+      );
     },
     currentDate() {
       return new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
@@ -256,7 +221,9 @@ export default {
       return !!this.properties.enableMask;
     },
     minDate() {
-      const validator = this.validators.find(v => v.identifier === 'DateInterval');
+      const validator = this.validators.find(
+        (v) => v.identifier === "DateInterval"
+      );
       if (!validator) return undefined;
 
       const minDate = validator.options?.minDate;
@@ -269,7 +236,9 @@ export default {
       return !isNaN(date) ? minDate : undefined;
     },
     maxDate() {
-      const validator = this.validators.find(v => v.identifier === 'DateInterval');
+      const validator = this.validators.find(
+        (v) => v.identifier === "DateInterval"
+      );
       if (!validator) return undefined;
 
       const maxDate = validator.options?.maxDate;
@@ -303,7 +272,10 @@ export default {
       return this.$store.getters.getCurrentSchema?.i18n;
     },
     inputRules() {
-      return createInputRules(this.required, this.validators, {...this.properties, 'pattern': this.maskPattern});
+      return createInputRules(this.required, this.validators, {
+        ...this.properties,
+        pattern: this.maskPattern,
+      });
     },
     inputBridge: {
       get() {
