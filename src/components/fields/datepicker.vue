@@ -256,24 +256,30 @@ export default {
       return !!this.properties.enableMask;
     },
     minDate() {
-      const minDate = this.properties.minDate;
+      const validator = this.validators.find(v => v.identifier === 'DateInterval');
+      if (!validator) return undefined;
+
+      const minDate = validator.options?.minDate;
       if (!minDate) return undefined;
 
-      if (minDate === "now") return this.currentDate();
+      if (minDate === "today") return this.currentDate();
 
       // parse date with date
       const date = Date.parse(minDate);
       return !isNaN(date) ? minDate : undefined;
     },
     maxDate() {
-      const minDate = this.properties.maxDate;
-      if (!minDate) return undefined;
+      const validator = this.validators.find(v => v.identifier === 'DateInterval');
+      if (!validator) return undefined;
 
-      if (minDate === "now") return this.currentDate();
+      const maxDate = validator.options?.maxDate;
+      if (!maxDate) return undefined;
+
+      if (maxDate === "today") return this.currentDate();
 
       // parse date with date
-      const date = Date.parse(minDate);
-      return !isNaN(date) ? minDate : undefined;
+      const date = Date.parse(maxDate);
+      return !isNaN(date) ? maxDate : undefined;
     },
     maskPattern() {
       if (!this.maskActive) return "";
