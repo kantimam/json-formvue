@@ -1,3 +1,4 @@
+import { replaceFormatSpecifiers } from '../lib/substition';
 import { createCallbackList } from '../lib/util';
 
 
@@ -54,6 +55,11 @@ const createStore = (Vuex, initialState) => {
           return errorHintWithCount;
         }
         return null;
+      },
+      getPageSummaryText: (state, getters) => {
+        const schema = getters.getCurrentSchema;
+        const text = schema?.api?.page?.pageSummaryText;
+        return text ? replaceFormatSpecifiers(text, schema.api.page.current, schema.api.page.pages) : null;
       }
     },
 

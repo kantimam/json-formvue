@@ -1,7 +1,7 @@
 <template>
   <div class="ondigo-multistep-form-wrapper">
-    <h2 class="mb-4 ondigo-form-header">
-      step {{ currentStep }} of {{ lastStep }}
+    <h2 v-if="pageSummaryLabel" class="mb-4 ondigo-form-header">
+      {{ pageSummaryLabel }}
     </h2>
     <v-form
       class="ondigo-multi-step-form ondigo-form"
@@ -73,6 +73,9 @@ export default {
     currentStep() {
       return this.$store.state.currentStep;
     },
+    pageSummaryLabel() {
+		  return this.$store.getters.getPageSummaryText;
+	  },
 
     lastStep() {
       return this.$store.state.lastStep;
