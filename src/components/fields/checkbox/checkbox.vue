@@ -16,7 +16,7 @@
     hide-details="auto"
     off-icon="mdi-checkbox-blank"
   >
-    <div v-if="properties.content" slot="label" class="ondigo-content-element-wrapper" v-html="properties.content" />
+    <div v-if="properties.content" ref="contentLabel" slot="label" class="ondigo-content-element-wrapper" v-html="properties.content" />
   </v-checkbox>
 </template>
 
@@ -25,7 +25,7 @@ import { createInputRules, isRequired } from "../../../lib/util";
 
 export default {
   name: "OnCheckbox",
-  
+
   props: {
     id: {
       type: String,
@@ -64,6 +64,15 @@ export default {
       type: Array,
       required: false,
     },
+  },
+
+  mounted() {
+    const contentLabel = this.$refs['contentLabel'];
+    if (contentLabel) {
+      /** @type HTMLElement[] */
+      const links = Array.from(contentLabel.querySelectorAll('a'));
+      links.forEach(elem => elem.addEventListener('click', e => e.stopPropagation()));
+    }
   },
 
   computed: {
