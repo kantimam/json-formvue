@@ -63,10 +63,6 @@
 import utils from "../../plugins/utils";
 
 export default {
-  model: {
-    prop: 'inputValue',
-    event: 'input'
-  },
   name: "TextField",
   props: {
     counter: {
