@@ -15888,6 +15888,137 @@ function _nonIterableSpread() {
 function _toConsumableArray(arr) {
   return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread();
 }
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.keys.js
+var es_object_keys = __webpack_require__("b64b");
+
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.filter.js
+var es_array_filter = __webpack_require__("4de4");
+
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.get-own-property-descriptor.js
+var es_object_get_own_property_descriptor = __webpack_require__("e439");
+
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.for-each.js
+var es_array_for_each = __webpack_require__("4160");
+
+// EXTERNAL MODULE: ./node_modules/core-js/modules/web.dom-collections.for-each.js
+var web_dom_collections_for_each = __webpack_require__("159b");
+
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.get-own-property-descriptors.js
+var es_object_get_own_property_descriptors = __webpack_require__("dbb4");
+
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.define-properties.js
+var es_object_define_properties = __webpack_require__("1d1c");
+
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.define-property.js
+var es_object_define_property = __webpack_require__("7a82");
+
+// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js
+
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/objectSpread2.js
+
+
+
+
+
+
+
+
+
+
+
+function ownKeys(object, enumerableOnly) {
+  var keys = Object.keys(object);
+
+  if (Object.getOwnPropertySymbols) {
+    var symbols = Object.getOwnPropertySymbols(object);
+
+    if (enumerableOnly) {
+      symbols = symbols.filter(function (sym) {
+        return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+      });
+    }
+
+    keys.push.apply(keys, symbols);
+  }
+
+  return keys;
+}
+
+function _objectSpread2(target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i] != null ? arguments[i] : {};
+
+    if (i % 2) {
+      ownKeys(Object(source), true).forEach(function (key) {
+        _defineProperty(target, key, source[key]);
+      });
+    } else if (Object.getOwnPropertyDescriptors) {
+      Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
+    } else {
+      ownKeys(Object(source)).forEach(function (key) {
+        Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+      });
+    }
+  }
+
+  return target;
+}
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.index-of.js
+var es_array_index_of = __webpack_require__("c975");
+
+// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/objectWithoutPropertiesLoose.js
+
+
+function _objectWithoutPropertiesLoose(source, excluded) {
+  if (source == null) return {};
+  var target = {};
+  var sourceKeys = Object.keys(source);
+  var key, i;
+
+  for (i = 0; i < sourceKeys.length; i++) {
+    key = sourceKeys[i];
+    if (excluded.indexOf(key) >= 0) continue;
+    target[key] = source[key];
+  }
+
+  return target;
+}
+// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/objectWithoutProperties.js
+
+
+
+function _objectWithoutProperties(source, excluded) {
+  if (source == null) return {};
+  var target = _objectWithoutPropertiesLoose(source, excluded);
+  var key, i;
+
+  if (Object.getOwnPropertySymbols) {
+    var sourceSymbolKeys = Object.getOwnPropertySymbols(source);
+
+    for (i = 0; i < sourceSymbolKeys.length; i++) {
+      key = sourceSymbolKeys[i];
+      if (excluded.indexOf(key) >= 0) continue;
+      if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue;
+      target[key] = source[key];
+    }
+  }
+
+  return target;
+}
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.promise.js
 var es_promise = __webpack_require__("e6cf");
 
@@ -15939,17 +16070,11 @@ var es_regexp_exec = __webpack_require__("ac1f");
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.replace.js
 var es_string_replace = __webpack_require__("5319");
 
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.keys.js
-var es_object_keys = __webpack_require__("b64b");
-
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.for-each.js
-var es_array_for_each = __webpack_require__("4160");
-
-// EXTERNAL MODULE: ./node_modules/core-js/modules/web.dom-collections.for-each.js
-var web_dom_collections_for_each = __webpack_require__("159b");
-
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.freeze.js
 var es_object_freeze = __webpack_require__("dca8");
+
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.map.js
+var es_array_map = __webpack_require__("d81d");
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.match-all.js
 var es_string_match_all = __webpack_require__("a1f0");
@@ -16162,9 +16287,6 @@ var es_regexp_to_string = __webpack_require__("25f0");
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.match.js
 var es_string_match = __webpack_require__("466d");
 
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.map.js
-var es_array_map = __webpack_require__("d81d");
-
 // CONCATENATED MODULE: ./src/lib/pattern.js
 
 
@@ -16304,86 +16426,6 @@ function matchMaskPattern(input, maskPattern) {
   if (!match) return null;
   return [match, order];
 }
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.filter.js
-var es_array_filter = __webpack_require__("4de4");
-
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.get-own-property-descriptor.js
-var es_object_get_own_property_descriptor = __webpack_require__("e439");
-
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.get-own-property-descriptors.js
-var es_object_get_own_property_descriptors = __webpack_require__("dbb4");
-
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.define-properties.js
-var es_object_define_properties = __webpack_require__("1d1c");
-
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.define-property.js
-var es_object_define_property = __webpack_require__("7a82");
-
-// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js
-
-function _defineProperty(obj, key, value) {
-  if (key in obj) {
-    Object.defineProperty(obj, key, {
-      value: value,
-      enumerable: true,
-      configurable: true,
-      writable: true
-    });
-  } else {
-    obj[key] = value;
-  }
-
-  return obj;
-}
-// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/objectSpread2.js
-
-
-
-
-
-
-
-
-
-
-
-function ownKeys(object, enumerableOnly) {
-  var keys = Object.keys(object);
-
-  if (Object.getOwnPropertySymbols) {
-    var symbols = Object.getOwnPropertySymbols(object);
-
-    if (enumerableOnly) {
-      symbols = symbols.filter(function (sym) {
-        return Object.getOwnPropertyDescriptor(object, sym).enumerable;
-      });
-    }
-
-    keys.push.apply(keys, symbols);
-  }
-
-  return keys;
-}
-
-function _objectSpread2(target) {
-  for (var i = 1; i < arguments.length; i++) {
-    var source = arguments[i] != null ? arguments[i] : {};
-
-    if (i % 2) {
-      ownKeys(Object(source), true).forEach(function (key) {
-        _defineProperty(target, key, source[key]);
-      });
-    } else if (Object.getOwnPropertyDescriptors) {
-      Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
-    } else {
-      ownKeys(Object(source)).forEach(function (key) {
-        Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
-      });
-    }
-  }
-
-  return target;
-}
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.pad-start.js
 var es_string_pad_start = __webpack_require__("4d90");
 
@@ -16398,9 +16440,6 @@ var es_date_to_string = __webpack_require__("0d03");
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.date.now.js
 var es_date_now = __webpack_require__("6eba");
-
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.index-of.js
-var es_array_index_of = __webpack_require__("c975");
 
 // CONCATENATED MODULE: ./src/lib/time.js
 
@@ -16858,6 +16897,7 @@ var createCallbackByKey = function createCallbackByKey(callbackKey, callbackArgs
 
 
 
+var _excluded = ["formData", "callbacksMap"];
 
 
 
@@ -16872,12 +16912,22 @@ var createCallbackByKey = function createCallbackByKey(callbackKey, callbackArgs
 
 
 
-/* look into splitting single step and multi step into different modules and conditionally adding them if needed */
+
+
+
+/**
+ *
+ * @param Vuex
+ * @param {Object} initialState
+ * @param {Object} initialState.formData - object containing the form configuration.
+ * @param {Object} [initialState.callbacksMap={}] - object containing form submit callbacks.
+ * @returns {Promise<unknown[]>|*}
+ */
 
 var store_createStore = function createStore(Vuex, initialState) {
   var debug = "production" !== 'production';
   return new Vuex.Store({
-    state: initFormStateFromExtendedForm(initialState),
+    state: initState(initialState),
     strict: debug,
     getters: {
       getCurrentStep: function getCurrentStep(state) {
@@ -17084,7 +17134,6 @@ var store_createStore = function createStore(Vuex, initialState) {
             return context.dispatch('handleSuccessResponse', json);
           })["catch"](function (error) {
             // does not catch handleSuccessResponse errors
-            console.error(error);
             context.commit('setFormResponse', "<h1>request failed</h1>\n                <h2>".concat(error.message, "</h2>"));
             context.commit('setLoading', false);
           });
@@ -17096,12 +17145,14 @@ var store_createStore = function createStore(Vuex, initialState) {
       },
       handleSuccessResponse: function handleSuccessResponse(context, successJson) {
         return _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
-          return regeneratorRuntime.wrap(function _callee$(_context2) {
+          var callbacksList, _callbacksList;
+
+          return regeneratorRuntime.wrap(function _callee$(_context) {
             while (1) {
-              switch (_context2.prev = _context2.next) {
+              switch (_context.prev = _context.next) {
                 case 0:
                   if (successJson) {
-                    _context2.next = 2;
+                    _context.next = 2;
                     break;
                   }
 
@@ -17109,45 +17160,47 @@ var store_createStore = function createStore(Vuex, initialState) {
 
                 case 2:
                   if (!(successJson.status === 301 && successJson.redirectUri)) {
-                    _context2.next = 5;
+                    _context.next = 5;
                     break;
                   }
 
                   window.location = successJson.redirectUri;
-                  return _context2.abrupt("return");
+                  return _context.abrupt("return");
 
                 case 5:
                   if (!(successJson.status === 200 && successJson.content)) {
-                    _context2.next = 18;
+                    _context.next = 19;
                     break;
                   }
 
-                  if (!(successJson.callbacks && successJson.callbacks.length)) {
-                    _context2.next = 15;
+                  _context.prev = 6;
+                  callbacksList = generateCallbacksList(context.state.callbacksMap, successJson.api.callbacks);
+
+                  if (!callbacksList) {
+                    _context.next = 11;
                     break;
                   }
 
-                  _context2.prev = 7;
-                  _context2.next = 10;
-                  return context.dispatch('handleSuccessCallbacks', successJson.callbacks);
+                  _context.next = 11;
+                  return callbacksList;
 
-                case 10:
-                  _context2.next = 15;
+                case 11:
+                  _context.next = 16;
                   break;
 
-                case 12:
-                  _context2.prev = 12;
-                  _context2.t0 = _context2["catch"](7);
-                  return _context2.abrupt("return", context.commit('setFormResponse', "<h1>one of the form callbacks failed, check console for more info</h1>\n                  <h2>".concat(_context2.t0, "</h2>")));
+                case 13:
+                  _context.prev = 13;
+                  _context.t0 = _context["catch"](6);
+                  context.commit('setFormResponse', "<h1>one of the form callbacks failed, check console for more info</h1>\n                <h2>".concat(_context.t0, "</h2>"));
 
-                case 15:
+                case 16:
                   context.commit('setFormResponse', successJson.content);
                   context.commit('setFormFinished');
-                  return _context2.abrupt("return");
+                  return _context.abrupt("return");
 
-                case 18:
+                case 19:
                   if (!successJson.api) {
-                    _context2.next = 30;
+                    _context.next = 34;
                     break;
                   }
 
@@ -17155,74 +17208,61 @@ var store_createStore = function createStore(Vuex, initialState) {
                     context.commit('setModelErrors', successJson.api.errors);
                   }
 
-                  if (!(successJson.api.callbacks && successJson.api.callbacks.length)) {
-                    _context2.next = 29;
+                  _context.prev = 21;
+                  _callbacksList = generateCallbacksList(context.state.callbacksMap, successJson.api.callbacks);
+                  console.log(_callbacksList);
+
+                  if (!_callbacksList) {
+                    _context.next = 27;
                     break;
                   }
 
-                  _context2.prev = 21;
-                  _context2.next = 24;
-                  return context.dispatch('handleSuccessCallbacks', successJson.api.callbacks);
+                  _context.next = 27;
+                  return _callbacksList;
 
-                case 24:
-                  _context2.next = 29;
+                case 27:
+                  _context.next = 33;
                   break;
 
-                case 26:
-                  _context2.prev = 26;
-                  _context2.t1 = _context2["catch"](21);
-                  return _context2.abrupt("return", context.commit('setFormResponse', "<h1>one of the step callbacks failed, check console for more info</h1>\n                  <h2>".concat(_context2.t1, "</h2>")));
-
                 case 29:
+                  _context.prev = 29;
+                  _context.t1 = _context["catch"](21);
+                  console.log(_context.t1);
+                  context.commit('setFormResponse', "<h1>one of the step callbacks failed, check console for more info</h1>\n                <h2>".concat(_context.t1, "</h2>"));
+
+                case 33:
                   context.commit('setFormStep', successJson);
 
-                case 30:
+                case 34:
                 case "end":
-                  return _context2.stop();
+                  return _context.stop();
               }
             }
-          }, _callee, null, [[7, 12], [21, 26]]);
-        }))();
-      },
-      handleSuccessCallbacks: function handleSuccessCallbacks(_context, callbackArray) {
-        return _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
-          var createdCallbackList;
-          return regeneratorRuntime.wrap(function _callee2$(_context3) {
-            while (1) {
-              switch (_context3.prev = _context3.next) {
-                case 0:
-                  createdCallbackList = createCallbackList(callbackArray);
-
-                  if (!(!createdCallbackList || !createdCallbackList.length)) {
-                    _context3.next = 3;
-                    break;
-                  }
-
-                  return _context3.abrupt("return");
-
-                case 3:
-                  return _context3.abrupt("return", Promise.all(createdCallbackList));
-
-                case 4:
-                case "end":
-                  return _context3.stop();
-              }
-            }
-          }, _callee2);
+          }, _callee, null, [[6, 13], [21, 29]]);
         }))();
       }
     }
   });
 };
-/* should maybe generate error handlers and finishers once on start instead of in every input component */
+/**
+ *
+ * @param formData
+ * @param callbacksMap
+ * @param rest
+ * @returns {(*&{currentStep: number, lastStep: ([]|*|number), callbacksMap: {}, previousStep: ((function(*=): *)|*|number), formDisabled: boolean, nextStep: number, formFinished: boolean, id, loading: boolean, steps: {schema: unknown[], formId, wasSubmitted: boolean, inputModel: {}, formAction: string, formStepError: null}[], errorCount: number, formResponse: null})|{}}
+ */
 
-/* try to flatten the data as much as possible. Repeating data is fine */
 
+function initState(_ref) {
+  var formData = _ref.formData,
+      _ref$callbacksMap = _ref.callbacksMap,
+      callbacksMap = _ref$callbacksMap === void 0 ? {} : _ref$callbacksMap,
+      rest = _objectWithoutProperties(_ref, _excluded);
 
-function initFormStateFromExtendedForm(formData) {
   var formConfig = formData.configuration;
   if (!formConfig) return {};
-  var state = {
+
+  var state = _objectSpread2({
     id: formConfig.id,
     currentStep: formConfig.api.page.current || 1,
     loading: false,
@@ -17233,8 +17273,10 @@ function initFormStateFromExtendedForm(formData) {
     lastStep: formConfig.api.page.pages || 1,
     formResponse: null,
     formFinished: false,
-    steps: [createStepFromFormConfig(formConfig)]
-  };
+    steps: [createStepFromFormConfig(formConfig)],
+    callbacksMap: Object.freeze(callbacksMap)
+  }, rest);
+
   return state;
 }
 
@@ -17274,6 +17316,31 @@ function inputArrayFromSchema(elements) {
     } else inputs.push(element);
   });
   return inputs;
+}
+/**
+ *
+ * @param knownCallbacks
+ * @param requestedCallbacks
+ * @returns {Promise<unknown[]> | undefined}
+ */
+
+
+function generateCallbacksList() {
+  var knownCallbacks = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var requestedCallbacks = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
+  if (!knownCallbacks) return;
+  var callbacks = requestedCallbacks.map(function (callbackDescription) {
+    var foundCallback = knownCallbacks[callbackDescription.action];
+    if (foundCallback) return foundCallback(callbackDescription.arguments);
+  });
+  var defaultCallback = knownCallbacks['defaultCallback'];
+
+  if (defaultCallback) {
+    callbacks.push(defaultCallback());
+  }
+
+  if (!callbacks || !callbacks.length) return;
+  return Promise.all(callbacks);
 }
 
 /* harmony default export */ var store = (store_createStore);
@@ -17807,45 +17874,6 @@ function install(Vue) {
       }
     }
   });
-}
-// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/objectWithoutPropertiesLoose.js
-
-
-function _objectWithoutPropertiesLoose(source, excluded) {
-  if (source == null) return {};
-  var target = {};
-  var sourceKeys = Object.keys(source);
-  var key, i;
-
-  for (i = 0; i < sourceKeys.length; i++) {
-    key = sourceKeys[i];
-    if (excluded.indexOf(key) >= 0) continue;
-    target[key] = source[key];
-  }
-
-  return target;
-}
-// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/objectWithoutProperties.js
-
-
-
-function _objectWithoutProperties(source, excluded) {
-  if (source == null) return {};
-  var target = _objectWithoutPropertiesLoose(source, excluded);
-  var key, i;
-
-  if (Object.getOwnPropertySymbols) {
-    var sourceSymbolKeys = Object.getOwnPropertySymbols(source);
-
-    for (i = 0; i < sourceSymbolKeys.length; i++) {
-      key = sourceSymbolKeys[i];
-      if (excluded.indexOf(key) >= 0) continue;
-      if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue;
-      target[key] = source[key];
-    }
-  }
-
-  return target;
 }
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.create.js
 var es_object_create = __webpack_require__("b8bf");
@@ -18633,7 +18661,7 @@ var service_Service = /*#__PURE__*/function () {
 
 
 
-var _excluded = ["preset"];
+var presets_excluded = ["preset"];
 // Preset
  // Utilities
 
@@ -18658,7 +18686,7 @@ var presets_Presets = /*#__PURE__*/function (_Service) {
 
     var _userPreset$preset = userPreset.preset,
         globalPreset = _userPreset$preset === void 0 ? {} : _userPreset$preset,
-        preset = _objectWithoutProperties(userPreset, _excluded);
+        preset = _objectWithoutProperties(userPreset, presets_excluded);
 
     if (globalPreset.preset != null) {
       consoleWarn('Global presets do not support the **preset** option, it can be safely omitted');

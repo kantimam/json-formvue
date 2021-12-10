@@ -2,13 +2,21 @@ import { replaceFormatSpecifiers } from '../lib/substitution';
 import { createCallbackList } from '../lib/util';
 
 
-/* look into splitting single step and multi step into different modules and conditionally adding them if needed */
+
+/**
+ *
+ * @param Vuex
+ * @param {Object} initialState
+ * @param {Object} initialState.formData - object containing the form configuration.
+ * @param {Object} [initialState.callbacksMap={}] - object containing form submit callbacks.
+ * @returns {Promise<unknown[]>|*}
+ */
 const createStore = (Vuex, initialState) => {
   const debug = process.env.NODE_ENV !== 'production'
 
 
   return new Vuex.Store({
-    state: initFormStateFromExtendedForm(initialState),
+    state: initState(initialState),
     strict: debug,
 
     getters: {
@@ -207,22 +215,21 @@ const createStore = (Vuex, initialState) => {
             method: "POST",
             body: formData
           })
-            .then(response => {
-              if (response.status === 200 || response.status === 301) return response.json();
-              throw new Error('invalid status code. Only 200 and 301 allowed');
-            }
-            )
-            .then(json => context.dispatch('handleSuccessResponse', json))
-            .catch(error => { // does not catch handleSuccessResponse errors
-              console.error(error);
-              context.commit(
-                'setFormResponse',
-                `<h1>request failed</h1>
+              .then(response => {
+                    if (response.status === 200 || response.status === 301) return response.json();
+                    throw new Error('invalid status code. Only 200 and 301 allowed');
+                  }
+              )
+              .then(json => context.dispatch('handleSuccessResponse', json))
+              .catch(error => { // does not catch handleSuccessResponse errors
+                context.commit(
+                    'setFormResponse',
+                    `<h1>request failed</h1>
                 <h2>${error.message}</h2>`
-              );
-              context.commit('setLoading', false);
+                );
+                context.commit('setLoading', false);
 
-            })
+              })
 
         } else {
           requestAnimationFrame(function () {
@@ -242,18 +249,18 @@ const createStore = (Vuex, initialState) => {
 
         // handle replace content with success message
         if (successJson.status === 200 && successJson.content) {
-          if (successJson.callbacks && successJson.callbacks.length) {
-            // if the response contains callbacks handle them before proceeding
-            try {
-              await context.dispatch('handleSuccessCallbacks', successJson.callbacks);
-            } catch (error) {
-              // if a callback fails return early
-              return context.commit(
+          // if the response contains callbacks handle them before proceeding
+          try {
+            const callbacksList=generateCallbacksList(context.state.callbacksMap, successJson.api.callbacks);
+            if(callbacksList){
+              await callbacksList;
+            }
+          } catch (error) {
+            context.commit(
                 'setFormResponse',
                 `<h1>one of the form callbacks failed, check console for more info</h1>
-                  <h2>${error}</h2>`
-              );
-            }
+                <h2>${error}</h2>`
+            );
           }
           context.commit('setFormResponse', successJson.content);
           context.commit('setFormFinished');
@@ -265,16 +272,19 @@ const createStore = (Vuex, initialState) => {
           if (successJson.api.status = 'failure') {
             context.commit('setModelErrors', successJson.api.errors);
           }
-          if (successJson.api.callbacks && successJson.api.callbacks.length) {
-            try {
-              await context.dispatch('handleSuccessCallbacks', successJson.api.callbacks);
-            } catch (error) {
-              return context.commit(
+          try {
+            const callbacksList=generateCallbacksList(context.state.callbacksMap, successJson.api.callbacks);
+            console.log(callbacksList)
+            if(callbacksList){
+              await callbacksList;
+            }
+          } catch (error) {
+            console.log(error)
+            context.commit(
                 'setFormResponse',
                 `<h1>one of the step callbacks failed, check console for more info</h1>
-                  <h2>${error}</h2>`
-              );
-            }
+                <h2>${error}</h2>`
+            );
           }
           context.commit('setFormStep', successJson);
         }
@@ -282,22 +292,19 @@ const createStore = (Vuex, initialState) => {
       },
 
 
-      async handleSuccessCallbacks(_context, callbackArray) {
-        const createdCallbackList = createCallbackList(callbackArray);
-        if (!createdCallbackList || !createdCallbackList.length) return;
-
-        return Promise.all(createdCallbackList);
-
-      }
     }
 
   })
 }
 
-/* should maybe generate error handlers and finishers once on start instead of in every input component */
-/* try to flatten the data as much as possible. Repeating data is fine */
-
-function initFormStateFromExtendedForm(formData) {
+/**
+ *
+ * @param formData
+ * @param callbacksMap
+ * @param rest
+ * @returns {(*&{currentStep: number, lastStep: ([]|*|number), callbacksMap: {}, previousStep: ((function(*=): *)|*|number), formDisabled: boolean, nextStep: number, formFinished: boolean, id, loading: boolean, steps: {schema: unknown[], formId, wasSubmitted: boolean, inputModel: {}, formAction: string, formStepError: null}[], errorCount: number, formResponse: null})|{}}
+ */
+function initState({formData, callbacksMap={}, ...rest}) {
   const formConfig = formData.configuration;
   if (!formConfig) return {}
 
@@ -315,7 +322,10 @@ function initFormStateFromExtendedForm(formData) {
 
     steps: [
       createStepFromFormConfig(formConfig)
-    ]
+    ],
+    callbacksMap: Object.freeze(callbacksMap),
+    ...rest
+
   }
   return state;
 }
@@ -362,6 +372,30 @@ function inputArrayFromSchema(elements) {
 
   return inputs;
 }
+
+
+/**
+ *
+ * @param knownCallbacks
+ * @param requestedCallbacks
+ * @returns {Promise<unknown[]> | undefined}
+ */
+function generateCallbacksList(knownCallbacks={}, requestedCallbacks=[]) {
+  if(!knownCallbacks) return;
+  const callbacks=requestedCallbacks.map(callbackDescription=>{
+    const foundCallback=knownCallbacks[callbackDescription.action];
+    if(foundCallback) return foundCallback(callbackDescription.arguments);
+  })
+  const defaultCallback=knownCallbacks['defaultCallback'];
+  if(defaultCallback){
+    callbacks.push(defaultCallback());
+  }
+  if (!callbacks || !callbacks.length) return;
+
+  return Promise.all(callbacks);
+
+}
+
 
 
 export default createStore;
