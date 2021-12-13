@@ -2,6 +2,28 @@ import { replaceFormatSpecifiers } from '../lib/substitution';
 import { createCallbackList } from '../lib/util';
 
 
+/**
+ *
+ * @param knownCallbacks
+ * @param requestedCallbacks
+ * @returns {Promise<unknown[]> | undefined}
+ */
+function generateCallbacksList(knownCallbacks={}, requestedCallbacks=[]) {
+  if(!knownCallbacks) return;
+  const callbacks=requestedCallbacks.map(callbackDescription=>{
+    const foundCallback=knownCallbacks[callbackDescription.action];
+    if(foundCallback) return foundCallback(callbackDescription.arguments);
+  })
+  const defaultCallback=knownCallbacks['defaultCallback'];
+  if(defaultCallback){
+    callbacks.push(defaultCallback());
+  }
+  if (!callbacks || !callbacks.length) return;
+
+  return Promise.all(callbacks);
+
+}
+
 
 /**
  *
@@ -251,7 +273,8 @@ const createStore = (Vuex, initialState) => {
         if (successJson.status === 200 && successJson.content) {
           // if the response contains callbacks handle them before proceeding
           try {
-            const callbacksList=generateCallbacksList(context.state.callbacksMap, successJson.api.callbacks);
+            const requestedCallbacks=successJson.api.callbacks || successJson.callbacks;
+            const callbacksList=generateCallbacksList(context.state.callbacksMap, requestedCallbacks);
             if(callbacksList){
               await callbacksList;
             }
@@ -273,8 +296,8 @@ const createStore = (Vuex, initialState) => {
             context.commit('setModelErrors', successJson.api.errors);
           }
           try {
-            const callbacksList=generateCallbacksList(context.state.callbacksMap, successJson.api.callbacks);
-            console.log(callbacksList)
+            const requestedCallbacks=successJson.api.callbacks || successJson.callbacks;
+            const callbacksList=generateCallbacksList(context.state.callbacksMap, requestedCallbacks);
             if(callbacksList){
               await callbacksList;
             }
@@ -290,7 +313,6 @@ const createStore = (Vuex, initialState) => {
         }
 
       },
-
 
     }
 
@@ -372,30 +394,6 @@ function inputArrayFromSchema(elements) {
 
   return inputs;
 }
-
-
-/**
- *
- * @param knownCallbacks
- * @param requestedCallbacks
- * @returns {Promise<unknown[]> | undefined}
- */
-function generateCallbacksList(knownCallbacks={}, requestedCallbacks=[]) {
-  if(!knownCallbacks) return;
-  const callbacks=requestedCallbacks.map(callbackDescription=>{
-    const foundCallback=knownCallbacks[callbackDescription.action];
-    if(foundCallback) return foundCallback(callbackDescription.arguments);
-  })
-  const defaultCallback=knownCallbacks['defaultCallback'];
-  if(defaultCallback){
-    callbacks.push(defaultCallback());
-  }
-  if (!callbacks || !callbacks.length) return;
-
-  return Promise.all(callbacks);
-
-}
-
 
 
 export default createStore;

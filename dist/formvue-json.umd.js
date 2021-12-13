@@ -16070,6 +16070,9 @@ function _asyncToGenerator(fn) {
     });
   };
 }
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.map.js
+var es_array_map = __webpack_require__("d81d");
+
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.concat.js
 var es_array_concat = __webpack_require__("99af");
 
@@ -16081,9 +16084,6 @@ var es_string_replace = __webpack_require__("5319");
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.freeze.js
 var es_object_freeze = __webpack_require__("dca8");
-
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.map.js
-var es_array_map = __webpack_require__("d81d");
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.match-all.js
 var es_string_match_all = __webpack_require__("a1f0");
@@ -16926,12 +16926,37 @@ var _excluded = ["formData", "callbacksMap"];
 
 /**
  *
+ * @param knownCallbacks
+ * @param requestedCallbacks
+ * @returns {Promise<unknown[]> | undefined}
+ */
+
+function generateCallbacksList() {
+  var knownCallbacks = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var requestedCallbacks = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
+  if (!knownCallbacks) return;
+  var callbacks = requestedCallbacks.map(function (callbackDescription) {
+    var foundCallback = knownCallbacks[callbackDescription.action];
+    if (foundCallback) return foundCallback(callbackDescription.arguments);
+  });
+  var defaultCallback = knownCallbacks['defaultCallback'];
+
+  if (defaultCallback) {
+    callbacks.push(defaultCallback());
+  }
+
+  if (!callbacks || !callbacks.length) return;
+  return Promise.all(callbacks);
+}
+/**
+ *
  * @param Vuex
  * @param {Object} initialState
  * @param {Object} initialState.formData - object containing the form configuration.
  * @param {Object} [initialState.callbacksMap={}] - object containing form submit callbacks.
  * @returns {Promise<unknown[]>|*}
  */
+
 
 var store_createStore = function createStore(Vuex, initialState) {
   var debug = "production" !== 'production';
@@ -17154,7 +17179,7 @@ var store_createStore = function createStore(Vuex, initialState) {
       },
       handleSuccessResponse: function handleSuccessResponse(context, successJson) {
         return _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
-          var callbacksList, _callbacksList;
+          var requestedCallbacks, callbacksList, _requestedCallbacks, _callbacksList;
 
           return regeneratorRuntime.wrap(function _callee$(_context) {
             while (1) {
@@ -17178,38 +17203,39 @@ var store_createStore = function createStore(Vuex, initialState) {
 
                 case 5:
                   if (!(successJson.status === 200 && successJson.content)) {
-                    _context.next = 19;
+                    _context.next = 20;
                     break;
                   }
 
                   _context.prev = 6;
-                  callbacksList = generateCallbacksList(context.state.callbacksMap, successJson.api.callbacks);
+                  requestedCallbacks = successJson.api.callbacks || successJson.callbacks;
+                  callbacksList = generateCallbacksList(context.state.callbacksMap, requestedCallbacks);
 
                   if (!callbacksList) {
-                    _context.next = 11;
+                    _context.next = 12;
                     break;
                   }
 
-                  _context.next = 11;
+                  _context.next = 12;
                   return callbacksList;
 
-                case 11:
-                  _context.next = 16;
+                case 12:
+                  _context.next = 17;
                   break;
 
-                case 13:
-                  _context.prev = 13;
+                case 14:
+                  _context.prev = 14;
                   _context.t0 = _context["catch"](6);
                   context.commit('setFormResponse', "<h1>one of the form callbacks failed, check console for more info</h1>\n                <h2>".concat(_context.t0, "</h2>"));
 
-                case 16:
+                case 17:
                   context.commit('setFormResponse', successJson.content);
                   context.commit('setFormFinished');
                   return _context.abrupt("return");
 
-                case 19:
+                case 20:
                   if (!successJson.api) {
-                    _context.next = 34;
+                    _context.next = 35;
                     break;
                   }
 
@@ -17217,37 +17243,37 @@ var store_createStore = function createStore(Vuex, initialState) {
                     context.commit('setModelErrors', successJson.api.errors);
                   }
 
-                  _context.prev = 21;
-                  _callbacksList = generateCallbacksList(context.state.callbacksMap, successJson.api.callbacks);
-                  console.log(_callbacksList);
+                  _context.prev = 22;
+                  _requestedCallbacks = successJson.api.callbacks || successJson.callbacks;
+                  _callbacksList = generateCallbacksList(context.state.callbacksMap, _requestedCallbacks);
 
                   if (!_callbacksList) {
-                    _context.next = 27;
+                    _context.next = 28;
                     break;
                   }
 
-                  _context.next = 27;
+                  _context.next = 28;
                   return _callbacksList;
 
-                case 27:
-                  _context.next = 33;
+                case 28:
+                  _context.next = 34;
                   break;
 
-                case 29:
-                  _context.prev = 29;
-                  _context.t1 = _context["catch"](21);
+                case 30:
+                  _context.prev = 30;
+                  _context.t1 = _context["catch"](22);
                   console.log(_context.t1);
                   context.commit('setFormResponse', "<h1>one of the step callbacks failed, check console for more info</h1>\n                <h2>".concat(_context.t1, "</h2>"));
 
-                case 33:
+                case 34:
                   context.commit('setFormStep', successJson);
 
-                case 34:
+                case 35:
                 case "end":
                   return _context.stop();
               }
             }
-          }, _callee, null, [[6, 13], [21, 29]]);
+          }, _callee, null, [[6, 14], [22, 30]]);
         }))();
       }
     }
@@ -17325,31 +17351,6 @@ function inputArrayFromSchema(elements) {
     } else inputs.push(element);
   });
   return inputs;
-}
-/**
- *
- * @param knownCallbacks
- * @param requestedCallbacks
- * @returns {Promise<unknown[]> | undefined}
- */
-
-
-function generateCallbacksList() {
-  var knownCallbacks = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  var requestedCallbacks = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
-  if (!knownCallbacks) return;
-  var callbacks = requestedCallbacks.map(function (callbackDescription) {
-    var foundCallback = knownCallbacks[callbackDescription.action];
-    if (foundCallback) return foundCallback(callbackDescription.arguments);
-  });
-  var defaultCallback = knownCallbacks['defaultCallback'];
-
-  if (defaultCallback) {
-    callbacks.push(defaultCallback());
-  }
-
-  if (!callbacks || !callbacks.length) return;
-  return Promise.all(callbacks);
 }
 
 /* harmony default export */ var store = (store_createStore);
