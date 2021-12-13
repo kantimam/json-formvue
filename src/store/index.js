@@ -297,6 +297,8 @@ const createStore = (Vuex, initialState) => {
         if (successJson.api) {
           if (successJson.api.status === 'failure') {
             context.commit('setModelErrors', successJson.api.errors);
+            context.commit('setLoading', false);
+            return;
           }else{
             try {
               const requestedCallbacks=successJson?.api?.callbacks || successJson?.callbacks;

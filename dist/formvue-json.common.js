@@ -17233,57 +17233,57 @@ var store_createStore = function createStore(Vuex, initialState) {
 
                 case 22:
                   if (!successJson.api) {
-                    _context.next = 41;
+                    _context.next = 43;
                     break;
                   }
 
                   if (!(successJson.api.status === 'failure')) {
-                    _context.next = 27;
+                    _context.next = 29;
                     break;
                   }
 
                   context.commit('setModelErrors', successJson.api.errors);
-                  _context.next = 41;
-                  break;
+                  context.commit('setLoading', false);
+                  return _context.abrupt("return");
 
-                case 27:
-                  _context.prev = 27;
+                case 29:
+                  _context.prev = 29;
                   _requestedCallbacks = (successJson === null || successJson === void 0 ? void 0 : (_successJson$api2 = successJson.api) === null || _successJson$api2 === void 0 ? void 0 : _successJson$api2.callbacks) || (successJson === null || successJson === void 0 ? void 0 : successJson.callbacks);
 
                   if (!_requestedCallbacks) {
-                    _context.next = 34;
+                    _context.next = 36;
                     break;
                   }
 
                   _callbacksList = generateCallbacksList(context.state.callbacksMap, _requestedCallbacks);
 
                   if (!_callbacksList) {
-                    _context.next = 34;
+                    _context.next = 36;
                     break;
                   }
 
-                  _context.next = 34;
+                  _context.next = 36;
                   return _callbacksList;
 
-                case 34:
-                  _context.next = 40;
+                case 36:
+                  _context.next = 42;
                   break;
 
-                case 36:
-                  _context.prev = 36;
-                  _context.t1 = _context["catch"](27);
+                case 38:
+                  _context.prev = 38;
+                  _context.t1 = _context["catch"](29);
                   console.log(_context.t1);
                   context.commit('setFormResponse', "<h1>one of the step callbacks failed, check console for more info</h1>\n                <h2>".concat(_context.t1, "</h2>"));
 
-                case 40:
+                case 42:
                   context.commit('setFormStep', successJson);
 
-                case 41:
+                case 43:
                 case "end":
                   return _context.stop();
               }
             }
-          }, _callee, null, [[6, 15], [27, 36]]);
+          }, _callee, null, [[6, 15], [29, 38]]);
         }))();
       }
     }
