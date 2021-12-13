@@ -273,12 +273,15 @@ const createStore = (Vuex, initialState) => {
         if (successJson.status === 200 && successJson.content) {
           // if the response contains callbacks handle them before proceeding
           try {
-            const requestedCallbacks=successJson.api.callbacks || successJson.callbacks;
-            const callbacksList=generateCallbacksList(context.state.callbacksMap, requestedCallbacks);
-            if(callbacksList){
-              await callbacksList;
+            const requestedCallbacks=successJson?.api?.callbacks || successJson?.callbacks;
+            if(requestedCallbacks){
+              const callbacksList=generateCallbacksList(context.state.callbacksMap, requestedCallbacks);
+              if(callbacksList){
+                await callbacksList;
+              }
             }
           } catch (error) {
+            console.log(error)
             context.commit(
                 'setFormResponse',
                 `<h1>one of the form callbacks failed, check console for more info</h1>
@@ -292,24 +295,27 @@ const createStore = (Vuex, initialState) => {
 
         // handle loading next page after finishing callbacks if needed
         if (successJson.api) {
-          if (successJson.api.status = 'failure') {
+          if (successJson.api.status === 'failure') {
             context.commit('setModelErrors', successJson.api.errors);
-          }
-          try {
-            const requestedCallbacks=successJson.api.callbacks || successJson.callbacks;
-            const callbacksList=generateCallbacksList(context.state.callbacksMap, requestedCallbacks);
-            if(callbacksList){
-              await callbacksList;
-            }
-          } catch (error) {
-            console.log(error)
-            context.commit(
-                'setFormResponse',
-                `<h1>one of the step callbacks failed, check console for more info</h1>
+          }else{
+            try {
+              const requestedCallbacks=successJson?.api?.callbacks || successJson?.callbacks;
+              if(requestedCallbacks){
+                const callbacksList=generateCallbacksList(context.state.callbacksMap, requestedCallbacks);
+                if(callbacksList){
+                  await callbacksList;
+                }
+              }
+            } catch (error) {
+              console.log(error)
+              context.commit(
+                  'setFormResponse',
+                  `<h1>one of the step callbacks failed, check console for more info</h1>
                 <h2>${error}</h2>`
-            );
+              );
+            }
+            context.commit('setFormStep', successJson);
           }
-          context.commit('setFormStep', successJson);
         }
 
       },

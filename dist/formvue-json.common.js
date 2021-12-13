@@ -17170,7 +17170,7 @@ var store_createStore = function createStore(Vuex, initialState) {
       },
       handleSuccessResponse: function handleSuccessResponse(context, successJson) {
         return _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
-          var requestedCallbacks, callbacksList, _requestedCallbacks, _callbacksList;
+          var _successJson$api, requestedCallbacks, callbacksList, _successJson$api2, _requestedCallbacks, _callbacksList;
 
           return regeneratorRuntime.wrap(function _callee$(_context) {
             while (1) {
@@ -17194,77 +17194,96 @@ var store_createStore = function createStore(Vuex, initialState) {
 
                 case 5:
                   if (!(successJson.status === 200 && successJson.content)) {
-                    _context.next = 20;
+                    _context.next = 22;
                     break;
                   }
 
                   _context.prev = 6;
-                  requestedCallbacks = successJson.api.callbacks || successJson.callbacks;
-                  callbacksList = generateCallbacksList(context.state.callbacksMap, requestedCallbacks);
+                  requestedCallbacks = (successJson === null || successJson === void 0 ? void 0 : (_successJson$api = successJson.api) === null || _successJson$api === void 0 ? void 0 : _successJson$api.callbacks) || (successJson === null || successJson === void 0 ? void 0 : successJson.callbacks);
 
-                  if (!callbacksList) {
-                    _context.next = 12;
+                  if (!requestedCallbacks) {
+                    _context.next = 13;
                     break;
                   }
 
-                  _context.next = 12;
+                  callbacksList = generateCallbacksList(context.state.callbacksMap, requestedCallbacks);
+
+                  if (!callbacksList) {
+                    _context.next = 13;
+                    break;
+                  }
+
+                  _context.next = 13;
                   return callbacksList;
 
-                case 12:
-                  _context.next = 17;
+                case 13:
+                  _context.next = 19;
                   break;
 
-                case 14:
-                  _context.prev = 14;
+                case 15:
+                  _context.prev = 15;
                   _context.t0 = _context["catch"](6);
+                  console.log(_context.t0);
                   context.commit('setFormResponse', "<h1>one of the form callbacks failed, check console for more info</h1>\n                <h2>".concat(_context.t0, "</h2>"));
 
-                case 17:
+                case 19:
                   context.commit('setFormResponse', successJson.content);
                   context.commit('setFormFinished');
                   return _context.abrupt("return");
 
-                case 20:
+                case 22:
                   if (!successJson.api) {
-                    _context.next = 35;
+                    _context.next = 41;
                     break;
                   }
 
-                  if (successJson.api.status = 'failure') {
-                    context.commit('setModelErrors', successJson.api.errors);
+                  if (!(successJson.api.status === 'failure')) {
+                    _context.next = 27;
+                    break;
                   }
 
-                  _context.prev = 22;
-                  _requestedCallbacks = successJson.api.callbacks || successJson.callbacks;
+                  context.commit('setModelErrors', successJson.api.errors);
+                  _context.next = 41;
+                  break;
+
+                case 27:
+                  _context.prev = 27;
+                  _requestedCallbacks = (successJson === null || successJson === void 0 ? void 0 : (_successJson$api2 = successJson.api) === null || _successJson$api2 === void 0 ? void 0 : _successJson$api2.callbacks) || (successJson === null || successJson === void 0 ? void 0 : successJson.callbacks);
+
+                  if (!_requestedCallbacks) {
+                    _context.next = 34;
+                    break;
+                  }
+
                   _callbacksList = generateCallbacksList(context.state.callbacksMap, _requestedCallbacks);
 
                   if (!_callbacksList) {
-                    _context.next = 28;
+                    _context.next = 34;
                     break;
                   }
 
-                  _context.next = 28;
+                  _context.next = 34;
                   return _callbacksList;
 
-                case 28:
-                  _context.next = 34;
+                case 34:
+                  _context.next = 40;
                   break;
 
-                case 30:
-                  _context.prev = 30;
-                  _context.t1 = _context["catch"](22);
+                case 36:
+                  _context.prev = 36;
+                  _context.t1 = _context["catch"](27);
                   console.log(_context.t1);
                   context.commit('setFormResponse', "<h1>one of the step callbacks failed, check console for more info</h1>\n                <h2>".concat(_context.t1, "</h2>"));
 
-                case 34:
+                case 40:
                   context.commit('setFormStep', successJson);
 
-                case 35:
+                case 41:
                 case "end":
                   return _context.stop();
               }
             }
-          }, _callee, null, [[6, 14], [22, 30]]);
+          }, _callee, null, [[6, 15], [27, 36]]);
         }))();
       }
     }
