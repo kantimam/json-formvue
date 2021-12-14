@@ -48,7 +48,7 @@ export default {
       return createRequiredLabel(this.validators);
     },
     inputRules() {
-      return createInputRules(this.required, this.validators, this.properties);
+      return createInputRules(this.required, this.validators, this.properties, true);
     },
     inputValue: {
       get() {

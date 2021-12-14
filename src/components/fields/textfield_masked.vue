@@ -181,12 +181,9 @@ export default {
 
       return mask;
     },
-    required() {
-      return isRequired(this.properties);
-    },
     inputRules() {
       if (this.rules && Array.isArray(this.rules)) return this.rules;
-      else return createInputRules(this.required, this.validators, this.properties);
+      else return createInputRules(this.required, this.validators, this.properties, true);
     },
     inputValue: {
       get() {

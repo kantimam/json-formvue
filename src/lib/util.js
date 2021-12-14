@@ -21,7 +21,7 @@ export const createRequiredLabel = (validators) => {
     );
 }
 
-export const createInputRules = (required, validators, context, overwriteRequiredRules=true) => {
+export const createInputRules = (required, validators, context, overwriteRequiredRules) => {
     const rules = createValidatorsMap(validators, context);
     if(required && overwriteRequiredRules){
         if(rules.required) delete rules.required;
