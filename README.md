@@ -22,7 +22,7 @@ If you already use Vuex you need to look into merging your store with formvues s
 
 # Configure
 
-Here is a minimal configuration to get you up and running.
+## Here is a minimal configuration to get you up and running.
 
 ```js
 import {
@@ -53,23 +53,148 @@ const formVueConfig=window.extendedforms['form-vue-form'];
 // Then mount the instance into your wrapper in this case formVueWrapper
 
 new Vue({
-    vuetify: new Vuetify({}),  // configure Vuetify to match your theme needs
-    store: createStore(Vuex, { // create a pre filled Vuex store
-        formData: formSchema, // this is the important part
-        callbacksMap: {} // this is optional and will be explained later
-    }),
-    render: h => h(FormVue, {
-        props: {
-            formSchema,
-            componentsMap: { // register the components you want to use here
-                Text: OnTextfieldText,
-            },
-            fieldPropsOverwrite: {
-                filled: true // force all vuetify inputs to be variant=filled
-            }
-        }
-    })
-}).$mount(formVueWrapper);
+			vuetify: new Vuetify({}),  // configure Vuetify to match your theme needs
+			store: createStore(Vuex, { // create a pre filled Vuex store
+				formData: formSchema, // this is the important part
+				callbacksMap: {} // this is optional and will be explained later
+			}),
+			render: h => h(FormVue, {
+				props: {
+					formSchema,
+					componentsMap: { // register the components you want to use here
+						Text: OnTextfieldText,
+					},
+					fieldPropsOverwrite: {
+						filled: true // force all vuetify inputs to be variant=filled
+					}
+				}
+			})
+		}).$mount(formVueWrapper);
+
+
+```
+
+## Here is a typical configuration for Typo3 projects.
+
+```js 
+
+import {
+	FormVue,
+	createStore,
+	OnTextfieldText,
+	OnTextfieldEmail,
+	OnTextfieldNumber,
+	HiddenfieldHoneypot,
+	OnCheckBox,
+	OnSelect,
+	FileUpload,
+	StaticText,
+	OnCaptcha,
+	OnTextArea,
+	Telephone
+} from 'formvue-json';
+
+import Vue from 'vue';
+import Vuex from 'vuex';
+import Vuetify from 'vuetify/lib/framework';
+
+// configure Vue
+Vue.use(Vuex);
+Vue.use(Vuetify);
+
+
+/*
+    In this case we want to initialize all the forms of the current page at once
+*/
+export default function initFormVue() {
+	const forms = document.querySelectorAll('[data-id]');  // select all the DOM Nodes that are supposed to contain a form later
+	const formConfigsMap = window.extendedforms; // get the configuration for all the pages forms. It is an object / dictionary [formId]: formConfig
+
+	if (!formConfigsMap) return; // if the page did not contain a form configuration return early
+
+	// create your vuetify theme once
+	const theme = {
+		primary: '#637785',
+		error: '#e4052f',
+	};
+	const vuetifyConfig = {
+		theme: {
+			dark: false,
+			themes: {
+				light: theme,
+				dark: theme
+			}
+		}
+	};
+
+    // optional!
+	const callbacksMap={ // a dictionary of callbacks that can be fired after finishing a form step or the entire form
+		GoogleAnalytics: async(cbArgs)=>{
+			if (typeof gtag === 'function') {
+				const {eventAction="Rückruf", eventCategory="Rückruf beantragen", eventLabel="Overlay"}=cbArgs;
+				return gtag('event', eventAction, {'event_category': eventCategory, 'event_label': eventLabel});
+			}
+		}
+	}
+
+    // optional!
+	function scrollToError(inputWithError) {
+		if (inputWithError) {
+			let scrollTarget = inputWithError.getBoundingClientRect().top + window.scrollY;
+			const offset = 100;
+			scrollTarget -= offset;
+			scrollTarget = scrollTarget > 0 ? scrollTarget : 0;
+			window.scrollTo({
+				top: scrollTarget,
+				behavior: 'smooth'
+			});
+		}
+	}
+
+    // iterate over all DOM Nodes that are supposed to be forms and try creating a form for them
+	for (let form of forms) {
+        // in this case we store the id of the form configuration inside the data-id propery of each DOM Node
+		const id = form.getAttribute('data-id');
+
+		if (!id) continue;
+		const formSchema = formConfigsMap[id]; // try finding the form configuration with the specified id inside the formConfigsMap
+		if (!formSchema || !formSchema.configuration) continue; // if we dont find a valid configuration object skip this form
+
+
+		new Vue({
+			vuetify: new Vuetify(vuetifyConfig),
+			store: createStore(Vuex, {
+				formData: formSchema,
+				callbacksMap: callbacksMap
+			}),
+			render: h => h(FormVue, {
+				props: {
+					formSchema,
+					componentsMap: {
+						Text: OnTextfieldText,
+						Email: OnTextfieldEmail,
+						Number: OnTextfieldNumber,
+						Honeypot: HiddenfieldHoneypot,
+						Checkbox: OnCheckBox,
+						LinkedCheckbox: OnCheckBox,
+						SingleSelect: OnSelect,
+						FileUpload: FileUpload,
+						StaticText: StaticText,
+						Textarea: OnTextArea,
+						Oncaptcha: OnCaptcha,
+						Telephone: Telephone
+					},
+					fieldPropsOverwrite: {
+						filled: true // force all vuetify inputs to be variant=filled
+					},
+					scrollToErrorCallback: scrollToError // add a function that gets called when the form error summary is clicked
+				}
+			})
+		}).$mount(form);
+
+
+	}
+}
 
 
 ```
