@@ -29,7 +29,7 @@
     v-bind:class="
       ({
         'v-text-field--required': required,
-        'v-text-field--optional': optional,
+        'v-text-field--optional': !required,
         'v-text-field--counting': counter,
         'v-text-field--updated': updated,
       },
@@ -40,11 +40,11 @@
     validate-on-blur
   >
     <template slot="prepend-outer"><slot name="prepend"></slot></template>
-    <template slot="prepend-inner" v-if="optional"
-      ><span class="v-input__label-optional">{{
-        optionalLabel
-      }}</span></template
-    >
+    <template slot="prepend-inner" v-if="!required">
+		<span class="v-input__label-optional">
+			{{optionalLabel }}
+		</span>
+	</template>
     <template slot="prepend-inner" v-if="required"
       ><span class="v-input__label-required">{{
         requiredLabel

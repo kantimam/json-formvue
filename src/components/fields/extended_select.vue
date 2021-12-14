@@ -46,7 +46,7 @@
     :suffix="suffix"
     v-bind:class="{
       'v-text-field--required': required,
-      'v-text-field--optional': optional,
+      'v-text-field--optional': !required,
       'v-text-field--updated': updated,
     }"
     v-model="inputValue"
@@ -60,6 +60,11 @@
     <template slot="prepend-item" v-if="!!$slots.info"
       ><div class="v-select__dropdown-info"><slot name="info"></slot></div
     ></template>
+	  <template slot="prepend-inner" v-if="!required">
+		<span class="v-input__label-optional">
+			{{optionalLabel }}
+		</span>
+	  </template>
     <template slot="prepend-inner" v-if="required"
       ><span class="v-input__label-required">{{
         requiredLabel

@@ -16,7 +16,7 @@
     validate-on-blur
   >
     <template slot="prepend-outer"><slot name="prepend"></slot></template>
-    <template slot="prepend-inner" v-if="optional">
+    <template slot="prepend-inner" v-if="!required">
       <span class="v-input__label-optional">
         {{ optionalLabel }}
       </span>
@@ -211,7 +211,7 @@ export default {
       if (!this.maskActive) return;
 
       if (this.masked && this.masked.destroy) this.destroyMask();
-      
+
       this.masked = IMask(this.element, this.mask);
     },
     destroyMask() {
