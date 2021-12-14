@@ -11,5 +11,8 @@ It is tailored to be used with another Typo3 library "extended formframework" bu
 - Install the newest version of formvue-json via npm.
 
 Install command while this repository is private
+
 `npm i git+https://formvue-json:yb77VU1nUyPe9Sx5FpDo@git.ondigo.io/proj-typo3/formvue-json.git#1.5.3`
+
+
 
