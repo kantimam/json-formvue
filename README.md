@@ -24,7 +24,7 @@ If you already use Vuex you need to look into merging your store with formvues s
 
 Here is a minimal configuration to get you up and running.
 
-```
+```js
 import {
 	FormVue, // required
 	createStore, // required
