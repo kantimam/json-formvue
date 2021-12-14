@@ -53,23 +53,23 @@ const formVueConfig=window.extendedforms['form-vue-form'];
 // Then mount the instance into your wrapper in this case formVueWrapper
 
 new Vue({
-			vuetify: new Vuetify({}),  // configure Vuetify to match your theme needs
-			store: createStore(Vuex, { // create a pre filled Vuex store
-				formData: formSchema, // this is the important part
-				callbacksMap: {} // this is optional and will be explained later
-			}),
-			render: h => h(FormVue, {
-				props: {
-					formSchema,
-					componentsMap: { // register the components you want to use here
-						Text: OnTextfieldText,
-					},
-					fieldPropsOverwrite: {
-						filled: true // force all vuetify inputs to be variant=filled
-					}
-				}
-			})
-		}).$mount(formVueWrapper);
+	vuetify: new Vuetify({}),  // configure Vuetify to match your theme needs
+	store: createStore(Vuex, { // create a pre filled Vuex store
+		formData: formSchema, // this is the important part
+		callbacksMap: {} // this is optional and will be explained later
+	}),
+	render: h => h(FormVue, {
+		props: {
+			formSchema,
+			componentsMap: { // register the components you want to use here
+				Text: OnTextfieldText,
+			},
+			fieldPropsOverwrite: {
+				filled: true // force all vuetify inputs to be variant=filled
+			}
+		}
+	})
+}).$mount(formVueWrapper);
 
 
 ```
