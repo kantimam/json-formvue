@@ -10,7 +10,7 @@
     :outlined="outlined"
     :solor="solo"
     @focus="focus"
-    hide-details="auto"
+    :hide-details="hidedetails"
     :id="id"
     :inputmode="inputmode"
     :label="label"
