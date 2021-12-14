@@ -16656,8 +16656,15 @@ var createRequiredLabel = function createRequiredLabel(validators) {
   return notEmptyValidator && notEmptyValidator.errorMessage || "required";
 };
 var createInputRules = function createInputRules(required, validators, context) {
+  var overwriteRequiredRules = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : true;
   var rules = util_createValidatorsMap(validators, context);
-  if (!!required) rules.require = function (v) {
+
+  if (required && overwriteRequiredRules) {
+    if (rules.required) delete rules.required;
+    if (rules.NotEmpty) delete rules.NotEmpty;
+  }
+
+  if (!!required) rules.required = function (v) {
     return !!v;
   };
   var rulesArray = [];
@@ -25957,8 +25964,8 @@ var form_grid_row_component = normalizeComponent(
 
 installComponents_default()(form_grid_row_component, {VRow: VRow})
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1706ad7c-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/extended_textarea.vue?vue&type=template&id=7e4567cd&
-var extended_textareavue_type_template_id_7e4567cd_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('v-textarea',{ref:'ref-' + _vm.id,class:({
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1706ad7c-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/extended_textarea.vue?vue&type=template&id=07d8bb5c&
+var extended_textareavue_type_template_id_07d8bb5c_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('v-textarea',{ref:'ref-' + _vm.id,class:({
         'v-text-field--required': _vm.required,
         'v-text-field--optional': !_vm.required,
         'v-text-field--counting': _vm.counter,
@@ -25966,11 +25973,11 @@ var extended_textareavue_type_template_id_7e4567cd_render = function () {var _vm
       },
       'ondigo-input',
       'ondigo-textarea',
-      ("ondigo-input-" + _vm.id)),attrs:{"autocomplete":_vm.autocomplete,"auto-size":"","color":_vm.color,"counter":_vm.counter,"disabled":_vm.disabled,"filled":_vm.filled,"outlined":_vm.outlined,"solor":_vm.solo,"hide-details":_vm.hidedetails,"id":_vm.id,"inputmode":_vm.inputmode,"label":_vm.label,"loading":_vm.loading,"error-messages":_vm.inputError,"name":_vm.name,"placeholder":_vm.placeholder,"prefix":_vm.prefix,"readonly":_vm.readonly,"required":_vm.required,"rules":_vm.inputRules,"suffix":_vm.suffix,"type":_vm.type,"validate-on-blur":""},on:{"blur":_vm.blur,"focus":_vm.focus},model:{value:(_vm.inputValue),callback:function ($$v) {_vm.inputValue=$$v},expression:"inputValue"}},[_c('template',{slot:"prepend-outer"},[_vm._t("prepend")],2),(!_vm.required)?_c('template',{slot:"prepend-inner"},[_c('span',{staticClass:"v-input__label-optional"},[_vm._v(" "+_vm._s(_vm.optionalLabel)+" ")])]):_vm._e(),(_vm.required)?_c('template',{slot:"prepend-inner"},[_c('span',{staticClass:"v-input__label-required"},[_vm._v(_vm._s(_vm.requiredLabel))])]):_vm._e(),_c('template',{slot:"append-outer"},[_vm._t("append")],2)],2)}
-var extended_textareavue_type_template_id_7e4567cd_staticRenderFns = []
+      ("ondigo-input-" + _vm.id)),attrs:{"autocomplete":_vm.autocomplete,"auto-size":"","color":_vm.color,"counter":_vm.counter,"disabled":_vm.disabled,"filled":_vm.filled,"outlined":_vm.outlined,"solo":_vm.solo,"hide-details":"auto","id":_vm.id,"inputmode":_vm.inputmode,"label":_vm.label,"loading":_vm.loading,"error-messages":_vm.inputError,"name":_vm.name,"placeholder":_vm.placeholder,"prefix":_vm.prefix,"readonly":_vm.readonly,"required":_vm.required,"rules":_vm.inputRules,"suffix":_vm.suffix,"type":_vm.type,"validate-on-blur":""},on:{"blur":_vm.blur,"focus":_vm.focus},model:{value:(_vm.inputValue),callback:function ($$v) {_vm.inputValue=$$v},expression:"inputValue"}},[_c('template',{slot:"prepend-outer"},[_vm._t("prepend")],2),(!_vm.required)?_c('template',{slot:"prepend-inner"},[_c('span',{staticClass:"v-input__label-optional"},[_vm._v(" "+_vm._s(_vm.optionalLabel)+" ")])]):_vm._e(),(_vm.required)?_c('template',{slot:"prepend-inner"},[_c('span',{staticClass:"v-input__label-required"},[_vm._v(_vm._s(_vm.requiredLabel))])]):_vm._e(),_c('template',{slot:"append-outer"},[_vm._t("append")],2)],2)}
+var extended_textareavue_type_template_id_07d8bb5c_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/fields/extended_textarea.vue?vue&type=template&id=7e4567cd&
+// CONCATENATED MODULE: ./src/components/fields/extended_textarea.vue?vue&type=template&id=07d8bb5c&
 
 // EXTERNAL MODULE: ./node_modules/vuetify/src/components/VTextarea/VTextarea.sass
 var VTextarea = __webpack_require__("1681");
@@ -26326,8 +26333,8 @@ var VTextarea_baseMixins = mixins(VTextField_VTextField);
 
 var extended_textarea_component = normalizeComponent(
   fields_extended_textareavue_type_script_lang_js_,
-  extended_textareavue_type_template_id_7e4567cd_render,
-  extended_textareavue_type_template_id_7e4567cd_staticRenderFns,
+  extended_textareavue_type_template_id_07d8bb5c_render,
+  extended_textareavue_type_template_id_07d8bb5c_staticRenderFns,
   false,
   null,
   null,
