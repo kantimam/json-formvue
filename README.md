@@ -217,7 +217,7 @@ export default function initFormVue() {
 
 #### FormSchema
 contains the entire configuration for the current form but for now we only care about the key elements
-```ts 
+```typescript
 interface FormSchema {
 	...
 	elemenents: ElementDefinition[];
@@ -229,14 +229,14 @@ type ElementDefinition=InputElementDefinition | ContainerElementDefinition | Con
 
 
 #### ComponentsMap
-```ts
+```typescript
 interface ComponentsMap {
 	[elementIdentifier: string]: VueComponent
 }
 ```
 
 #### ScrollToErrorCallback
-```ts
+```typescript
 function scrollToErrorCallback(firstInputWithError: HTMLElement){
 	// use the provided HTMLElement to lead the user to the first error.
 	// you focus it, scroll it into view, make it blink or implement your own idea
@@ -254,7 +254,7 @@ Some of these functions will be re exported from the library root but otherwise 
 
 ### createInputRules
 takes the validators found in the InputElementDefinition and generates an array of [VuetifyValidationRules](https://vuetifyjs.com/en/components/forms/#rules).
-```ts 
+```typescript
 const createInputRules = (required: boolean, validators: ElementValidators, context: ElementProperties): VuetifyValidationRules => {
 	const rules = createValidatorsMap(validators, context);
 	if (!!required) rules.require = (v) => !!v
@@ -267,18 +267,18 @@ const createInputRules = (required: boolean, validators: ElementValidators, cont
 ```
 
 ### createRequiredLabel
-```ts 
-	implement
+```typescript
+implement
 ```
 
 #### isRequired
-```ts 
-	implement
+```typescript
+implement
 ```
 
 #### getPlaceholder
-```ts 
-	implement
+```typescript
+implement
 ```
 
 
