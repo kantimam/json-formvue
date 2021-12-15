@@ -20,7 +20,7 @@ Most noteably this will install Vue version 2.6.11, Vuetify 2.4.0 and Vuex 3.4.0
 Already having different versions of these libraries in your project could lead to problems.   
 If you already use Vuex you need to look into merging your store with formvues store yourself.
 
-# Configure
+# Configuration
 
 ## Here is a minimal configuration to get you up and running.
 
@@ -198,3 +198,54 @@ export default function initFormVue() {
 
 
 ```
+
+# API
+
+## FormVue
+
+### Properties
+
+| name | type | required | default |
+| ------ | ------ | ------ | ------ |
+| formSchema | FormSchema | true |  |
+| componentsMap | ComponentsMap | true | {} |
+| appName | String | false | tx_form_formframework |
+| fieldPropsOverwrite | Vue Component Props | false | {} |
+| scrollToErrorCallback | ScrollToErrorCallback | false | noOp=()=>{} |
+
+### Types
+
+#### FormSchema
+contains the entire configuration for the current form but for now we only care about the key elements
+```ts 
+interface FormSchema {
+	...;
+	elemenents: ElementDefinition[]
+	...;
+}
+
+interface ElementDefinition {
+	
+}
+```
+
+
+#### ComponentsMap
+```ts
+interface ComponentsMap {
+	[elementIdentifier: String]: VueComponent
+}
+```
+
+#### ScrollToErrorCallback
+```ts
+function scrollToErrorCallback(firstInputWithError: HTMLElement){
+	// use the provided HTMLElement to lead the user to the first error.
+	// you focus it, scroll it into view, make it blink or implement your own idea
+}
+```
+
+
+
+
+
