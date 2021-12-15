@@ -224,9 +224,7 @@ interface FormSchema {
 	...
 }
 
-interface ElementDefinition {
-	
-}
+type ElementDefinition=InputElementDefinition | ContainerElementDefinition | ContentElementDefinition; 
 ```
 
 
