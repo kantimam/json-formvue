@@ -3,14 +3,29 @@ import { compareDateTimes, currentIsoTime, parseISODateFromPattern } from "./tim
 
 export const createInputName = (formName, inputName) => `tx_form_formframework[${formName}][${inputName}]`;
 
+/**
+ *
+ * @param properties
+ * @returns {boolean}
+ */
 export function isRequired(properties) {
     return properties?.fluidAdditionalAttributes?.required === 'required';
 }
 
+/**
+ *
+ * @param {ElementProperties} properties
+ * @returns {string} placeholder label
+ */
 export function getPlaceholder(properties) {
     return properties?.fluidAdditionalAttributes?.placeholder;
 }
 
+/**
+ *
+ * @param {ElementValidators} validators
+ * @returns {string} error message for required validator
+ */
 export const createRequiredLabel = (validators) => {
     if (!validators || !validators.length) return "required";
     const notEmptyValidator = validators.find(
@@ -21,6 +36,14 @@ export const createRequiredLabel = (validators) => {
     );
 }
 
+/**
+ *
+ * @param {boolean} required
+ * @param {ElementValidators} validators
+ * @param {ElementProperties} context
+ * @param {boolean} overwriteRequiredRules - if true deletes the required and NotEmpty validator (you might want this for inputs that use createRequiredLabel for their required validation).
+ * @returns {*[]}
+ */
 export const createInputRules = (required, validators, context, overwriteRequiredRules) => {
     const rules = createValidatorsMap(validators, context);
     if(required && overwriteRequiredRules){
@@ -72,7 +95,6 @@ export const createValidatorByKey = (validatorKey, vArgs, errorMessage, context)
     }
     return knownFunctions[validatorKey] || knownFunctions.default;
 }
-
 
 export const validatorRequired = (string, invalidMessage) => !!string || invalidMessage;
 export const validatorLength = (string, invalidMessage, vArgs) => {
@@ -215,3 +237,4 @@ export const createCallbackByKey = (callbackKey, callbackArgs) => {
     }
     return knownCallbacks[callbackKey] || knownCallbacks.default;
 }
+

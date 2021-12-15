@@ -15727,6 +15727,11 @@ __webpack_require__.r(__webpack_exports__);
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, "FormVue", function() { return /* reexport */ FormVue; });
 __webpack_require__.d(__webpack_exports__, "createStore", function() { return /* reexport */ store; });
+__webpack_require__.d(__webpack_exports__, "createInputName", function() { return /* reexport */ createInputName; });
+__webpack_require__.d(__webpack_exports__, "isRequired", function() { return /* reexport */ isRequired; });
+__webpack_require__.d(__webpack_exports__, "getPlaceholder", function() { return /* reexport */ util_getPlaceholder; });
+__webpack_require__.d(__webpack_exports__, "createRequiredLabel", function() { return /* reexport */ createRequiredLabel; });
+__webpack_require__.d(__webpack_exports__, "createInputRules", function() { return /* reexport */ createInputRules; });
 __webpack_require__.d(__webpack_exports__, "BaseInput", function() { return /* reexport */ base_input; });
 __webpack_require__.d(__webpack_exports__, "OnTextfieldText", function() { return /* reexport */ textfield_text; });
 __webpack_require__.d(__webpack_exports__, "OnTextfieldEmail", function() { return /* reexport */ textfield_email; });
@@ -16629,16 +16634,34 @@ function formatISODateFromPattern(date, pattern) {
 var createInputName = function createInputName(formName, inputName) {
   return "tx_form_formframework[".concat(formName, "][").concat(inputName, "]");
 };
+/**
+ *
+ * @param properties
+ * @returns {boolean}
+ */
+
 function isRequired(properties) {
   var _properties$fluidAddi;
 
   return (properties === null || properties === void 0 ? void 0 : (_properties$fluidAddi = properties.fluidAdditionalAttributes) === null || _properties$fluidAddi === void 0 ? void 0 : _properties$fluidAddi.required) === 'required';
 }
+/**
+ *
+ * @param {ElementProperties} properties
+ * @returns {string} placeholder label
+ */
+
 function util_getPlaceholder(properties) {
   var _properties$fluidAddi2;
 
   return properties === null || properties === void 0 ? void 0 : (_properties$fluidAddi2 = properties.fluidAdditionalAttributes) === null || _properties$fluidAddi2 === void 0 ? void 0 : _properties$fluidAddi2.placeholder;
 }
+/**
+ *
+ * @param {ElementValidators} validators
+ * @returns {string} error message for required validator
+ */
+
 var createRequiredLabel = function createRequiredLabel(validators) {
   if (!validators || !validators.length) return "required";
   var notEmptyValidator = validators.find(function (v) {
@@ -16646,6 +16669,15 @@ var createRequiredLabel = function createRequiredLabel(validators) {
   });
   return notEmptyValidator && notEmptyValidator.errorMessage || "required";
 };
+/**
+ *
+ * @param {boolean} required
+ * @param {ElementValidators} validators
+ * @param {ElementProperties} context
+ * @param {boolean} overwriteRequiredRules - if true deletes the required and NotEmpty validator (you might want this for inputs that use createRequiredLabel for their required validation).
+ * @returns {*[]}
+ */
+
 var createInputRules = function createInputRules(required, validators, context, overwriteRequiredRules) {
   var rules = util_createValidatorsMap(validators, context);
 
@@ -40719,6 +40751,10 @@ var content_element_component = normalizeComponent(
 /* harmony default export */ var content_element = (content_element_component.exports);
 // CONCATENATED MODULE: ./src/main.js
 
+ // CORE
+
+
+ // OPTIONAL ELEMENTS
 
 
 
@@ -40744,8 +40780,9 @@ var content_element_component = normalizeComponent(
 
 
 
+ // PUBLIC OPTIONAL FUNCTIONS AND HELPERS
 
-
+ // re export all public modules
 
 
 /* harmony default export */ var src_main = (FormVue);

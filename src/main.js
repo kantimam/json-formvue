@@ -1,9 +1,11 @@
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 
+// CORE
 import createStore from './store'
-
 import FormVue from './FormVue.vue';
+
+// OPTIONAL ELEMENTS
 import BaseInput from './components/fields/base_input.vue';
 import OnTextfieldText from "./components/fields/textfield_text.vue";
 import OnTextfieldEmail from "./components/fields/textfield_email.vue";
@@ -30,9 +32,22 @@ import MultiSelect from './components/fields/extended_multiselect.vue';
 import MultiCheckbox from './components/fields/multi_checkbox.vue';
 import ContentElement from './components/fields/content_element/content_element.vue';
 
+// PUBLIC OPTIONAL FUNCTIONS AND HELPERS
+import {createInputName, isRequired, getPlaceholder, createRequiredLabel, createInputRules} from "./lib/util";
+
+
+// re export all public modules
 export {
+    // core modules that are required to init FormVue
     FormVue,
     createStore,
+    // utility functions that can be used to create your own elements
+    createInputName,
+    isRequired,
+    getPlaceholder,
+    createRequiredLabel,
+    createInputRules,
+    // list of optional default elements that can be used
     BaseInput,
     OnTextfieldText,
     OnTextfieldEmail,
