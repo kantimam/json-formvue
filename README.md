@@ -231,7 +231,7 @@ type ElementDefinition=InputElementDefinition | ContainerElementDefinition | Con
 #### ComponentsMap
 ```ts
 interface ComponentsMap {
-	[elementIdentifier: String]: VueComponent
+	[elementIdentifier: string]: VueComponent
 }
 ```
 
@@ -243,7 +243,43 @@ function scrollToErrorCallback(firstInputWithError: HTMLElement){
 }
 ```
 
+## Vuex
+to be implemented
 
+## Utility functions
+you can find useful utilty functions inside the lib folder formvue-json/src/lib/util.js  
+Some of these functions will be re exported from the library root but otherwise you can grab them from src.  
+
+### Important utility functions
+
+### createInputRules
+takes the validators found in the InputElementDefinition and generates an array of [VuetifyValidationRules](https://vuetifyjs.com/en/components/forms/#rules).
+```ts 
+const createInputRules = (required: boolean, validators: ElementValidators, context: ElementProperties): VuetifyValidationRules => {
+	const rules = createValidatorsMap(validators, context);
+	if (!!required) rules.require = (v) => !!v
+	const rulesArray = [];
+	for (const key in rules) rulesArray.push(rules[key])
+	return rulesArray;
+}
+
+
+```
+
+### createRequiredLabel
+```ts 
+	implement
+```
+
+#### isRequired
+```ts 
+	implement
+```
+
+#### getPlaceholder
+```ts 
+	implement
+```
 
 
 
