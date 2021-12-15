@@ -219,9 +219,9 @@ export default function initFormVue() {
 contains the entire configuration for the current form but for now we only care about the key elements
 ```ts 
 interface FormSchema {
-	...;
-	elemenents: ElementDefinition[]
-	...;
+	...
+	elemenents: ElementDefinition[];
+	...
 }
 
 interface ElementDefinition {
