@@ -17236,22 +17236,22 @@ var store_createStore = function createStore(Vuex, initialState) {
                   throw new Error('could not find valid json');
 
                 case 2:
-                  if (!(successJson.status === 301 && successJson.redirectUri)) {
-                    _context.next = 5;
-                    break;
-                  }
-
-                  window.location = successJson.redirectUri;
-                  return _context.abrupt("return");
-
-                case 5:
                   if (!successJson.errors) {
-                    _context.next = 8;
+                    _context.next = 5;
                     break;
                   }
 
                   context.commit('setFormErrors', successJson.errors);
                   return _context.abrupt("return", context.commit('setLoading', false));
+
+                case 5:
+                  if (!(successJson.status === 301 && successJson.redirectUri)) {
+                    _context.next = 8;
+                    break;
+                  }
+
+                  window.location = successJson.redirectUri;
+                  return _context.abrupt("return");
 
                 case 8:
                   if (!(successJson.status === 200 && successJson.content)) {
