@@ -17106,11 +17106,7 @@ var store_createStore = function createStore(Vuex, initialState) {
         state.loading = false;
       },
       setFormErrors: function setFormErrors(state, errorMessages) {
-        if (errorMessages && Array.isArray(errorMessages)) {
-          state.formErrors = errorMessages;
-        } else if (typeof errorMessages === 'string' && errorMessages !== '') {
-          state.formErrors = [errorMessages];
-        }
+        state.formErrors = errorMessages;
       },
       setLoading: function setLoading(state, isLoading) {
         state.loading = Boolean(isLoading);
@@ -17183,11 +17179,11 @@ var store_createStore = function createStore(Vuex, initialState) {
     actions: {
       submitStep: function submitStep(context, vuetifyForm) {
         var isFormValid = vuetifyForm.validate();
+        context.commit('resetFormErrorCount');
 
         if (vuetifyForm.$el && isFormValid) {
           // check if form element exists and if it is valid
           context.commit('setLoading', true);
-          context.commit('resetFormErrorCount');
           context.commit('setFormErrors', []);
           var formData = new FormData(vuetifyForm.$el); // parse formdata from underlying form element
 
