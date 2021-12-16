@@ -1,28 +1,31 @@
 <template>
   <v-form
-    class="ondigo-form"
-    :id="formConfig.id"
-    @submit.prevent="handleFormSubmit"
-    ref="form"
-    :name="formConfig.identifier"
-    :loading="loading"
-    :disabled="disabled"
+      class="ondigo-form"
+      :id="formConfig.id"
+      @submit.prevent="handleFormSubmit"
+      ref="form"
+      :name="formConfig.identifier"
+      :loading="loading"
+      :disabled="disabled"
   >
-	  <dynamic-element
-		  v-for="element in formConfig.elements"
-		  :key="element.identifier"
-		  :formName="formConfig.id"
-		  :element="element"
-	  />
-    <div v-show="errorCountLabel" class="error-summary">
+    <dynamic-element
+        v-for="element in formConfig.elements"
+        :key="element.identifier"
+        :formName="formConfig.id"
+        :element="element"
+    />
+    <div v-show="errorCountLabel" class="error-summary input-errors">
       <a target="#" @click.prevent="scrollToFirstError">{{ errorCountLabel }}</a>
     </div>
+    <div v-show="formErrors && formErrors.length" class="error-summary form-errors">
+      <p v-for="error in formErrors" class="error-summary-item">{{error}}</p>
+    </div>
     <v-btn
-      :class="`ondigo-btn-submit ondigo-btn ${nextButtonAlignment}`"
-      type="submit"
-      :loading="loading"
-      color="primary"
-      :disabled="disabled"
+        :class="`ondigo-btn-submit ondigo-btn ${nextButtonAlignment}`"
+        type="submit"
+        :loading="loading"
+        color="primary"
+        :disabled="disabled"
     >
       {{ nextButtonLabel }}
     </v-btn>
@@ -32,16 +35,19 @@
 <script>
 import dynamic_element from "./dynamic_element.vue";
 export default {
-	components:{
-		'dynamic-element': dynamic_element
-	},
+  components:{
+    'dynamic-element': dynamic_element
+  },
   computed: {
     formConfig() {
       return this.$store.getters.getCurrentSchema;
     },
-	  errorCountLabel(){
-		  return this.$store.getters.getErrorLabel;
-	  },
+    errorCountLabel(){
+      return this.$store.getters.getErrorLabel;
+    },
+    formErrors(){
+      return this.$store.getters.getFormErrors;
+    },
     loading() {
       return this.$store.state.loading;
     },
@@ -50,24 +56,24 @@ export default {
     },
     buttonLabels() {
       return (
-        this.formConfig &&
-        this.formConfig.api &&
-        this.formConfig.api.page &&
-        this.formConfig.api.page.labels
+          this.formConfig &&
+          this.formConfig.api &&
+          this.formConfig.api.page &&
+          this.formConfig.api.page.labels
       );
     },
     nextButtonLabel() {
       return (
-        (this.buttonLabels && this.buttonLabels.nextButtonLabel) || "submit"
+          (this.buttonLabels && this.buttonLabels.nextButtonLabel) || "submit"
       );
     },
     nextButtonAlignment() {
       return (
-        (this.formConfig &&
-          this.formConfig.api &&
-          this.formConfig.api.page &&
-          this.formConfig.api.page.submitButtonAlignment) ||
-        "left"
+          (this.formConfig &&
+              this.formConfig.api &&
+              this.formConfig.api.page &&
+              this.formConfig.api.page.submitButtonAlignment) ||
+          "left"
       );
     },
   },
@@ -88,7 +94,7 @@ export default {
     },
     scrollToFirstError() {
       const firstInputWithError = this.$refs.form.$el.querySelector(
-        ".v-input.error--text"
+          ".v-input.error--text"
       );
       if (firstInputWithError) {
         if (this.scrollToErrorCallback) {

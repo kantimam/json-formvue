@@ -4,54 +4,55 @@
       {{ pageSummaryLabel }}
     </h2>
     <v-form
-      class="ondigo-multi-step-form ondigo-form"
-      :id="formConfig.id"
-      @submit.prevent="handleFormSubmit"
-      ref="form"
-      :name="formConfig.identifier"
-      :loading="loading"
-      :disabled="disabled"
+        class="ondigo-multi-step-form ondigo-form"
+        :id="formConfig.id"
+        @submit.prevent="handleFormSubmit"
+        ref="form"
+        :name="formConfig.identifier"
+        :loading="loading"
+        :disabled="disabled"
     >
       <dynamic-element
-        v-for="element in formConfig.elements"
-        :key="element.identifier"
-        :formName="formConfig.id"
-        :element="element"
+          v-for="element in formConfig.elements"
+          :key="element.identifier"
+          :formName="formConfig.id"
+          :element="element"
       />
-      <div v-show="errorCountLabel" class="error-summary">
-        <a target="#" @click.prevent="scrollToFirstError">{{
-          errorCountLabel
-        }}</a>
+      <div v-show="errorCountLabel" class="error-summary input-errors">
+        <a target="#" @click.prevent="scrollToFirstError">{{ errorCountLabel }}</a>
+      </div>
+      <div v-show="formErrors && formErrors.length" class="error-summary form-errors">
+        <p v-for="error in formErrors" class="error-summary-item">{{error}}</p>
       </div>
       <div class="d-flex justify-space-between mt-4">
         <v-btn
-          type="button"
-          v-if="currentStep > 1"
-          @click="loadPreviousStep"
-          color="secondary"
-          class="ondigo-btn ondigo-btn-back"
-          :disabled="disabled"
+            type="button"
+            v-if="currentStep > 1"
+            @click="loadPreviousStep"
+            color="secondary"
+            class="ondigo-btn ondigo-btn-back"
+            :disabled="disabled"
         >
           {{ previousButtonLabel }}
         </v-btn>
 
         <v-btn
-          type="submit"
-          v-if="isLastStep"
-          :loading="loading"
-          color="primary"
-          class="ondigo-btn ondigo-btn-submit"
-          :disabled="disabled"
+            type="submit"
+            v-if="isLastStep"
+            :loading="loading"
+            color="primary"
+            class="ondigo-btn ondigo-btn-submit"
+            :disabled="disabled"
         >
           {{ nextButtonLabel }}
         </v-btn>
         <v-btn
-          type="submit"
-          v-else
-          :loading="loading"
-          color="primary"
-          class="ondigo-btn ondigo-btn-next"
-          :disabled="disabled"
+            type="submit"
+            v-else
+            :loading="loading"
+            color="primary"
+            class="ondigo-btn ondigo-btn-next"
+            :disabled="disabled"
         >
           {{ nextButtonLabel }}
         </v-btn>
@@ -76,6 +77,9 @@ export default {
     errorCountLabel() {
       return this.$store.getters.getErrorLabel;
     },
+    formErrors(){
+      return this.$store.getters.getFormErrors;
+    },
     currentStep() {
       return this.$store.state.currentStep;
     },
@@ -95,22 +99,22 @@ export default {
     },
     buttonLabels() {
       return (
-        this.formConfig &&
-        this.formConfig.api &&
-        this.formConfig.api.page &&
-        this.formConfig.api.page.labels
+          this.formConfig &&
+          this.formConfig.api &&
+          this.formConfig.api.page &&
+          this.formConfig.api.page.labels
       );
     },
     previousButtonLabel() {
       return (
-        (this.buttonLabels && this.buttonLabels.previousButtonLabel) ||
-        "previous step"
+          (this.buttonLabels && this.buttonLabels.previousButtonLabel) ||
+          "previous step"
       );
     },
 
     nextButtonLabel() {
       return (
-        (this.buttonLabels && this.buttonLabels.nextButtonLabel) || "next step"
+          (this.buttonLabels && this.buttonLabels.nextButtonLabel) || "next step"
       );
     },
   },
@@ -125,7 +129,7 @@ export default {
     },
     scrollToFirstError(scrollToErrorCallback) {
       const firstInputWithError = this.$refs.form.$el.querySelector(
-        ".v-input.error--text"
+          ".v-input.error--text"
       );
       if (firstInputWithError) {
         if (scrollToErrorCallback) {

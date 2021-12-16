@@ -1,5 +1,5 @@
-import { replaceFormatSpecifiers } from '../lib/substitution';
-import { createCallbackList } from '../lib/util';
+import {replaceFormatSpecifiers} from '../lib/substitution';
+import {createCallbackList} from '../lib/util';
 
 
 /**
@@ -8,14 +8,14 @@ import { createCallbackList } from '../lib/util';
  * @param requestedCallbacks
  * @returns {Promise<unknown[]> | undefined}
  */
-function generateCallbacksList(knownCallbacks={}, requestedCallbacks=[]) {
-  if(!knownCallbacks) return;
-  const callbacks=requestedCallbacks.map(callbackDescription=>{
-    const foundCallback=knownCallbacks[callbackDescription.action];
-    if(foundCallback) return foundCallback(callbackDescription.arguments);
+function generateCallbacksList(knownCallbacks = {}, requestedCallbacks = []) {
+  if (!knownCallbacks) return;
+  const callbacks = requestedCallbacks.map(callbackDescription => {
+    const foundCallback = knownCallbacks[callbackDescription.action];
+    if (foundCallback) return foundCallback(callbackDescription.arguments);
   })
-  const defaultCallback=knownCallbacks['defaultCallback'];
-  if(defaultCallback){
+  const defaultCallback = knownCallbacks['defaultCallback'];
+  if (defaultCallback) {
     callbacks.push(defaultCallback());
   }
   if (!callbacks || !callbacks.length) return;
@@ -90,6 +90,9 @@ const createStore = (Vuex, initialState) => {
         const schema = getters.getCurrentSchema;
         const text = schema?.api?.page?.pageSummaryText;
         return text ? replaceFormatSpecifiers(text, schema.api.page.current, schema.api.page.pages) : null;
+      },
+      getFormErrors: (state) =>{
+        return state.formErrors || [];
       }
     },
 
@@ -144,6 +147,13 @@ const createStore = (Vuex, initialState) => {
         state.steps[formConfigStep - 1] = createStepFromFormConfig(formConfig)
         state.loading = false;
 
+      },
+      setFormErrors(state, errorMessages){
+        if(errorMessages && Array.isArray(errorMessages)){
+          state.formErrors=errorMessages;
+        }else if(typeof errorMessages === 'string' && errorMessages!==''){
+          state.formErrors=[errorMessages];
+        }
       },
       setLoading(state, isLoading) {
         state.loading = Boolean(isLoading)
@@ -222,6 +232,7 @@ const createStore = (Vuex, initialState) => {
         if (vuetifyForm.$el && isFormValid) { // check if form element exists and if it is valid
           context.commit('setLoading', true);
           context.commit('resetFormErrorCount');
+          context.commit('setFormErrors', []);
           const formData = new FormData(vuetifyForm.$el); // parse formdata from underlying form element
 
           const currentModel = context.getters.getCurrentModel;
@@ -246,11 +257,9 @@ const createStore = (Vuex, initialState) => {
               .catch(error => { // does not catch handleSuccessResponse errors
                 context.commit(
                     'setFormResponse',
-                    `<h1>request failed</h1>
-                <h2>${error.message}</h2>`
+                    `<h1>request failed</h1><h2>${error.message}</h2>`
                 );
                 context.commit('setLoading', false);
-
               })
 
         } else {
@@ -269,28 +278,17 @@ const createStore = (Vuex, initialState) => {
           return;
         }
 
+        if(successJson.errors){
+          context.commit('setFormErrors', successJson.errors);
+          return context.commit('setLoading', false);
+        }
+
         // handle replace content with success message
         if (successJson.status === 200 && successJson.content) {
           // if the response contains callbacks handle them before proceeding
-          try {
-            const requestedCallbacks=successJson?.api?.callbacks || successJson?.callbacks;
-            if(requestedCallbacks){
-              const callbacksList=generateCallbacksList(context.state.callbacksMap, requestedCallbacks);
-              if(callbacksList){
-                await callbacksList;
-              }
-            }
-          } catch (error) {
-            console.log(error)
-            context.commit(
-                'setFormResponse',
-                `<h1>one of the form callbacks failed, check console for more info</h1>
-                <h2>${error}</h2>`
-            );
-          }
+          await context.dispatch('handleResponseCallbacks', successJson);
           context.commit('setFormResponse', successJson.content);
-          context.commit('setFormFinished');
-          return;
+          return context.commit('setFormFinished');
         }
 
         // handle loading next page after finishing callbacks if needed
@@ -299,28 +297,33 @@ const createStore = (Vuex, initialState) => {
             context.commit('setModelErrors', successJson.api.errors);
             context.commit('setLoading', false);
             return;
-          }else{
-            try {
-              const requestedCallbacks=successJson?.api?.callbacks || successJson?.callbacks;
-              if(requestedCallbacks){
-                const callbacksList=generateCallbacksList(context.state.callbacksMap, requestedCallbacks);
-                if(callbacksList){
-                  await callbacksList;
-                }
-              }
-            } catch (error) {
-              console.log(error)
-              context.commit(
-                  'setFormResponse',
-                  `<h1>one of the step callbacks failed, check console for more info</h1>
-                <h2>${error}</h2>`
-              );
-            }
-            context.commit('setFormStep', successJson);
+          } else {
+            await context.dispatch('handleResponseCallbacks', successJson);
+            return context.commit('setFormStep', successJson);
           }
         }
 
+        context.commit('setLoading', false);
+
       },
+
+      async handleResponseCallbacks(context, successJson) {
+        try {
+          const requestedCallbacks = successJson?.api?.callbacks || successJson?.callbacks;
+          if (requestedCallbacks) {
+            const callbacksList = generateCallbacksList(context.state.callbacksMap, requestedCallbacks);
+            if (callbacksList) {
+              await callbacksList;
+            }
+          }
+        } catch (error) {
+          console.log(error)
+          context.commit(
+              'setFormResponse',
+              `<h1>one of the step callbacks failed, check console for more info</h1><h2>${error}</h2>`
+          );
+        }
+      }
 
     }
 
@@ -334,7 +337,7 @@ const createStore = (Vuex, initialState) => {
  * @param rest
  * @returns {(*&{currentStep: number, lastStep: ([]|*|number), callbacksMap: {}, previousStep: ((function(*=): *)|*|number), formDisabled: boolean, nextStep: number, formFinished: boolean, id, loading: boolean, steps: {schema: unknown[], formId, wasSubmitted: boolean, inputModel: {}, formAction: string, formStepError: null}[], errorCount: number, formResponse: null})|{}}
  */
-function initState({formData, callbacksMap={}, ...rest}) {
+function initState({formData, callbacksMap = {}, ...rest}) {
   const formConfig = formData.configuration;
   if (!formConfig) return {}
 
@@ -349,6 +352,7 @@ function initState({formData, callbacksMap={}, ...rest}) {
     lastStep: formConfig.api.page.pages || 1,
     formResponse: null,
     formFinished: false,
+    formErrors: [],
 
     steps: [
       createStepFromFormConfig(formConfig)
@@ -396,8 +400,7 @@ function inputArrayFromSchema(elements) {
   elements.forEach(element => {
     if (element.elements && element.elements.length) {
       inputs.push(...inputArrayFromSchema(element.elements));
-    }
-    else inputs.push(element)
+    } else inputs.push(element)
   })
 
   return inputs;

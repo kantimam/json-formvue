@@ -17051,6 +17051,9 @@ var store_createStore = function createStore(Vuex, initialState) {
         var schema = getters.getCurrentSchema;
         var text = schema === null || schema === void 0 ? void 0 : (_schema$api = schema.api) === null || _schema$api === void 0 ? void 0 : (_schema$api$page = _schema$api.page) === null || _schema$api$page === void 0 ? void 0 : _schema$api$page.pageSummaryText;
         return text ? replaceFormatSpecifiers(text, schema.api.page.current, schema.api.page.pages) : null;
+      },
+      getFormErrors: function getFormErrors(state) {
+        return state.formErrors || [];
       }
     },
     mutations: {
@@ -17101,6 +17104,13 @@ var store_createStore = function createStore(Vuex, initialState) {
         state.formResponse = null;
         state.steps[formConfigStep - 1] = createStepFromFormConfig(formConfig);
         state.loading = false;
+      },
+      setFormErrors: function setFormErrors(state, errorMessages) {
+        if (errorMessages && Array.isArray(errorMessages)) {
+          state.formErrors = errorMessages;
+        } else if (typeof errorMessages === 'string' && errorMessages !== '') {
+          state.formErrors = [errorMessages];
+        }
       },
       setLoading: function setLoading(state, isLoading) {
         state.loading = Boolean(isLoading);
@@ -17178,6 +17188,7 @@ var store_createStore = function createStore(Vuex, initialState) {
           // check if form element exists and if it is valid
           context.commit('setLoading', true);
           context.commit('resetFormErrorCount');
+          context.commit('setFormErrors', []);
           var formData = new FormData(vuetifyForm.$el); // parse formdata from underlying form element
 
           var currentModel = context.getters.getCurrentModel; // append entries to formdata
@@ -17197,7 +17208,7 @@ var store_createStore = function createStore(Vuex, initialState) {
             return context.dispatch('handleSuccessResponse', json);
           })["catch"](function (error) {
             // does not catch handleSuccessResponse errors
-            context.commit('setFormResponse', "<h1>request failed</h1>\n                <h2>".concat(error.message, "</h2>"));
+            context.commit('setFormResponse', "<h1>request failed</h1><h2>".concat(error.message, "</h2>"));
             context.commit('setLoading', false);
           });
         } else {
@@ -17208,8 +17219,6 @@ var store_createStore = function createStore(Vuex, initialState) {
       },
       handleSuccessResponse: function handleSuccessResponse(context, successJson) {
         return _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
-          var _successJson$api, requestedCallbacks, callbacksList, _successJson$api2, _requestedCallbacks, _callbacksList;
-
           return regeneratorRuntime.wrap(function _callee$(_context) {
             while (1) {
               switch (_context.prev = _context.next) {
@@ -17231,52 +17240,35 @@ var store_createStore = function createStore(Vuex, initialState) {
                   return _context.abrupt("return");
 
                 case 5:
+                  if (!successJson.errors) {
+                    _context.next = 8;
+                    break;
+                  }
+
+                  context.commit('setFormErrors', successJson.errors);
+                  return _context.abrupt("return", context.commit('setLoading', false));
+
+                case 8:
                   if (!(successJson.status === 200 && successJson.content)) {
-                    _context.next = 22;
-                    break;
-                  }
-
-                  _context.prev = 6;
-                  requestedCallbacks = (successJson === null || successJson === void 0 ? void 0 : (_successJson$api = successJson.api) === null || _successJson$api === void 0 ? void 0 : _successJson$api.callbacks) || (successJson === null || successJson === void 0 ? void 0 : successJson.callbacks);
-
-                  if (!requestedCallbacks) {
                     _context.next = 13;
                     break;
                   }
 
-                  callbacksList = generateCallbacksList(context.state.callbacksMap, requestedCallbacks);
+                  _context.next = 11;
+                  return context.dispatch('handleResponseCallbacks', successJson);
 
-                  if (!callbacksList) {
-                    _context.next = 13;
-                    break;
-                  }
-
-                  _context.next = 13;
-                  return callbacksList;
+                case 11:
+                  context.commit('setFormResponse', successJson.content);
+                  return _context.abrupt("return", context.commit('setFormFinished'));
 
                 case 13:
-                  _context.next = 19;
-                  break;
-
-                case 15:
-                  _context.prev = 15;
-                  _context.t0 = _context["catch"](6);
-                  console.log(_context.t0);
-                  context.commit('setFormResponse', "<h1>one of the form callbacks failed, check console for more info</h1>\n                <h2>".concat(_context.t0, "</h2>"));
-
-                case 19:
-                  context.commit('setFormResponse', successJson.content);
-                  context.commit('setFormFinished');
-                  return _context.abrupt("return");
-
-                case 22:
                   if (!successJson.api) {
-                    _context.next = 43;
+                    _context.next = 23;
                     break;
                   }
 
                   if (!(successJson.api.status === 'failure')) {
-                    _context.next = 29;
+                    _context.next = 20;
                     break;
                   }
 
@@ -17284,44 +17276,66 @@ var store_createStore = function createStore(Vuex, initialState) {
                   context.commit('setLoading', false);
                   return _context.abrupt("return");
 
-                case 29:
-                  _context.prev = 29;
-                  _requestedCallbacks = (successJson === null || successJson === void 0 ? void 0 : (_successJson$api2 = successJson.api) === null || _successJson$api2 === void 0 ? void 0 : _successJson$api2.callbacks) || (successJson === null || successJson === void 0 ? void 0 : successJson.callbacks);
+                case 20:
+                  _context.next = 22;
+                  return context.dispatch('handleResponseCallbacks', successJson);
 
-                  if (!_requestedCallbacks) {
-                    _context.next = 36;
-                    break;
-                  }
+                case 22:
+                  return _context.abrupt("return", context.commit('setFormStep', successJson));
 
-                  _callbacksList = generateCallbacksList(context.state.callbacksMap, _requestedCallbacks);
+                case 23:
+                  context.commit('setLoading', false);
 
-                  if (!_callbacksList) {
-                    _context.next = 36;
-                    break;
-                  }
-
-                  _context.next = 36;
-                  return _callbacksList;
-
-                case 36:
-                  _context.next = 42;
-                  break;
-
-                case 38:
-                  _context.prev = 38;
-                  _context.t1 = _context["catch"](29);
-                  console.log(_context.t1);
-                  context.commit('setFormResponse', "<h1>one of the step callbacks failed, check console for more info</h1>\n                <h2>".concat(_context.t1, "</h2>"));
-
-                case 42:
-                  context.commit('setFormStep', successJson);
-
-                case 43:
+                case 24:
                 case "end":
                   return _context.stop();
               }
             }
-          }, _callee, null, [[6, 15], [29, 38]]);
+          }, _callee);
+        }))();
+      },
+      handleResponseCallbacks: function handleResponseCallbacks(context, successJson) {
+        return _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
+          var _successJson$api, requestedCallbacks, callbacksList;
+
+          return regeneratorRuntime.wrap(function _callee2$(_context2) {
+            while (1) {
+              switch (_context2.prev = _context2.next) {
+                case 0:
+                  _context2.prev = 0;
+                  requestedCallbacks = (successJson === null || successJson === void 0 ? void 0 : (_successJson$api = successJson.api) === null || _successJson$api === void 0 ? void 0 : _successJson$api.callbacks) || (successJson === null || successJson === void 0 ? void 0 : successJson.callbacks);
+
+                  if (!requestedCallbacks) {
+                    _context2.next = 7;
+                    break;
+                  }
+
+                  callbacksList = generateCallbacksList(context.state.callbacksMap, requestedCallbacks);
+
+                  if (!callbacksList) {
+                    _context2.next = 7;
+                    break;
+                  }
+
+                  _context2.next = 7;
+                  return callbacksList;
+
+                case 7:
+                  _context2.next = 13;
+                  break;
+
+                case 9:
+                  _context2.prev = 9;
+                  _context2.t0 = _context2["catch"](0);
+                  console.log(_context2.t0);
+                  context.commit('setFormResponse', "<h1>one of the step callbacks failed, check console for more info</h1><h2>".concat(_context2.t0, "</h2>"));
+
+                case 13:
+                case "end":
+                  return _context2.stop();
+              }
+            }
+          }, _callee2, null, [[0, 9]]);
         }))();
       }
     }
@@ -17356,6 +17370,7 @@ function initState(_ref) {
     lastStep: formConfig.api.page.pages || 1,
     formResponse: null,
     formFinished: false,
+    formErrors: [],
     steps: [createStepFromFormConfig(formConfig)],
     callbacksMap: Object.freeze(callbacksMap)
   }, rest);
@@ -17409,12 +17424,12 @@ var staticRenderFns = []
 
 // CONCATENATED MODULE: ./src/FormVue.vue?vue&type=template&id=7c9a07c2&
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1706ad7c-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/multi_step_form.vue?vue&type=template&id=7d4a843d&
-var multi_step_formvue_type_template_id_7d4a843d_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"ondigo-multistep-form-wrapper"},[(_vm.pageSummaryLabel)?_c('h2',{staticClass:"mb-4 ondigo-form-header"},[_vm._v(" "+_vm._s(_vm.pageSummaryLabel)+" ")]):_vm._e(),_c('v-form',{ref:"form",staticClass:"ondigo-multi-step-form ondigo-form",attrs:{"id":_vm.formConfig.id,"name":_vm.formConfig.identifier,"loading":_vm.loading,"disabled":_vm.disabled},on:{"submit":function($event){$event.preventDefault();return _vm.handleFormSubmit.apply(null, arguments)}}},[_vm._l((_vm.formConfig.elements),function(element){return _c('dynamic-element',{key:element.identifier,attrs:{"formName":_vm.formConfig.id,"element":element}})}),_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.errorCountLabel),expression:"errorCountLabel"}],staticClass:"error-summary"},[_c('a',{attrs:{"target":"#"},on:{"click":function($event){$event.preventDefault();return _vm.scrollToFirstError.apply(null, arguments)}}},[_vm._v(_vm._s(_vm.errorCountLabel))])]),_c('div',{staticClass:"d-flex justify-space-between mt-4"},[(_vm.currentStep > 1)?_c('v-btn',{staticClass:"ondigo-btn ondigo-btn-back",attrs:{"type":"button","color":"secondary","disabled":_vm.disabled},on:{"click":_vm.loadPreviousStep}},[_vm._v(" "+_vm._s(_vm.previousButtonLabel)+" ")]):_vm._e(),(_vm.isLastStep)?_c('v-btn',{staticClass:"ondigo-btn ondigo-btn-submit",attrs:{"type":"submit","loading":_vm.loading,"color":"primary","disabled":_vm.disabled}},[_vm._v(" "+_vm._s(_vm.nextButtonLabel)+" ")]):_c('v-btn',{staticClass:"ondigo-btn ondigo-btn-next",attrs:{"type":"submit","loading":_vm.loading,"color":"primary","disabled":_vm.disabled}},[_vm._v(" "+_vm._s(_vm.nextButtonLabel)+" ")])],1)],2)],1)}
-var multi_step_formvue_type_template_id_7d4a843d_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1706ad7c-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/multi_step_form.vue?vue&type=template&id=7430b450&
+var multi_step_formvue_type_template_id_7430b450_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"ondigo-multistep-form-wrapper"},[(_vm.pageSummaryLabel)?_c('h2',{staticClass:"mb-4 ondigo-form-header"},[_vm._v(" "+_vm._s(_vm.pageSummaryLabel)+" ")]):_vm._e(),_c('v-form',{ref:"form",staticClass:"ondigo-multi-step-form ondigo-form",attrs:{"id":_vm.formConfig.id,"name":_vm.formConfig.identifier,"loading":_vm.loading,"disabled":_vm.disabled},on:{"submit":function($event){$event.preventDefault();return _vm.handleFormSubmit.apply(null, arguments)}}},[_vm._l((_vm.formConfig.elements),function(element){return _c('dynamic-element',{key:element.identifier,attrs:{"formName":_vm.formConfig.id,"element":element}})}),_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.errorCountLabel),expression:"errorCountLabel"}],staticClass:"error-summary input-errors"},[_c('a',{attrs:{"target":"#"},on:{"click":function($event){$event.preventDefault();return _vm.scrollToFirstError.apply(null, arguments)}}},[_vm._v(_vm._s(_vm.errorCountLabel))])]),_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.formErrors && _vm.formErrors.length),expression:"formErrors && formErrors.length"}],staticClass:"error-summary form-errors"},_vm._l((_vm.formErrors),function(error){return _c('p',{staticClass:"error-summary-item"},[_vm._v(_vm._s(error))])}),0),_c('div',{staticClass:"d-flex justify-space-between mt-4"},[(_vm.currentStep > 1)?_c('v-btn',{staticClass:"ondigo-btn ondigo-btn-back",attrs:{"type":"button","color":"secondary","disabled":_vm.disabled},on:{"click":_vm.loadPreviousStep}},[_vm._v(" "+_vm._s(_vm.previousButtonLabel)+" ")]):_vm._e(),(_vm.isLastStep)?_c('v-btn',{staticClass:"ondigo-btn ondigo-btn-submit",attrs:{"type":"submit","loading":_vm.loading,"color":"primary","disabled":_vm.disabled}},[_vm._v(" "+_vm._s(_vm.nextButtonLabel)+" ")]):_c('v-btn',{staticClass:"ondigo-btn ondigo-btn-next",attrs:{"type":"submit","loading":_vm.loading,"color":"primary","disabled":_vm.disabled}},[_vm._v(" "+_vm._s(_vm.nextButtonLabel)+" ")])],1)],2)],1)}
+var multi_step_formvue_type_template_id_7430b450_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/multi_step_form.vue?vue&type=template&id=7d4a843d&
+// CONCATENATED MODULE: ./src/components/multi_step_form.vue?vue&type=template&id=7430b450&
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1706ad7c-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/dynamic_element.vue?vue&type=template&id=c3083dd6&
 var dynamic_elementvue_type_template_id_c3083dd6_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[(_vm.componentsMap[_vm.element.type])?_c(_vm.componentsMap[_vm.element.type],_vm._b({tag:"component",attrs:{"id":_vm.element.identifier,"formName":_vm.formName}},'component',Object.assign({}, _vm.element, _vm.fieldPropsOverwrite),false)):(_vm.element.type !== 'Hidden')?_c('fallback-field',{attrs:{"type":_vm.element.type}}):_vm._e()],1)}
@@ -17687,6 +17702,7 @@ var dynamic_element_component = normalizeComponent(
 //
 //
 //
+//
 
 /* harmony default export */ var multi_step_formvue_type_script_lang_js_ = ({
   components: {
@@ -17701,6 +17717,9 @@ var dynamic_element_component = normalizeComponent(
     },
     errorCountLabel: function errorCountLabel() {
       return this.$store.getters.getErrorLabel;
+    },
+    formErrors: function formErrors() {
+      return this.$store.getters.getFormErrors;
     },
     currentStep: function currentStep() {
       return this.$store.state.currentStep;
@@ -22116,8 +22135,8 @@ var baseMixins = mixins(components_VSheet, routable, positionable, sizeable, fac
 
 var multi_step_form_component = normalizeComponent(
   components_multi_step_formvue_type_script_lang_js_,
-  multi_step_formvue_type_template_id_7d4a843d_render,
-  multi_step_formvue_type_template_id_7d4a843d_staticRenderFns,
+  multi_step_formvue_type_template_id_7430b450_render,
+  multi_step_formvue_type_template_id_7430b450_staticRenderFns,
   false,
   null,
   null,
@@ -22133,14 +22152,17 @@ var multi_step_form_component = normalizeComponent(
 
 installComponents_default()(multi_step_form_component, {VBtn: VBtn_VBtn,VForm: VForm})
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1706ad7c-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/single_step_form.vue?vue&type=template&id=619f5b50&
-var single_step_formvue_type_template_id_619f5b50_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('v-form',{ref:"form",staticClass:"ondigo-form",attrs:{"id":_vm.formConfig.id,"name":_vm.formConfig.identifier,"loading":_vm.loading,"disabled":_vm.disabled},on:{"submit":function($event){$event.preventDefault();return _vm.handleFormSubmit.apply(null, arguments)}}},[_vm._l((_vm.formConfig.elements),function(element){return _c('dynamic-element',{key:element.identifier,attrs:{"formName":_vm.formConfig.id,"element":element}})}),_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.errorCountLabel),expression:"errorCountLabel"}],staticClass:"error-summary"},[_c('a',{attrs:{"target":"#"},on:{"click":function($event){$event.preventDefault();return _vm.scrollToFirstError.apply(null, arguments)}}},[_vm._v(_vm._s(_vm.errorCountLabel))])]),_c('v-btn',{class:("ondigo-btn-submit ondigo-btn " + _vm.nextButtonAlignment),attrs:{"type":"submit","loading":_vm.loading,"color":"primary","disabled":_vm.disabled}},[_vm._v(" "+_vm._s(_vm.nextButtonLabel)+" ")])],2)}
-var single_step_formvue_type_template_id_619f5b50_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1706ad7c-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/single_step_form.vue?vue&type=template&id=218c5203&
+var single_step_formvue_type_template_id_218c5203_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('v-form',{ref:"form",staticClass:"ondigo-form",attrs:{"id":_vm.formConfig.id,"name":_vm.formConfig.identifier,"loading":_vm.loading,"disabled":_vm.disabled},on:{"submit":function($event){$event.preventDefault();return _vm.handleFormSubmit.apply(null, arguments)}}},[_vm._l((_vm.formConfig.elements),function(element){return _c('dynamic-element',{key:element.identifier,attrs:{"formName":_vm.formConfig.id,"element":element}})}),_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.errorCountLabel),expression:"errorCountLabel"}],staticClass:"error-summary input-errors"},[_c('a',{attrs:{"target":"#"},on:{"click":function($event){$event.preventDefault();return _vm.scrollToFirstError.apply(null, arguments)}}},[_vm._v(_vm._s(_vm.errorCountLabel))])]),_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.formErrors && _vm.formErrors.length),expression:"formErrors && formErrors.length"}],staticClass:"error-summary form-errors"},_vm._l((_vm.formErrors),function(error){return _c('p',{staticClass:"error-summary-item"},[_vm._v(_vm._s(error))])}),0),_c('v-btn',{class:("ondigo-btn-submit ondigo-btn " + _vm.nextButtonAlignment),attrs:{"type":"submit","loading":_vm.loading,"color":"primary","disabled":_vm.disabled}},[_vm._v(" "+_vm._s(_vm.nextButtonLabel)+" ")])],2)}
+var single_step_formvue_type_template_id_218c5203_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/single_step_form.vue?vue&type=template&id=619f5b50&
+// CONCATENATED MODULE: ./src/components/single_step_form.vue?vue&type=template&id=218c5203&
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/single_step_form.vue?vue&type=script&lang=js&
+//
+//
+//
 //
 //
 //
@@ -22183,6 +22205,9 @@ var single_step_formvue_type_template_id_619f5b50_staticRenderFns = []
     },
     errorCountLabel: function errorCountLabel() {
       return this.$store.getters.getErrorLabel;
+    },
+    formErrors: function formErrors() {
+      return this.$store.getters.getFormErrors;
     },
     loading: function loading() {
       return this.$store.state.loading;
@@ -22236,8 +22261,8 @@ var single_step_formvue_type_template_id_619f5b50_staticRenderFns = []
 
 var single_step_form_component = normalizeComponent(
   components_single_step_formvue_type_script_lang_js_,
-  single_step_formvue_type_template_id_619f5b50_render,
-  single_step_formvue_type_template_id_619f5b50_staticRenderFns,
+  single_step_formvue_type_template_id_218c5203_render,
+  single_step_formvue_type_template_id_218c5203_staticRenderFns,
   false,
   null,
   null,
