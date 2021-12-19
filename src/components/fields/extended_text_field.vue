@@ -20,7 +20,7 @@ import {
 import TextField from "./textfield.vue";
 
 export default {
-  name: "OnTextfieldText",
+  name: "OnTextfield",
   components: { TextField },
   props: {
     id: {
