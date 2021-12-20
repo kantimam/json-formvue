@@ -1,26 +1,26 @@
 <template>
   <div>
-    <input type="hidden" :name="name" v-model="formattedInput" />
+    <input type="hidden" :name="name" v-model="formattedInput"/>
     <v-menu
-      ref="menu"
-      v-model="menu"
-      :close-on-content-click="false"
-      transition="scale-transition"
-      offset-y
-      min-width="auto"
+        ref="menu"
+        v-model="menu"
+        :close-on-content-click="false"
+        transition="scale-transition"
+        offset-y
+        min-width="auto"
     >
       <template v-slot:activator="{ on, attrs }">
         <masked-text
-          :mask-active="maskActive"
-          :label="label"
-          :placeholder="placeholder"
-          :filled="filled"
-          :id="id"
-          ref="masked"
-          :rules="menu ? [] : inputRules"
-          :class="`ondigo-input ondigo-textfield ondigo-input-${id}`"
-          :inputBridge="inputBridge"
-          v-bind="{
+            :mask-active="maskActive"
+            :label="label"
+            :placeholder="placeholder"
+            :filled="filled"
+            :id="id"
+            ref="masked"
+            :rules="menu ? [] : inputRules"
+            :class="`ondigo-input ondigo-textfield ondigo-input-${id}`"
+            :inputBridge="inputBridge"
+            v-bind="{
             ...$attrs,
             name: undefined,
             properties: {
@@ -30,7 +30,7 @@
               placeholder: '_',
             },
           }"
-          v-on="$listeners"
+            v-on="$listeners"
         >
           <template slot="append-masked">
             <div class="ondigo-icon-button" v-bind="attrs" v-on="on">
@@ -40,19 +40,19 @@
         </masked-text>
       </template>
       <v-date-picker
-        v-model="date"
-        :active-picker.sync="activePicker"
-        :max="maxDate"
-        :min="minDate"
-        @change="save"
-        :locale="locale || navigator.language || 'en-US'"
+          v-model="date"
+          :active-picker.sync="activePicker"
+          :max="maxDate"
+          :min="minDate"
+          @change="save"
+          :locale="locale || navigator.language || 'en-US'"
       />
     </v-menu>
   </div>
 </template>
 
 <script>
-import { createInputRules, isRequired, getPlaceholder } from "../../lib/util";
+import {createInputRules, isRequired, getPlaceholder} from "../../lib/util";
 import MaskedText from "./textfield_masked.vue";
 import {
   compareDateTimes,
@@ -85,7 +85,10 @@ export default {
       if (parsed && parsed !== this.date) this.date = parsed;
 
       const time = Date.parse(parsed);
-      if (isNaN(time)) return;
+      if (isNaN(time)) {
+        this.formattedInput = null;
+        return;
+      }
 
       this.formattedInput = toIsoFormatWithOffset(new Date(time));
     },
@@ -108,55 +111,55 @@ export default {
       if (!date) return null;
 
       return parseISODateFromPattern(
-        date,
-        this.maskPattern,
-        // Getter for date components
-        (match, order, identifier) => {
-          const idx = order.indexOf(identifier);
-          if (idx >= 0) return Number(match[idx + 1]); // order[i] = match[i + 1]
+          date,
+          this.maskPattern,
+          // Getter for date components
+          (match, order, identifier) => {
+            const idx = order.indexOf(identifier);
+            if (idx >= 0) return Number(match[idx + 1]); // order[i] = match[i + 1]
 
-          // default values
-          const now = new Date();
-          switch (identifier) {
-            case "Y":
-              return now.getFullYear();
-            case "m":
-              return now.getMonth() + 1;
-            case "d":
-              return now.getDate();
-            default:
-              return undefined;
-          }
-        },
-        // Interceptor, ensures invalid dates are not set
-        (year, month, day) => {
-          // check if date components are in allowed ranges
-          if (
-            month < 1 ||
-            month > 12 ||
-            day < 1 ||
-            day > 31 ||
-            year < 1000 ||
-            year > 9999
-          )
-            return [null, true]; // invalid date, override with null
+            // default values
+            const now = new Date();
+            switch (identifier) {
+              case "Y":
+                return now.getFullYear();
+              case "m":
+                return now.getMonth() + 1;
+              case "d":
+                return now.getDate();
+              default:
+                return undefined;
+            }
+          },
+          // Interceptor, ensures invalid dates are not set
+          (year, month, day) => {
+            // check if date components are in allowed ranges
+            if (
+                month < 1 ||
+                month > 12 ||
+                day < 1 ||
+                day > 31 ||
+                year < 1000 ||
+                year > 9999
+            )
+              return [null, true]; // invalid date, override with null
 
-          // check if date components are in given min/max range (to prevent vuetify error throw)
-          const inputDate = [year, month, day];
-          if (
-            (this.minDate && compareDateTimes(inputDate, this.minDate) < 0) /* date is before minDate */ ||
-            (this.maxDate && compareDateTimes(inputDate, this.maxDate) > 0) /* date is after maxDate */
-          ) {
-            return [null, true]; // date out of selectable range, override with null
+            // check if date components are in given min/max range (to prevent vuetify error throw)
+            const inputDate = [year, month, day];
+            if (
+                (this.minDate && compareDateTimes(inputDate, this.minDate) < 0) /* date is before minDate */ ||
+                (this.maxDate && compareDateTimes(inputDate, this.maxDate) > 0) /* date is after maxDate */
+            ) {
+              return [null, true]; // date out of selectable range, override with null
+            }
+            return [null, false]; // do not override
           }
-          return [null, false]; // do not override
-        }
       );
     },
     currentDate() {
       return new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
-        .toISOString()
-        .substr(0, 10);
+          .toISOString()
+          .substr(0, 10);
     },
   },
   props: {
@@ -219,7 +222,7 @@ export default {
     },
     minDate() {
       const validator = this.validators.find(
-        (v) => v.identifier === "DateInterval"
+          (v) => v.identifier === "DateInterval"
       );
       if (!validator) return undefined;
 
@@ -234,7 +237,7 @@ export default {
     },
     maxDate() {
       const validator = this.validators.find(
-        (v) => v.identifier === "DateInterval"
+          (v) => v.identifier === "DateInterval"
       );
       if (!validator) return undefined;
 
@@ -279,7 +282,7 @@ export default {
         return this.$store.getters.getCurrentInputValue(this.id) || "";
       },
       set(value) {
-        this.$store.commit("updateInputValue", { key: this.id, value: value });
+        this.$store.commit("updateInputValue", {key: this.id, value: value});
       },
     },
   },
