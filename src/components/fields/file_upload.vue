@@ -42,6 +42,8 @@
       :hint="inputDescription"
       :filled="filled"
       :error-messages="inputError"
+	  prepend-icon=""
+	  append-icon="mdi-paperclip"
     ></v-file-input>
   </div>
 </template>
