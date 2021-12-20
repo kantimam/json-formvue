@@ -103,22 +103,20 @@ const createStore = (Vuex, initialState) => {
         const currentStep = state.steps[validIndex];
         if (!currentStep) return;
 
-        const currentModel = currentStep.inputModel[payload.key];
-        if (!currentModel) {
-          currentStep.inputModel[payload.key] = {
-            id: payload.key,
-            value: payload.value,
-            error: '',
-            hasError: false
-          }
-        } else {
-          currentModel.value = payload.value;
-          currentModel.error = '';
-          if (currentModel.hasError && state.errorCount > 0) {
-            state.errorCount = state.errorCount - 1;
-            currentModel.hasError = false;
-          }
+        const currentModel = currentStep.inputModel[payload.key] ? currentStep.inputModel[payload.key] : {
+          id: payload.key,
+          hasError: false
+        };
+
+        currentModel.value = payload.value;
+        currentModel.error = '';
+        if (currentModel.hasError && state.errorCount > 0) {
+          state.errorCount = state.errorCount - 1;
+          currentModel.hasError = false;
         }
+
+
+        currentStep.inputModel[payload.key] = currentModel;
       },
       updateFormStep(state, newStep) {
         state.currentStep = newStep > 0 ? newStep : 1;
@@ -223,13 +221,25 @@ const createStore = (Vuex, initialState) => {
     actions: {
 
       submitStep(context, vuetifyForm) {
+        vuetifyForm.$el.focus();
         const isFormValid = vuetifyForm.validate();
         context.commit('resetFormErrorCount');
 
         if (vuetifyForm.$el && isFormValid) { // check if form element exists and if it is valid
           context.commit('setLoading', true);
           context.commit('setFormErrors', []);
+          const formId = vuetifyForm.$el.id;
           const formData = new FormData(vuetifyForm.$el); // parse formdata from underlying form element
+
+          // quickfix - radio buttons SOMETIMES not getting put into form data?!
+          const modelSupplier = context.getters.getCurrentModel;
+          if (modelSupplier) {
+            Object.entries(modelSupplier).forEach(([key, value]) => {
+              const mappedKey = `tx_form_formframework[${formId}][${key}]`;
+              if (!!value.hasError || key.startsWith('__') || value.value.length <= 0 || formData.has(mappedKey)) return;
+              formData.append(mappedKey, value.value);
+            });
+          }
 
           const currentModel = context.getters.getCurrentModel;
           // append entries to formdata
@@ -313,7 +323,7 @@ const createStore = (Vuex, initialState) => {
             }
           }
         } catch (error) {
-          console.log(error)
+          console.error(error)
           context.commit(
               'setFormResponse',
               `<h1>one of the step callbacks failed, check console for more info</h1><h2>${error}</h2>`

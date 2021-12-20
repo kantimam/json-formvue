@@ -20,6 +20,7 @@
     <v-radio
       v-for="option in radioOptions"
       :key="option.value"
+	    :check="inputValue === option.value"
       :label="option.label"
       :value="option.value"
     ></v-radio>
