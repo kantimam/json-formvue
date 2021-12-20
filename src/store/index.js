@@ -92,7 +92,8 @@ const createStore = (Vuex, initialState) => {
         return text ? replaceFormatSpecifiers(text, schema.api.page.current, schema.api.page.pages) : null;
       },
       getFormErrors: (state) =>{
-        return state.formErrors || [];
+		if (!Array.isArray(state.formErrors)) return [state.formErrors];
+		return state.formErrors || [];
       }
     },
 
@@ -118,7 +119,6 @@ const createStore = (Vuex, initialState) => {
             currentModel.hasError = false;
           }
         }
-
       },
       updateFormStep(state, newStep) {
         state.currentStep = newStep > 0 ? newStep : 1;
@@ -268,8 +268,8 @@ const createStore = (Vuex, initialState) => {
 
       async handleSuccessResponse(context, successJson) {
         if (!successJson) throw new Error('could not find valid json');
-        if(successJson.errors && successJson.errors.length>0){
-          context.commit('setFormErrors', successJson.errors);
+        if(successJson.error || (successJson.errors && successJson.errors.length > 0)){
+          context.commit('setFormErrors', successJson.error ? [successJson.error] : successJson.errors);
           return context.commit('setLoading', false);
         }
         // handle redirect on success
