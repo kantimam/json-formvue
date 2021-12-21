@@ -25532,16 +25532,15 @@ var form_grid_rowvue_type_template_id_62e3ff02_staticRenderFns = []
 
 // CONCATENATED MODULE: ./src/components/containers/form_grid_row.vue?vue&type=template&id=62e3ff02&
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"7542ab18-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/containers/form_grid_col.vue?vue&type=template&id=56cc35e8&
-var form_grid_colvue_type_template_id_56cc35e8_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('v-col',{attrs:{"cols":"12","xl":_vm.columnSizes.lg,"lg":_vm.columnSizes.lg,"md":_vm.columnSizes.md,"sm":_vm.columnSizes.sm,"xs":_vm.columnSizes.xs}},[_c('child-dynamic-element',{attrs:{"formName":_vm.formName,"element":Object.assign({}, _vm.$props, _vm.$attrs)}})],1)}
-var form_grid_colvue_type_template_id_56cc35e8_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"7542ab18-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/containers/form_grid_col.vue?vue&type=template&id=74337d55&
+var form_grid_colvue_type_template_id_74337d55_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('v-col',{attrs:{"cols":_vm.columnSizes.xs,"xl":_vm.columnSizes.lg,"lg":_vm.columnSizes.md,"md":_vm.columnSizes.sm,"sm":_vm.columnSizes.xs}},[_c('child-dynamic-element',{attrs:{"formName":_vm.formName,"element":Object.assign({}, _vm.$props, _vm.$attrs)}})],1)}
+var form_grid_colvue_type_template_id_74337d55_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/containers/form_grid_col.vue?vue&type=template&id=56cc35e8&
+// CONCATENATED MODULE: ./src/components/containers/form_grid_col.vue?vue&type=template&id=74337d55&
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/containers/form_grid_col.vue?vue&type=script&lang=js&
 
-//
 //
 //
 //
@@ -25795,8 +25794,8 @@ var cache = new Map();
 
 var form_grid_col_component = normalizeComponent(
   containers_form_grid_colvue_type_script_lang_js_,
-  form_grid_colvue_type_template_id_56cc35e8_render,
-  form_grid_colvue_type_template_id_56cc35e8_staticRenderFns,
+  form_grid_colvue_type_template_id_74337d55_render,
+  form_grid_colvue_type_template_id_74337d55_staticRenderFns,
   false,
   null,
   null,
