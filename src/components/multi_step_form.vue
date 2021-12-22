@@ -4,9 +4,9 @@
       {{ pageSummaryLabel }}
     </h2>
     <v-form
-        class="ondigo-multi-step-form ondigo-form"
-        :id="formConfig.identifier"
+        :class="`ondigo-multi-step-form ondigo-form form-${formConfig.identifier}`"
         :data-form-identifier="formConfig.id"
+        :id="formConfig.id"
         @submit.prevent="handleFormSubmit"
         ref="form"
         :loading="loading"

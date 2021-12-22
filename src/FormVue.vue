@@ -1,5 +1,5 @@
 <template>
-  <v-app class="ondigo-formvue-app">
+  <v-app :class="`ondigo-formvue-app formvue-${formSchema.configuration.identifier}`" :id="`formvue-${formSchema.configuration.id}`">
     <div class="ondigo-formvue">
       <div class="ondigo-form-wrapper" v-if="!formFinished">
         <single-step-form v-if="isSingleStepForm" />
@@ -84,6 +84,9 @@ export default {
       return this.$store.getters.getIsSingleStep;
     },
   },
+  mounted(){
+    console.log(this.formSchema)
+  }
 };
 </script>
 
