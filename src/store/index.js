@@ -349,6 +349,7 @@ function initState({formData, callbacksMap = {}, ...rest}) {
 
   const state = {
     id: formConfig.id,
+    formElementId: formConfig.identifier || formConfig.id,
     currentStep: formConfig.api.page.current || 1,
     loading: false,
     formDisabled: false,

@@ -5,10 +5,10 @@
     </h2>
     <v-form
         class="ondigo-multi-step-form ondigo-form"
-        :id="formConfig.id"
+        :id="formConfig.formElementId"
+        :data-form-identifier="formConfig.id"
         @submit.prevent="handleFormSubmit"
         ref="form"
-        :name="formConfig.identifier"
         :loading="loading"
         :disabled="disabled"
     >

@@ -1,10 +1,10 @@
 <template>
   <v-form
       class="ondigo-form"
-      :id="formConfig.id"
+      :id="formConfig.formElementId"
+      :data-form-identifier="formConfig.id"
       @submit.prevent="handleFormSubmit"
       ref="form"
-      :name="formConfig.identifier"
       :loading="loading"
       :disabled="disabled"
   >
