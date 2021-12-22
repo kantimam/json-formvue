@@ -1,7 +1,7 @@
 <template>
   <v-form
       class="ondigo-form"
-      :id="formConfig.formElementId"
+      :id="formConfig.identifier"
       :data-form-identifier="formConfig.id"
       @submit.prevent="handleFormSubmit"
       ref="form"

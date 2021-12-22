@@ -92,8 +92,8 @@ const createStore = (Vuex, initialState) => {
         return text ? replaceFormatSpecifiers(text, schema.api.page.current, schema.api.page.pages) : null;
       },
       getFormErrors: (state) =>{
-		if (!Array.isArray(state.formErrors)) return [state.formErrors];
-		return state.formErrors || [];
+        if (!Array.isArray(state.formErrors)) return [state.formErrors];
+        return state.formErrors || [];
       }
     },
 
@@ -379,6 +379,7 @@ function createStepFromFormConfig(formConfig) {
 
     formStepError: null,
     formId: formConfig.id,
+    formElementId: formConfig.identifier || formConfig.id,
     formAction: formConfig.action || '',
     wasSubmitted: false
   }
