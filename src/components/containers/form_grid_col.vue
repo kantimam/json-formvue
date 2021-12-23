@@ -1,10 +1,10 @@
 <template>
   <v-col
-    :cols="columnSizes.xs"
     :xl="columnSizes.lg"
-    :lg="columnSizes.md"
-    :md="columnSizes.sm"
-    :sm="columnSizes.xs"
+    :lg="columnSizes.lg"
+    :md="columnSizes.md"
+    :sm="columnSizes.sm"
+    :cols="columnSizes.xs"
   >
     <child-dynamic-element
       :formName="formName"
