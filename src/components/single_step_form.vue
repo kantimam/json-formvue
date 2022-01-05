@@ -20,20 +20,20 @@
     <div v-show="formErrors && formErrors.length" class="error-summary form-errors">
       <p v-for="error in formErrors" class="error-summary-item">{{error}}</p>
     </div>
-    <v-btn
-        :class="`ondigo-btn-submit ondigo-btn ${nextButtonAlignment}`"
-        type="submit"
+    <component
+        v-if="componentsMap['SubmitButton']"
+        :is="componentsMap['SubmitButton']"
         :loading="loading"
-        color="primary"
+        :btn-label="nextButtonLabel"
+        :alignment="nextButtonAlignment"
         :disabled="disabled"
-    >
-      {{ nextButtonLabel }}
-    </v-btn>
+    />
   </v-form>
 </template>
 
 <script>
 import dynamic_element from "./dynamic_element.vue";
+
 export default {
   components:{
     'dynamic-element': dynamic_element
@@ -86,7 +86,7 @@ export default {
       errorSummary: ""
     }
   },
-  inject: ["scrollToErrorCallback"],
+  inject: ["scrollToErrorCallback", "componentsMap"],
   methods: {
     handleFormSubmit() {
       const form = this.$refs.form;
