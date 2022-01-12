@@ -36,16 +36,14 @@
           {{ previousButtonLabel }}
         </v-btn>
 
-        <v-btn
-            type="submit"
-            v-if="isLastStep"
+        <component
+            v-if="isLastStep && componentsMap['SubmitButton']"
+            :is="componentsMap['SubmitButton']"
             :loading="loading"
-            color="primary"
-            class="ondigo-btn ondigo-btn-submit"
+            :btn-label="nextButtonLabel"
+            alignment=""
             :disabled="disabled"
-        >
-          {{ nextButtonLabel }}
-        </v-btn>
+        />
         <v-btn
             type="submit"
             v-else
@@ -63,6 +61,7 @@
 
 <script>
 import dynamic_element from "./dynamic_element.vue";
+
 export default {
   components: {
     "dynamic-element": dynamic_element,
@@ -118,7 +117,7 @@ export default {
       );
     },
   },
-  inject: ["scrollToErrorCallback"],
+  inject: ["scrollToErrorCallback", "componentsMap"],
   methods: {
     handleFormSubmit() {
       const form = this.$refs.form;

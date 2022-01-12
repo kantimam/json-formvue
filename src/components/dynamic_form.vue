@@ -20,19 +20,19 @@
       >{{ errorCountLabel }}</a
       >
     </div>
-    <v-btn
-        :class="`ondigo-btn-submit ondigo-btn ${nextButtonAlignment}`"
-        type="submit"
+    <component
+        v-if="componentsMap['SubmitButton']"
+        :is="componentsMap['SubmitButton']"
         :loading="loading"
-        color="primary"
-    >
-      {{ nextButtonLabel }}
-    </v-btn>
+        :btn-label="nextButtonLabel"
+        :alignment="nextButtonAlignment"
+    />
   </v-form>
 </template>
 
 <script>
 import dynamic_element from "./dynamic_element.vue";
+
 export default {
   components:{
     'dynamic-element': dynamic_element
@@ -81,7 +81,7 @@ export default {
       loading: false
     }
   },
-  inject: ["scrollToErrorCallback"],
+  inject: ["scrollToErrorCallback", "componentsMap"],
   methods: {
     getInputModel(inputName){
       return this.formModel[inputName] || {value: '', error: ''}
@@ -117,7 +117,7 @@ export default {
       setInputValue: this.setInputModel,
       setInputError: this.setInputModel
     }
-  }
+  },
 };
 </script>
 

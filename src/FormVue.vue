@@ -13,6 +13,7 @@
 <script>
 import MultiStepForm from "./components/multi_step_form.vue";
 import SingleStepForm from "./components/single_step_form.vue";
+import SubmitButton from "./components/misc/submit_button.vue";
 
 export default {
   components: {
@@ -67,7 +68,7 @@ export default {
   provide() {
     return {
       appName: this.appName,
-      componentsMap: Object.freeze(this.componentsMap),
+      componentsMap: Object.freeze(this.mixedComponents),
       formSchema: Object.freeze(this.formSchema),
       scrollToErrorCallback: this.scrollToErrorCallback,
       fieldPropsOverwrite: this.fieldPropsOverwrite,
@@ -83,9 +84,18 @@ export default {
     isSingleStepForm() {
       return this.$store.getters.getIsSingleStep;
     },
-  },
-  mounted(){
-    console.log(this.formSchema)
+    mixedComponents() {
+      const components = {...this.componentsMap};
+      const mixin = (name, component) => {
+        if (!(name in components))
+          components[name] = component;
+      };
+
+      // mixin default form components, such as submit button (add lazy import?)
+      mixin('SubmitButton', SubmitButton);
+
+      return components;
+    }
   }
 };
 </script>
