@@ -1,17 +1,15 @@
 <template>
-  <div>
-    <component
-      v-if="componentsMap[element.type]"
-      :is="componentsMap[element.type]"
-      v-bind="{ ...element, ...fieldPropsOverwrite }"
-      :id="element.identifier"
-      :formName="formName"
-    />
-    <fallback-field
-      v-else-if="element.type !== 'Hidden'"
-      :type="element.type"
-    />
-  </div>
+  <component
+    v-if="componentsMap[element.type]"
+    :is="componentsMap[element.type]"
+    v-bind="{ ...element, ...fieldPropsOverwrite }"
+    :id="element.identifier"
+    :formName="formName"
+  />
+  <fallback-field
+    v-else-if="element.type !== 'Hidden'"
+    :type="element.type"
+  />
 </template>
 
 <script>
