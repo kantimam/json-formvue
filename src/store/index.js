@@ -283,6 +283,9 @@ const createStore = (Vuex, initialState) => {
 
       async handleSuccessResponse(context, successJson) {
         if (!successJson) throw new Error('could not find valid json');
+
+        if (await ResponseInterceptor.handleResponse(context, successJson)) return;
+
         if(successJson.error || (successJson.errors && successJson.errors.length > 0)){
           context.commit('setFormErrors', successJson.error ? [successJson.error] : successJson.errors);
           return context.commit('setLoading', false);
@@ -309,8 +312,6 @@ const createStore = (Vuex, initialState) => {
             context.commit('setLoading', false);
             return;
           }
-
-          if (await ResponseInterceptor.handleResponse(context, successJson)) return;
 
           await context.dispatch('handleResponseCallbacks', successJson);
           return context.commit('setFormStep', successJson);
