@@ -5,15 +5,16 @@ It is tailored to be used with another Typo3 library "[Extended Form Framework](
 
 # Setup
 
-- Preferably install [Typo3](https://get.typo3.org/) and [Extended Form Framework](https://git.ondigo.io/proj-typo3/extended_form_framework) before.
-- Prepare your front end to be able to use es6 features and Vue. You can use [webpack](https://webpack.js.org/) for that.
-- Make sure you are using Node version >= 12.18.3 (check out [nvm](https://github.com/nvm-sh/nvm) for using a certain Node version).
-- Install the newest version of formvue-json via npm.
+- preferably install [Typo3](https://get.typo3.org/) and [Extended Form Framework](https://git.ondigo.io/proj-typo3/extended_form_framework) before.
+- prepare your front end to be able to use es6 features and Vue. You can use [webpack](https://webpack.js.org/) for that.
+- make sure you are using Node version >= 12.18.3 (check out [nvm](https://github.com/nvm-sh/nvm) for using a certain Node version).
+- install the newest version of formvue-json via npm.
+- register the custom registry url for @ondigo-internal npm packages (see `.npmrc`)
 
 Install command while this repository is private
 
 ```
-npm i git+https://formvue-json:yb77VU1nUyPe9Sx5FpDo@git.ondigo.io/proj-typo3/formvue-json.git#1.5.3
+npm i git+https://formvue-json:yb77VU1nUyPe9Sx5FpDo@git.ondigo.io/proj-typo3/formvue-json.git#1.8.2
 ```
 
 Most noteably this will install Vue version 2.6.11, Vuetify 2.4.0 and Vuex 3.4.0  

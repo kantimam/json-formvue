@@ -41,9 +41,9 @@
   </v-text-field>
 </template>
 <script>
-import IMask from "imask";
+import IMask from "@ondigo-internal/imask";
 import utils from "../../plugins/utils";
-import { isRequired, getPlaceholder, createInputRules } from "../../lib/util";
+import {createInputRules, getPlaceholder, isRequired} from "@/lib/util";
 
 export default {
   name: "OnTextfieldMasked",
