@@ -1,5 +1,6 @@
 import {replaceFormatSpecifiers} from '../lib/substitution';
 import Vue from "vue";
+import * as ResponseInterceptor from "@/store/response_interceptor";
 
 
 /**
@@ -307,10 +308,12 @@ const createStore = (Vuex, initialState) => {
             context.commit('setModelErrors', successJson.api.errors);
             context.commit('setLoading', false);
             return;
-          } else {
-            await context.dispatch('handleResponseCallbacks', successJson);
-            return context.commit('setFormStep', successJson);
           }
+
+          if (await ResponseInterceptor.handleResponse(context, successJson)) return;
+
+          await context.dispatch('handleResponseCallbacks', successJson);
+          return context.commit('setFormStep', successJson);
         }
 
         context.commit('setLoading', false);
