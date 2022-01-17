@@ -8,6 +8,7 @@
   </div>
   <div
       v-else
+      class="ondigo-response"
       v-html="response"
   />
 
