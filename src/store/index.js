@@ -1,5 +1,5 @@
 import {replaceFormatSpecifiers} from '../lib/substitution';
-import {createCallbackList} from '../lib/util';
+import Vue from "vue";
 
 
 /**
@@ -263,7 +263,11 @@ const createStore = (Vuex, initialState) => {
               .catch(error => { // does not catch handleSuccessResponse errors
                 context.commit(
                     'setFormResponse',
-                    `<h1>request failed</h1><h2>${error.message}</h2>`
+                    {
+                      title: 'Ein Fehler ist aufgetreten, bitte versuchen Sie es später erneut',
+                      text: Vue.config.devtools ? error.message : null,
+                      error: true
+                    }
                 );
                 context.commit('setLoading', false);
               })
@@ -326,7 +330,11 @@ const createStore = (Vuex, initialState) => {
           console.error(error)
           context.commit(
               'setFormResponse',
-              `<h1>one of the step callbacks failed, check console for more info</h1><h2>${error}</h2>`
+              {
+                title: 'Ein Fehler ist aufgetreten, bitte versuchen Sie es später erneut',
+                text: Vue.config.devtools ? `Callback response error: ${error}` : null,
+                error: true
+              }
           );
         }
       }

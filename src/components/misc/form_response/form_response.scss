@@ -1,0 +1,15 @@
+.v-application.ondigo-formvue-app .ondigo-formvue .ondigo-response {
+    margin-top: 20px;
+
+    h3 {
+        margin-bottom: 0;
+    }
+
+    p {
+        margin-bottom: 0;
+    }
+}
+
+.ondigo-response-error.error--text h3 {
+    color: #ff5252 !important;
+}

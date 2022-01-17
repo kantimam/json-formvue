@@ -5,7 +5,18 @@
         <single-step-form v-if="isSingleStepForm" />
         <multi-step-form v-else />
       </div>
-      <div v-if="formResponse" v-html="formResponse"></div>
+
+      <component
+          v-if="this.mixedComponents['FormResponse']"
+          :is="this.mixedComponents['FormResponse']"
+          :formName="formSchema.configuration.id"
+          :response="formResponse"
+      />
+      <!-- Fallback response -->
+      <div
+          v-else-if="formResponse"
+          v-html="formResponse"
+      />
     </div>
   </v-app>
 </template>
@@ -13,7 +24,9 @@
 <script>
 import MultiStepForm from "./components/multi_step_form.vue";
 import SingleStepForm from "./components/single_step_form.vue";
+
 import SubmitButton from "./components/misc/submit_button.vue";
+import FormResponse from './components/misc/form_response/form_response.vue';
 
 export default {
   components: {
@@ -93,6 +106,7 @@ export default {
 
       // mixin default form components, such as submit button (add lazy import?)
       mixin('SubmitButton', SubmitButton);
+      mixin('FormResponse', FormResponse);
 
       return components;
     }
