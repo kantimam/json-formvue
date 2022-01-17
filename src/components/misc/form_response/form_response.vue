@@ -28,7 +28,7 @@ export default {
   },
   computed: {
     isResponseObject() {
-      return typeof this.response === 'object';
+      return this.response && typeof this.response === 'object';
     },
     isError() {
       return this.isResponseObject ? !!this.response.error : false
