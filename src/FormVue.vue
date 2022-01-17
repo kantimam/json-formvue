@@ -1,9 +1,10 @@
 <template>
-  <v-app :class="`ondigo-formvue-app formvue-${formSchema.configuration.identifier}`" :id="`formvue-${formSchema.configuration.id}`">
+  <v-app :class="`ondigo-formvue-app formvue-${formSchema.configuration.identifier}`"
+         :id="`formvue-${formSchema.configuration.id}`">
     <div class="ondigo-formvue">
       <div class="ondigo-form-wrapper" v-if="!formFinished">
-        <single-step-form v-if="isSingleStepForm" />
-        <multi-step-form v-else />
+        <single-step-form v-if="isSingleStepForm"/>
+        <multi-step-form v-else/>
       </div>
 
       <component
@@ -11,11 +12,13 @@
           :is="this.mixedComponents['FormResponse']"
           :formName="formSchema.configuration.id"
           :response="formResponse"
+          ref="formResponseElement"
       />
       <!-- Fallback response -->
       <div
           v-else-if="formResponse"
           v-html="formResponse"
+          ref="formResponseElement"
       />
     </div>
   </v-app>
@@ -69,7 +72,7 @@ export default {
         };
       },
     },
-    scrollToErrorCallback: {
+    scrollIntoView: {
       type: Function,
       default: function () {
         return (element) => {
@@ -77,13 +80,17 @@ export default {
         };
       },
     },
+    scrollToSuccessMessage: {
+      type: Boolean,
+      default: false
+    }
   },
   provide() {
     return {
       appName: this.appName,
       componentsMap: Object.freeze(this.mixedComponents),
       formSchema: Object.freeze(this.formSchema),
-      scrollToErrorCallback: this.scrollToErrorCallback,
+      scrollIntoView: this.scrollIntoView,
       fieldPropsOverwrite: this.fieldPropsOverwrite,
     };
   },
@@ -109,6 +116,16 @@ export default {
       mixin('FormResponse', FormResponse);
 
       return components;
+    }
+  },
+  watch: {
+    formFinished: function (val) {
+      this.$nextTick(() => {
+        if (val && this.scrollToSuccessMessage && this.scrollIntoView) {
+          this.scrollIntoView(this.$refs.formResponseElement)
+        }
+      })
+
     }
   }
 };

@@ -18,7 +18,7 @@
       <a target="#" @click.prevent="scrollToFirstError">{{ errorCountLabel }}</a>
     </div>
     <div v-show="formErrors && formErrors.length" class="error-summary form-errors">
-      <p v-for="error in formErrors" class="error-summary-item">{{error}}</p>
+      <p v-for="error in formErrors" class="error-summary-item">{{ error }}</p>
     </div>
     <component
         v-if="componentsMap['SubmitButton']"
@@ -46,17 +46,17 @@
 import dynamic_element from "./dynamic_element.vue";
 
 export default {
-  components:{
+  components: {
     'dynamic-element': dynamic_element
   },
   computed: {
     formConfig() {
       return this.$store.getters.getCurrentSchema;
     },
-    errorCountLabel(){
+    errorCountLabel() {
       return this.$store.getters.getErrorLabel;
     },
-    formErrors(){
+    formErrors() {
       return this.$store.getters.getFormErrors;
     },
     loading() {
@@ -88,16 +88,14 @@ export default {
       );
     },
   },
-  data(){
+  data() {
     return {
-      formModel: {
-
-      },
+      formModel: {},
       formErrorCount: 0,
       errorSummary: ""
     }
   },
-  inject: ["scrollToErrorCallback", "componentsMap"],
+  inject: ["scrollIntoView", "componentsMap"],
   methods: {
     handleFormSubmit() {
       const form = this.$refs.form;
@@ -108,8 +106,8 @@ export default {
           ".v-input.error--text"
       );
       if (firstInputWithError) {
-        if (this.scrollToErrorCallback) {
-          this.scrollToErrorCallback(firstInputWithError);
+        if (this.scrollIntoView) {
+          this.scrollIntoView(firstInputWithError);
         }
       }
     },
