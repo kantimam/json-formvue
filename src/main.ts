@@ -33,7 +33,7 @@ import MultiCheckbox from './components/fields/multi_checkbox.vue';
 import ContentElement from './components/fields/content_element/content_element.vue';
 
 // PUBLIC OPTIONAL FUNCTIONS AND HELPERS
-import {createInputName, isRequired, getPlaceholder, createRequiredLabel, createInputRules} from "./lib/util";
+import {createInputName, createInputRules, createRequiredLabel, getPlaceholder, isRequired} from "./lib/util";
 
 
 // re export all public modules
