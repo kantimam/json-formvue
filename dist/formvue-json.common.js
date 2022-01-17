@@ -16318,7 +16318,7 @@ function _handleResponse() {
 
             interceptor = _step.value;
             _context.next = 7;
-            return interceptor.handle(context, successJson);
+            return interceptor(context, successJson);
 
           case 7:
             if (!_context.sent) {
