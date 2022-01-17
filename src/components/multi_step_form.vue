@@ -22,7 +22,7 @@
         <a target="#" @click.prevent="scrollToFirstError">{{ errorCountLabel }}</a>
       </div>
       <div v-show="formErrors && formErrors.length" class="error-summary form-errors">
-        <p v-for="error in formErrors" class="error-summary-item">{{error}}</p>
+        <p v-for="error in formErrors" class="error-summary-item">{{ error }}</p>
       </div>
       <div class="d-flex justify-space-between mt-4">
         <v-btn
@@ -77,7 +77,7 @@ export default {
     errorCountLabel() {
       return this.$store.getters.getErrorLabel;
     },
-    formErrors(){
+    formErrors() {
       return this.$store.getters.getFormErrors;
     },
     currentStep() {
@@ -118,7 +118,7 @@ export default {
       );
     },
   },
-  inject: ["scrollToErrorCallback", "componentsMap"],
+  inject: ["scrollIntoView", "componentsMap"],
   methods: {
     handleFormSubmit() {
       const form = this.$refs.form;
@@ -127,13 +127,13 @@ export default {
     loadPreviousStep() {
       this.$store.commit("updateFormStep", this.currentStep - 1);
     },
-    scrollToFirstError(scrollToErrorCallback) {
+    scrollToFirstError() {
       const firstInputWithError = this.$refs.form.$el.querySelector(
           ".v-input.error--text"
       );
       if (firstInputWithError) {
-        if (scrollToErrorCallback) {
-          scrollToErrorCallback(firstInputWithError);
+        if (this.scrollIntoView) {
+          this.scrollIntoView(firstInputWithError);
         }
       }
     },
