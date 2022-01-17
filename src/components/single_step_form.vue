@@ -27,7 +27,18 @@
         :btn-label="nextButtonLabel"
         :alignment="nextButtonAlignment"
         :disabled="disabled"
+        :formName="formConfig.id"
     />
+    <v-btn
+        type="submit"
+        v-else
+        :loading="loading"
+        color="primary"
+        class="ondigo-btn"
+        :disabled="disabled"
+    >
+      {{ nextButtonLabel }}
+    </v-btn>
   </v-form>
 </template>
 
