@@ -6,20 +6,19 @@
         <single-step-form v-if="isSingleStepForm"/>
         <multi-step-form v-else/>
       </div>
-
-      <component
-          v-if="this.mixedComponents['FormResponse']"
-          :is="this.mixedComponents['FormResponse']"
-          :formName="formSchema.configuration.id"
-          :response="formResponse"
-          ref="formResponseElement"
-      />
-      <!-- Fallback response -->
-      <div
-          v-else-if="formResponse"
-          v-html="formResponse"
-          ref="formResponseElement"
-      />
+      <div class="response-wrapper" ref="formResponseElement">
+        <component
+            v-if="this.mixedComponents['FormResponse']"
+            :is="this.mixedComponents['FormResponse']"
+            :formName="formSchema.configuration.id"
+            :response="formResponse"
+        />
+        <!-- Fallback response -->
+        <div
+            v-else-if="formResponse"
+            v-html="formResponse"
+        />
+      </div>
     </div>
   </v-app>
 </template>
@@ -121,7 +120,7 @@ export default {
   watch: {
     formFinished: function (val) {
       this.$nextTick(() => {
-        if (val && this.scrollToSuccessMessage && this.scrollIntoView) {
+        if (val && this.scrollToSuccessMessage && this.scrollIntoView && this.$refs.formResponseElement) {
           this.scrollIntoView(this.$refs.formResponseElement)
         }
       })
