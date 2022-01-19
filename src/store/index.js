@@ -1,6 +1,6 @@
 import {replaceFormatSpecifiers} from '../lib/substitution';
 import Vue from "vue";
-import * as ResponseInterceptor from "@/store/response_interceptor";
+import * as ResponseInterceptor from "../store/response_interceptor";
 
 
 /**
@@ -262,10 +262,11 @@ const createStore = (Vuex, initialState) => {
               )
               .then(json => context.dispatch('handleSuccessResponse', json))
               .catch(error => { // does not catch handleSuccessResponse errors
+                const labels = context.getters.getCurrentSchema?.global?.labels;
                 context.commit(
                     'setFormResponse',
                     {
-                      title: 'Ein Fehler ist aufgetreten, bitte versuchen Sie es später erneut',
+                      title: labels?.error || 'Ein Fehler ist aufgetreten, bitte versuchen Sie es später erneut',
                       text: Vue.config.devtools ? error.message : null,
                       error: true
                     }
