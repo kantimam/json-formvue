@@ -226,16 +226,17 @@ export default {
         this.element.value = this.masked.value;
         this.element.dispatchEvent(new Event("input"));
 
-        // move caret to first index, because this sometimes doesn't happen
-        if (this.element.setSelectionRange) {
-          this.element.setSelectionRange(0, 0);
-        } else if (this.element.createTextRange) {
-          const range = this.element.createTextRange();
-          range.collapse(true);
-          range.moveEnd("character", 0);
-          range.moveStart("character", 0);
-          range.select();
-        }
+        setTimeout(() => {
+          if (this.element.setSelectionRange) {
+            this.element.setSelectionRange(0, 0);
+          } else if (this.element.createTextRange) {
+            const range = this.element.createTextRange();
+            range.collapse(true);
+            range.moveEnd("character", 0);
+            range.moveStart("character", 0);
+            range.select();
+          }
+        }, 20);
       }
     },
     blur() {
