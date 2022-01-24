@@ -32,6 +32,9 @@ import MultiSelect from './components/fields/extended_multiselect.vue';
 import MultiCheckbox from './components/fields/multi_checkbox.vue';
 import ContentElement from './components/fields/content_element/content_element.vue';
 
+// INTERNAL ELEMENTS
+import InternalTextField from './components/fields/textfield.vue';
+
 // PUBLIC OPTIONAL FUNCTIONS AND HELPERS
 import {createInputName, createInputRules, createRequiredLabel, getPlaceholder, isRequired} from "./lib/util";
 
@@ -72,7 +75,8 @@ export {
     MultiSelect,
     MultiCheckbox,
     DatePicker,
-    ContentElement
+    ContentElement,
+    InternalTextField
 }
 
 export { registerResponseInterceptor } from './store/response_interceptor';
