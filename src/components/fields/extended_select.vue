@@ -3,6 +3,7 @@
     :allow-overflow="false"
     :append-icon="appendicon || $vuetify.icons.values.dropdown"
     :autocomplete="autocomplete || 'chrome-off'"
+    attach
     :error-messages="inputError"
     @blur="blur"
     @change="change"

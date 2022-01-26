@@ -1,0 +1,215 @@
+.v-file-input {
+
+	&.v-input--is-readonly {
+		pointer-events: none;
+	}
+
+	.v-input__append-inner {
+		position: absolute;
+		padding: 0;
+		margin: 0;
+		left: -4px;
+		bottom: -1px;
+		right: 0;
+		top: auto;
+	}
+
+	.v-input__prepend-outer {
+		display: none;
+	}
+
+	.v-input__append-outer {
+		margin: 0;
+		width: 100%;
+
+		.v-file-upload__preview {
+			width: 100%;
+		}
+	}
+
+	.v-file-input__text {
+		display: none;
+	}
+
+	&.v-text-field {
+		position: relative;
+		padding-top: 0;
+		margin-top: 0;
+		border-radius: 0;
+		display: block;
+
+		.v-input__control {
+			padding-right: 1px;
+			padding-left: 1px;
+
+			> .v-input__slot {
+				margin-top: 1px;
+				border-radius: 0;
+				justify-content: center;
+				align-items: center;
+				cursor: pointer;
+				padding-top: 12px;
+				padding-bottom: 12px;
+
+				&:hover {
+					background: map-deep-get($material-light, 'text-fields', 'filled-hover')
+				}
+
+				&:before,
+				&:after {
+					top: -1px;
+					right: -1px;
+					width: auto;
+					left: -1px;
+				}
+
+				&:before {
+					border-style: dashed;
+					border-width: thin;
+					background-color: transparent;
+				}
+
+				&:after {
+					display: none;
+				}
+
+				> .v-text-field__slot {
+					position: static;
+				}
+			}
+		}
+
+		.v-label {
+			position: static !important;
+			transform: none !important;
+			white-space: normal;
+			overflow: visible;
+			display: flex;
+			width: 100%;
+			height: auto;
+			flex-wrap: wrap;
+
+			.v-icon__wrapper {
+				margin-right: $spacer * 4;
+
+				.v-icon {
+					color: currentColor;
+				}
+			}
+
+			&--active {
+				max-width: 90%;
+			}
+
+			.v-input__label-required,
+			.v-input__label-optional {
+				left: auto;
+				right: 5px;
+			}
+		}
+
+		&.v-input--is-disabled {
+			pointer-events: none;
+
+			&.v-text-field--filled:not(.v-input--is-focused):not(.v-input--has-state) > .v-input__control > .v-input__slot:hover {
+				background: map-deep-get($material-light, 'text-fields', 'filled');
+			}
+
+			* {
+				color: map-deep-get($material-light, 'text', 'disabled') !important; // important need to overwrite vuetidy color in icons
+			}
+		}
+
+		&.v-input--upload-is-disabled {
+
+			&.v-text-field--filled:not(.v-input--is-focused):not(.v-input--has-state) > .v-input__control > .v-input__slot:hover {
+				background: map-deep-get($material-light, 'text-fields', 'filled');
+			}
+
+			.v-input__control {
+				pointer-events: none;
+
+				.v-label {
+					pointer-events: none;
+					color: map-deep-get($material-light, 'text', 'disabled') !important; // important need to overwrite vuetidy color in icons
+
+					* {
+						color: map-deep-get($material-light, 'text', 'disabled') !important; // important need to overwrite vuetidy color in icons
+					}
+				}
+			}
+		}
+
+		&.v-file-input--is-hovered {
+
+			.v-input__control {
+
+				> .v-input__slot {
+					background: map-deep-get($material-light, 'text-fields', 'filled-hover')
+				}
+			}
+		}
+	}
+
+	&.v-text-field--filled:not(.v-text-field--single-line) input {
+		margin-top: 0;
+	}
+
+	&.v-text-field.v-text-field--enclosed:not(.v-text-field--rounded) > .v-input__control > .v-input__slot {
+		padding-top: 12px;
+		padding-bottom: 12px;
+	}
+}
+
+.v-file-input__wrapper {
+
+	.v-file-input__dropzone {
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		z-index: 1;
+	}
+
+	.v-file-upload__preview {
+
+		.v-chip {
+			margin: 0 $spacer $spacer 0;
+			max-width: calc(50% - #{$spacer});
+
+			.v-chip__content {
+				position: relative;
+				display: inline-flex;
+				line-height: 24px;
+
+				.v-chip__label {
+					text-overflow: ellipsis;
+					overflow: hidden;
+					max-width: 270px;
+				}
+
+				.v-progress-circular--visible,
+				.v-icon__wrapper {
+					margin-right: 6px;
+				}
+			}
+		}
+	}
+
+	&.v-file-input--is-loading {
+
+		.v-file-input {
+
+			.v-input__control {
+
+				> .v-input__slot {
+
+					&:before {
+						border-bottom: none;
+					}
+				}
+			}
+		}
+	}
+}

@@ -19,6 +19,7 @@ import OnRadioGroup from './components/fields/radio_group.vue'
 import OnSelect from './components/fields/extended_select.vue'
 import AdvancedPassword from "./components/fields/advanced_password.vue";
 import FileUpload from "./components/fields/file_upload.vue";
+//import ExtendedFileUpload from "./components/fields/file_upload/file_upload.vue";
 import StaticText from "./components/fields/static_text/static_text.vue";
 import OnCaptcha from "./components/fields/onCaptcha/onCaptcha.vue";
 import DatePicker from "./components/fields/datepicker.vue";
@@ -65,6 +66,7 @@ export {
     OnCaptcha,
     AdvancedPassword,
     FileUpload,
+    //ExtendedFileUpload,
     StaticText,
     MaskedText,
     ConditionRadio,
@@ -81,4 +83,3 @@ export {
 
 export { registerResponseInterceptor } from './store/response_interceptor';
 
-export default FormVue;
