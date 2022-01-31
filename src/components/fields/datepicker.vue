@@ -24,7 +24,7 @@
             ...$attrs,
             name: undefined,
             properties: {
-              ...$attrs.properties,
+              ...properties,
               // mixin generated MaskedText properties
               pattern: maskPattern,
               placeholder: '_',
@@ -52,7 +52,7 @@
 </template>
 
 <script>
-import {createInputRules, isRequired, getPlaceholder} from "../../lib/util";
+import {createInputRules, getPlaceholder, isRequired} from "../../lib/util";
 import MaskedText from "./textfield_masked.vue";
 import {
   compareDateTimes,

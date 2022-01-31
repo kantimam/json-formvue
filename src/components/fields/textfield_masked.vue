@@ -102,7 +102,7 @@ export default {
   },
   watch: {
     inputBridge(val) {
-      if (!this.maskActive) return;
+      if (!this.maskActive || (!this.required && val.length <= 0)) return;
 
       if (!this.masked || !this.element) this.initMask();
 
