@@ -90,7 +90,7 @@ export const createValidatorByKey = (validatorKey, vArgs, errorMessage, context)
         TimeFormat: (inputValue) => !inputValue.length || validatorTimeFormat(inputValue, errorMessage || `the datetime must be in this format: '${vArgs.format}'`, vArgs),
         MaskComplete: (inputValue) => !inputValue.length || validatorMaskComplete(inputValue, errorMessage || `please complete the input`, vArgs, context),
         FileSize: (inputValue) => validatorFileSize(inputValue, errorMessage, vArgs),
-        DateInterval: (inputValue) => validatorDateInterval(inputValue, errorMessage, vArgs, context),
+        DateInterval: (inputValue) => !inputValue.length || validatorDateInterval(inputValue, errorMessage, vArgs, context),
         default: null
     }
     return knownFunctions[validatorKey] || knownFunctions.default;
