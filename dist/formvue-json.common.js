@@ -22613,7 +22613,7 @@ var createValidatorByKey = function createValidatorByKey(validatorKey, vArgs, er
       return validatorFileSize(inputValue, errorMessage, vArgs);
     },
     DateInterval: function DateInterval(inputValue) {
-      return util_validatorDateInterval(inputValue, errorMessage, vArgs, context);
+      return !inputValue.length || util_validatorDateInterval(inputValue, errorMessage, vArgs, context);
     },
     "default": null
   };
