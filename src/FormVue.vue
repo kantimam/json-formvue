@@ -3,8 +3,12 @@
          :id="`formvue-${formSchema.configuration.id}`">
     <div class="ondigo-formvue">
       <div class="ondigo-form-wrapper" v-if="!formFinished">
-        <single-step-form v-if="isSingleStepForm"/>
-        <multi-step-form v-else/>
+        <template v-if="isSingleStepForm">
+          <component :is="singleStepForm" />
+        </template>
+        <template v-else>
+          <component :is="multiStepForm" />
+        </template>
       </div>
       <div class="response-wrapper" ref="formResponseElement">
         <component
@@ -24,16 +28,16 @@
 </template>
 
 <script>
-import MultiStepForm from "./components/multi_step_form.vue";
-import SingleStepForm from "./components/single_step_form.vue";
+import DefaultMultiStepForm from "./components/multi_step_form.vue";
+import DefaultSingleStepForm from "./components/single_step_form.vue";
 
 import SubmitButton from "./components/misc/submit_button.vue";
 import FormResponse from './components/misc/form_response/form_response.vue';
 
 export default {
   components: {
-    SingleStepForm,
-    MultiStepForm,
+    DefaultSingleStepForm,
+    DefaultMultiStepForm,
   },
   props: {
     appName: {
@@ -82,6 +86,14 @@ export default {
     scrollToSuccessMessage: {
       type: Boolean,
       default: false
+    },
+    customSingleStepForm: {
+      type: Object,
+      required: false
+    },
+    customMultiStepForm: {
+      type: Object,
+      required: false
     }
   },
   provide() {
@@ -94,6 +106,12 @@ export default {
     };
   },
   computed: {
+    singleStepForm(){
+      return this.customSingleStepForm || DefaultSingleStepForm;
+    },
+    multiStepForm(){
+      return this.customMultiStepForm || DefaultMultiStepForm;
+    },
     formFinished() {
       return this.$store.state.formFinished;
     },
