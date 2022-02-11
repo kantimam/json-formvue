@@ -221,6 +221,8 @@ export default {
       return !!this.properties.enableMask;
     },
     minDate() {
+      if (!this.validators) return undefined;
+
       const validator = this.validators.find(
           (v) => v.identifier === "DateInterval"
       );
@@ -236,6 +238,8 @@ export default {
       return !isNaN(date) ? minDate : undefined;
     },
     maxDate() {
+      if (!this.validators) return undefined;
+
       const validator = this.validators.find(
           (v) => v.identifier === "DateInterval"
       );
