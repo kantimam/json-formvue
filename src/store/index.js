@@ -243,10 +243,17 @@ const createStore = (Vuex, initialState) => {
           }
 
           const currentModel = context.getters.getCurrentModel;
-          // append entries to formdata
-          formData.append(context.getters.getCurrentInputName('__currentPage'), currentModel['__currentPage'].value)
-          formData.append('tx_form_formframework[__trustedProperties]', currentModel['__trustedProperties'].value)
-          formData.append(context.getters.getCurrentInputName('__state'), currentModel['__state'].value)
+
+          // append all hidden fields to form data
+          const hiddenFields=context.getters.getCurrentSchema?.elements.filter(element=>element.type==='Hidden');
+          hiddenFields.forEach(field=>{
+            if(field.identifier==='__trustedProperties'){
+              // trusted properties has a different naming convention for whatever reason, maybe fix that in the backend later...
+              formData.append('tx_form_formframework[__trustedProperties]', field.defaultValue)
+            }else{
+              formData.append(field.name, field.defaultValue);
+            }
+          })
 
           const currentAction = context.getters.getCurrentStep.formAction;
           if (!currentAction) return;

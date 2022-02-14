@@ -15733,6 +15733,7 @@ __webpack_require__.d(__webpack_exports__, "getPlaceholder", function() { return
 __webpack_require__.d(__webpack_exports__, "createRequiredLabel", function() { return /* reexport */ createRequiredLabel; });
 __webpack_require__.d(__webpack_exports__, "createInputRules", function() { return /* reexport */ createInputRules; });
 __webpack_require__.d(__webpack_exports__, "BaseInput", function() { return /* reexport */ base_input; });
+__webpack_require__.d(__webpack_exports__, "DynamicElement", function() { return /* reexport */ dynamic_element; });
 __webpack_require__.d(__webpack_exports__, "OnTextfieldText", function() { return /* reexport */ textfield_text; });
 __webpack_require__.d(__webpack_exports__, "OnTextfieldEmail", function() { return /* reexport */ textfield_email; });
 __webpack_require__.d(__webpack_exports__, "OnTextfieldNumber", function() { return /* reexport */ textfield_number; });
@@ -16389,6 +16390,8 @@ var _excluded = ["formData", "callbacksMap"];
 
 
 
+
+
 /**
  *
  * @param knownCallbacks
@@ -16615,6 +16618,8 @@ var store_createStore = function createStore(Vuex, initialState) {
         context.commit('resetFormErrorCount');
 
         if (vuetifyForm.$el && isFormValid) {
+          var _context$getters$getC;
+
           // check if form element exists and if it is valid
           context.commit('setLoading', true);
           context.commit('setFormErrors', []);
@@ -16636,11 +16641,19 @@ var store_createStore = function createStore(Vuex, initialState) {
             });
           }
 
-          var currentModel = context.getters.getCurrentModel; // append entries to formdata
+          var currentModel = context.getters.getCurrentModel; // append all hidden fields to form data
 
-          formData.append(context.getters.getCurrentInputName('__currentPage'), currentModel['__currentPage'].value);
-          formData.append('tx_form_formframework[__trustedProperties]', currentModel['__trustedProperties'].value);
-          formData.append(context.getters.getCurrentInputName('__state'), currentModel['__state'].value);
+          var hiddenFields = (_context$getters$getC = context.getters.getCurrentSchema) === null || _context$getters$getC === void 0 ? void 0 : _context$getters$getC.elements.filter(function (element) {
+            return element.type === 'Hidden';
+          });
+          hiddenFields.forEach(function (field) {
+            if (field.identifier === '__trustedProperties') {
+              // trusted properties has a different naming convention for whatever reason, maybe fix that in the backend later...
+              formData.append('tx_form_formframework[__trustedProperties]', field.defaultValue);
+            } else {
+              formData.append(field.name, field.defaultValue);
+            }
+          });
           var currentAction = context.getters.getCurrentStep.formAction;
           if (!currentAction) return;
           fetch(currentAction, {
@@ -16652,10 +16665,10 @@ var store_createStore = function createStore(Vuex, initialState) {
           }).then(function (json) {
             return context.dispatch('handleSuccessResponse', json);
           })["catch"](function (error) {
-            var _context$getters$getC, _context$getters$getC2;
+            var _context$getters$getC2, _context$getters$getC3;
 
             // does not catch handleSuccessResponse errors
-            var labels = (_context$getters$getC = context.getters.getCurrentSchema) === null || _context$getters$getC === void 0 ? void 0 : (_context$getters$getC2 = _context$getters$getC.global) === null || _context$getters$getC2 === void 0 ? void 0 : _context$getters$getC2.labels;
+            var labels = (_context$getters$getC2 = context.getters.getCurrentSchema) === null || _context$getters$getC2 === void 0 ? void 0 : (_context$getters$getC3 = _context$getters$getC2.global) === null || _context$getters$getC3 === void 0 ? void 0 : _context$getters$getC3.labels;
             context.commit('setFormResponse', {
               title: (labels === null || labels === void 0 ? void 0 : labels.error) || 'Ein Fehler ist aufgetreten, bitte versuchen Sie es später erneut',
               text: external_commonjs_vue_commonjs2_vue_root_Vue_default.a.config.devtools ? error.message : null,
@@ -41179,6 +41192,7 @@ var content_element_component = normalizeComponent(
 
 
  // INTERNAL ELEMENTS
+
 
  // PUBLIC OPTIONAL FUNCTIONS AND HELPERS
 
