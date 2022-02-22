@@ -1,26 +1,26 @@
 <template>
   <div>
     <v-radio-group
-      :class="`ondigo-input-${id} ondigo-radio`"
-      :label="label"
-      :ref="'ref-' + id"
-      :required="required"
-      v-model="selected"
-      hide-details="auto"
+        :class="`ondigo-input-${id} ondigo-radio`"
+        :label="label"
+        :ref="'ref-' + id"
+        :required="required"
+        v-model="inputValue"
+        hide-details="auto"
     >
       <v-radio
-        v-for="option in radioOptions"
-        :key="option.value"
-        :name="name"
-        :label="option.label"
-        :value="option.value"
+          v-for="option in radioOptions"
+          :key="option.value"
+          :name="name"
+          :label="option.label"
+          :value="option.value"
       ></v-radio>
     </v-radio-group>
     <child-dynamic-element
-      v-for="element in elements"
-      :element="{ conditionalValue: selected, ...element }"
-      :key="element.identifier"
-      :formName="formName"
+        v-for="element in elements"
+        :element="{ conditionalValue: inputValue, ...element }"
+        :key="element.identifier"
+        :formName="formName"
     />
   </div>
 </template>
@@ -33,14 +33,6 @@ export default {
   name: "ConditionRadio",
   components: {
     "child-dynamic-element": DynamicElement,
-  },
-  data: () => ({
-    selected: "",
-  }),
-  methods: {
-    save(date) {
-      this.$refs.menu.save(date);
-    },
   },
   props: {
     focused: {
@@ -82,6 +74,14 @@ export default {
   computed: {
     required() {
       return isRequired(this.properties);
+    },
+    inputValue: {
+      get() {
+        return this.$store.getters.getCurrentInputValue(this.id) || "";
+      },
+      set(value) {
+        this.$store.commit("updateInputValue", { key: this.id, value: value });
+      },
     },
     radioOptions() {
       const optionsArray = [];

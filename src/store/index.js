@@ -106,7 +106,8 @@ const createStore = (Vuex, initialState) => {
 
         const currentModel = currentStep.inputModel[payload.key] ? currentStep.inputModel[payload.key] : {
           id: payload.key,
-          hasError: false
+          hasError: false,
+          default: true
         };
 
         currentModel.value = payload.value;
@@ -116,8 +117,10 @@ const createStore = (Vuex, initialState) => {
           currentModel.hasError = false;
         }
 
-
         currentStep.inputModel[payload.key] = currentModel;
+
+        state.steps=[...state.steps]; // need to re assign the array to trigger a re render
+
       },
       updateFormStep(state, newStep) {
         state.currentStep = newStep > 0 ? newStep : 1;
@@ -143,7 +146,9 @@ const createStore = (Vuex, initialState) => {
         state.lastStep = formConfig.api.page.pages || 1
         state.formResponse = null
 
-        state.steps[formConfigStep - 1] = createStepFromFormConfig(formConfig)
+        const updatedSteps=state.steps;
+        updatedSteps[formConfigStep - 1]=createStepFromFormConfig(formConfig);
+        state.steps = updatedSteps;
         state.loading = false;
 
       },
@@ -241,8 +246,6 @@ const createStore = (Vuex, initialState) => {
               formData.append(mappedKey, value.value);
             });
           }
-
-          const currentModel = context.getters.getCurrentModel;
 
           // append all hidden fields to form data
           const hiddenFields=context.getters.getCurrentSchema?.elements.filter(element=>element.type==='Hidden');
@@ -427,6 +430,10 @@ function inputArrayFromSchema(elements) {
 
   elements.forEach(element => {
     if (element.elements && element.elements.length) {
+      // ConditionRadio and Checkbox are container elements but also inputs so this exception is needed
+      if(element.type==='ConditionRadio' || element.type==='ConditionCheckbox'){
+        inputs.push(element);
+      }
       inputs.push(...inputArrayFromSchema(element.elements));
     } else inputs.push(element)
   })
