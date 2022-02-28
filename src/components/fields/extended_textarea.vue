@@ -1,33 +1,33 @@
 <template>
   <v-textarea
-    :autocomplete="autocomplete"
-    auto-size
-    @blur="blur"
-    :color="color"
-    :counter="counter"
-    :disabled="disabled"
-    :filled="filled"
-    :outlined="outlined"
-    :solo="solo"
-    @focus="focus"
-    hide-details="auto"
-    :id="id"
-    :inputmode="inputmode"
-    :label="label"
-    :loading="loading"
-    :error-messages="inputError"
-    :name="name"
-    :placeholder="placeholder"
-    :prefix="prefix"
-    v-model="inputValue"
-    :readonly="readonly"
-    :ref="'ref-' + id"
-    :required="required"
-    :rules="inputRules"
-    :suffix="suffix"
-    :type="type"
-    v-bind:class="
-      ({
+      :autocomplete="autocomplete"
+      auto-size
+      @blur="blur"
+      :color="color"
+      :counter="counter"
+      :disabled="disabled"
+      :filled="filled"
+      :outlined="outlined"
+      :solo="solo"
+      @focus="focus"
+      hide-details="auto"
+      :id="id"
+      :inputmode="inputmode"
+      :label="label"
+      :loading="loading"
+      :error-messages="inputError"
+      :name="name"
+      :placeholder="placeholder"
+      :prefix="prefix"
+      v-model="inputValue"
+      :readonly="readonly"
+      :ref="'ref-' + id"
+      :required="required"
+      :rules="inputRules"
+      :suffix="suffix"
+      :type="type"
+      v-bind:class="
+      [{
         'v-text-field--required': required,
         'v-text-field--optional': !required,
         'v-text-field--counting': counter,
@@ -35,18 +35,18 @@
       },
       'ondigo-input',
       'ondigo-textarea',
-      `ondigo-input-${id}`)
+      `ondigo-input-${id}`]
     "
-    validate-on-blur
+      validate-on-blur
   >
     <template slot="prepend-outer"><slot name="prepend"></slot></template>
     <template slot="prepend-inner" v-if="!required">
 		<span class="v-input__label-optional">
 			{{optionalLabel }}
 		</span>
-	</template>
+    </template>
     <template slot="prepend-inner" v-if="required"
-      ><span class="v-input__label-required">{{
+    ><span class="v-input__label-required">{{
         requiredLabel
       }}</span></template
     >
@@ -61,6 +61,7 @@ import {
   isRequired,
   createRequiredLabel,
 } from "../../lib/util";
+
 
 export default {
   name: "OnTextarea",
@@ -85,13 +86,6 @@ export default {
     color: {
       type: String,
       default: null,
-    },
-    counter: {
-      type: [Number, String],
-      default: null,
-      validator: function (value) {
-        return /^\d+$/.test(value);
-      },
     },
     disabled: {
       type: Boolean,
@@ -178,6 +172,7 @@ export default {
   data() {
     return {
       updated: false,
+      counter: 1000
     };
   },
 
