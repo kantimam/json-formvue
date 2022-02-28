@@ -1,6 +1,6 @@
 <template>
   <v-select
-      :allow-overflow="false"
+      :allow-overflow="true"
       :append-icon="appendicon || $vuetify.icons.values.dropdown"
       :autocomplete="autocomplete || 'chrome-off'"
       attach
@@ -19,7 +19,6 @@
       :solo="solo"
       @focus="focus"
       :hide-details="hidedetails"
-      :id="id"
       @input="input"
       inputmode="none"
       :items="selectItems"
@@ -45,11 +44,11 @@
       :required="required"
       :rules="inputRules"
       :suffix="suffix"
-      v-bind:class="{
+      v-bind:class="[{
       'v-text-field--required': required,
       'v-text-field--optional': !required,
       'v-text-field--updated': updated,
-    }"
+    }, `select-${id}`]"
       v-model="inputValue"
       validate-on-blur
       :value="defaultValue"
@@ -306,18 +305,28 @@ export default {
       return this.$store.getters.getCurrentInputError(this.id) || "";
     },
     selectItems() {
-      const optionsArray = [];
-      if (!this.properties || !this.properties.options) return optionsArray;
+      if(Array.isArray(this.properties.options)){
+        return this.properties.options;
+      }
 
-      const options = this.properties.options;
-      for (const prop in options) {
-        optionsArray.push({
-          value: prop,
-          label: options[prop],
-        });
+      const optionsArray = [];
+
+      if(typeof this.properties.options === 'object'){
+        if (!this.properties || !this.properties.options) return optionsArray;
+
+        const options = this.properties.options;
+        for (const prop in options) {
+          optionsArray.push({
+            value: prop,
+            label: options[prop],
+          });
+        }
+
+        return optionsArray;
       }
 
       return optionsArray;
+
     },
     customSelectionKey(){
       if(this.properties?.customSelectionKey){

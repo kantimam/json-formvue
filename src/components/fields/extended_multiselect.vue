@@ -32,6 +32,9 @@ export default {
   }),
   computed: {
     selectedOptions() {
+      if(Array.isArray(this.properties.options)){
+        return this.properties.options.filter(val => this.inputValue.includes(val));
+      }
       return Object.keys(this.properties.options).filter(val => this.inputValue.includes(val));
     }
   }
