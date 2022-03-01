@@ -1,16 +1,32 @@
 <template>
   <v-app :class="`ondigo-formvue-app formvue-${formSchema.configuration.identifier}`"
          :id="`formvue-${formSchema.configuration.id}`">
-    <div class="ondigo-formvue">
+    <div :class="`ondigo-formvue ${formFinished? 'finished' : ''}`">
       <div class="ondigo-form-wrapper" v-if="!formFinished">
         <template v-if="isSingleStepForm">
-          <component :is="singleStepForm" />
+          <component :is="singleStepForm">
+            <template v-if="showErrorResponseInsideForm" slot="append-inner">
+              <div class="response-wrapper" ref="formResponseElement">
+                <component
+                    v-if="this.mixedComponents['FormResponse']"
+                    :is="this.mixedComponents['FormResponse']"
+                    :formName="formSchema.configuration.id"
+                    :response="formResponse"
+                />
+                <!-- Fallback response -->
+                <div
+                    v-else-if="formResponse"
+                    v-html="formResponse"
+                />
+              </div>
+            </template>
+          </component>
         </template>
         <template v-else>
           <component :is="multiStepForm" />
         </template>
       </div>
-      <div class="response-wrapper" ref="formResponseElement">
+      <div v-if="!showErrorResponseInsideForm || formFinished" class="response-wrapper" ref="formResponseElement">
         <component
             v-if="this.mixedComponents['FormResponse']"
             :is="this.mixedComponents['FormResponse']"
@@ -94,7 +110,12 @@ export default {
     customMultiStepForm: {
       type: Object,
       required: false
+    },
+    showErrorResponseInsideForm: {
+      type: Boolean,
+      default: false
     }
+
   },
   provide() {
     return {

@@ -8,6 +8,7 @@
       :loading="loading"
       :disabled="disabled"
   >
+    <slot name="prepend-inner"></slot>
     <dynamic-element
         v-for="element in formConfig.elements"
         :key="element.identifier"
@@ -20,6 +21,7 @@
     <div v-show="formErrors && formErrors.length" class="error-summary form-errors">
       <p v-for="error in formErrors" class="error-summary-item">{{ error }}</p>
     </div>
+    <slot name="append-inner"></slot>
     <component
         v-if="componentsMap['SubmitButton']"
         :is="componentsMap['SubmitButton']"

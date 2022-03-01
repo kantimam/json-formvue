@@ -4,7 +4,7 @@
       auto-size
       @blur="blur"
       :color="color"
-      :counter="counter"
+      :counter="maxLength"
       :disabled="disabled"
       :filled="filled"
       :outlined="outlined"
@@ -30,7 +30,7 @@
       [{
         'v-text-field--required': required,
         'v-text-field--optional': !required,
-        'v-text-field--counting': counter,
+        'v-text-field--counting': maxLength,
         'v-text-field--updated': updated,
       },
       'ondigo-input',
@@ -61,7 +61,6 @@ import {
   isRequired,
   createRequiredLabel,
 } from "../../lib/util";
-
 
 export default {
   name: "OnTextarea",
@@ -171,8 +170,7 @@ export default {
 
   data() {
     return {
-      updated: false,
-      counter: 1000
+      updated: false
     };
   },
 
@@ -211,6 +209,15 @@ export default {
     inputError() {
       return this.$store.getters.getCurrentInputError(this.id) || "";
     },
+    maxLength(){
+      if(this.validators && Array.isArray(this.validators)){
+        const stringLengthValidator=this.validators.find(val=>val.identifier==='StringLength');
+        if(stringLengthValidator && stringLengthValidator.options && stringLengthValidator.options.maximum){
+          return parseInt(stringLengthValidator.options.maximum);
+        }
+      }
+      return null;
+    }
   },
 
   methods: {

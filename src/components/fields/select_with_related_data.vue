@@ -308,7 +308,6 @@ export default {
     },
     inputValue: {
       get() {
-        console.log("val:" +this.$store.getters.getCurrentInputValue(this.id))
 
         return this.$store.getters.getCurrentInputValue(this.id) || "";
       },
