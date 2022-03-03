@@ -17,7 +17,7 @@ import OnTextArea from './components/fields/extended_textarea.vue'
 import OnCheckBox from './components/fields/checkbox/checkbox.vue'
 import OnRadioGroup from './components/fields/radio_group.vue'
 import OnSelect from './components/fields/extended_select.vue'
-import SelectWithRelatedData from './components/fields/select_with_related_data'
+import SelectWithRelatedData from './components/fields/select_with_related_data.vue'
 import AdvancedPassword from "./components/fields/advanced_password.vue";
 import FileUpload from "./components/fields/file_upload.vue";
 import StaticText from "./components/fields/static_text/static_text.vue";

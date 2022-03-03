@@ -83,12 +83,10 @@ export default {
       type: Array,
       required: true,
     },
-    validatorsMap: {
+    validatorsMap: {  // TODO implement properly in 2.0. At the moment, this is only supported on MaskText elements
       type: Object,
       default: function () {
-        return {
-          filled: true,
-        };
+        return {};
       },
     },
     scrollIntoView: {
@@ -124,6 +122,7 @@ export default {
       formSchema: Object.freeze(this.formSchema),
       scrollIntoView: this.scrollIntoView,
       fieldPropsOverwrite: this.fieldPropsOverwrite,
+      validatorsMap: this.validatorsMap
     };
   },
   computed: {

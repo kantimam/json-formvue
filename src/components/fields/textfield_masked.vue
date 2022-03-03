@@ -183,7 +183,7 @@ export default {
     },
     inputRules() {
       if (this.rules && Array.isArray(this.rules)) return this.rules;
-      else return createInputRules(this.required, this.validators, this.properties, true);
+      else return createInputRules(this.required, this.validators, this.properties, true, this.validatorsMap);
     },
     inputValue: {
       get() {
@@ -256,5 +256,6 @@ export default {
       }
     }
   },
+  inject: ['validatorsMap']
 };
 </script>
