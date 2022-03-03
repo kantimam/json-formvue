@@ -1,15 +1,15 @@
 <template>
   <div
-    v-if="isResponseObject"
-    :class="`ondigo-response${isError ? ' ondigo-response-error error--text' : ''}`"
+      v-if="isResponseObject && !isHtml"
+      :class="`ondigo-response${isError ? ' ondigo-response-error error--text' : ''}`"
   >
     <h3 v-if="title">{{ title }}</h3>
     <p v-if="text">{{ text }}</p>
   </div>
   <div
       v-else
-      class="ondigo-response"
-      v-html="response"
+      :class="`ondigo-response${isError ? ' ondigo-response-error error--text' : ''}`"
+      v-html="isResponseObject ? response.html : response"
   />
 
 </template>
@@ -30,6 +30,9 @@ export default {
   computed: {
     isResponseObject() {
       return !!this.response && typeof this.response === 'object';
+    },
+    isHtml() {
+      return this.isResponseObject && 'html' in this.response
     },
     isError() {
       return this.isResponseObject ? !!this.response.error : false
