@@ -35,7 +35,7 @@ export default {
       return this.isResponseObject && 'html' in this.response
     },
     isError() {
-      return this.isResponseObject ? !!this.response.error : false
+      return this.isResponseObject && 'error' in this.response ? !!this.response.error : false
     },
     title() {
       return this.isResponseObject ? this.response.title : null;

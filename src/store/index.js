@@ -313,7 +313,7 @@ const createStore = (Vuex, initialState) => {
           // if the response contains callbacks handle them before proceeding
           await context.dispatch('handleResponseCallbacks', successJson);
           context.commit('setFormResponse', {
-            error: !successJson.success,
+            error: 'success' in successJson ? !successJson.success : false,
             html: successJson.content
           });
           return context.commit('setFormFinished');
