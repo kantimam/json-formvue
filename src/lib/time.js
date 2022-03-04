@@ -1,4 +1,4 @@
-import { getMaskPatternToRegexMatches, matchMaskPattern } from "./pattern";
+import {getMaskPatternToRegexMatches, matchMaskPattern} from "./pattern";
 
 /**
  * Formats a date in the ISO8601 UTC format.
@@ -20,6 +20,16 @@ export function toIsoFormatWithOffset(date) {
  */
 export function splitIsoDate(date) {
     return date.split('-').map(x => Number(x));
+}
+
+/**
+ * Checks, if a string is ISO formatted.
+ * @param {string} str The string to check.
+ * @returns {boolean} True, if the string is ISO formatted.
+ */
+export function isIsoFormatted(str) {
+    const pattern = /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))/;
+    return pattern.test(str);
 }
 
 /**
@@ -48,14 +58,22 @@ export function compareDateTimes(a, b) {
  * @returns {string} The current date as ISO string. e.g. '2021-12-31'
  */
 export function currentIsoTime() {
-    return new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
-        .toISOString()
-        .substr(0, 10);
+    const now = new Date(Date.now() - new Date().getTimezoneOffset() * 60000);
+    return getShortIsoString(now);
+}
+
+/**
+ * Converts a date object to a short ISO string, e.g. '2021-12-31'
+ *
+ * @param {Date} date The date to convert.
+ */
+export function getShortIsoString(date) {
+    return date.toISOString().substr(0, 10);
 }
 
 /**
  * Formats a pattern date to an ISO Date (e.g. '2021-12-31').
- * 
+ *
  * @param {string} date A pattern formatted date string.
  * @param {string} pattern A masked element pattern.
  * @param {function(string[], string[], string):number} getter An optional getter that supplies date numbers.
@@ -90,7 +108,7 @@ export function parseISODateFromPattern(date, pattern, getter = (match, order, i
 
 /**
  * Formats an ISO Date (e.g. '2021-12-31') according to a masked element pattern.
- * 
+ *
  * @param {string} date An ISO formatted date string.
  * @param {string} pattern A masked element pattern
  * @param {object} substitutes A dictionary with character substitutes

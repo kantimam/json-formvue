@@ -49,6 +49,10 @@ export default {
   name: "OnTextfieldMasked",
   mounted() {
     this.initElement();
+
+    // when a default value is set, init mask manually
+    if (this.maskActive && this.inputValue && this.inputValue.length > 0)
+      this.initMask();
   },
   model: {
     prop: "value",
