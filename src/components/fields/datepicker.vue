@@ -22,6 +22,7 @@
             :inputBridge="inputBridge"
             v-bind="{
             ...$attrs,
+            defaultValue: formattedDefaultValue,
             name: undefined,
             properties: {
               ...properties,
@@ -57,8 +58,10 @@ import MaskedText from "./textfield_masked.vue";
 import {
   compareDateTimes,
   formatISODateFromPattern,
+  getShortIsoString,
+  isIsoFormatted,
   parseISODateFromPattern,
-  toIsoFormatWithOffset,
+  toIsoFormatWithOffset
 } from "../../lib/time";
 
 export default {
@@ -92,6 +95,16 @@ export default {
 
       this.formattedInput = toIsoFormatWithOffset(new Date(time));
     },
+  },
+  created() {
+    const stored = this.$store.getters.getCurrentInputValue(this.id);
+    if (!stored) return;
+
+    // when default values are set, they are in ISO format, but we need our masked format for this component.
+    // fix it via the formattedDefaultValue property
+    if (isIsoFormatted(stored)) {
+      this.$store.commit("updateInputValue", {key: this.id, value: this.formattedDefaultValue});
+    }
   },
   methods: {
     save(date) {
@@ -163,6 +176,10 @@ export default {
     },
   },
   props: {
+    defaultValue: {
+      type: String,
+      required: false
+    },
     focused: {
       type: Boolean,
       default: false,
@@ -219,6 +236,19 @@ export default {
     },
     maskActive() {
       return !!this.properties.enableMask;
+    },
+    formattedDefaultValue() {
+      if (!this.defaultValue || !this.maskPattern) return '';
+
+      const date = new Date(this.defaultValue);
+      const dateStr = getShortIsoString(date);
+
+      const now = new Date();
+      return formatISODateFromPattern(dateStr, this.maskPattern, {
+        // additional mappings for hour, minute
+        H: String(now.getHours()).padStart(2, "0"),
+        i: String(now.getMinutes()).padStart(2, "0"),
+      });
     },
     minDate() {
       if (!this.validators) return undefined;
