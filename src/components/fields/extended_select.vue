@@ -54,8 +54,12 @@
       :value="defaultValue"
       :multiple="multiple"
   >
-    <template v-if="customSelectionKey" v-slot:selection="{ item, index }">
-      {{ item[customSelectionKey] || item['value'] }}
+    <template v-if="customSelectionKeys && Array.isArray(customSelectionKeys)" v-slot:selection="{ item, index }">
+      <template v-for="key in customSelectionKeys" >
+        <span :class="[`custom-selection custom-selection-${key}`]" v-if="item.hasOwnProperty(key)">
+          {{ item[key] }}
+        </span>
+      </template>
     </template>
     <template slot="prepend-outer" v-if="!!$slots.prepend"
     ><slot name="prepend"></slot
@@ -328,9 +332,14 @@ export default {
       return optionsArray;
 
     },
-    customSelectionKey(){
-      if(this.properties?.customSelectionKey){
-        return this.properties?.customSelectionKey;
+    customSelectionKeys(){
+      if(this.properties?.customSelectionKeys){
+        if(Array.isArray(this.properties.customSelectionKeys)){
+          return this.properties.customSelectionKeys;
+        }
+        if(typeof this.properties.customSelectionKeys === 'string'){
+          return [this.properties?.customSelectionKeys];
+        }
       }
     }
   },
