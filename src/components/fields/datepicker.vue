@@ -84,16 +84,7 @@ export default {
       this.inputBridge = this.formatDate(this.date);
     },
     inputBridge(val) {
-      const parsed = this.parseDate(val);
-      if (parsed && parsed !== this.date) this.date = parsed;
-
-      const time = Date.parse(parsed);
-      if (isNaN(time)) {
-        this.formattedInput = null;
-        return;
-      }
-
-      this.formattedInput = toIsoFormatWithOffset(new Date(time));
+      this.updateFormattedValue(val);
     },
   },
   created() {
@@ -104,6 +95,8 @@ export default {
     // fix it via the formattedDefaultValue property
     if (isIsoFormatted(stored)) {
       this.$store.commit("updateInputValue", {key: this.id, value: this.formattedDefaultValue});
+    } else {
+      this.updateFormattedValue(stored);
     }
   },
   methods: {
@@ -119,6 +112,18 @@ export default {
         H: String(now.getHours()).padStart(2, "0"),
         i: String(now.getMinutes()).padStart(2, "0"),
       });
+    },
+    updateFormattedValue(val) {
+      const parsed = this.parseDate(val);
+      if (parsed && parsed !== this.date) this.date = parsed;
+
+      const time = Date.parse(parsed);
+      if (isNaN(time)) {
+        this.formattedInput = null;
+        return;
+      }
+
+      this.formattedInput = toIsoFormatWithOffset(new Date(time));
     },
     parseDate(date) {
       if (!date) return null;
