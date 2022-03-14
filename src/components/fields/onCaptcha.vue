@@ -6,7 +6,7 @@
       <img :src="data" alt="Captcha">
     </div>
     <div class="ondigo-captcha-refresh-container">
-      <a 
+      <a
         v-if="!loading"
         href="#"
         class="ondigo-captcha-refresh-text"
@@ -25,7 +25,7 @@
         {{ error }}
       </p>
     </div>
-    <text-field v-bind="{...$props, ...$attrs}" v-on="$listeners" type="text" />
+    <text-field v-bind="{...$props, ...$attrs}" v-on="$listeners" type="text" autocomplete="off" />
   </div>
   <div v-else class="ondigo-captch-error">
     <p>
@@ -36,6 +36,7 @@
 
 <script>
 import TextField from './textfield_text.vue'
+
 export default {
   name: "onCaptcha",
   components: {

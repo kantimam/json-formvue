@@ -1,8 +1,9 @@
 <template>
-  <masked-text v-bind="{...$attrs, ...$props}" :mask-active="maskActive" v-on="$listeners" />
+  <masked-text v-bind="{...$attrs, ...$props}" :mask-active="maskActive" v-on="$listeners" type="tel" />
 </template>
 <script>
 import MaskedText from "./textfield_masked.vue";
+
 export default {
   name: "OnTextfieldTelephone",
   components: {

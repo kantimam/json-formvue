@@ -1,6 +1,6 @@
 <template>
   <v-textarea
-      :autocomplete="autocomplete"
+      :autocomplete="properties['autoComplete']"
       auto-size
       @blur="blur"
       :color="color"
@@ -55,12 +55,8 @@
 </template>
 
 <script>
-import { VTextarea } from "vuetify/lib";
-import {
-  createInputRules,
-  isRequired,
-  createRequiredLabel,
-} from "../../lib/util";
+import {VTextarea} from "vuetify/lib";
+import {createInputRules, createRequiredLabel, isRequired,} from "../../lib/util";
 
 export default {
   name: "OnTextarea",

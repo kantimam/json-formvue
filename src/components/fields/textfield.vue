@@ -27,6 +27,7 @@
       :required="required"
       :rules="rules"
       :suffix="suffix"
+      :autocomplete="properties['autoComplete']"
       v-bind:class="{
         'v-text-field--required': required,
         'v-text-field--optional': optional,
@@ -72,7 +73,10 @@ export default {
         return /^\d+$/.test(value);
       },
     },
-
+    properties: {
+      type: Object | Array,
+      required: true,
+    },
     errorMessages: {
       type: String | null,
     },

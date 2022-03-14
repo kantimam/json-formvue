@@ -1,6 +1,6 @@
 <template>
   <text-field
-    v-bind="$attrs"
+    v-bind="{...$attrs, ...$props}"
     :id="id"
     :rules="inputRules"
     :value="inputValue"
@@ -12,11 +12,7 @@
 </template>
 
 <script>
-import {
-  createInputRules,
-  isRequired,
-  createRequiredLabel,
-} from "../../lib/util";
+import {createInputRules, createRequiredLabel, isRequired,} from "../../lib/util";
 import TextField from "./textfield.vue";
 
 export default {

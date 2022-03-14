@@ -4,6 +4,7 @@
     ref="field"
     v-model="inputValue"
     :value="value"
+    :autocomplete="properties['autoComplete']"
     @input="input"
     @focus="focus"
     @blur="blur"
