@@ -3,7 +3,6 @@
     class="ondigo-checkbox"
     :class="`ondigo-input-${id} ondigo-checkbox`"
     :error-messages="inputError"
-    :id="id"
     :label="label"
     :ref="'ref-' + id"
     :required="required"
@@ -21,7 +20,7 @@
 </template>
 
 <script>
-import { createInputRules, isRequired } from "../../../lib/util";
+import {createInputRules, isRequired} from "../../../lib/util";
 
 export default {
   name: "OnCheckbox",

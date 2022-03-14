@@ -2,7 +2,6 @@
   <div class="ondigo-advanced-password">
     <text-field
       v-bind="$attrs"
-      :id="id"
       :label="label"
       :name="`${name}[password]`"
       :rules="inputRules"
@@ -15,7 +14,6 @@
     />
     <text-field
       v-bind="$attrs"
-      :id="`${id}-repeat`"
       :label="`${label} repeat`"
       :name="`${name}[confirmation]`"
       :rules="passwordMatchingValidator"
@@ -30,11 +28,7 @@
 </template>
 
 <script>
-import {
-  createInputRules,
-  isRequired,
-  createRequiredLabel,
-} from "../../lib/util";
+import {createInputRules, createRequiredLabel, isRequired,} from "../../lib/util";
 import TextField from "./textfield.vue";
 
 export default {

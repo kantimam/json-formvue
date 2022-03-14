@@ -6,7 +6,6 @@
     <v-form
         :class="`ondigo-multi-step-form ondigo-form form-${formConfig.identifier}`"
         :data-form-identifier="formConfig.id"
-        :id="formConfig.id"
         @submit.prevent="handleFormSubmit"
         ref="form"
         :loading="loading"

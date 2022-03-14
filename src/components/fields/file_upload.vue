@@ -26,7 +26,6 @@
     </v-sheet>
     <v-file-input
       :accept="allowedMimeTypes"
-      :id="id"
       :required="required"
       class="ondigo-file-input"
       counter
@@ -49,11 +48,8 @@
 </template>
 
 <script>
-import {
-  createInputRules,
-  createRequiredLabel,
-  isRequired,
-} from "../../lib/util";
+import {createInputRules, createRequiredLabel, isRequired,} from "../../lib/util";
+
 export default {
   name: "fileUpload",
   props: {

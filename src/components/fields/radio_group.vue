@@ -6,7 +6,6 @@
     :class="`ondigo-input-${id} ondigo-radio`"
     :error-messages="inputError"
     @input="input"
-    :id="id"
     :label="label"
     :ref="'ref-' + id"
     :required="required"
@@ -28,11 +27,7 @@
 </template>
 
 <script>
-import {
-  createInputRules,
-  isRequired,
-  createRequiredLabel,
-} from "../../lib/util";
+import {createInputRules, createRequiredLabel, isRequired,} from "../../lib/util";
 
 export default {
   name: "OnRadio",

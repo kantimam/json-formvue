@@ -15,7 +15,6 @@
       :filled="filled"
       :outlined="outlined"
       :solor="solo"
-      :id="id"
       :inputmode="inputmode"
       @input="input"
       :label="label"

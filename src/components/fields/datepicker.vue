@@ -15,7 +15,6 @@
             :label="label"
             :placeholder="placeholder"
             :filled="filled"
-            :id="id"
             ref="masked"
             :rules="menu ? [] : inputRules"
             :class="`ondigo-input ondigo-textfield ondigo-input-${id}`"

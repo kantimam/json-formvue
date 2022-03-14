@@ -9,7 +9,6 @@
                   :disabled="disabled"
                   :filled="filled"
                   @focus="focus"
-                  :id="id"
                   :multiple="multiple"
                   :readonly="readonly"
                   :ref="'ref-' + id"
@@ -51,9 +50,9 @@
 </template>
 
 <script>
-  import {VChip, VFileInput, VInput, VProgressCircular, VProgressLinear} from "vuetify/lib";
-  import {createInputRules, createRequiredLabel, isRequired} from "../../../lib/util";
-  //import './_file_upload.scss';
+import {VChip, VFileInput, VInput, VProgressCircular, VProgressLinear} from "vuetify/lib";
+import {createInputRules, createRequiredLabel, isRequired} from "../../../lib/util";
+//import './_file_upload.scss';
 
 
   export default {

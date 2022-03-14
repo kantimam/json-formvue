@@ -1,7 +1,6 @@
 <template>
   <text-field
     v-bind="{...$attrs, ...$props}"
-    :id="id"
     :rules="inputRules"
     :value="inputValue"
     @input="val=>inputValue=val"

@@ -3,7 +3,6 @@
     v-if="componentsMap[element.type]"
     :is="componentsMap[element.type]"
     v-bind="{ ...filteredElement, ...fieldPropsOverwrite }"
-    :id="element.identifier"
     :formName="formName"
   />
   <fallback-field

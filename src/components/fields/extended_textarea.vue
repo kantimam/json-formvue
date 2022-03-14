@@ -11,7 +11,6 @@
       :solo="solo"
       @focus="focus"
       hide-details="auto"
-      :id="id"
       :inputmode="inputmode"
       :label="label"
       :loading="loading"

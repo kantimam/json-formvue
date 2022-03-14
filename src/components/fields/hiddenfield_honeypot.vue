@@ -3,8 +3,6 @@
     <input
       type="text"
       :name="name"
-      :id="id"
-      :autocomplete="id"
       :style="{
         position: 'absolute',
         margin: '0 0 0 -999em',
