@@ -11,7 +11,7 @@
 
 <script>
 import DynamicElement from "../dynamic_element.vue";
-import { isRequired } from "../../lib/util";
+import {isRequired} from "../../lib/util";
 
 export default {
   name: "ConditionalContent",
@@ -44,7 +44,7 @@ export default {
       type: String,
       required: true,
     },
-    id: {
+    identifier: {
       type: String,
       required: true,
     },
@@ -78,10 +78,10 @@ export default {
     },
     inputValue: {
       get() {
-        return this.$store.getters.getCurrentInputValue(this.id) || "";
+        return this.$store.getters.getCurrentInputValue(this.identifier) || "";
       },
       set(value) {
-        this.$store.commit("updateInputValue", { key: this.id, value: value });
+        this.$store.commit("updateInputValue", { key: this.identifier, value: value });
       },
     },
   },

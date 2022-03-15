@@ -23,7 +23,7 @@
 
 <script>
 import DynamicElement from "../dynamic_element.vue";
-import { isRequired } from "../../lib/util";
+import {isRequired} from "../../lib/util";
 
 export default {
   name: "ConditionCheckbox",
@@ -47,7 +47,7 @@ export default {
       type: String,
       required: true,
     },
-    id: {
+    identifier: {
       type: String,
       required: true,
     },

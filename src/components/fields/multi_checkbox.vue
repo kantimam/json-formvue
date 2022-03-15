@@ -5,9 +5,9 @@
       v-for="option in Object.entries(properties.options)"
       :key="option[0]"
       class="ondigo-checkbox"
-      :class="`ondigo-input-${id}-${option[0]} ondigo-checkbox`"
+      :class="`ondigo-input-${identifier}-${option[0]} ondigo-checkbox`"
       :label="option[1]"
-      :ref="`ref-${id}-${option[0]}`"
+      :ref="`ref-${identifier}-${option[0]}`"
       v-model="checked[option[0]]"
       hide-details="auto"
       off-icon="mdi-checkbox-blank"
@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import { createInputRules } from "../../lib/util";
+import {createInputRules} from "../../lib/util";
 
 export default {
   name: "OnMultiCheckbox",
@@ -75,7 +75,7 @@ export default {
       type: Boolean,
       default: false,
     },
-    id: {
+    identifier: {
       type: String,
       required: true,
     },

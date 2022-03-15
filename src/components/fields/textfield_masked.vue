@@ -92,7 +92,7 @@ export default {
       type: String,
       default: "optional",
     },
-    id: {
+    identifier: {
       type: String,
       required: true,
     },

@@ -3,11 +3,11 @@
     @blur="blur"
     @change="change"
     @focus="focus"
-    :class="`ondigo-input-${id} ondigo-radio`"
+    :class="`ondigo-input-${identifier} ondigo-radio`"
     :error-messages="inputError"
     @input="input"
     :label="label"
-    :ref="'ref-' + id"
+    :ref="'ref-' + identifier"
     :required="required"
     :rules="inputRules"
     validate-on-blur
@@ -72,7 +72,7 @@ export default {
       type: Boolean,
       default: false,
     },
-    id: {
+    identifier: {
       type: String,
       required: true,
     },

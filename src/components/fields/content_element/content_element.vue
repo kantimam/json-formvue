@@ -5,7 +5,7 @@
 export default {
   name: "ContentElement",
   props: {
-    id: {
+    identifier: {
       type: String,
       required: true,
     },

@@ -1,9 +1,9 @@
 <template>
   <div>
     <v-radio-group
-        :class="`ondigo-input-${id} ondigo-radio`"
+        :class="`ondigo-input-${identifier} ondigo-radio`"
         :label="label"
-        :ref="'ref-' + id"
+        :ref="'ref-' + identifier"
         :required="required"
         v-model="inputValue"
         hide-details="auto"
@@ -27,7 +27,7 @@
 
 <script>
 import DynamicElement from "../dynamic_element.vue";
-import { isRequired } from "../../lib/util";
+import {isRequired} from "../../lib/util";
 
 export default {
   name: "ConditionRadio",
@@ -43,7 +43,7 @@ export default {
       type: String,
       required: true,
     },
-    id: {
+    identifier: {
       type: String,
       required: true,
     },
@@ -77,10 +77,10 @@ export default {
     },
     inputValue: {
       get() {
-        return this.$store.getters.getCurrentInputValue(this.id) || "";
+        return this.$store.getters.getCurrentInputValue(this.identifier) || "";
       },
       set(value) {
-        this.$store.commit("updateInputValue", { key: this.id, value: value });
+        this.$store.commit("updateInputValue", { key: this.identifier, value: value });
       },
     },
     radioOptions() {

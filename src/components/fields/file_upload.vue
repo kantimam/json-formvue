@@ -54,7 +54,7 @@ export default {
   name: "fileUpload",
   props: {
     // required base props
-    id: {
+    identifier: {
       type: String,
       required: true,
     },
@@ -152,10 +152,10 @@ export default {
     },
     inputValue: {
       get() {
-        return this.$store.getters.getCurrentInputValue(this.id) || null;
+        return this.$store.getters.getCurrentInputValue(this.identifier) || null;
       },
       set(value) {
-        this.$store.commit("updateInputValue", { key: this.id, value: value });
+        this.$store.commit("updateInputValue", { key: this.identifier, value: value });
       },
     },
     inputError() {

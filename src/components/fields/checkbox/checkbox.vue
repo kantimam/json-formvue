@@ -1,10 +1,10 @@
 <template>
   <v-checkbox
     class="ondigo-checkbox"
-    :class="`ondigo-input-${id} ondigo-checkbox`"
+    :class="`ondigo-input-${identifier} ondigo-checkbox`"
     :error-messages="inputError"
     :label="label"
-    :ref="'ref-' + id"
+    :ref="'ref-' + identifier"
     :required="required"
     :rules="inputRules"
     validate-on-blur
@@ -26,7 +26,7 @@ export default {
   name: "OnCheckbox",
 
   props: {
-    id: {
+    identifier: {
       type: String,
       required: true,
     },
@@ -83,7 +83,7 @@ export default {
     },
     inputValue: {
       get() {
-        return this.$store.getters.getCurrentInputValue(this.id) ? true : false;
+        return !!this.$store.getters.getCurrentInputValue(this.identifier);
       },
       set(value) {
         this.$store.commit("updateInputValue", { key: this.id, value: value });

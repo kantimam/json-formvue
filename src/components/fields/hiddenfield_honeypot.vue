@@ -16,7 +16,7 @@
 <script>
 export default {
   props: {
-    id: {
+    identifier: {
       type: String,
       required: true,
     },

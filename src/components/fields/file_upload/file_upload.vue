@@ -11,7 +11,7 @@
                   @focus="focus"
                   :multiple="multiple"
                   :readonly="readonly"
-                  :ref="'ref-' + id"
+                  :ref="'ref-' + identifier"
                   :rules="inputRules"
                   v-bind:class="{ 'v-file-input--is-hovered': dragged, 'v-text-field--required' : required, 'v-text-field--optional' : optional, 'v-input--upload-is-disabled' : disabledupload }"
                   :value="files">
@@ -88,7 +88,7 @@ import {createInputRules, createRequiredLabel, isRequired} from "../../../lib/ut
         type: Boolean,
         default: true
       },
-      id: {
+      identifier: {
         type: String,
         required: true
       },

@@ -18,7 +18,7 @@ export default {
   name: "OnTextfield",
   components: { TextField },
   props: {
-    id: {
+    identifier: {
       type: String,
       required: true,
     },

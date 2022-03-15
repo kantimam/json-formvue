@@ -105,7 +105,7 @@ export default {
       type: Boolean,
       default: false,
     },
-    id: {
+    identifier: {
       type: String,
       required: true,
     },
