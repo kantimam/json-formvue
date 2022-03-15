@@ -87,8 +87,17 @@
 </template>
 
 <script>
-import {VListItemContent, VListItemSubtitle, VListItemTitle, VSelect,} from "vuetify/lib";
-import {createInputRules, createRequiredLabel, isRequired,} from "../../lib/util";
+import {
+  VSelect,
+  VListItemTitle,
+  VListItemContent,
+  VListItemSubtitle,
+} from "vuetify/lib";
+import {
+  createInputRules,
+  isRequired,
+  createRequiredLabel,
+} from "../../lib/util";
 
 export default {
   name: "OnSelect",
@@ -149,6 +158,11 @@ export default {
       type: Boolean,
       default: false,
     },
+    id: {
+      type: String,
+      required: true,
+    },
+
     label: {
       type: String,
       default: null,

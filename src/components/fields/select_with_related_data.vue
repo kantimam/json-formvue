@@ -89,9 +89,18 @@
 </template>
 
 <script>
-import {VListItemContent, VListItemSubtitle, VListItemTitle, VSelect,} from "vuetify/lib";
+import {
+  VSelect,
+  VListItemTitle,
+  VListItemContent,
+  VListItemSubtitle,
+} from "vuetify/lib";
 
-import {createInputRules, createRequiredLabel, isRequired,} from "../../lib/util";
+import {
+  createInputRules,
+  isRequired,
+  createRequiredLabel,
+} from "../../lib/util";
 
 export default {
   name: "OnSelect",
@@ -152,6 +161,11 @@ export default {
       type: Boolean,
       default: false,
     },
+    id: {
+      type: String,
+      required: true,
+    },
+
     label: {
       type: String,
       default: null,
@@ -295,12 +309,11 @@ export default {
       return createRequiredLabel(this.validators);
     },
     inputRules() {
-      const inputRules = createInputRules(this.required, this.validators, this.properties, true);
-      console.log(inputRules)
-      return inputRules;
+      return createInputRules(this.required, this.validators, this.properties, true);
     },
     inputValue: {
       get() {
+
         return this.$store.getters.getCurrentInputValue(this.id) || "";
       },
       set(value) {

@@ -8,6 +8,10 @@
 <script>
 export default {
   props: {
+    id: {
+      type: String,
+      required: true,
+    },
     label: {
       type: String,
       default: null,

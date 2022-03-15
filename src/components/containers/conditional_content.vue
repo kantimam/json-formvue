@@ -11,7 +11,7 @@
 
 <script>
 import DynamicElement from "../dynamic_element.vue";
-import {isRequired} from "../../lib/util";
+import { isRequired } from "../../lib/util";
 
 export default {
   name: "ConditionalContent",
@@ -41,6 +41,10 @@ export default {
       default: false,
     },
     formName: {
+      type: String,
+      required: true,
+    },
+    id: {
       type: String,
       required: true,
     },

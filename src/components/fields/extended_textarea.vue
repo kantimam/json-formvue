@@ -105,6 +105,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    id: {
+      type: String,
+      required: true,
+    },
     name: {
       type: String,
       required: true,
