@@ -20,7 +20,7 @@
       :prefix="prefix"
       v-model="inputValue"
       :readonly="readonly"
-      :ref="'ref-' + id"
+      :ref="'ref-' + identifier"
       :required="required"
       :rules="inputRules"
       :suffix="suffix"
@@ -34,7 +34,7 @@
       },
       'ondigo-input',
       'ondigo-textarea',
-      `ondigo-input-${id}`]
+      `ondigo-input-${identifier}`]
     "
       validate-on-blur
   >
@@ -173,9 +173,9 @@ export default {
     focused(focused) {
       // set focus to input tag
       if (focused) {
-        this.$refs["ref-" + this.id].$refs.input.focus();
+        this.$refs["ref-" + this.identifier].$refs.input.focus();
       } else {
-        this.$refs["ref-" + this.id].$refs.input.blur();
+        this.$refs["ref-" + this.identifier].$refs.input.blur();
       }
     },
     loading(loading) {
@@ -195,14 +195,14 @@ export default {
     },
     inputValue: {
       get() {
-        return this.$store.getters.getCurrentInputValue(this.id) || "";
+        return this.$store.getters.getCurrentInputValue(this.identifier) || "";
       },
       set(value) {
-        this.$store.commit("updateInputValue", { key: this.id, value: value });
+        this.$store.commit("updateInputValue", { key: this.identifier, value: value });
       },
     },
     inputError() {
-      return this.$store.getters.getCurrentInputError(this.id) || "";
+      return this.$store.getters.getCurrentInputError(this.identifier) || "";
     },
     maxLength(){
       if(this.validators && Array.isArray(this.validators)){

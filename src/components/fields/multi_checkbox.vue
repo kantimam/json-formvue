@@ -144,7 +144,7 @@ export default {
       );
     },
     inputError() {
-      return this.$store.getters.getCurrentInputError(this.id) || "";
+      return this.$store.getters.getCurrentInputError(this.identifier) || "";
     },
   },
 };

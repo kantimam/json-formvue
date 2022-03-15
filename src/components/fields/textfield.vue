@@ -22,7 +22,7 @@
       :name="name"
       :prefix="prefix"
       :value="value"
-      :ref="'ref-' + id"
+      :ref="'ref-' + identifier"
       :required="required"
       :rules="rules"
       :suffix="suffix"
@@ -181,7 +181,7 @@ export default {
   },
 
   mounted() {
-    this.dialog = this.$refs["ref-" + this.id].$el.closest(".v-dialog");
+    this.dialog = this.$refs["ref-" + this.identifier].$el.closest(".v-dialog");
 
     if (this.isTouchDevice) {
       window.addEventListener("orientationchange", this.onResize);
@@ -211,13 +211,13 @@ export default {
     focused(focused) {
       // set focus to input tag
       if (focused) {
-        this.$refs["ref-" + this.id].$refs.input.focus();
+        this.$refs["ref-" + this.identifier].$refs.input.focus();
 
         if (!this.readonly && !this.isTouchDevice) {
           this.menu = true;
         }
       } else {
-        this.$refs["ref-" + this.id].$refs.input.blur();
+        this.$refs["ref-" + this.identifier].$refs.input.blur();
         this.menu = false;
       }
     },
@@ -227,7 +227,7 @@ export default {
     blur(e) {
       this.$emit("blur", e);
 
-      this.$refs["ref-" + this.id].blur();
+      this.$refs["ref-" + this.identifier].blur();
       this.menu = false;
     },
     change(e) {
@@ -264,7 +264,7 @@ export default {
               this.dialog.scrollTop > this.scrollPos + 50 ||
               this.dialog.scrollTop < this.scrollPos - 50
           ) {
-            this.$refs["ref-" + this.id].blur();
+            this.$refs["ref-" + this.identifier].blur();
             this.menu = false;
           }
         }
@@ -274,12 +274,12 @@ export default {
       let keyboardHeight = this.isTouchDevice
               ? this.windowHeight / 2
               : this.windowHeight, // assumed keyboard height
-          fieldHeight = this.$refs["ref-" + this.id].$el.clientHeight,
+          fieldHeight = this.$refs["ref-" + this.identifier].$el.clientHeight,
           maxHeight = this.menuMaxHeight,
           offset = 10;
 
       if (
-          this.$refs["ref-" + this.id].$el.getBoundingClientRect().top +
+          this.$refs["ref-" + this.identifier].$el.getBoundingClientRect().top +
           fieldHeight +
           100 <
           keyboardHeight
@@ -287,13 +287,13 @@ export default {
         this.dropDown = true;
         maxHeight =
             keyboardHeight -
-            this.$refs["ref-" + this.id].$el.getBoundingClientRect().top -
+            this.$refs["ref-" + this.identifier].$el.getBoundingClientRect().top -
             fieldHeight -
             offset;
       } else {
         this.dropDown = false;
         maxHeight =
-            this.$refs["ref-" + this.id].$el.getBoundingClientRect().top - offset;
+            this.$refs["ref-" + this.identifier].$el.getBoundingClientRect().top - offset;
       }
 
       this.menuMaxHeight = maxHeight;

@@ -40,7 +40,7 @@
       :placeholder="placeholder"
       :prefix="prefix"
       :readonly="readonly"
-      :ref="'ref-' + id"
+      :ref="'ref-' + identifier"
       :required="required"
       :rules="inputRules"
       :suffix="suffix"
@@ -48,7 +48,7 @@
       'v-text-field--required': required,
       'v-text-field--optional': !required,
       'v-text-field--updated': updated,
-    }, `select-${id}`]"
+    }, `select-${identifier}`]"
       v-model="inputValue"
       validate-on-blur
       :value="defaultValue"
@@ -237,14 +237,14 @@ export default {
       // set focus to input tag
       this.$nextTick(() => {
         if (focused) {
-          this.$refs["ref-" + this.id].focus();
+          this.$refs["ref-" + this.identifier].focus();
 
           if (!this.readonly) {
             this.setMenuMaxHeight();
-            this.$refs["ref-" + this.id].activateMenu();
+            this.$refs["ref-" + this.identifier].activateMenu();
           }
         } else {
-          this.$refs["ref-" + this.id].blur();
+          this.$refs["ref-" + this.identifier].blur();
           this.menu = false;
         }
       });
@@ -252,7 +252,7 @@ export default {
   },
 
   mounted() {
-    this.dialog = this.$refs["ref-" + this.id].$el.closest(".v-dialog");
+    this.dialog = this.$refs["ref-" + this.identifier].$el.closest(".v-dialog");
 
     if (this.isTouchDevice) {
       window.addEventListener("orientationchange", this.onResize);
@@ -290,14 +290,14 @@ export default {
     },
     inputValue: {
       get() {
-        return this.$store.getters.getCurrentInputValue(this.id) || "";
+        return this.$store.getters.getCurrentInputValue(this.identifier) || "";
       },
       set(value) {
-        this.$store.commit("updateInputValue", { key: this.id, value: value });
+        this.$store.commit("updateInputValue", { key: this.identifier, value: value });
       },
     },
     inputError() {
-      return this.$store.getters.getCurrentInputError(this.id) || "";
+      return this.$store.getters.getCurrentInputError(this.identifier) || "";
     },
     selectItems() {
       if(Array.isArray(this.properties.options)){
@@ -338,21 +338,21 @@ export default {
   methods: {
     append() {
       if (this.menu) {
-        this.$refs["ref-" + this.id].blur();
+        this.$refs["ref-" + this.identifier].blur();
         this.menu = false;
       } else {
-        this.$refs["ref-" + this.id].focus();
+        this.$refs["ref-" + this.identifier].focus();
 
         if (!this.readonly) {
           this.setMenuMaxHeight();
-          this.$refs["ref-" + this.id].activateMenu();
+          this.$refs["ref-" + this.identifier].activateMenu();
         }
       }
     },
     blur(e) {
       this.$emit("blur", e);
 
-      this.$refs["ref-" + this.id].blur();
+      this.$refs["ref-" + this.identifier].blur();
       this.menu = false;
     },
     change(e) {
@@ -388,13 +388,13 @@ export default {
             this.dialog.scrollTop > this.scrollPos + 25 ||
             this.dialog.scrollTop < this.scrollPos - 25
         ) {
-          this.$refs["ref-" + this.id].blur();
+          this.$refs["ref-" + this.identifier].blur();
           this.menu = false;
         }
       }
     },
     setMenuMaxHeight() {
-      let fieldHeight = this.$refs["ref-" + this.id].$el.clientHeight,
+      let fieldHeight = this.$refs["ref-" + this.identifier].$el.clientHeight,
           maxHeight =
               this.menuMaxHeight <= this.lazyMaxHeight
                   ? this.menuMaxHeight
@@ -402,7 +402,7 @@ export default {
           offset = 10;
 
       if (
-          this.$refs["ref-" + this.id].$el.getBoundingClientRect().top +
+          this.$refs["ref-" + this.identifier].$el.getBoundingClientRect().top +
           fieldHeight +
           100 <
           this.windowHeight
@@ -410,13 +410,13 @@ export default {
         this.dropDown = true;
         maxHeight =
             this.windowHeight -
-            this.$refs["ref-" + this.id].$el.getBoundingClientRect().top -
+            this.$refs["ref-" + this.identifier].$el.getBoundingClientRect().top -
             fieldHeight -
             offset;
       } else {
         this.dropDown = false;
         maxHeight =
-            this.$refs["ref-" + this.id].$el.getBoundingClientRect().top - offset;
+            this.$refs["ref-" + this.identifier].$el.getBoundingClientRect().top - offset;
       }
 
       this.menuMaxHeight =

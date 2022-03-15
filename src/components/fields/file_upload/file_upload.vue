@@ -153,14 +153,14 @@ import {createInputRules, createRequiredLabel, isRequired} from "../../../lib/ut
 		  },
 		  inputValue: {
 			  get() {
-				  return this.$store.getters.getCurrentInputValue(this.id) || null;
+				  return this.$store.getters.getCurrentInputValue(this.identifier) || null;
 			  },
 			  set(value) {
-				  this.$store.commit("updateInputValue", { key: this.id, value: value });
+				  this.$store.commit("updateInputValue", { key: this.identifier, value: value });
 			  },
 		  },
 		  inputError() {
-			  return this.$store.getters.getCurrentInputError(this.id) || "";
+			  return this.$store.getters.getCurrentInputError(this.identifier) || "";
 		  },
 	  },
 
@@ -184,11 +184,11 @@ import {createInputRules, createRequiredLabel, isRequired} from "../../../lib/ut
     mounted() {
       let _scope = this;
 
-      this.$refs['ref-' + this.id].$attrs.disabled = this.disabledupload;
-      this.valid = this.$refs['ref-' + this.id].valid;
+      this.$refs['ref-' + this.identifier].$attrs.disabled = this.disabledupload;
+      this.valid = this.$refs['ref-' + this.identifier].valid;
 
       // prevent fire on change event twice on native file upload
-      this.$refs['ref-' + this.id].$refs.input.addEventListener('change', function () {
+      this.$refs['ref-' + this.identifier].$refs.input.addEventListener('change', function () {
         _scope.preventTwiceChangeEvents = true;
       }, false);
 
@@ -201,7 +201,7 @@ import {createInputRules, createRequiredLabel, isRequired} from "../../../lib/ut
       disabledupload(disabledupload) {
 
         this.$nextTick(() => {
-          this.$refs['ref-' + this.id].$attrs.disabled = disabledupload;
+          this.$refs['ref-' + this.identifier].$attrs.disabled = disabledupload;
         });
       }
     },
@@ -213,7 +213,7 @@ import {createInputRules, createRequiredLabel, isRequired} from "../../../lib/ut
         // prevent validation on file upload
         // field looses its focus on click file upload
         if(e.sourceCapabilities === null && !this.files.length) {
-          this.$refs['ref-' + this.id].resetValidation();
+          this.$refs['ref-' + this.identifier].resetValidation();
         }
 
         this.preventTwiceChangeEvents = false;
@@ -232,12 +232,12 @@ import {createInputRules, createRequiredLabel, isRequired} from "../../../lib/ut
           this.preventOverride(arr);
           this.$emit("change", this.files);
 
-          this.$refs['ref-' + this.id].blur();
+          this.$refs['ref-' + this.identifier].blur();
         }
       },
       click () {
-        if(!this.readonly && this.$refs['ref-' + this.id].$refs.input && !this.disabledupload) {
-          this.$refs['ref-' + this.id].$refs.input.click();
+        if(!this.readonly && this.$refs['ref-' + this.identifier].$refs.input && !this.disabledupload) {
+          this.$refs['ref-' + this.identifier].$refs.input.click();
         }
       },
       dragenter (e) {
@@ -301,7 +301,7 @@ import {createInputRules, createRequiredLabel, isRequired} from "../../../lib/ut
           }
         }
 
-        this.valid = this.$refs['ref-' + this.id].valid;
+        this.valid = this.$refs['ref-' + this.identifier].valid;
       },
       removeFile(index) {
 
