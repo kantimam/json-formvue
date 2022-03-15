@@ -35,6 +35,10 @@ export default {
   name: "OnAdvancedPassword",
   components: { TextField },
   props: {
+    id: {
+      type: String,
+      required: true,
+    },
     label: {
       type: String,
       default: "",

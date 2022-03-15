@@ -3,11 +3,11 @@
 </template>
 <script>
 import TextField from './extended_text_field.vue'
-
-export default {
+  export default {
   name: "OnTextfieldText",
   components: {
     TextField
   },
 };
 </script>
+'

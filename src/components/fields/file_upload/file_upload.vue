@@ -88,6 +88,10 @@ import {createInputRules, createRequiredLabel, isRequired} from "../../../lib/ut
         type: Boolean,
         default: true
       },
+      id: {
+        type: String,
+        required: true
+      },
       loading: {
         type: Boolean,
         default: false

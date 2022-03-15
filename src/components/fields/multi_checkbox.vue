@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import {createInputRules} from "../../lib/util";
+import { createInputRules } from "../../lib/util";
 
 export default {
   name: "OnMultiCheckbox",
@@ -74,6 +74,10 @@ export default {
     hidedetails: {
       type: Boolean,
       default: false,
+    },
+    id: {
+      type: String,
+      required: true,
     },
     name: {
       type: String,
