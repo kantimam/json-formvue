@@ -17,9 +17,9 @@ const Template = (args, { argTypes }) => ({
     template: '<v-text-field v-bind="$props" />',
 });
 
-export const Test = Template.bind({});
+export const Default = Template.bind({});
 // More on args: https://storybook.js.org/docs/vue/writing-stories/args
-Primary.args = {
+Default.args = {
     label: 'TextInput',
 };
 

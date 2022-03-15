@@ -1,3 +1,4 @@
+
 import {InternalTextField} from "../main";
 
 // More on default export: https://storybook.js.org/docs/vue/writing-stories/introduction#default-export
@@ -19,7 +20,14 @@ const Template = (args, { argTypes }) => ({
 
 export const Default = Template.bind({});
 // More on args: https://storybook.js.org/docs/vue/writing-stories/args
-Primary.args = {
+Default.args = {
     label: 'TextInput',
+    id: 'test',
+    properties: {},
+    name: 'test',
+
+
 };
+
+
 
