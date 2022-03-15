@@ -18,10 +18,6 @@ export default {
   name: "OnTextfield",
   components: { TextField },
   props: {
-    id: {
-      type: String,
-      required: true,
-    },
     properties: {
       type: Object | Array,
       required: true,

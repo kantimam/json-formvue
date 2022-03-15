@@ -83,10 +83,6 @@ export default {
       type: Boolean,
       default: false,
     },
-    id: {
-      type: String,
-      required: true,
-    },
     hidedetails: {
       type: Boolean,
       default: false,

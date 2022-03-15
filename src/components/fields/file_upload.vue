@@ -54,10 +54,6 @@ export default {
   name: "fileUpload",
   props: {
     // required base props
-    id: {
-      type: String,
-      required: true,
-    },
     filled: {
       type: Boolean,
     },

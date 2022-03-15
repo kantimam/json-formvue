@@ -1,17 +1,9 @@
 <script>
-import {
-  createInputRules,
-  isRequired,
-  createRequiredLabel,
-} from "../../lib/util";
+import {createInputRules, createRequiredLabel, isRequired,} from "../../lib/util";
 
 export default {
   name: "BaseInput",
   props: {
-    id: {
-      type: String,
-      required: true,
-    },
     name: {
       type: String,
       required: true,

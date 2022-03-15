@@ -92,10 +92,6 @@ export default {
       type: String,
       default: "optional",
     },
-    id: {
-      type: String,
-      required: true,
-    },
     maskActive: {
       type: Boolean,
       default: true,

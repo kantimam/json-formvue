@@ -16,10 +16,6 @@
 <script>
 export default {
   props: {
-    id: {
-      type: String,
-      required: true,
-    },
     name: {
       type: String,
       required: true,
