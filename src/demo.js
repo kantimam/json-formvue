@@ -1,4 +1,5 @@
 //import '@mdi/font/css/materialdesignicons.css'; // Ensure you are using css-loader
+/*
 import {
     ContentElement,
     createStore,
@@ -444,5 +445,5 @@ new Vue({
 }).$mount(document.querySelector("#app"));
 
 
-
+*/
 

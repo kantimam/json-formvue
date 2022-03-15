@@ -1,5 +1,9 @@
 
-import {InternalTextField} from "../main";
+import InternalTextField from "../components/fields/extended_text_field";
+import Vue from "vue";
+import {VTextField} from "vuetify/lib/components";
+
+Vue.component('v-text-field', VTextField)
 
 // More on default export: https://storybook.js.org/docs/vue/writing-stories/introduction#default-export
 export default {
