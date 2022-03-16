@@ -5,6 +5,7 @@
       :autocomplete="autocomplete || 'chrome-off'"
       attach
       :error-messages="inputError"
+      :identifier="identifier"
       @blur="blur"
       @change="change"
       @click="click"
@@ -252,6 +253,7 @@ export default {
   },
 
   mounted() {
+    console.log(this.identifier)
     this.dialog = this.$refs["ref-" + this.identifier].$el.closest(".v-dialog");
 
     if (this.isTouchDevice) {
