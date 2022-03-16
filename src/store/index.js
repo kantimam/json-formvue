@@ -234,7 +234,7 @@ const createStore = (Vuex, initialState) => {
         if (vuetifyForm.$el && isFormValid) { // check if form element exists and if it is valid
           context.commit('setLoading', true);
           context.commit('setFormErrors', []);
-          const formId = vuetifyForm.$el.id;
+          const formId = context.state.formElementId;
           const formData = new FormData(vuetifyForm.$el); // parse formdata from underlying form element
 
           // quickfix - radio buttons SOMETIMES not getting put into form data?!
