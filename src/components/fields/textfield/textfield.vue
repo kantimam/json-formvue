@@ -29,7 +29,7 @@
       :autocomplete="properties && properties['autoComplete']"
       v-bind:class="{
         'v-text-field--required': required,
-        'v-text-field--optional': optional,
+        'v-text-field--optional': isOptional,
         'v-text-field--counting': counter,
         'v-text-field--updated': updated,
       }"
@@ -148,9 +148,9 @@ export default {
       type: String | null
     },
     rules: {
-      type: [Object, Array],
+      type: Array,
       default() {
-        return {} || [];
+        return [];
       },
     },
     suffix: {
@@ -179,6 +179,12 @@ export default {
       isTouchDevice: utils.isTouchDevice(),
       windowHeight: window.innerHeight,
     };
+  },
+
+  computed: {
+    isOptional() {
+      return this.optional === true || !this.required;
+    }
   },
 
   mounted() {

@@ -1,13 +1,128 @@
+@import '../_variables';
 @import '~vuetify/src/components/VTextField/_variables.scss';
+@import '~vuetify/src/components/VLabel/_variables.scss';
+
+.v-application--is-ltr, .v-application--is-rtl {
+    .v-text-field {
+        .v-input__prepend-inner {
+            margin: 0;
+            padding: 0;
+        }
+    }
+}
 
 .v-text-field {
-    &.v-text-field--required .error--text, &.v-text-field--optional {
+    input {
+        margin-top: $text-field-filled-margin-top
+    }
+
+    .v-label {
+        top: $text-field-filled-full-width-label-top;
+    }
+
+    .v-input__label-required,
+    .v-input__label-optional {
+        left: $text-field-label-optional-left;
+        right: $text-field-label-optional-right;
+        max-width: 90%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        pointer-events: none;
+        font-size: $label-font-size;
+        line-height: $label-line-height;
+        min-height: $label-min-height;
+        transition: .3s map-get($transition, 'swing');
+        position: absolute;
+        top: $text-field-filled-full-width-label-top - 4px;
+        transform: $text-field-filled-full-width-label-active-transform;
+
+        @mixin ltr() {
+            transform-origin: top left
+        }
+
+        @mixin rtl() {
+            transform-origin: top right
+        }
+    }
+
+    .v-input__label-optional {
+        color: rgba(map-get($grey, 'darken-1'), 0.75);
+    }
+
+    .v-input__label-required {
+        opacity: 0;
+    }
+
+    &.error--text {
+        .v-input__label-required {
+            opacity: 1;
+        }
+
+        .v-label {
+            top: $text-field-label-top + 4px;
+        }
+    }
+
+    &.v-input--is-focused,
+    &.v-input--is-label-active {
+        .v-label {
+            transform: $text-field-filled-full-width-label-active-transform;
+        }
+
+        .v-input__label-required,
+        .v-input__label-optional {
+            opacity: 0;
+        }
+
+        &.error--text {
+            .v-input__label-required {
+                opacity: 0;
+            }
+        }
+    }
+
+    &.v-text-field--optional {
         .v-label {
             top: $text-field-filled-full-width-label-top + 6px;
 
             &--active {
                 top: $text-field-filled-full-width-label-top;
             }
+        }
+    }
+
+    &.v-text-field--required {
+        &.error--text {
+            .v-label {
+                top: $text-field-filled-full-width-label-top;
+
+                &--active {
+                    top: $text-field-filled-full-width-label-top;
+                }
+            }
+        }
+    }
+
+    &.error--text {
+        .v-label {
+            top: $text-field-filled-full-width-label-top;
+        }
+    }
+
+    &.error--text:not(.v-text-field--required) {
+        .v-text-field__details {
+            opacity: 1;
+            max-height: none;
+            padding-top: $input-slot-margin-bottom;
+        }
+    }
+
+    &.error--text.v-text-field--required.v-input--is-dirty {
+        .v-text-field__details {
+            opacity: 1;
+            max-height: none;
+            padding-top: $input-slot-margin-bottom;
         }
     }
 }

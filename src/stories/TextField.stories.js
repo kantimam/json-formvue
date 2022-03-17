@@ -2,6 +2,7 @@ import {VTextField} from "vuetify/lib/components";
 import TextField from "../components/fields/textfield/textfield.vue";
 import Vue from "vue";
 import Vuetify from 'vuetify/lib/framework';
+import {createInputRules} from "../lib/util";
 
 Vue.use(Vuetify);
 const vuetify = new Vuetify({});
@@ -26,16 +27,26 @@ Default.args = {
     identifier: 'text-input',
     filled: true,
     properties: {},
-    name: 'text-input'
+    name: 'text-input',
 };
 
-export const WithName = Template.bind({});
+export const Required = Template.bind({});
 // More on args: https://storybook.js.org/docs/vue/writing-stories/args
-WithName.args = {
-    label: 'With Name',
-    id: 'test',
+Required.args = {
+    label: 'Text Input',
+    identifier: 'text-input',
+    filled: true,
     properties: {},
-    name: 'test',
-
+    name: 'text-input',
+    required: true,
+    rules: createInputRules(true, [createDummyRequiredValidator()], {}, false, [])
 };
+
+function createDummyRequiredValidator() {
+    return {
+        identifier: 'NotEmpty',
+        code: 1221560910,
+        errorMessage: 'This field is required'
+    };
+}
 

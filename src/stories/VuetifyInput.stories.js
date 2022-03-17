@@ -21,6 +21,11 @@ const Template = (args, { argTypes }) => ({
 export const Default = Template.bind({});
 // More on args: https://storybook.js.org/docs/vue/writing-stories/args
 Default.args = {
-    label: 'TextInput',
+    label: 'Text Input',
 };
 
+export const Filled = Template.bind({});
+Filled.args = {
+    label: 'Text Input',
+    filled: true
+};
