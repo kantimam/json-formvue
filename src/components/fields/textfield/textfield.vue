@@ -60,7 +60,8 @@
 </template>
 
 <script>
-import utils from "../../plugins/utils";
+import utils from "../../../plugins/utils";
+import './textfield.scss';
 
 export default {
   name: "TextField",

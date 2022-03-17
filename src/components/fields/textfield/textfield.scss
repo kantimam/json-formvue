@@ -1,0 +1,13 @@
+@import '~vuetify/src/components/VTextField/_variables.scss';
+
+.v-text-field {
+    &.v-text-field--required .error--text, &.v-text-field--optional {
+        .v-label {
+            top: $text-field-filled-full-width-label-top + 6px;
+
+            &--active {
+                top: $text-field-filled-full-width-label-top;
+            }
+        }
+    }
+}

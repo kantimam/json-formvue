@@ -12,7 +12,7 @@
 
 <script>
 import {createInputRules, createRequiredLabel, isRequired,} from "../../lib/util";
-import TextField from "./textfield.vue";
+import TextField from "./textfield/textfield.vue";
 
 export default {
   name: "OnTextfield",

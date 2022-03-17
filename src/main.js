@@ -34,7 +34,7 @@ import MultiCheckbox from './components/fields/multi_checkbox.vue';
 import ContentElement from './components/fields/content_element/content_element.vue';
 
 // INTERNAL ELEMENTS
-import InternalTextField from './components/fields/textfield.vue';
+import InternalTextField from './components/fields/textfield/textfield.vue';
 import DynamicElement from './components/dynamic_element.vue';
 
 // PUBLIC OPTIONAL FUNCTIONS AND HELPERS
