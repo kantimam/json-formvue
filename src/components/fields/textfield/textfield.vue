@@ -36,7 +36,7 @@
       validate-on-blur
   >
     <template slot="prepend-outer"><slot name="prepend"></slot></template>
-    <template slot="prepend-inner" v-if="!required"
+    <template slot="prepend-inner" v-if="optional"
 		><span class="v-input__label-optional">{{
 			optionalLabel
 		  }}</span></template
@@ -183,7 +183,7 @@ export default {
 
   computed: {
     isOptional() {
-      return this.optional === true || !this.required;
+      return this.optional === undefined ? false : this.optional;
     }
   },
 
