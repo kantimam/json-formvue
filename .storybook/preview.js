@@ -8,8 +8,6 @@ import {VApp} from "vuetify/lib/components";
 Vue.use(Vuex);
 Vue.use(Vuetify);
 
-
-
 export const parameters = {
   actions: { argTypesRegex: "^on[A-Z].*" },
   controls: {
@@ -19,7 +17,6 @@ export const parameters = {
     },
   },
 }
-
 
 const formDefinitionExample={
   "id": "contact-19915",
@@ -382,7 +379,6 @@ const formDefinitionExample={
     }
   ]
 }
-
 
 export const decorators = [
   (story, context) => {
