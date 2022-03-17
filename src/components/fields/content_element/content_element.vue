@@ -1,11 +1,11 @@
 <template>
-  <div class="ondigo-content-element-wrapper" v-html="properties.content" />
+  <div class="ondigo-content-element-wrapper" v-html="properties.content" :identifier="identifier" />
 </template>
 <script>
 export default {
   name: "ContentElement",
   props: {
-    id: {
+    identifier: {
       type: String,
       required: true,
     },

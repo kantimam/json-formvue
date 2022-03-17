@@ -2,9 +2,9 @@
   <div>
     <v-checkbox
       class="ondigo-checkbox"
-      :class="`ondigo-input-${id} ondigo-checkbox`"
+      :class="`ondigo-input-${identifier} ondigo-checkbox`"
       :label="label"
-      :ref="'ref-' + id"
+      :ref="'ref-' + identifier"
       :name="name"
       v-model="checked"
       :value="checked ? true : false"
@@ -47,7 +47,7 @@ export default {
       type: String,
       required: true,
     },
-    id: {
+    identifier: {
       type: String,
       required: true,
     },

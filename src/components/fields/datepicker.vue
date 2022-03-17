@@ -17,8 +17,9 @@
             :filled="filled"
             ref="masked"
             :rules="menu ? [] : inputRules"
-            :class="`ondigo-input ondigo-textfield ondigo-input-${id}`"
+            :class="`ondigo-input ondigo-textfield ondigo-input-${identifier}`"
             :inputBridge="inputBridge"
+            :identifier="identifier"
             v-bind="{
             ...$attrs,
             defaultValue: formattedDefaultValue,
@@ -87,13 +88,13 @@ export default {
     },
   },
   created() {
-    const stored = this.$store.getters.getCurrentInputValue(this.id);
+    const stored = this.$store.getters.getCurrentInputValue(this.identifier);
     if (!stored) return;
 
     // when default values are set, they are in ISO format, but we need our masked format for this component.
     // fix it via the formattedDefaultValue property
     if (isIsoFormatted(stored)) {
-      this.$store.commit("updateInputValue", {key: this.id, value: this.formattedDefaultValue});
+      this.$store.commit("updateInputValue", {key: this.identifier, value: this.formattedDefaultValue});
     } else {
       this.updateFormattedValue(stored);
     }
@@ -188,7 +189,7 @@ export default {
       type: Boolean,
       default: false,
     },
-    id: {
+    identifier: {
       type: String,
       required: true,
     },
@@ -317,10 +318,10 @@ export default {
     },
     inputBridge: {
       get() {
-        return this.$store.getters.getCurrentInputValue(this.id) || "";
+        return this.$store.getters.getCurrentInputValue(this.identifier) || "";
       },
       set(value) {
-        this.$store.commit("updateInputValue", {key: this.id, value: value});
+        this.$store.commit("updateInputValue", {key: this.identifier, value: value});
       },
     },
   },

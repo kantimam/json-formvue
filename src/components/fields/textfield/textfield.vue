@@ -22,7 +22,7 @@
       :name="name"
       :prefix="prefix"
       :value="value"
-      :ref="'ref-' + id"
+      :ref="'ref-' + identifier"
       :required="required"
       :rules="rules"
       :suffix="suffix"
@@ -84,7 +84,7 @@ export default {
       type: Boolean,
       default: false,
     },
-    id: {
+    identifier: {
       type: String,
       required: true,
     },
@@ -181,16 +181,54 @@ export default {
     };
   },
 
+  mounted() {
+    this.dialog = this.$refs["ref-" + this.identifier].$el.closest(".v-dialog");
 
+    if (this.isTouchDevice) {
+      window.addEventListener("orientationchange", this.onResize);
+    } else {
+      window.addEventListener("resize", this.onResize);
+    }
 
+    if (!!this.dialog) {
+      this.scrollPos = this.dialog.scrollTop;
+      this.dialog.addEventListener("scroll", this.onScroll, true);
+    }
+  },
 
+  beforeDestroy() {
+    if (this.isTouchDevice) {
+      window.removeEventListener("orientationchange", this.onResize);
+    } else {
+      window.removeEventListener("resize", this.onResize);
+    }
 
+    if (!!this.dialog) {
+      this.dialog.removeEventListener("scroll", this.onScroll);
+    }
+  },
+
+  watch: {
+    focused(focused) {
+      // set focus to input tag
+      if (focused) {
+        this.$refs["ref-" + this.identifier].$refs.input.focus();
+
+        if (!this.readonly && !this.isTouchDevice) {
+          this.menu = true;
+        }
+      } else {
+        this.$refs["ref-" + this.identifier].$refs.input.blur();
+        this.menu = false;
+      }
+    },
+  },
 
   methods: {
     blur(e) {
       this.$emit("blur", e);
 
-      //this.$refs["ref-" + this.id]?.blur();
+      this.$refs["ref-" + this.identifier].blur();
       this.menu = false;
     },
     change(e) {
@@ -218,7 +256,49 @@ export default {
     onResize() {
       this.setMenuMaxHeight();
     },
+    onScroll() {
+      // remove focus only if menu exisits
+      if (!!this.$slots.info) {
+        // only need to close menu if in overlay (do not attach!)
+        if (this.menu && !!this.dialog) {
+          if (
+              this.dialog.scrollTop > this.scrollPos + 50 ||
+              this.dialog.scrollTop < this.scrollPos - 50
+          ) {
+            this.$refs["ref-" + this.identifier].blur();
+            this.menu = false;
+          }
+        }
+      }
+    },
+    setMenuMaxHeight() {
+      let keyboardHeight = this.isTouchDevice
+              ? this.windowHeight / 2
+              : this.windowHeight, // assumed keyboard height
+          fieldHeight = this.$refs["ref-" + this.identifier].$el.clientHeight,
+          maxHeight = this.menuMaxHeight,
+          offset = 10;
 
+      if (
+          this.$refs["ref-" + this.identifier].$el.getBoundingClientRect().top +
+          fieldHeight +
+          100 <
+          keyboardHeight
+      ) {
+        this.dropDown = true;
+        maxHeight =
+            keyboardHeight -
+            this.$refs["ref-" + this.identifier].$el.getBoundingClientRect().top -
+            fieldHeight -
+            offset;
+      } else {
+        this.dropDown = false;
+        maxHeight =
+            this.$refs["ref-" + this.identifier].$el.getBoundingClientRect().top - offset;
+      }
+
+      this.menuMaxHeight = maxHeight;
+    },
     update() {
       let _scope = this;
       this.updated = true;

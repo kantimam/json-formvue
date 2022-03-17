@@ -18,7 +18,7 @@ export default {
   name: "OnTextfield",
   components: { TextField },
   props: {
-    id: {
+    identifier: {
       type: String,
       required: true,
     },
@@ -47,14 +47,14 @@ export default {
     },
     inputValue: {
       get() {
-        return this.$store.getters.getCurrentInputValue(this.id) || "";
+        return this.$store.getters.getCurrentInputValue(this.identifier) || "";
       },
       set(value) {
-        this.$store.commit("updateInputValue", { key: this.id, value: value });
+        this.$store.commit("updateInputValue", { key: this.identifier, value: value });
       },
     },
     inputError() {
-      return this.$store.getters.getCurrentInputError(this.id) || "";
+      return this.$store.getters.getCurrentInputError(this.identifier) || "";
     },
   },
 };

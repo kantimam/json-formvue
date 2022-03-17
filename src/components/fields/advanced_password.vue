@@ -35,7 +35,7 @@ export default {
   name: "OnAdvancedPassword",
   components: { TextField },
   props: {
-    id: {
+    identifier: {
       type: String,
       required: true,
     },
@@ -69,10 +69,10 @@ export default {
     },
     inputValue: {
       get() {
-        return this.$store.getters.getCurrentInputValue(this.id) || "";
+        return this.$store.getters.getCurrentInputValue(this.identifier) || "";
       },
       set(value) {
-        this.$store.commit("updateInputValue", { key: this.id, value: value });
+        this.$store.commit("updateInputValue", { key: this.identifier, value: value });
       },
     },
     passwordMatchingValidator() {
@@ -87,27 +87,27 @@ export default {
     },
     passwordValue: {
       get() {
-        return this.$store.getters.getCurrentInputValue(this.id) || "";
+        return this.$store.getters.getCurrentInputValue(this.identifier) || "";
       },
       set(value) {
-        this.$store.commit("updateInputValue", { key: this.id, value: value });
+        this.$store.commit("updateInputValue", { key: this.identifier, value: value });
       },
     },
     passwordRepeatValue: {
       get() {
         return (
-          this.$store.getters.getCurrentInputValue(`${this.id}-repeat`) || ""
+          this.$store.getters.getCurrentInputValue(`${this.identifier}-repeat`) || ""
         );
       },
       set(value) {
         this.$store.commit("updateInputValue", {
-          key: `${this.id}-repeat`,
+          key: `${this.identifier}-repeat`,
           value: value,
         });
       },
     },
     inputError() {
-      return this.$store?.getters.getCurrentInputError(this.id) || "";
+      return this.$store?.getters.getCurrentInputError(this.identifier) || "";
     },
   },
 };
