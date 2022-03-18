@@ -15725,7 +15725,6 @@ __webpack_require__.d(__webpack_exports__, "MultiCheckbox", function() { return 
 __webpack_require__.d(__webpack_exports__, "DatePicker", function() { return /* reexport */ datepicker; });
 __webpack_require__.d(__webpack_exports__, "ContentElement", function() { return /* reexport */ content_element; });
 __webpack_require__.d(__webpack_exports__, "InternalTextField", function() { return /* reexport */ textfield_textfield; });
-__webpack_require__.d(__webpack_exports__, "registerResponseInterceptor", function() { return /* reexport */ registerResponseInterceptor; });
 
 // NAMESPACE OBJECT: ./node_modules/vuetify/lib/services/goto/easing-patterns.js
 var easing_patterns_namespaceObject = {};
@@ -16110,7 +16109,7 @@ var es_number_constructor = __webpack_require__("a9e3");
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.join.js
 var es_array_join = __webpack_require__("a15b");
 
-// CONCATENATED MODULE: ./src/lib/substitution.js
+// CONCATENATED MODULE: ./src/lib/substitution.ts
 
 
 
@@ -16138,7 +16137,7 @@ function replaceFormatSpecifiers(text) {
   matches.forEach(function (match, nMatch) {
     var str = match[0];
     var idx = match['index'];
-    if (idx > 0 && text[idx - 1] === '%') return; // escaped
+    if (idx === undefined || idx > 0 && text[idx - 1] === '%') return; // no match or escaped match
 
     var prefix = text.substring(cursor, idx);
     if (prefix.length > 0) segments.push(prefix); // prepend prefix
@@ -16241,82 +16240,94 @@ function _createForOfIteratorHelper(o, allowArrayLike) {
     }
   };
 }
-// CONCATENATED MODULE: ./src/store/response_interceptor.js
+// CONCATENATED MODULE: ./src/store/response_interceptor.ts
 
 
 
-var responseInterceptors = [];
-function registerResponseInterceptor(interceptor) {
-  responseInterceptors.push(interceptor);
-}
-function handleResponse(_x, _x2) {
-  return _handleResponse.apply(this, arguments);
-}
+var response_interceptor_ResponseInterceptor;
 
-function _handleResponse() {
-  _handleResponse = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(context, successJson) {
-    var _iterator, _step, interceptor;
+(function (ResponseInterceptor) {
+  var responseInterceptors = [];
 
-    return regeneratorRuntime.wrap(function _callee$(_context) {
-      while (1) {
-        switch (_context.prev = _context.next) {
-          case 0:
-            _iterator = _createForOfIteratorHelper(responseInterceptors);
-            _context.prev = 1;
+  function registerResponseInterceptor(handler) {
+    responseInterceptors.push(handler);
+  }
 
-            _iterator.s();
+  ResponseInterceptor.registerResponseInterceptor = registerResponseInterceptor;
 
-          case 3:
-            if ((_step = _iterator.n()).done) {
-              _context.next = 11;
+  function handleResponse(_x, _x2) {
+    return _handleResponse.apply(this, arguments);
+  }
+
+  function _handleResponse() {
+    _handleResponse = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(context, successJson) {
+      var _iterator, _step, interceptor;
+
+      return regeneratorRuntime.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              _iterator = _createForOfIteratorHelper(responseInterceptors);
+              _context.prev = 1;
+
+              _iterator.s();
+
+            case 3:
+              if ((_step = _iterator.n()).done) {
+                _context.next = 11;
+                break;
+              }
+
+              interceptor = _step.value;
+              _context.next = 7;
+              return interceptor(context, successJson);
+
+            case 7:
+              if (!_context.sent) {
+                _context.next = 9;
+                break;
+              }
+
+              return _context.abrupt("return", true);
+
+            case 9:
+              _context.next = 3;
               break;
-            }
 
-            interceptor = _step.value;
-            _context.next = 7;
-            return interceptor(context, successJson);
-
-          case 7:
-            if (!_context.sent) {
-              _context.next = 9;
+            case 11:
+              _context.next = 16;
               break;
-            }
 
-            return _context.abrupt("return", true);
+            case 13:
+              _context.prev = 13;
+              _context.t0 = _context["catch"](1);
 
-          case 9:
-            _context.next = 3;
-            break;
+              _iterator.e(_context.t0);
 
-          case 11:
-            _context.next = 16;
-            break;
+            case 16:
+              _context.prev = 16;
 
-          case 13:
-            _context.prev = 13;
-            _context.t0 = _context["catch"](1);
+              _iterator.f();
 
-            _iterator.e(_context.t0);
+              return _context.finish(16);
 
-          case 16:
-            _context.prev = 16;
+            case 19:
+              return _context.abrupt("return", false);
 
-            _iterator.f();
-
-            return _context.finish(16);
-
-          case 19:
-            return _context.abrupt("return", false);
-
-          case 20:
-          case "end":
-            return _context.stop();
+            case 20:
+            case "end":
+              return _context.stop();
+          }
         }
-      }
-    }, _callee, null, [[1, 13, 16, 19]]);
-  }));
-  return _handleResponse.apply(this, arguments);
-}
+      }, _callee, null, [[1, 13, 16, 19]]);
+    }));
+    return _handleResponse.apply(this, arguments);
+  }
+
+  ResponseInterceptor.handleResponse = handleResponse;
+})(response_interceptor_ResponseInterceptor || (response_interceptor_ResponseInterceptor = {}));
+
+/* harmony default export */ var response_interceptor = (response_interceptor_ResponseInterceptor);
 // CONCATENATED MODULE: ./src/store/index.js
 
 
@@ -16432,8 +16443,7 @@ var store_createStore = function createStore(Vuex, initialState) {
         var errorCount = state.errorCount;
 
         if (errorCount > 0 && schema && schema.api && schema.api.page && schema.api.page.errorHint) {
-          var errorHintWithCount = schema.api.page.errorHint.replace("%s", errorCount);
-          return errorHintWithCount;
+          return schema.api.page.errorHint.replace("%s", errorCount);
         }
 
         return null;
@@ -16654,7 +16664,7 @@ var store_createStore = function createStore(Vuex, initialState) {
 
                 case 2:
                   _context.next = 4;
-                  return handleResponse(context, successJson);
+                  return response_interceptor.handleResponse(context, successJson);
 
                 case 4:
                   if (!_context.sent) {
@@ -22155,7 +22165,7 @@ installComponents_default()(FormVue_component, {VApp: VApp_VApp})
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.regexp.constructor.js
 var es_regexp_constructor = __webpack_require__("4d63");
 
-// CONCATENATED MODULE: ./src/lib/pattern.js
+// CONCATENATED MODULE: ./src/lib/pattern.ts
 
 
 
@@ -22175,36 +22185,32 @@ var es_regexp_constructor = __webpack_require__("4d63");
 
 /**
  * Gets the default pattern mapping.
- * The rule tuples (rules) are defined like the following: 
+ * The rule tuples (rules) are defined like the following:
  * @example [
  *   'min_value': 'The minimum integer value accepted',
  *   'max_value': 'The maximum integer value accepted',
  *   'min_digits': 'The minimum amount of digits which can be parsed of the character in a group'
  * ]
- * @returns A dictionary that holds records for every known identifier and it's rule tuple
+ * @returns {MaskPatternMapping} A dictionary that holds records for every known identifier and it's rule tuple
  */
 function getMaskPatternMapping() {
   return {
     // identifier (char): [min_value, max_value, min_digits]
     // omit min_digits to set to max_digits (derived by given format)
     'H': [0, 23, 1],
-    // hour
     'i': [0, 59, 1],
-    // minute
     'd': [0, 31, 1],
-    // day of month
     'm': [1, 12, 1],
-    // month
     'Y': [0, undefined] // year
 
   };
 }
 /**
  * Gets all matches in the process mask pattern to regex.
- * 
+ *
  * @param {string} format The mask pattern to convert.
- * @param {object} mapping The identifier dictionary.
- * @returns {string[]} An array of string matches.
+ * @param mapping The identifier dictionary.
+ * @returns {RegExpMatchArray[]} An array of string matches.
  */
 
 function getMaskPatternToRegexMatches(format) {
@@ -22217,14 +22223,14 @@ function getMaskPatternToRegexMatches(format) {
 }
 /**
  * Converts a mask pattern to a regex pattern.
- * 
+ *
  * @example
  * convertMaskPatternToRegex('dd.mm.YYYY', getMaskPatternMapping())
  * -> [
- *      '[0-9]{1,2}\.[0-9]{1,2}\.[0-9]{4}', 
+ *      '[0-9]{1,2}\.[0-9]{1,2}\.[0-9]{4}',
  *      ['d','m','Y']
  *    ]
- * 
+ *
  * @param {string} format The fornmat to convert
  * @param {object} mapping The identifier dictionary.
  * @returns {[string, string[]]} A tuple with first, the generated pattern string; and second, an ordered array with the occurrences of identifiers.
@@ -22236,15 +22242,11 @@ function convertMaskPatternToRegex(format, mapping) {
   var patternSegments = [];
   var groupOrder = [];
   matches.forEach(function (match) {
+    if (match.index === undefined) return;
     var str = match[0];
     var len = str.length;
     var firstChar = str[0];
-
-    var _mapping$firstChar = _slicedToArray(mapping[firstChar], 3),
-        _min = _mapping$firstChar[0],
-        _max = _mapping$firstChar[1],
-        minDigits = _mapping$firstChar[2];
-
+    var minDigits = mapping[firstChar][2];
     groupOrder.push(firstChar);
     var group = "([0-9]{".concat(minDigits || len, ",").concat(len, "})");
     var preRemainder = escapeRegexSpecialChars(format.slice(cursor, match.index));
@@ -22264,19 +22266,19 @@ function escapeRegexSpecialChars(text) {
 }
 /**
  * Matches an input against a mask pattern and returns the matches as well as their mapping.
- * 
+ *
  * @example
- * 
+ *
  * matchMaskPattern('31.12.2021', 'dd.mm.YYYY')
  * -> [
  *      ['31', '12', '2021'],
  *      ['d', 'm', 'Y']
  *    ]
- * 
+ *
  * @param {string} input The input string to process
  * @param {string} maskPattern The mask pattern
  * @param {object} mapping The pattern identifier dictionary to match against
- * @returns {[string[], string[]] | null} A tuple with first, an ordered array of matches in the input; 
+ * @returns {[string[], string[]] | null} A tuple with first, an ordered array of matches in the input;
  * and second, an ordered array of the order of occurrences of identifiers, so that the match types can be identified.
  * Returns null, if the input doesn't match the maskPattern
  */
@@ -22303,7 +22305,7 @@ var es_date_now = __webpack_require__("6eba");
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.date.to-iso-string.js
 var es_date_to_iso_string = __webpack_require__("accc");
 
-// CONCATENATED MODULE: ./src/lib/time.js
+// CONCATENATED MODULE: ./src/lib/time.ts
 
 
 
@@ -22340,12 +22342,12 @@ function toIsoFormatWithOffset(date) {
 }
 /**
  * Decomposes an ISO date into year, month and date
- * @param {string} date An ISO Date as string, e.g. '2021-12-31'
+ * @param {string} dateString An ISO Date as string, e.g. '2021-12-31'
  * @returns {[number, number, number]} A tuple of year, month and date
  */
 
-function splitIsoDate(date) {
-  return date.split('-').map(function (x) {
+function splitIsoDate(dateString) {
+  return dateString.split('-').map(function (x) {
     return Number(x);
   });
 }
@@ -22361,8 +22363,8 @@ function isIsoFormatted(str) {
 }
 /**
  * Compares two ISO formatted dates.
- * @param {string|[number, number, number]} a Date a in ISO format
- * @param {string|[number, number, number]} $b Date b in ISO format
+ * @param {IsoInterpretable} a Date a in ISO format
+ * @param {IsoInterpretable} b Date b in ISO format
  * @returns {number} Either -1, 0 or 1; if Date a is before, the same or after b.
  */
 
@@ -22410,20 +22412,20 @@ function getShortIsoString(date) {
 /**
  * Formats a pattern date to an ISO Date (e.g. '2021-12-31').
  *
- * @param {string} date A pattern formatted date string.
+ * @param {string} dateStr A pattern formatted date string.
  * @param {string} pattern A masked element pattern.
- * @param {function(string[], string[], string):number} getter An optional getter that supplies date numbers.
- * @param {function(number, number, number):[string|null, boolean]} interceptor An optional interceptor that takes year, month and day and returns a result and a boolean, whether to override the functions result with it.
+ * @param {DatePartSupplier} getter An optional getter that supplies date numbers.
+ * @param interceptor An optional interceptor that takes year, month and day and returns a result and a boolean, whether to override the functions result with it.
  * @returns {string|null} The ISO formatted string, or null, if there was an error.
  */
 
-function parseISODateFromPattern(date, pattern) {
+function parseISODateFromPattern(dateStr, pattern) {
   var getter = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : function (match, order, identifier) {
     var idx = order.indexOf(identifier);
     return idx >= 0 ? Number(match[idx + 1]) : undefined; // order[i] = match[i + 1]
   };
-  var interceptor = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : undefined;
-  var res = matchMaskPattern(date, pattern);
+  var interceptor = arguments.length > 3 ? arguments[3] : undefined;
+  var res = matchMaskPattern(dateStr, pattern);
   if (!res) return null;
 
   var _res = _slicedToArray(res, 2),
@@ -22451,7 +22453,7 @@ function parseISODateFromPattern(date, pattern) {
  *
  * @param {string} date An ISO formatted date string.
  * @param {string} pattern A masked element pattern
- * @param {object} substitutes A dictionary with character substitutes
+ * @param extraSubstitutes A dictionary with character substitutes
  * @returns {string|null} The formatted string, or null, if there was an error.
  */
 
@@ -22474,6 +22476,7 @@ function formatISODateFromPattern(date, pattern) {
   var cursor = 0;
   var patternSegments = [];
   matches.forEach(function (match) {
+    if (match.index === undefined) return;
     var str = match[0];
     var len = str.length;
     var firstChar = str[0];
@@ -27932,8 +27935,8 @@ var radio_group_component = normalizeComponent(
 
 installComponents_default()(radio_group_component, {VRadio: VRadioGroup_VRadio,VRadioGroup: VRadioGroup_VRadioGroup})
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"444768a5-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/extended_select.vue?vue&type=template&id=2a92046a&
-var extended_selectvue_type_template_id_2a92046a_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('v-select',{ref:'ref-' + _vm.identifier,class:[{
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"444768a5-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/extended_select.vue?vue&type=template&id=1af73d1d&
+var extended_selectvue_type_template_id_1af73d1d_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('v-select',{ref:'ref-' + _vm.identifier,class:[{
       'v-text-field--required': _vm.required,
       'v-text-field--optional': !_vm.required,
       'v-text-field--updated': _vm.updated,
@@ -27949,10 +27952,10 @@ var extended_selectvue_type_template_id_2a92046a_render = function () {var _vm=t
     var item = ref.item;
     var index = ref.index;
 return [_vm._l((_vm.customSelectionKeys),function(key){return [(item.hasOwnProperty(key))?_c('span',{class:[("custom-selection custom-selection-" + key)]},[_vm._v(" "+_vm._s(item[key])+" ")]):_vm._e()]})]}}:null],null,true),model:{value:(_vm.inputValue),callback:function ($$v) {_vm.inputValue=$$v},expression:"inputValue"}},[(!!_vm.$slots.prepend)?_c('template',{slot:"prepend-outer"},[_vm._t("prepend")],2):_vm._e(),(!!_vm.$slots.info)?_c('template',{slot:"prepend-item"},[_c('div',{staticClass:"v-select__dropdown-info"},[_vm._t("info")],2)]):_vm._e(),(!_vm.required)?_c('template',{slot:"prepend-inner"},[_c('span',{staticClass:"v-input__label-optional"},[_vm._v(" "+_vm._s(_vm.optionalLabel)+" ")])]):_vm._e(),(_vm.required)?_c('template',{slot:"prepend-inner"},[_c('span',{staticClass:"v-input__label-required"},[_vm._v(_vm._s(_vm.requiredLabel))])]):_vm._e(),_c('template',{slot:"append-item"},[_c('span',{staticClass:"v-select__shadow"})]),(!!_vm.$slots.append)?_c('template',{slot:"append-outer"},[_vm._t("append")],2):_vm._e()],2)}
-var extended_selectvue_type_template_id_2a92046a_staticRenderFns = []
+var extended_selectvue_type_template_id_1af73d1d_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/fields/extended_select.vue?vue&type=template&id=2a92046a&
+// CONCATENATED MODULE: ./src/components/fields/extended_select.vue?vue&type=template&id=1af73d1d&
 
 // EXTERNAL MODULE: ./node_modules/vuetify/src/components/VSelect/VSelect.sass
 var VSelect = __webpack_require__("68dd");
@@ -31868,7 +31871,6 @@ var VSelect_baseMixins = mixins(VTextField_VTextField, comparable, dependent, fi
     }
   },
   mounted: function mounted() {
-    console.log(this.identifier);
     this.dialog = this.$refs["ref-" + this.identifier].$el.closest(".v-dialog");
 
     if (this.isTouchDevice) {
@@ -32047,8 +32049,8 @@ var VSelect_baseMixins = mixins(VTextField_VTextField, comparable, dependent, fi
 
 var extended_select_component = normalizeComponent(
   fields_extended_selectvue_type_script_lang_js_,
-  extended_selectvue_type_template_id_2a92046a_render,
-  extended_selectvue_type_template_id_2a92046a_staticRenderFns,
+  extended_selectvue_type_template_id_1af73d1d_render,
+  extended_selectvue_type_template_id_1af73d1d_staticRenderFns,
   false,
   null,
   null,

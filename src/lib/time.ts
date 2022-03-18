@@ -1,25 +1,31 @@
-import {getMaskPatternToRegexMatches, matchMaskPattern} from "./pattern";
+import {getMaskPatternToRegexMatches, matchMaskPattern} from '@/lib/pattern';
+
+export type DatePartSupplier = (match: string[], order: string[], identifier: string) => number | undefined;
+export type DateInjectionResult = [string | null, boolean];
+export type DateInjector = (year?: number, month?: number, day?: number) => DateInjectionResult;
+export type IsoInterpretable = string | [number, number, number];
+export type CompareValue = -1 | 0 | 1;
 
 /**
  * Formats a date in the ISO8601 UTC format.
  * @param {Date} date The date to format
  * @returns {string} An ISO UTC formatted string with timezone offset.
  */
-export function toIsoFormatWithOffset(date) {
+export function toIsoFormatWithOffset(date: Date): string {
     const offset = -date.getTimezoneOffset();
     const sign = offset >= 0 ? '+' : '-';
-    const pad = num => String(num).padStart(2, '0');
+    const pad = (num: number) => String(num).padStart(2, '0');
 
     return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}${sign}${pad(offset / 60)}:${pad(offset % 60)}`;
 }
 
 /**
  * Decomposes an ISO date into year, month and date
- * @param {string} date An ISO Date as string, e.g. '2021-12-31'
+ * @param {string} dateString An ISO Date as string, e.g. '2021-12-31'
  * @returns {[number, number, number]} A tuple of year, month and date
  */
-export function splitIsoDate(date) {
-    return date.split('-').map(x => Number(x));
+export function splitIsoDate(dateString: string) {
+    return dateString.split('-').map(x => Number(x));
 }
 
 /**
@@ -27,22 +33,22 @@ export function splitIsoDate(date) {
  * @param {string} str The string to check.
  * @returns {boolean} True, if the string is ISO formatted.
  */
-export function isIsoFormatted(str) {
+export function isIsoFormatted(str: string) {
     const pattern = /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))/;
     return pattern.test(str);
 }
 
 /**
  * Compares two ISO formatted dates.
- * @param {string|[number, number, number]} a Date a in ISO format
- * @param {string|[number, number, number]} $b Date b in ISO format
+ * @param {IsoInterpretable} a Date a in ISO format
+ * @param {IsoInterpretable} b Date b in ISO format
  * @returns {number} Either -1, 0 or 1; if Date a is before, the same or after b.
  */
-export function compareDateTimes(a, b) {
+export function compareDateTimes(a: IsoInterpretable, b: IsoInterpretable): CompareValue {
     const [yearA, monthA, dayA] = Array.isArray(a) ? a : splitIsoDate(a);
     const [yearB, monthB, dayB] = Array.isArray(b) ? b : splitIsoDate(b);
 
-    const intcmp = (a, b) => (a < b) ? -1 : ((a > b) ? 1 : 0);
+    const intcmp = (a: number, b: number) => (a < b) ? -1 : ((a > b) ? 1 : 0);
 
     const yearCmp = intcmp(yearA, yearB);
     if (yearCmp !== 0) return yearCmp;
@@ -57,7 +63,7 @@ export function compareDateTimes(a, b) {
  * Gets the current date in ISO time.
  * @returns {string} The current date as ISO string. e.g. '2021-12-31'
  */
-export function currentIsoTime() {
+export function currentIsoTime(): string {
     const now = new Date(Date.now() - new Date().getTimezoneOffset() * 60000);
     return getShortIsoString(now);
 }
@@ -67,24 +73,25 @@ export function currentIsoTime() {
  *
  * @param {Date} date The date to convert.
  */
-export function getShortIsoString(date) {
+export function getShortIsoString(date: Date): string {
     return date.toISOString().substr(0, 10);
 }
 
 /**
  * Formats a pattern date to an ISO Date (e.g. '2021-12-31').
  *
- * @param {string} date A pattern formatted date string.
+ * @param {string} dateStr A pattern formatted date string.
  * @param {string} pattern A masked element pattern.
- * @param {function(string[], string[], string):number} getter An optional getter that supplies date numbers.
- * @param {function(number, number, number):[string|null, boolean]} interceptor An optional interceptor that takes year, month and day and returns a result and a boolean, whether to override the functions result with it.
+ * @param {DatePartSupplier} getter An optional getter that supplies date numbers.
+ * @param interceptor An optional interceptor that takes year, month and day and returns a result and a boolean, whether to override the functions result with it.
  * @returns {string|null} The ISO formatted string, or null, if there was an error.
  */
-export function parseISODateFromPattern(date, pattern, getter = (match, order, identifier) => {
+export function parseISODateFromPattern(dateStr: string, pattern: string, getter: DatePartSupplier = (match, order, identifier) => {
     const idx = order.indexOf(identifier);
     return idx >= 0 ? Number(match[idx + 1]) : undefined; // order[i] = match[i + 1]
-}, interceptor = undefined) {
-    const res = matchMaskPattern(date, pattern);
+}, interceptor?: DateInjector) {
+
+    const res = matchMaskPattern(dateStr, pattern);
     if (!res) return null;
 
     const [match, order] = res;
@@ -100,10 +107,7 @@ export function parseISODateFromPattern(date, pattern, getter = (match, order, i
 
     if (year === undefined || month === undefined || day === undefined) return null;
 
-    return `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(
-        2,
-        "0"
-    )}`;
+    return `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
 }
 
 /**
@@ -111,12 +115,12 @@ export function parseISODateFromPattern(date, pattern, getter = (match, order, i
  *
  * @param {string} date An ISO formatted date string.
  * @param {string} pattern A masked element pattern
- * @param {object} substitutes A dictionary with character substitutes
+ * @param extraSubstitutes A dictionary with character substitutes
  * @returns {string|null} The formatted string, or null, if there was an error.
  */
-export function formatISODateFromPattern(date, pattern, extraSubstitutes = {}) {
+export function formatISODateFromPattern(date: string, pattern: string, extraSubstitutes: Record<string, string> = {}) {
     const [year, month, day] = splitIsoDate(date);
-    const substitutes = {
+    const substitutes: Record<string, string> = {
         d: String(day).padStart(2, '0'),
         m: String(month).padStart(2, '0'),
         Y: String(year),
@@ -129,6 +133,8 @@ export function formatISODateFromPattern(date, pattern, extraSubstitutes = {}) {
     const patternSegments = [];
 
     matches.forEach((match) => {
+        if (match.index === undefined) return;
+
         const str = match[0];
         const len = str.length;
         const firstChar = str[0];

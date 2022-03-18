@@ -5,18 +5,18 @@
  * @param  {...any} param Substitutes
  * @return {string} The processed string.
  */
-export function replaceFormatSpecifiers(text, ...param) {
+export function replaceFormatSpecifiers(text: string, ...param: any[]): string {
     const matches = Array.from(text.matchAll(/%[sdf]/g));
-    const segments = [];
+    const segments: string[] = [];
     let cursor = 0;
 
     matches.forEach((match, nMatch) => {
         const str = match[0];
         const idx = match['index'];
-        if (idx > 0 && text[idx - 1] === '%') return; // escaped
+        if (idx === undefined || (idx > 0 && text[idx - 1] === '%')) return;  // no match or escaped match
 
         let prefix = text.substring(cursor, idx);
-        if (prefix.length > 0) segments.push(prefix); // prepend prefix
+        if (prefix.length > 0) segments.push(prefix);  // prepend prefix
 
         let repl = str;
         if (nMatch < param.length) {
@@ -42,7 +42,8 @@ export function replaceFormatSpecifiers(text, ...param) {
         cursor += prefix.length + str.length;
     });
 
-    if (cursor < text.length) segments.push(text.substring(cursor, text.length));
+    if (cursor < text.length)
+        segments.push(text.substring(cursor, text.length));
 
     return segments.join('');
 }

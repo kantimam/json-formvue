@@ -1,7 +1,6 @@
-import {replaceFormatSpecifiers} from '../lib/substitution';
+import {replaceFormatSpecifiers} from '@/lib/substitution';
 import Vue from "vue";
-import * as ResponseInterceptor from "../store/response_interceptor";
-
+import ResponseInterceptor from "./response_interceptor";
 
 /**
  *
@@ -82,8 +81,7 @@ const createStore = (Vuex, initialState) => {
         const schema = getters.getCurrentSchema;
         const errorCount = state.errorCount;
         if (errorCount > 0 && schema && schema.api && schema.api.page && schema.api.page.errorHint) {
-          const errorHintWithCount = schema.api.page.errorHint.replace("%s", errorCount);
-          return errorHintWithCount;
+          return schema.api.page.errorHint.replace("%s", errorCount);
         }
         return null;
       },

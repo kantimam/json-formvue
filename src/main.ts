@@ -39,49 +39,50 @@ import DynamicElement from './components/dynamic_element.vue';
 
 // PUBLIC OPTIONAL FUNCTIONS AND HELPERS
 import {createInputName, createInputRules, createRequiredLabel, getPlaceholder, isRequired} from "./lib/util";
+import ResponseInterceptor from "@/store/response_interceptor";
 
 
 // re export all public modules
 export {
-  // core modules that are required to init FormVue
-  FormVue,
-  createStore,
-  // utility functions that can be used to create your own elements
-  createInputName,
-  isRequired,
-  getPlaceholder,
-  createRequiredLabel,
-  createInputRules,
-  // list of optional default elements that can be used
-  BaseInput,
-  DynamicElement,
-  OnTextfieldText,
-  OnTextfieldEmail,
-  OnTextfieldNumber,
-  OnTextfieldPassword,
-  HiddenfieldHoneypot,
-  FormGridRow,
-  OnTextArea,
-  OnCheckBox,
-  OnRadioGroup,
-  OnSelect,
-  SelectWithRelatedData,
-  OnCaptcha,
-  AdvancedPassword,
-  FileUpload,
-  StaticText,
-  MaskedText,
-  ConditionRadio,
-  ConditionCheckbox,
-  ConditionalContent,
-  Telephone,
-  Url,
-  MultiSelect,
-  MultiCheckbox,
-  DatePicker,
-  ContentElement,
-  InternalTextField
+    // core modules that are required to init FormVue
+    FormVue,
+    createStore,
+    // utility functions that can be used to create your own elements
+    createInputName,
+    isRequired,
+    getPlaceholder,
+    createRequiredLabel,
+    createInputRules,
+    // list of optional default elements that can be used
+    BaseInput,
+    DynamicElement,
+    OnTextfieldText,
+    OnTextfieldEmail,
+    OnTextfieldNumber,
+    OnTextfieldPassword,
+    HiddenfieldHoneypot,
+    FormGridRow,
+    OnTextArea,
+    OnCheckBox,
+    OnRadioGroup,
+    OnSelect,
+    SelectWithRelatedData,
+    OnCaptcha,
+    AdvancedPassword,
+    FileUpload,
+    StaticText,
+    MaskedText,
+    ConditionRadio,
+    ConditionCheckbox,
+    ConditionalContent,
+    Telephone,
+    Url,
+    MultiSelect,
+    MultiCheckbox,
+    DatePicker,
+    ContentElement,
+    InternalTextField,
 }
 
-export { registerResponseInterceptor } from './store/response_interceptor';
+export { default } from '@/store/response_interceptor';
 
