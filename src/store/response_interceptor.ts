@@ -1,7 +1,7 @@
 namespace ResponseInterceptor {
     const responseInterceptors: Handler[] = [];
 
-    export function registerResponseInterceptor(handler: Handler) {
+    export function register(handler: Handler) {
         responseInterceptors.push(handler);
     }
 
