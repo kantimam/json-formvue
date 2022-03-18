@@ -2,7 +2,7 @@ import Vue from "vue";
 import Vuex from 'vuex';
 import Vuetify from 'vuetify/lib/framework';
 
-import createStore from "@/store";
+import createStore from "@/store/index";
 import {VApp} from "vuetify/lib/components";
 
 Vue.use(Vuex);

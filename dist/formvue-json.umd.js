@@ -16258,11 +16258,11 @@ var response_interceptor_ResponseInterceptor;
 (function (ResponseInterceptor) {
   var responseInterceptors = [];
 
-  function registerResponseInterceptor(handler) {
+  function register(handler) {
     responseInterceptors.push(handler);
   }
 
-  ResponseInterceptor.registerResponseInterceptor = registerResponseInterceptor;
+  ResponseInterceptor.register = register;
 
   function handleResponse(_x, _x2) {
     return _handleResponse.apply(this, arguments);

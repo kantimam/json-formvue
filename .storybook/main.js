@@ -1,5 +1,5 @@
-//const path = require('path') // used for resolving aliases
 const custom = require('@vue/cli-service/webpack.config.js');
+const path = require("path");
 
 module.exports = {
     "stories": [
@@ -12,7 +12,20 @@ module.exports = {
     ],
     "framework": "@storybook/vue",
     webpackFinal: async (config) => {
-        return {...config, module: {...config.module, rules: custom.module.rules}};
+        return {
+            ...config,
+            module: {
+                ...config.module,
+                rules: custom.module.rules
+            },
+            resolve: {
+                ...(config.resolve || {}),
+                alias: {
+                    ...(config.resolve && config.resolve.alias ? config.resolve.alias : {}),
+                    '@': path.resolve(__dirname, '../src')
+                }
+            }
+        };
     },
 
 }

@@ -36,7 +36,6 @@ function generateCallbacksList(knownCallbacks = {}, requestedCallbacks = []) {
 const createStore = (Vuex, initialState) => {
   const debug = process.env.NODE_ENV !== 'production'
 
-
   return new Vuex.Store({
     state: initState(initialState),
     strict: debug,
