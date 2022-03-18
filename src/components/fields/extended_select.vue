@@ -88,17 +88,8 @@
 </template>
 
 <script>
-import {
-  VSelect,
-  VListItemTitle,
-  VListItemContent,
-  VListItemSubtitle,
-} from "vuetify/lib";
-import {
-  createInputRules,
-  isRequired,
-  createRequiredLabel,
-} from "../../lib/util";
+import {VListItemContent, VListItemSubtitle, VListItemTitle, VSelect,} from "vuetify/lib";
+import {createInputRules, createRequiredLabel, isRequired,} from "../../lib/util";
 
 export default {
   name: "OnSelect",
@@ -261,7 +252,6 @@ export default {
   },
 
   mounted() {
-    console.log(this.identifier)
     this.dialog = this.$refs["ref-" + this.identifier].$el.closest(".v-dialog");
 
     if (this.isTouchDevice) {
