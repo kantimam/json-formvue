@@ -41,7 +41,8 @@ Required.args = {
     properties: {},
     name: 'text-input',
     required: true,
-    rules: createInputRules(true, [createDummyRequiredValidator()], {}, false, [])
+    rules: createInputRules(true, [createDummyRequiredValidator()], {}, true, []),
+    requiredLabel: 'This field is required'
 };
 
 function createDummyRequiredValidator() {

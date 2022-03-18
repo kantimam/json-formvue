@@ -13,7 +13,18 @@
 
 .v-text-field {
     input {
-        margin-top: $text-field-filled-margin-top
+        margin-top: $text-field-filled-margin-top;
+
+        // remove autofill background color in chrome
+        &:-webkit-autofill,
+        &:-webkit-autofill:hover,
+        &:-webkit-autofill:focus,
+        &:-webkit-autofill:active {
+            // setting background-color to transparent is not accepted by major browsers at the moment
+            // this is a hacky solution to "support" completely transparent autofill background
+            transition: background-color 5000s ease-in-out 0s;
+            transition-delay: 5000s;
+        }
     }
 
     .v-label {
@@ -52,6 +63,7 @@
 
     .v-input__label-required {
         opacity: 0;
+        left: -6px;  // weird bug
     }
 
     &.error--text {
@@ -95,7 +107,7 @@
     &.v-text-field--required {
         &.error--text {
             .v-label {
-                top: $text-field-filled-full-width-label-top;
+                top: $text-field-filled-full-width-label-top + 6px;
 
                 &--active {
                     top: $text-field-filled-full-width-label-top;
@@ -123,6 +135,39 @@
             opacity: 1;
             max-height: none;
             padding-top: $input-slot-margin-bottom;
+        }
+    }
+
+    &.v-text-field--enclosed {
+        .v-text-field__details {
+            margin-bottom: 0;
+        }
+
+        &.v-text-field--counting {
+            .v-text-field__details {
+                padding-top: $input-slot-margin-bottom;
+            }
+        }
+    }
+
+    .v-text-field__details {
+        opacity: 0;
+        max-height: 0;
+        overflow: hidden;
+        min-height: 0;
+        margin-bottom: 0;
+    }
+
+    > .v-input__control {
+        padding-bottom: 1px;
+        overflow: hidden;
+        position: relative;
+
+        > .v-input__slot {
+            padding: $text-field-enclosed-details-padding;
+            margin-bottom: 0;
+            align-items: stretch;
+            min-height: $text-field-filled-full-width-outlined-slot-min-height
         }
     }
 }
