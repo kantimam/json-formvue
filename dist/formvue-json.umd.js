@@ -23693,7 +23693,7 @@ function formatISODateFromPattern(date, pattern) {
 
   return patternSegments.join("");
 }
-// CONCATENATED MODULE: ./src/lib/util.js
+// CONCATENATED MODULE: ./src/lib/util.ts
 
 
 
@@ -23712,9 +23712,9 @@ function formatISODateFromPattern(date, pattern) {
 
 
 
-var createInputName = function createInputName(formName, inputName) {
+function createInputName(formName, inputName) {
   return "tx_form_formframework[".concat(formName, "][").concat(inputName, "]");
-};
+}
 /**
  *
  * @param properties
@@ -23724,7 +23724,7 @@ var createInputName = function createInputName(formName, inputName) {
 function isRequired(properties) {
   var _properties$fluidAddi;
 
-  return (properties === null || properties === void 0 ? void 0 : (_properties$fluidAddi = properties.fluidAdditionalAttributes) === null || _properties$fluidAddi === void 0 ? void 0 : _properties$fluidAddi.required) === 'required';
+  return ((_properties$fluidAddi = properties.fluidAdditionalAttributes) === null || _properties$fluidAddi === void 0 ? void 0 : _properties$fluidAddi.required) === 'required';
 }
 /**
  *
@@ -23735,40 +23735,38 @@ function isRequired(properties) {
 function util_getPlaceholder(properties) {
   var _properties$fluidAddi2;
 
-  return properties === null || properties === void 0 ? void 0 : (_properties$fluidAddi2 = properties.fluidAdditionalAttributes) === null || _properties$fluidAddi2 === void 0 ? void 0 : _properties$fluidAddi2.placeholder;
+  return (_properties$fluidAddi2 = properties.fluidAdditionalAttributes) === null || _properties$fluidAddi2 === void 0 ? void 0 : _properties$fluidAddi2.placeholder;
 }
 /**
- *
- * @param {ElementValidators} validators
  * @returns {string} error message for required validator
  */
 
-var createRequiredLabel = function createRequiredLabel(validators) {
+function createRequiredLabel(validators) {
   if (!validators || !validators.length) return "required";
   var notEmptyValidator = validators.find(function (v) {
     return v.identifier === "NotEmpty";
   });
   return notEmptyValidator && notEmptyValidator.errorMessage || "required";
-};
+}
 /**
  *
  * @param {boolean} required
- * @param {ElementValidators} validators
+ * @param {InputValidator[]} validators
  * @param {ElementProperties} context
  * @param {boolean} overwriteRequiredRules - if true deletes the required and NotEmpty validator (you might want this for inputs that use createRequiredLabel for their required validation).
  * @param {object} componentsMap Custom validators.
  * @returns {*[]}
  */
 
-var createInputRules = function createInputRules(required, validators, context, overwriteRequiredRules, componentsMap) {
-  var rules = util_createValidatorsMap(validators, context, componentsMap);
+function createInputRules(required, validators, context, overwriteRequiredRules, componentsMap) {
+  var rules = createValidatorsMap(validators, context, componentsMap);
 
   if (required && overwriteRequiredRules) {
     if (rules.required) delete rules.required;
     if (rules.NotEmpty) delete rules.NotEmpty;
   }
 
-  if (!!required) rules.required = function (v) {
+  if (required) rules.required = function (v) {
     return !!v;
   };
   var rulesArray = [];
@@ -23778,8 +23776,8 @@ var createInputRules = function createInputRules(required, validators, context, 
   }
 
   return rulesArray;
-};
-var util_createValidatorsMap = function createValidatorsMap(validators, context, componentsMap) {
+}
+function createValidatorsMap(validators, context, componentsMap) {
   if (!validators || !validators.length) return {};
   var validatorsMap = {};
 
@@ -23792,7 +23790,7 @@ var util_createValidatorsMap = function createValidatorsMap(validators, context,
       var id = validator.identifier;
       var validatorArguments = validator.options;
       var errorMessage = validator.errorMessage;
-      var validatorFunction = util_createValidatorByKey(id, validatorArguments, errorMessage, context, componentsMap);
+      var validatorFunction = createValidatorByKey(id, validatorArguments || {}, errorMessage, context, componentsMap);
       if (validatorFunction) validatorsMap[id] = validatorFunction;
     }
   } catch (err) {
@@ -23802,115 +23800,134 @@ var util_createValidatorsMap = function createValidatorsMap(validators, context,
   }
 
   return validatorsMap;
-}; // create a function and wrap it inside the payload
+}
 
-var util_createValidatorByKey = function createValidatorByKey(validatorKey, vArgs, errorMessage, context) {
-  var componentsMap = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : {};
+function stringValidator(validator) {
+  return typedValidator(validator, function (inputValue) {
+    return typeof inputValue === 'string';
+  });
+}
 
-  // inject payload and error message into the selected validation function
-  var inputIntegerValidator = function inputIntegerValidator(inputValue) {
-    return !inputValue.length || validatorInteger(inputValue, errorMessage || "positive integer required");
+function typedValidator(validator, predicate) {
+  return function (inputValue, errorMessage) {
+    if (!predicate(inputValue)) return true; // can't validate, because of type mismatch
+
+    return validator(inputValue, errorMessage);
   };
+} // create a function and wrap it inside the payload
+
+
+function createValidatorByKey(validatorKey, vArgs, errorMessage, context) {
+  var componentsMap = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : {};
+  // inject payload and error message into the selected validation function
+  var inputIntegerValidator = stringValidator(function (inputValue) {
+    return !inputValue.length || validatorInteger(inputValue, errorMessage || "positive integer required");
+  });
 
   var knownFunctions = _objectSpread2(_objectSpread2({
-    required: function required(inputValue) {
+    required: stringValidator(function (inputValue) {
       return validatorRequired(inputValue, errorMessage || "this field is required");
-    },
-    NotEmpty: function NotEmpty(inputValue) {
+    }),
+    NotEmpty: stringValidator(function (inputValue) {
       return validatorRequired(inputValue, errorMessage || "this field is required");
-    },
-    StringLength: function StringLength(inputValue) {
+    }),
+    StringLength: stringValidator(function (inputValue) {
       return !inputValue.length || validatorLength(inputValue, errorMessage || "input length must be between ".concat(vArgs.minimum, " and ").concat(vArgs.maximum), vArgs);
-    },
-    Alphanumeric: function Alphanumeric(inputValue) {
+    }),
+    Alphanumeric: stringValidator(function (inputValue) {
       return !inputValue.length || validatorAlphanumeric(inputValue, errorMessage || "this field must be alphanumeric (different alphabets need to be implemented)");
-    },
-    EmailAddress: function EmailAddress(inputValue) {
+    }),
+    EmailAddress: stringValidator(function (inputValue) {
       return !inputValue.length || validatorEmail(inputValue, errorMessage || "invalid email");
-    },
+    }),
     Integer: inputIntegerValidator,
     Number: inputIntegerValidator,
-    Float: function Float(inputValue) {
+    Float: stringValidator(function (inputValue) {
       return !inputValue.length || validatorFloat(inputValue, errorMessage || "positive float required");
-    },
-    Text: function Text(inputValue) {
+    }),
+    Text: stringValidator(function (inputValue) {
       return validatorRequired(inputValue, errorMessage || "this field is required");
-    },
-    NumberRange: function NumberRange(inputValue) {
+    }),
+    NumberRange: stringValidator(function (inputValue) {
       return !inputValue.length || validatorNumberRange(inputValue, errorMessage || "number must be between ".concat(vArgs.minimum, " and ").concat(vArgs.maximum), vArgs);
-    },
-    RegularExpression: function RegularExpression(inputValue) {
+    }),
+    RegularExpression: stringValidator(function (inputValue) {
       return !inputValue.length || validatorRegex(inputValue, errorMessage || "input must match following regular expression ".concat(vArgs.regularExpression), vArgs);
-    },
-    MinimumNumber: function MinimumNumber(inputValue) {
+    }),
+    MinimumNumber: stringValidator(function (inputValue) {
       return !inputValue.length || validatorMinimumNumber(inputValue, errorMessage || "number must be greater than ".concat(vArgs.minimum), vArgs);
-    },
-    TimeFormat: function TimeFormat(inputValue) {
+    }),
+    TimeFormat: stringValidator(function (inputValue) {
       return !inputValue.length || util_validatorTimeFormat(inputValue, errorMessage || "the datetime must be in this format: '".concat(vArgs.format, "'"), vArgs);
-    },
-    MaskComplete: function MaskComplete(inputValue) {
+    }),
+    MaskComplete: stringValidator(function (inputValue) {
       return !inputValue.length || validatorMaskComplete(inputValue, errorMessage || "please complete the input", vArgs, context);
-    },
+    }),
     FileSize: function FileSize(inputValue) {
       return validatorFileSize(inputValue, errorMessage, vArgs);
     },
-    DateInterval: function DateInterval(inputValue) {
+    DateInterval: stringValidator(function (inputValue) {
       return !inputValue.length || util_validatorDateInterval(inputValue, errorMessage, vArgs, context);
-    }
+    })
   }, componentsMap), {}, {
-    // TODO use this map alone in 2.0
     "default": null
   });
 
   return knownFunctions[validatorKey] || knownFunctions["default"];
-};
+}
 var validatorRequired = function validatorRequired(string, invalidMessage) {
   return !!string || invalidMessage;
 };
-var validatorLength = function validatorLength(string, invalidMessage, vArgs) {
-  if (!string.length) return invalidMessage;
-  var trimmedString = string.trim();
+var validatorLength = function validatorLength(inputValue, invalidMessage, vArgs) {
+  if (!inputValue.length) return invalidMessage;
+  if (!vArgs) return true;
+  var trimmedString = inputValue.trim();
   return trimmedString.length >= vArgs.minimum && trimmedString.length <= vArgs.maximum || invalidMessage;
 };
-var validatorAlphanumeric = function validatorAlphanumeric(string, invalidMessage) {
-  return /^[a-z0-9]+$/i.test(string) || invalidMessage;
+var validatorAlphanumeric = function validatorAlphanumeric(inputValue, invalidMessage) {
+  return /^[a-z0-9]+$/i.test(inputValue) || invalidMessage;
 };
-var validatorEmail = function validatorEmail(string, invalidMessage) {
+var validatorEmail = function validatorEmail(inputValue, invalidMessage) {
   // Modified Regex which ensures at least 2 TLD chars
   // const emailRegex = /^(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9]{2,}|\[(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)])$/
-  var emailRegex = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/;
-  return emailRegex.test(string) || invalidMessage;
+  var emailRegex = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)])/;
+  return emailRegex.test(inputValue) || invalidMessage;
 };
-var validatorInteger = function validatorInteger(string, invalidMessage) {
-  return /^\d+$/.test(string) || invalidMessage;
+var validatorInteger = function validatorInteger(inputValue, invalidMessage) {
+  return /^\d+$/.test(inputValue) || invalidMessage;
 };
-var validatorFloat = function validatorFloat(string, invalidMessage) {
-  return /^([1-9]\d*(\.|\,)\d*|0?(\.|\,)\d*[1-9]\d*|[1-9]\d*)$/.test(string) || invalidMessage;
+var validatorFloat = function validatorFloat(inputValue, invalidMessage) {
+  return /^([1-9]\d*([.,])\d*|0?([.,])\d*[1-9]\d*|[1-9]\d*)$/.test(inputValue) || invalidMessage;
 };
-var validatorNumberRange = function validatorNumberRange(string, invalidMessage, vArgs) {
-  if (isNaN(string)) return invalidMessage;
-  var num = parseFloat(string);
+var validatorNumberRange = function validatorNumberRange(inputValue, invalidMessage, vArgs) {
+  if (!vArgs) return true; // can't validate
+
+  var num = parseFloat(inputValue);
+  if (isNaN(num)) return invalidMessage;
   return num >= vArgs.minimum && num < vArgs.maximum || invalidMessage;
 };
-var validatorRegex = function validatorRegex(string, invalidMessage, vArgs) {
+var validatorRegex = function validatorRegex(inputValue, invalidMessage, vArgs) {
   /* when no regex or a invalid regex was provided return true = valid so this does not break the form */
-  if (!vArgs.regularExpression) return true;
+  if (!vArgs || !vArgs.regularExpression) return true; // can't validate
 
   try {
     var regex = new RegExp(vArgs.regularExpression);
-    return regex.test(string) || invalidMessage;
+    return regex.test(inputValue) || invalidMessage;
   } catch (error) {
     return true;
   }
 };
-var validatorMinimumNumber = function validatorMinimumNumber(string, invalidMessage, vArgs) {
-  if (isNaN(string)) return invalidMessage;
-  var num = parseFloat(string);
+var validatorMinimumNumber = function validatorMinimumNumber(inputValue, invalidMessage, vArgs) {
+  if (!vArgs) return true; // can't validate
+
+  var num = parseFloat(inputValue);
+  if (isNaN(num)) return invalidMessage;
   return num >= vArgs.minimum || invalidMessage;
 };
-var util_validatorTimeFormat = function validatorTimeFormat(string, invalidMessage, vArgs) {
+var util_validatorTimeFormat = function validatorTimeFormat(inputValue, invalidMessage, vArgs) {
+  if (!vArgs) return true;
   var mapping = getMaskPatternMapping();
-  var res = matchMaskPattern(string, vArgs.format, mapping);
+  var res = matchMaskPattern(inputValue, vArgs.format, mapping);
   if (!res) return invalidMessage;
 
   var _res = _slicedToArray(res, 2),
@@ -23930,7 +23947,7 @@ var util_validatorTimeFormat = function validatorTimeFormat(string, invalidMessa
 
   return true;
 };
-var validatorMaskComplete = function validatorMaskComplete(string, invalidMessage, _vArgs, context) {
+var validatorMaskComplete = function validatorMaskComplete(inputValue, invalidMessage, _vArgs, context) {
   var maskPattern = context.pattern;
   if (!maskPattern) return true; // invalid validator for element
 
@@ -23938,15 +23955,16 @@ var validatorMaskComplete = function validatorMaskComplete(string, invalidMessag
 
   var pattern = "\\".concat(placeholder);
   var patternPlaceholderOcurrences = (maskPattern.match(new RegExp(pattern, 'g')) || []).length;
-  var inputPlaceholderOcurrences = (string.match(new RegExp(pattern, 'g')) || []).length;
+  var inputPlaceholderOcurrences = (inputValue.match(new RegExp(pattern, 'g')) || []).length;
   return inputPlaceholderOcurrences - patternPlaceholderOcurrences <= 0 ? true : invalidMessage; // completed, when there are no placeholders left
 };
-var util_validatorDateInterval = function validatorDateInterval(string, invalidMessage, vArgs, context) {
+var util_validatorDateInterval = function validatorDateInterval(inputValue, invalidMessage, vArgs, context) {
+  if (!vArgs) return true;
   var minDate = vArgs.minDate,
       maxDate = vArgs.maxDate;
   if ((!minDate || !minDate.length) && (!maxDate || !maxDate.length)) return true; // no validation required
 
-  var parsed = parseISODateFromPattern(string, context.pattern);
+  var parsed = parseISODateFromPattern(inputValue, context.pattern);
   if (!parsed) return invalidMessage; // invalid date
   // take 'today' into account
 
@@ -23955,6 +23973,7 @@ var util_validatorDateInterval = function validatorDateInterval(string, invalidM
   return minDate && compareDateTimes(parsed, minDate) < 0 || maxDate && compareDateTimes(parsed, maxDate) > 0 ? invalidMessage : true;
 };
 var validatorFileSize = function validatorFileSize(fileInput, invalidMessage, vArgs) {
+  if (!vArgs) return true;
   var valid = true;
   if (!fileInput) return valid; // if fileList is empty this is valid
 
@@ -23973,7 +23992,7 @@ var validatorFileSize = function validatorFileSize(fileInput, invalidMessage, vA
         var size = file.size;
         if (isNaN(size)) continue;
         totalSize += size;
-      } else continue;
+      }
     }
   } else if (fileInput instanceof File) {
     var _size = fileInput.size;
@@ -23985,10 +24004,10 @@ var validatorFileSize = function validatorFileSize(fileInput, invalidMessage, vA
   if (totalSize > maxSize || totalSize < minSize) valid = false;
   return valid || invalidMessage || "combined size of all files needs to be between ".concat(vArgs.minimum, " (").concat(minSize, " bytes) and ").concat(vArgs.maximum, " (").concat(maxSize, " bytes) but was ").concat(totalSize, " bytes.");
 };
-var typo3FileSizeToBytes = function typo3FileSizeToBytes(sizeString) {
+function typo3FileSizeToBytes(sizeString) {
   if (sizeString.length < 2) return sizeString;
   var str = sizeString.trim();
-  var num = str.slice(0, -1);
+  var num = Number(str.slice(0, -1));
   var modifier = str[str.length - 1];
 
   switch (modifier) {
@@ -24006,19 +24025,21 @@ var typo3FileSizeToBytes = function typo3FileSizeToBytes(sizeString) {
   }
 
   return num;
-};
-var createCallbackList = function createCallbackList(callbacks) {
+}
+function createCallbackList(callbacks) {
   return callbacks.map(function (callback) {
     return createCallbackByKey(callback.action, callback.arguments);
   });
-};
-var createCallbackByKey = function createCallbackByKey(callbackKey, callbackArgs) {
+}
+function createCallbackByKey(callbackKey, callbackArgs) {
   // inject payload and error message into the selected validation function
   var knownCallbacks = {
-    "default": Promise.resolve(callbackArgs)
+    "default": function _default() {
+      return Promise.resolve(callbackArgs);
+    }
   };
   return knownCallbacks[callbackKey] || knownCallbacks["default"];
-};
+}
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/base_input.vue?vue&type=script&lang=js&
 
 /* harmony default export */ var base_inputvue_type_script_lang_js_ = ({

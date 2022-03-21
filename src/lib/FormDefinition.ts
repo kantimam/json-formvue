@@ -55,14 +55,27 @@ export type ElementDefinition = {
     label: string
     name: string
     renderingOptions?: Record<string, any>
-    properties: Record<string, any>
+    properties: ElementProperties
     validators?: InputValidator[]
     type: string
 }
 
+export type ElementProperties = Record<string, any> & CommonProperties;
+
+export type CommonProperties = {
+    fluidAdditionalAttributes?: FluidAdditionalProperties
+}
+
+export type FluidAdditionalProperties = {
+    required?: 'required',
+    minlength?: string | number,
+    maxlength?: string | number,
+    placeholder?: string
+}
+
 export type InputValidator = {
     code: number
-    errorMessage: string | number
+    errorMessage: string
     identifier: string
     options?: Record<string, any>
 }

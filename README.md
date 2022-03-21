@@ -248,7 +248,7 @@ function scrollToErrorCallback(firstInputWithError: HTMLElement){
 to be implemented
 
 ## Utility functions
-you can find useful utilty functions inside the lib folder formvue-json/src/lib/util.js  
+you can find useful utilty functions inside the lib folder formvue-json/src/lib/util.ts  
 Some of these functions will be re exported from the library root but otherwise you can grab them from src.  
 
 ### Important utility functions
