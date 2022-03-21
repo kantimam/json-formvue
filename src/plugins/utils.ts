@@ -1,21 +1,21 @@
 let utils = {
   disablePageScroll: function () {
     let scrollPosition = window.pageYOffset;
-    window.document.body.setAttribute('data-top', scrollPosition);
+    window.document.body.setAttribute('data-top', String(scrollPosition));
     window.document.body.style.overflow = 'hidden';
     window.document.body.style.position = 'fixed';
     window.document.body.style.top = `-${scrollPosition}px`;
     window.document.body.style.width = '100%';
   },
 
-  elementInViewport: function (el) {
+  elementInViewport: function (el: HTMLElement) {
     let top = el.offsetTop;
     let left = el.offsetLeft;
     let width = el.offsetWidth;
     let height = el.offsetHeight;
 
     while(el.offsetParent) {
-      el = el.offsetParent;
+      el = el.offsetParent as HTMLElement;
       top += el.offsetTop;
       left += el.offsetLeft;
     }
@@ -33,7 +33,8 @@ let utils = {
     window.document.body.style.removeProperty('position');
     window.document.body.style.removeProperty('top');
     window.document.body.style.removeProperty('width');
-    window.scrollTo(0, window.document.body.getAttribute('data-top'));
+    const dataTop = window.document.body.getAttribute('data-top');
+    window.scrollTo(0, Number(dataTop!));
     window.document.body.removeAttribute('data-top');
   },
 
