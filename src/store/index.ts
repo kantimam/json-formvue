@@ -1,6 +1,63 @@
 import {replaceFormatSpecifiers} from '@/lib/substitution';
-import Vue from "vue";
+import Vue, {Component} from "vue";
+import Vuex from "vuex";
 import ResponseInterceptor from "./response_interceptor";
+import {CallbackMap} from "@/lib/callbacks";
+import {
+    CallbackDefinition,
+    ElementDefinition,
+    FormApi,
+    FormDefinition,
+    FormErrors,
+    FormWrapper,
+    isFormDefinition
+} from "@/lib/FormDefinition";
+
+export type StoreEntry = {
+    id: string,
+    value: string,
+    error: string,
+    hasError: boolean,
+    default?: boolean
+}
+
+// the actual container of store entries
+export type StoreImpl = Record<string, StoreEntry>;
+
+export type FormResponse = {
+    html?: string,
+    title?: string,
+    text?: string | null,
+    error: boolean
+}
+
+export type FormStepConfig = {
+    schema: Readonly<FormDefinition>,
+    inputModel: StoreImpl,
+    formStepError: unknown,
+    formId: string,
+    formElementId: string,
+    formAction: string,
+    wasSubmitted: boolean
+}
+
+// prototyping StoreImpl values
+export type StoreState = {
+    id: string,
+    formElementId: string,
+    currentStep: number,
+    loading: boolean,
+    formDisabled: boolean,
+    errorCount: number;
+    nextStep: number,
+    lastStep: number;
+    formResponse: FormResponse | null,
+    formFinished: boolean,
+    formErrors: FormErrors | string | null,
+    steps: FormStepConfig[],
+    callbacksMap: Readonly<CallbackMap>,
+    [key: string]: any
+}
 
 /**
  *
@@ -8,106 +65,134 @@ import ResponseInterceptor from "./response_interceptor";
  * @param requestedCallbacks
  * @returns {Promise<unknown[]> | undefined}
  */
-function generateCallbacksList(knownCallbacks = {}, requestedCallbacks = []) {
-    if (!knownCallbacks) return;
-    const callbacks = requestedCallbacks.map(callbackDescription => {
-        const foundCallback = knownCallbacks[callbackDescription.action];
-        if (foundCallback) return foundCallback(callbackDescription.arguments);
-    })
-    const defaultCallback = knownCallbacks['defaultCallback'];
-    if (defaultCallback) {
-        callbacks.push(defaultCallback());
-    }
-    if (!callbacks || !callbacks.length) return;
+function generateCallbacksList(knownCallbacks: CallbackMap = {}, requestedCallbacks: CallbackDefinition<unknown>[] = []): Promise<void> {
+    if (!knownCallbacks) return Promise.resolve();
 
-    return Promise.all(callbacks);
+    const callbacks = requestedCallbacks.map(cb => {
+        const foundCallback = knownCallbacks[cb.action];
+
+        if (foundCallback) {
+            return foundCallback(cb.arguments);
+        } else {
+            console.warn(`[Callback] Unknown callback '${cb.action}'`);
+            return Promise.resolve();
+        }
+    });
+
+    const defaultCallback = knownCallbacks['defaultCallback'];
+    if (defaultCallback)
+        callbacks.push(defaultCallback(null));
+
+    if (!callbacks || !callbacks.length)
+        return Promise.resolve();
+
+    return Promise.all(callbacks).then();
 }
 
 /**
  *
- * @param Vuex
- * @param {Object} initialState
- * @param {Object} initialState.formData - object containing the form configuration.
- * @param {Object} [initialState.callbacksMap={}] - object containing form submit callbacks.
+ * @param {Vuex} v The Vuex instance.
+ * @param {FormStateInit} stateInit
+ * @param {Object} stateInit.formData - object containing the form configuration.
+ * @param {Object} [stateInit.callbacksMap={}] - object containing form submit callbacks.
  * @returns {Promise<unknown[]>|*}
  */
-const createStore = (Vuex, initialState) => {
-    const debug = process.env.NODE_ENV !== 'production'
+function createStore(v: typeof Vuex, stateInit: FormStateInit) {
+    const debug = process.env.NODE_ENV !== 'production';
 
     return new Vuex.Store({
-        state: initState(initialState),
+        state: initState(stateInit),
         strict: debug,
-
         getters: {
-            getCurrentStep: state => {
+            getCurrentStep(state) {
                 const validIndex = state.currentStep ? state.currentStep - 1 : 0;
-                return state.steps[validIndex];
+                return state.steps ? state.steps[validIndex] : undefined;
             },
-            getIsSingleStep: state => {
-                return state.lastStep === 1
+            getIsSingleStep(state) {
+                return state.lastStep === 1;
             },
-            getIsLastStep: state => {
+            getIsLastStep(state) {
                 return state.currentStep === state.lastStep
             },
-            getCurrentSchema: (_, getters) => {
-                return getters.getCurrentStep.schema
+            getCurrentSchema(_, getters) {
+                const currentStep = getters.getCurrentStep as (FormStepConfig | undefined);
+                return currentStep ? currentStep.schema : undefined;
             },
-            getCurrentModel: (_, getters) => {
-                return getters.getCurrentStep.inputModel
+            getCurrentModel(_, getters) {
+                return (getters.getCurrentStep as (FormStepConfig | undefined))?.inputModel
             },
-            getCurrentInputValue: (_, getters) => inputKey => {
-                const model = getters.getCurrentModel;
-                if (!model) return ""
-                const inputModel = model[inputKey];
-                if (!inputModel || !inputModel.value) return ""
-                return inputModel.value;
+            getCurrentInputValue(_, getters) {
+                return (inputKey: string) => {
+                    const model = getters.getCurrentModel as (Record<string, StoreEntry> | undefined);
+                    if (!model) return "";
+
+                    const inputModel = model[inputKey];
+                    if (!inputModel || !inputModel.value) return "";
+
+                    return inputModel.value;
+                };
             },
-            getCurrentInputError: (_, getters) => inputKey => {
-                const model = getters.getCurrentModel;
-                if (!model) return ""
-                const inputModel = model[inputKey];
-                if (!inputModel || !inputModel.error) return ""
-                return inputModel.error;
+            getCurrentInputError(_, getters) {
+                return (inputKey: string) => {
+                    const model = getters.getCurrentModel as (Record<string, StoreEntry> | undefined);
+                    if (!model) return "";
+
+                    const inputModel = model[inputKey];
+                    if (!inputModel || !inputModel.error) return "";
+
+                    return inputModel.error;
+                };
             },
-            getCurrentInputName: (_, getters) => inputKey => {
-                const step = getters.getCurrentStep;
-                if (!step || !step.formId) return `tx_form_formframework[${inputKey}]`
-                return `tx_form_formframework[${step.formId}][${inputKey}]`
+            getCurrentInputName(_, getters) {
+                return (inputKey: string) => {
+                    const step = getters.getCurrentStep as (FormStepConfig | undefined);
+                    if (!step || !step.formId) return `tx_form_formframework[${inputKey}]`;
+
+                    return `tx_form_formframework[${step.formId}][${inputKey}]`;
+                };
             },
-            getErrorLabel: (state, getters) => {
+            getErrorLabel(state, getters) {
                 const schema = getters.getCurrentSchema;
                 const errorCount = state.errorCount;
-                if (errorCount > 0 && schema && schema.api && schema.api.page && schema.api.page.errorHint) {
+                if (errorCount && errorCount > 0 && schema && schema.api && schema.api.page && schema.api.page.errorHint) {
                     return schema.api.page.errorHint.replace("%s", errorCount);
                 }
                 return null;
             },
-            getPageSummaryText: (_state, getters) => {
-                const schema = getters.getCurrentSchema;
-                const text = schema?.api?.page?.pageSummaryText;
-                return text ? replaceFormatSpecifiers(text, schema.api.page.current, schema.api.page.pages) : null;
+            getPageSummaryText(_state, getters) {
+                const schema = getters.getCurrentSchema as Readonly<FormDefinition> | undefined;
+                const text = schema?.api.page.pageSummaryText;
+                return text && schema ? replaceFormatSpecifiers(text, schema.api.page.current, schema.api.page.pages) : null;
             },
-            getFormErrors: (state) => {
-                if (!Array.isArray(state.formErrors)) return [state.formErrors];
-                return state.formErrors || [];
+            getFormErrors(state): FormErrors {
+                const formErrors = state.formErrors;
+                if (typeof formErrors === 'string')
+                    return [formErrors];
+                else
+                    return formErrors || [];
             }
         },
 
         mutations: {
             updateInputValue(state, payload) {
                 const validIndex = state.currentStep ? state.currentStep - 1 : 0;
+                if (!state.steps) return;
+
                 const currentStep = state.steps[validIndex];
                 if (!currentStep) return;
 
                 const currentModel = currentStep.inputModel[payload.key] ? currentStep.inputModel[payload.key] : {
                     id: payload.key,
+                    value: '',
+                    error: '',
                     hasError: false,
                     default: true
-                };
+                } as StoreEntry;
 
                 currentModel.value = payload.value;
                 currentModel.error = '';
-                if (currentModel.hasError && state.errorCount > 0) {
+
+                if (currentModel.hasError && state.errorCount && state.errorCount > 0) {
                     state.errorCount = state.errorCount - 1;
                     currentModel.hasError = false;
                 }
@@ -142,10 +227,12 @@ const createStore = (Vuex, initialState) => {
                 state.formResponse = null
 
                 const updatedSteps = state.steps;
-                updatedSteps[formConfigStep - 1] = createStepFromFormConfig(formConfig);
-                state.steps = updatedSteps;
-                state.loading = false;
+                if (updatedSteps) {
+                    updatedSteps[formConfigStep - 1] = createStepFromFormConfig(formConfig);
+                    state.steps = updatedSteps;
+                }
 
+                state.loading = false;
             },
             setFormErrors(state, errorMessages) {
                 state.formErrors = errorMessages;
@@ -155,9 +242,14 @@ const createStore = (Vuex, initialState) => {
             },
             setModelErrors(state, model) {
                 if (!model) return;
+
                 const validIndex = state.currentStep ? state.currentStep - 1 : 0;
+
+                if (!state.steps) return;
+
                 const currentStep = state.steps[validIndex];
                 if (!currentStep) return;
+
                 const currentModel = currentStep.inputModel;
                 if (!currentModel) return;
 
@@ -168,11 +260,14 @@ const createStore = (Vuex, initialState) => {
                         inputModel.hasError = true;
                     }
                 }
-                state.errorCount = Object.keys(model).length || 0;
 
+                state.errorCount = Object.keys(model).length || 0;
             },
-            calcFormErrorCount(state, vuetifyFormComponent) {
+            calcFormErrorCount(state, vuetifyFormComponent: Component) {
                 const validIndex = state.currentStep ? state.currentStep - 1 : 0;
+
+                if (!state.steps) return;
+
                 const currentStep = state.steps[validIndex];
                 if (!currentStep) return;
 
@@ -183,7 +278,7 @@ const createStore = (Vuex, initialState) => {
                     formModel[inputKey].hasError = false;
                 }
 
-                const inputs = vuetifyFormComponent.inputs;
+                const inputs = (<any> vuetifyFormComponent).inputs as any[]; // actually it's Component[] TODO fix this later
 
                 let errorCount = 0;
                 inputs.forEach(element => {
@@ -207,10 +302,14 @@ const createStore = (Vuex, initialState) => {
             },
             resetFormErrorCount(state) {
                 const validIndex = state.currentStep ? state.currentStep - 1 : 0;
+                if (!state.steps) return;
+
                 const currentStep = state.steps[validIndex];
                 if (!currentStep) return;
+
                 const formModel = currentStep.inputModel;
                 if (!formModel) return;
+
                 for (const inputKey in formModel) {
                     formModel[inputKey].hasError = false;
                 }
@@ -220,7 +319,6 @@ const createStore = (Vuex, initialState) => {
         },
 
         actions: {
-
             submitStep(context, vuetifyForm) {
                 vuetifyForm.$el.focus();
                 const isFormValid = vuetifyForm.validate();
@@ -233,18 +331,19 @@ const createStore = (Vuex, initialState) => {
                     const formData = new FormData(vuetifyForm.$el); // parse formdata from underlying form element
 
                     // quickfix - radio buttons SOMETIMES not getting put into form data?!
-                    const modelSupplier = context.getters.getCurrentModel;
-                    if (modelSupplier) {
-                        Object.entries(modelSupplier).forEach(([key, value]) => {
-                            const mappedKey = `tx_form_formframework[${formId}][${key}]`;
-                            if (!!value.hasError || key.startsWith('__') || value.value.length <= 0 || formData.has(mappedKey)) return;
-                            formData.append(mappedKey, value.value);
-                        });
-                    }
+                    const model = context.getters.getCurrentModel as (Record<string, StoreEntry> | undefined);
+                    model && Object.entries(model).forEach(([key, value]) => {
+                        const mappedKey = `tx_form_formframework[${formId}][${key}]`;
+                        if (value.hasError || key.startsWith('__') || value.value.length <= 0 || formData.has(mappedKey)) return;
+
+                        formData.append(mappedKey, value.value);
+                    });
 
                     // append all hidden fields to form data
-                    const hiddenFields = context.getters.getCurrentSchema?.elements.filter(element => element.type === 'Hidden');
-                    hiddenFields.forEach(field => {
+                    const currentSchema = context.getters.getCurrentSchema as (Readonly<FormDefinition> | undefined);
+                    const hiddenFields = currentSchema?.elements?.filter(element => element.type === 'Hidden');
+
+                    hiddenFields && hiddenFields.forEach(field => {
                         if (field.identifier === '__trustedProperties') {
                             // trusted properties has a different naming convention for whatever reason, maybe fix that in the backend later...
                             formData.append('tx_form_formframework[__trustedProperties]', field.defaultValue)
@@ -253,7 +352,8 @@ const createStore = (Vuex, initialState) => {
                         }
                     })
 
-                    const currentAction = context.getters.getCurrentStep.formAction;
+
+                    const currentAction = (context.getters.getCurrentStep as FormStepConfig | undefined)?.formAction;
                     if (!currentAction) return;
 
                     fetch(currentAction, {
@@ -330,9 +430,9 @@ const createStore = (Vuex, initialState) => {
 
             },
 
-            async handleResponseCallbacks(context, successJson) {
+            async handleResponseCallbacks(context, successJson: FormDefinition | FormApi) {
                 try {
-                    const requestedCallbacks = successJson?.api?.callbacks || successJson?.callbacks;
+                    const requestedCallbacks = isFormDefinition(successJson) ? successJson.api.callbacks : successJson.callbacks;
                     if (requestedCallbacks) {
                         const callbacksList = generateCallbacksList(context.state.callbacksMap, requestedCallbacks);
                         if (callbacksList) {
@@ -357,6 +457,12 @@ const createStore = (Vuex, initialState) => {
     })
 }
 
+export type FormStateInit = {
+    formData: FormWrapper,
+    callbacksMap: CallbackMap,
+    rest?: Record<string, any>
+};
+
 /**
  *
  * @param formData
@@ -364,11 +470,11 @@ const createStore = (Vuex, initialState) => {
  * @param rest
  * @returns {(*&{currentStep: number, lastStep: ([]|*|number), callbacksMap: {}, previousStep: ((function(*=): *)|*|number), formDisabled: boolean, nextStep: number, formFinished: boolean, id, loading: boolean, steps: {schema: unknown[], formId, wasSubmitted: boolean, inputModel: {}, formAction: string, formStepError: null}[], errorCount: number, formResponse: null})|{}}
  */
-function initState({formData, callbacksMap = {}, ...rest}) {
+function initState({formData, callbacksMap = {}, ...rest}: FormStateInit): Partial<StoreState> {
     const formConfig = formData.configuration;
     if (!formConfig) return {}
 
-    const state = {
+    return {
         id: formConfig.id,
         formElementId: formConfig.identifier || formConfig.id,
         currentStep: formConfig.api.page.current || 1,
@@ -376,28 +482,20 @@ function initState({formData, callbacksMap = {}, ...rest}) {
         formDisabled: false,
         errorCount: 0,
         nextStep: formConfig.api.page.nextPage || 1,
-        previousStep: formConfig.api.page.previousPage || 1,
         lastStep: formConfig.api.page.pages || 1,
         formResponse: null,
         formFinished: false,
         formErrors: [],
-
-        steps: [
-            createStepFromFormConfig(formConfig)
-        ],
+        steps: [createStepFromFormConfig(formConfig)],
         callbacksMap: Object.freeze(callbacksMap),
         ...rest
-
-    }
-    return state;
+    };
 }
 
-
-function createStepFromFormConfig(formConfig) {
+function createStepFromFormConfig(formConfig: FormDefinition): FormStepConfig {
     return {
         schema: Object.freeze(formConfig), // the original shape of the form with all the nesting for reconstruction
-        inputModel: createModelFromFormConfig(inputArrayFromSchema(formConfig.elements)),  // actually reactive form state
-
+        inputModel: createModelFromFormConfig(flattenElements(formConfig.elements)),  // actually reactive form state
         formStepError: null,
         formId: formConfig.id,
         formElementId: formConfig.identifier || formConfig.id,
@@ -406,8 +504,8 @@ function createStepFromFormConfig(formConfig) {
     }
 }
 
-function createModelFromFormConfig(elements) {
-    const model = {};
+function createModelFromFormConfig(elements: ElementDefinition[]): StoreImpl {
+    const model: StoreImpl = {};
     if (!elements || !Array.isArray(elements)) return model;
 
     elements.forEach(element => {
@@ -417,14 +515,15 @@ function createModelFromFormConfig(elements) {
             error: '',
             hasError: false,
         }
-    })
+    });
+
     return model;
 }
 
 
 // recursive function that generates a flat array of only inputs from a nested form schema
-function inputArrayFromSchema(elements) {
-    const inputs = [];
+function flattenElements(elements: ElementDefinition[]): ElementDefinition[] {
+    const inputs: ElementDefinition[] = [];
 
     elements.forEach(element => {
         if (element.elements && element.elements.length) {
@@ -432,8 +531,11 @@ function inputArrayFromSchema(elements) {
             if (element.type === 'ConditionRadio' || element.type === 'ConditionCheckbox') {
                 inputs.push(element);
             }
-            inputs.push(...inputArrayFromSchema(element.elements));
-        } else inputs.push(element)
+
+            inputs.push(...flattenElements(element.elements));
+        } else {
+            inputs.push(element)
+        }
     })
 
     return inputs;
