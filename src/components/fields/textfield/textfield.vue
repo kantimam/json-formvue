@@ -37,10 +37,10 @@
   >
     <template slot="prepend-outer"><slot name="prepend"></slot></template>
     <template slot="prepend-inner" v-if="optional"
-		><span class="v-input__label-optional">{{
-			optionalLabel
-		  }}</span></template
-		>
+    ><span class="v-input__label-optional">{{
+        optionalLabel
+      }}</span></template
+    >
     <template slot="prepend-inner" v-if="required"
     ><span class="v-input__label-required">{{
         requiredLabel
@@ -59,26 +59,28 @@
   </v-text-field>
 </template>
 
-<script>
-import utils from "../../../plugins/utils";
+<script lang="ts">
+import 'reflect-metadata'; // auto-inject vue prop type validators from ts-types; needs to be imported first
+import utils from "@/plugins/utils";
 import './textfield.scss';
+import {Component, Vue} from 'vue-property-decorator';
 
-export default {
-  name: "TextField",
+const Props = Vue.extend({
   props: {
     counter: {
       type: [Number, String],
       default: null,
-      validator: function (value) {
+      validator: function (value: any) {
         return /^\d+$/.test(value);
       },
     },
     properties: {
-      type: Object | Array,
+      type: [Object, Array],
       required: true,
     },
     errorMessages: {
-      type: String | null,
+      type: String,
+      required: false
     },
     focused: {
       type: Boolean,
@@ -145,7 +147,8 @@ export default {
       default: false
     },
     requiredLabel: {
-      type: String | null
+      type: String,
+      required: false
     },
     rules: {
       type: Array,
@@ -158,37 +161,62 @@ export default {
       default: null,
     },
     value: {
-      type: String | Number,
+      type: [String, Number],
       default: ""
     },
     type: {
-      value: String,
+      type: String,
       default: 'text'
+    },
+    readonly: {
+      type: Boolean,
+      default: false
     }
+  }
+});
 
+@Component<TextField>({
+  name: 'TextField',
+  watch: {
+    focused(focused) {
+      // set focus to input tag
+      const input = (<any> this.$refs["ref-" + this.identifier]).$refs.input.blur();
+      if (focused) {
+        input?.focus();
+
+        if (!this.readonly && !this.isTouchDevice) {
+          this.menu = true;
+        }
+      } else {
+        input?.blur();
+        this.menu = false;
+      }
+    },
   },
+})
+export default class TextField extends Props {
+  $refs!: Partial<Record<string, HTMLElement>>
 
-  data() {
-    return {
-      menu: false,
-      menuMaxHeight: 304,
-      updated: false,
-      dialog: null,
-      dropDown: true,
-      scrollPos: 0,
-      isTouchDevice: utils.isTouchDevice(),
-      windowHeight: window.innerHeight,
-    };
-  },
+  // data
+  menu = false
+  menuMaxHeight = 304
+  updated = false
+  dialog: Element | null = null
+  dropDown = true
+  scrollPos = 0
+  isTouchDevice = utils.isTouchDevice()
+  windowHeight = window.innerHeight
 
-  computed: {
-    isOptional() {
-      return this.optional === undefined ? false : this.optional;
-    }
-  },
+  // computed
+  get isOptional() {
+    return this.optional;
+  }
 
+  // hooks
   mounted() {
-    this.dialog = this.$refs["ref-" + this.identifier].$el.closest(".v-dialog");
+    const ref = this.$refs["ref-" + this.identifier];
+    const element = (<Vue | undefined>(ref as any))?.$el;
+    this.dialog = element?.closest(".v-dialog") || null;
 
     if (this.isTouchDevice) {
       window.addEventListener("orientationchange", this.onResize);
@@ -200,7 +228,7 @@ export default {
       this.scrollPos = this.dialog.scrollTop;
       this.dialog.addEventListener("scroll", this.onScroll, true);
     }
-  },
+  }
 
   beforeDestroy() {
     if (this.isTouchDevice) {
@@ -212,108 +240,91 @@ export default {
     if (!!this.dialog) {
       this.dialog.removeEventListener("scroll", this.onScroll);
     }
-  },
+  }
 
-  watch: {
-    focused(focused) {
-      // set focus to input tag
-      if (focused) {
-        this.$refs["ref-" + this.identifier].$refs.input.focus();
+  // methods
+  blur(e: Event) {
+    this.$emit("blur", e);
 
-        if (!this.readonly && !this.isTouchDevice) {
-          this.menu = true;
-        }
-      } else {
-        this.$refs["ref-" + this.identifier].$refs.input.blur();
-        this.menu = false;
-      }
-    },
-  },
+    this.$refs["ref-" + this.identifier]?.blur();
+    this.menu = false;
+  }
 
-  methods: {
-    blur(e) {
-      this.$emit("blur", e);
+  change(e: Event) {
+    this.$emit("change", e);
+  }
 
-      this.$refs["ref-" + this.identifier].blur();
-      this.menu = false;
-    },
-    change(e) {
-      this.$emit("change", e);
-    },
-    clear(e) {
-      this.$emit("clear", e);
-      this.blur(e);
-    },
-    click(e) {
-      this.$emit("click", e);
-    },
-    focus(e) {
-      this.$emit("focus", e);
-      this.windowHeight = window.innerHeight;
+  clear(e: Event) {
+    this.$emit("clear", e);
+    this.blur(e);
+  }
 
-      if (!this.readonly && !this.isTouchDevice) {
-        this.setMenuMaxHeight();
-        this.menu = true;
-      }
-    },
-    input(e) {
-      this.$emit("input", e);
-    },
-    onResize() {
+  click(e: MouseEvent) {
+    this.$emit("click", e);
+  }
+
+  focus(e: FocusEvent) {
+    this.$emit("focus", e);
+    this.windowHeight = window.innerHeight;
+
+    if (!this.readonly && !this.isTouchDevice) {
       this.setMenuMaxHeight();
-    },
-    onScroll() {
-      // remove focus only if menu exisits
-      if (!!this.$slots.info) {
-        // only need to close menu if in overlay (do not attach!)
-        if (this.menu && !!this.dialog) {
-          if (
-              this.dialog.scrollTop > this.scrollPos + 50 ||
-              this.dialog.scrollTop < this.scrollPos - 50
-          ) {
-            this.$refs["ref-" + this.identifier].blur();
-            this.menu = false;
-          }
+      this.menu = true;
+    }
+  }
+
+  input(e: InputEvent) {
+    this.$emit("input", e);
+  }
+
+  onResize() {
+    this.setMenuMaxHeight();
+  }
+
+  onScroll() {
+    // remove focus only if menu exisits
+    if (!!this.$slots.info) {
+      // only need to close menu if in overlay (do not attach!)
+      if (this.menu && !!this.dialog) {
+        if (
+            this.dialog.scrollTop > this.scrollPos + 50 ||
+            this.dialog.scrollTop < this.scrollPos - 50
+        ) {
+          this.$refs["ref-" + this.identifier]?.blur();
+          this.menu = false;
         }
       }
-    },
-    setMenuMaxHeight() {
-      let keyboardHeight = this.isTouchDevice
-              ? this.windowHeight / 2
-              : this.windowHeight, // assumed keyboard height
-          fieldHeight = this.$refs["ref-" + this.identifier].$el.clientHeight,
-          maxHeight = this.menuMaxHeight,
-          offset = 10;
+    }
+  }
 
-      if (
-          this.$refs["ref-" + this.identifier].$el.getBoundingClientRect().top +
-          fieldHeight +
-          100 <
-          keyboardHeight
-      ) {
-        this.dropDown = true;
-        maxHeight =
-            keyboardHeight -
-            this.$refs["ref-" + this.identifier].$el.getBoundingClientRect().top -
-            fieldHeight -
-            offset;
-      } else {
-        this.dropDown = false;
-        maxHeight =
-            this.$refs["ref-" + this.identifier].$el.getBoundingClientRect().top - offset;
-      }
+  setMenuMaxHeight() {
+    const ref = this.$refs["ref-" + this.identifier];
+    const element = (<Vue | undefined>(ref as any))?.$el;
+    if (!element) return;
 
-      this.menuMaxHeight = maxHeight;
-    },
-    update() {
-      let _scope = this;
-      this.updated = true;
+    let keyboardHeight = this.isTouchDevice ? this.windowHeight / 2 : this.windowHeight, // assumed keyboard height
+        fieldHeight = element.clientHeight,
+        maxHeight: number,
+        offset = 10;
 
-      setTimeout(function () {
-        _scope.updated = false;
-      }, 1500);
-    },
-  },
+    if (element.getBoundingClientRect().top + fieldHeight + 100 < keyboardHeight) {
+      this.dropDown = true;
+      maxHeight = keyboardHeight - element.getBoundingClientRect().top - fieldHeight - offset;
+    } else {
+      this.dropDown = false;
+      maxHeight = element.getBoundingClientRect().top - offset;
+    }
+
+    this.menuMaxHeight = maxHeight;
+  }
+
+  update() {
+    let _scope = this;
+    this.updated = true;
+
+    setTimeout(function () {
+      _scope.updated = false;
+    }, 1500);
+  }
 };
 </script>
->
