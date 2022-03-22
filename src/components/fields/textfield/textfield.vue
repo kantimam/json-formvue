@@ -29,7 +29,7 @@
       :autocomplete="properties && properties['autoComplete']"
       v-bind:class="{
         'v-text-field--required': required,
-        'v-text-field--optional': isOptional,
+        'v-text-field--optional': optional,
         'v-text-field--counting': counter,
         'v-text-field--updated': updated,
       }"
@@ -60,7 +60,6 @@
 </template>
 
 <script lang="ts">
-import 'reflect-metadata'; // auto-inject vue prop type validators from ts-types; needs to be imported first
 import utils from "@/plugins/utils";
 import './textfield.scss';
 import {Component, Vue} from 'vue-property-decorator';
@@ -176,7 +175,7 @@ const Props = Vue.extend({
 });
 
 @Component<TextField>({
-  name: 'TextField',
+  name: 'OnTextField',
   watch: {
     focused(focused) {
       // set focus to input tag
@@ -206,11 +205,6 @@ export default class TextField extends Props {
   scrollPos = 0
   isTouchDevice = utils.isTouchDevice()
   windowHeight = window.innerHeight
-
-  // computed
-  get isOptional() {
-    return this.optional;
-  }
 
   // hooks
   mounted() {
