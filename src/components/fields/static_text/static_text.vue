@@ -1,5 +1,5 @@
 <template>
-  <div class="ongigo-text-wrapper" v-bind="$attrs">
+  <div class="ongigo-text-wrapper" v-bind="$attrs" :identifier="identifier">
     <h2 class="ondigo-text-label">{{ label }}</h2>
     <p class="ondigo-text-content">{{ properties.text }}</p>
   </div>

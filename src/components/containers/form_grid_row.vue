@@ -1,6 +1,6 @@
 <template>
-  <v-row :v-if="identifier && elements && elements.length>0">
-        <form-grid-col 
+  <v-row :v-if="identifier && elements && elements.length>0" :identifier="identifier">
+        <form-grid-col
             v-for="element in elements"
             v-bind:key="element.identifier"
             v-bind="element"
@@ -11,6 +11,7 @@
 
 <script>
 import FormGridCol from "./form_grid_col.vue";
+
 export default {
     components: {
         FormGridCol
