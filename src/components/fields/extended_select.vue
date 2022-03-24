@@ -28,13 +28,13 @@
       :label="label"
       :loading="loading"
       :menu-props="{
-      bottom: dropDown,
-      contentClass: 'v-select__dropdown',
-      maxHeight: menuMaxHeight,
-      offsetY: true,
-      tile: true,
-      top: !dropDown
-    }"
+        bottom: dropDown,
+        contentClass: 'v-select__dropdown',
+        maxHeight: menuMaxHeight,
+        offsetY: true,
+        tile: true,
+        top: !dropDown
+      }"
       :name="multiple ? undefined : name"
       :no-data-text="nodatatext"
       :placeholder="placeholder"
@@ -250,7 +250,6 @@ export default {
   },
 
   mounted() {
-    console.log(this.identifier)
     this.dialog = this.$refs["ref-" + this.identifier].$el.closest(".v-dialog");
 
     if (this.isTouchDevice) {
