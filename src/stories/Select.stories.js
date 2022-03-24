@@ -3,6 +3,7 @@ import OnSelect from '@/components/fields/select/select';
 import Vue from "vue";
 import Vuetify from 'vuetify/lib/framework';
 import {createInputRules} from "../lib/util";
+import './_global.scss'; // global storybook styles
 
 Vue.use(Vuetify);
 const vuetify = new Vuetify({});

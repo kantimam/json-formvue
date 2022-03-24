@@ -42,7 +42,12 @@
         'v-text-field--updated': updated,
       }, `select-${identifier}`]"
       :menu-props="{
-        bottom: dropDown
+        bottom: dropDown,
+        contentClass: 'v-select__dropdown',
+        maxHeight: menuMaxHeight,
+        offsetY: true,
+        tile: true,
+        top: !dropDown,
       }"
       validate-on-blur
       :value="defaultValue"
@@ -374,7 +379,7 @@ export default class OnSelect extends Props {
 
   onScroll() {
     // only need to close menu if in overlay (do not attach!)
-    if (!!this.dialog) {
+    if ((this.$refs["ref-" + this.identifier] as any)?.isMenuActive && !!this.dialog) {
       if (this.dialog.scrollTop > this.scrollPos + 25 || this.dialog.scrollTop < this.scrollPos - 25) {
         this.$refs["ref-" + this.identifier]?.blur();
       }
