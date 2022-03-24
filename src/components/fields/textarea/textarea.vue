@@ -146,10 +146,6 @@ const Props = Vue.extend({
       type: String,
       default: null,
     },
-    validators: {
-      type: Array,
-      required: false,
-    },
     properties: {
       type: [Object, Array],
       required: true,
