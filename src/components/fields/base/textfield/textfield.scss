@@ -1,6 +1,6 @@
-@import '../_variables';
-@import '~vuetify/src/components/VTextField/_variables.scss';
-@import '~vuetify/src/components/VLabel/_variables.scss';
+@import '../../variables';
+@import '~vuetify/src/components/VTextField/variables';
+@import '~vuetify/src/components/VLabel/variables';
 
 .v-application--is-ltr, .v-application--is-rtl {
     .v-text-field {

@@ -1,39 +1,33 @@
-import {VSelect} from "vuetify/lib/components";
-import OnSelect from '@/components/fields/select/select';
+import {VTextField} from "vuetify/lib/components";
+import TextField from "../../components/fields/base/textfield/textfield.vue";
 import Vue from "vue";
 import Vuetify from 'vuetify/lib/framework';
-import {createInputRules} from "../lib/util";
-import './_global.scss'; // global storybook styles
+import {createInputRules} from "@/lib/util.ts";
 
 Vue.use(Vuetify);
 const vuetify = new Vuetify({});
 
-Vue.component('v-select', VSelect)
+Vue.component('v-text-field', VTextField)
 
 export default {
-    title: 'Formvue/Select',
-    component: OnSelect,
+    title: 'Formvue/Base/TextField',
+    component: TextField,
 };
 
 const Template = (args, {argTypes}) => ({
     props: Object.keys(argTypes),
     vuetify: vuetify,
-    components: {OnSelect: OnSelect},
-    template: '<on-select v-bind="$props" />',
+    components: {TextField},
+    template: '<text-field v-bind="$props" />',
 });
 
 export const Default = Template.bind({});
 Default.args = {
-    label: 'Select',
-    identifier: 'select',
+    label: 'Text Input',
+    identifier: 'text-input',
     filled: true,
-    properties: {
-        options: {
-            apple: 'Apple',
-            banana: 'Banana'
-        },
-    },
-    name: 'select',
+    properties: {},
+    name: 'text-input',
     optional: true
 };
 Default.storyName = 'Default (optional)'
@@ -41,19 +35,14 @@ Default.storyName = 'Default (optional)'
 export const Required = Template.bind({});
 // More on args: https://storybook.js.org/docs/vue/writing-stories/args
 Required.args = {
-    label: 'Select',
-    identifier: 'select',
+    label: 'Text Input',
+    identifier: 'text-input',
     filled: true,
-    properties: {
-        options: {
-            apple: 'Apple',
-            banana: 'Banana'
-        },
-    },
-    name: 'select',
+    properties: {},
+    name: 'text-input',
     required: true,
     rules: createInputRules(true, [createDummyRequiredValidator()], {}, true, []),
-    requiredLabel: 'This field is required',
+    requiredLabel: 'This field is required'
 };
 
 function createDummyRequiredValidator() {
@@ -63,3 +52,4 @@ function createDummyRequiredValidator() {
         errorMessage: 'This field is required'
     };
 }
+

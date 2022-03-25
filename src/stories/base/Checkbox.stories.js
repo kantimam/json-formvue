@@ -1,5 +1,5 @@
 import {VCheckbox} from "vuetify/lib/components";
-import OnCheckbox from '@/components/fields/checkbox/checkbox';
+import OnCheckbox from '@/components/fields/base/checkbox/checkbox';
 import Vue from "vue";
 import Vuetify from 'vuetify/lib/framework';
 
@@ -9,7 +9,7 @@ const vuetify = new Vuetify({});
 Vue.component('v-checkbox', VCheckbox)
 
 export default {
-    title: 'Formvue/Checkbox',
+    title: 'Formvue/Base/Checkbox',
     component: OnCheckbox,
 };
 

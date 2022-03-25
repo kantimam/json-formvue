@@ -14,7 +14,7 @@ import OnTextfieldPassword from "./components/fields/textfield_password.vue";
 import HiddenfieldHoneypot from "./components/fields/hiddenfield_honeypot.vue";
 import FormGridRow from "./components/containers/form_grid_row.vue";
 import OnTextArea from './components/fields/extended_textarea.vue'
-import OnCheckBox from './components/fields/checkbox/checkbox.vue'
+import OnCheckBox from './components/fields/base/checkbox/checkbox.vue'
 import OnRadioGroup from './components/fields/radio_group.vue'
 import OnSelect from './components/fields/extended_select.vue'
 import SelectWithRelatedData from './components/fields/select_with_related_data.vue'
@@ -34,12 +34,11 @@ import MultiCheckbox from './components/fields/multi_checkbox.vue';
 import ContentElement from './components/fields/content_element/content_element.vue';
 
 // INTERNAL ELEMENTS
-import InternalTextField from './components/fields/textfield/textfield.vue';
+import InternalTextField from './components/fields/base/textfield/textfield.vue';
 import DynamicElement from './components/dynamic_element.vue';
 
 // PUBLIC OPTIONAL FUNCTIONS AND HELPERS
 import {createInputName, createInputRules, createRequiredLabel, getPlaceholder, isRequired} from "./lib/util";
-import ResponseInterceptor from "@/store/response_interceptor";
 
 
 // re export all public modules

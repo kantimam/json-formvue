@@ -1,8 +1,8 @@
 import {VTextarea} from "vuetify/lib/components";
-import OnTextarea from '@/components/fields/textarea/textarea';
+import OnTextarea from '@/components/fields/base/textarea/textarea';
 import Vue from "vue";
 import Vuetify from 'vuetify/lib/framework';
-import {createInputRules} from "../lib/util";
+import {createInputRules} from "@/lib/util.ts";
 
 Vue.use(Vuetify);
 const vuetify = new Vuetify({});
@@ -10,7 +10,7 @@ const vuetify = new Vuetify({});
 Vue.component('v-textarea', VTextarea)
 
 export default {
-    title: 'Formvue/Textarea',
+    title: 'Formvue/Base/Textarea',
     component: OnTextarea,
 };
 
