@@ -224,8 +224,8 @@ type SelectItem = {
   label: string
 }
 
-@Component<OnSelect>({
-  name: "OnSelect",
+@Component<OnSelectBase>({
+  name: "OnSelectBase",
   watch: {
     focused(focused) {
       // set focus to input tag
@@ -244,7 +244,7 @@ type SelectItem = {
     }
   },
 })
-export default class OnSelect extends Props {
+export default class OnSelectBase extends Props {
   $refs!: Partial<Record<string, HTMLElement>>
 
   menu = false

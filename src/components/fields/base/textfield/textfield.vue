@@ -174,8 +174,8 @@ const Props = Vue.extend({
   }
 });
 
-@Component<TextField>({
-  name: 'OnTextField',
+@Component<TextFieldBase>({
+  name: 'OnTextFieldBase',
   watch: {
     focused(focused) {
       // set focus to input tag
@@ -193,7 +193,7 @@ const Props = Vue.extend({
     },
   },
 })
-export default class TextField extends Props {
+export default class TextFieldBase extends Props {
   $refs!: Partial<Record<string, HTMLElement>>
 
   // data

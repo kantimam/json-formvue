@@ -11,6 +11,7 @@
     :name="name"
     hide-details="auto"
     off-icon="mdi-checkbox-blank"
+    v-model="inputValue"
   >
     <div v-if="properties.content" ref="contentLabel" slot="label" class="ondigo-content-element-wrapper" v-html="properties.content" />
   </v-checkbox>
@@ -18,6 +19,8 @@
 
 <script lang="ts">
 import {Component, Vue} from 'vue-property-decorator';
+import {mixins} from "vue-class-component";
+import InputValueMixin from "@/components/mixin/InputValueMixin";
 
 const Props = Vue.extend({
   props: {
@@ -57,14 +60,14 @@ const Props = Vue.extend({
     errorMessages: {
       type: String,
       required: false
-    },
+    }
   }
 });
 
-@Component<OnCheckbox>({
-  name: "OnCheckbox",
+@Component<OnCheckboxBase>({
+  name: "OnCheckboxBase",
 })
-export default class OnCheckbox extends Props {
+export default class OnCheckboxBase extends mixins(Props, InputValueMixin) {
   $refs!: Partial<Record<string, HTMLElement>>
 
   mounted() {

@@ -1,5 +1,5 @@
 import {VSelect} from "vuetify/lib/components";
-import OnSelect from '@/components/fields/base/select/select';
+import OnSelectBase from '@/components/fields/base/select/select';
 import Vue from "vue";
 import Vuetify from 'vuetify/lib/framework';
 import {createInputRules} from "@/lib/util.ts";
@@ -12,13 +12,13 @@ Vue.component('v-select', VSelect)
 
 export default {
     title: 'Formvue/Base/Select',
-    component: OnSelect,
+    component: OnSelectBase,
 };
 
 const Template = (args, {argTypes}) => ({
     props: Object.keys(argTypes),
     vuetify: vuetify,
-    components: {OnSelect: OnSelect},
+    components: {OnSelect: OnSelectBase},
     template: '<on-select v-bind="$props" />',
 });
 

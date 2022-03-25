@@ -1,5 +1,5 @@
 import {VTextField} from "vuetify/lib/components";
-import TextField from "../../components/fields/base/textfield/textfield.vue";
+import TextFieldBase from "../../components/fields/base/textfield/textfield.vue";
 import Vue from "vue";
 import Vuetify from 'vuetify/lib/framework';
 import {createInputRules} from "@/lib/util.ts";
@@ -11,13 +11,13 @@ Vue.component('v-text-field', VTextField)
 
 export default {
     title: 'Formvue/Base/TextField',
-    component: TextField,
+    component: TextFieldBase,
 };
 
 const Template = (args, {argTypes}) => ({
     props: Object.keys(argTypes),
     vuetify: vuetify,
-    components: {TextField},
+    components: {TextField: TextFieldBase},
     template: '<text-field v-bind="$props" />',
 });
 

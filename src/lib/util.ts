@@ -36,13 +36,13 @@ export function createRequiredLabel(validators?: InputValidator[]) {
  *
  * @param {boolean} required
  * @param {InputValidator[]} validators
- * @param {ElementProperties} context
+ * @param {ElementProperties} properties
  * @param {boolean} overwriteRequiredRules - if true deletes the required and NotEmpty validator (you might want this for inputs that use createRequiredLabel for their required validation).
- * @param {object} componentsMap Custom validators.
+ * @param {object} validatorMap Custom validators.
  * @returns {*[]}
  */
-export function createInputRules(required: boolean, validators: InputValidator[], context: ElementProperties, overwriteRequiredRules: boolean, componentsMap: ValidatorMap) {
-    const rules = createValidatorsMap(validators, context, componentsMap);
+export function createInputRules(required: boolean, validators: InputValidator[], properties: ElementProperties, overwriteRequiredRules = false, validatorMap: ValidatorMap = {}) {
+    const rules = createValidatorsMap(validators, properties, validatorMap);
 
     if (required && overwriteRequiredRules){
         if(rules.required) delete rules.required;
@@ -57,7 +57,7 @@ export function createInputRules(required: boolean, validators: InputValidator[]
     return rulesArray;
 }
 
-export function createValidatorsMap(validators: InputValidator[], context: ElementProperties, componentsMap: ValidatorMap) {
+export function createValidatorsMap(validators: InputValidator[], properties: ElementProperties, validatorMap: ValidatorMap) {
     if (!validators || !validators.length) return {};
     const validatorsMap: ValidatorMap = {};
 
@@ -66,7 +66,7 @@ export function createValidatorsMap(validators: InputValidator[], context: Eleme
         const validatorArguments = validator.options;
         const errorMessage = validator.errorMessage;
 
-        const validatorFunction = createValidatorByKey(id, validatorArguments || {}, errorMessage, context, componentsMap)
+        const validatorFunction = createValidatorByKey(id, validatorArguments || {}, errorMessage, properties, validatorMap)
         if (validatorFunction)
             validatorsMap[id] = validatorFunction;
     }
@@ -75,7 +75,7 @@ export function createValidatorsMap(validators: InputValidator[], context: Eleme
 }
 
 // create a function and wrap it inside the payload
-export function createValidatorByKey(validatorKey: string, vArgs: Record<string, any>, errorMessage: string, context: ElementProperties, componentsMap: ValidatorMap = {}) {
+export function createValidatorByKey(validatorKey: string, vArgs: Record<string, any>, errorMessage: string, properties: ElementProperties, validatorMap: ValidatorMap = {}) {
     // inject payload and error message into the selected validation function
     const required = Validators.required(errorMessage);
     const integer = Validators.integer(errorMessage);
@@ -94,10 +94,10 @@ export function createValidatorByKey(validatorKey: string, vArgs: Record<string,
         RegularExpression: Validators.regex(vArgs.regularExpression, errorMessage),
         MinimumNumber: Validators.min(vArgs.minimum, errorMessage),
         TimeFormat: Validators.timeFormat(vArgs.format, errorMessage),
-        MaskComplete: Validators.maskComplete(context.pattern, errorMessage),
+        MaskComplete: Validators.maskComplete(properties.pattern, errorMessage),
         FileSize: Validators.fileSize(vArgs.minimum, vArgs.maximum, errorMessage),
-        DateInterval: Validators.dateInterval(vArgs.minDate, vArgs.maxDate, context.pattern, errorMessage),
-        ...componentsMap,  // TODO use this map alone in 2.0
+        DateInterval: Validators.dateInterval(vArgs.minDate, vArgs.maxDate, properties.pattern, errorMessage),
+        ...validatorMap,  // TODO use this map alone in 2.0
         default: null
     };
 

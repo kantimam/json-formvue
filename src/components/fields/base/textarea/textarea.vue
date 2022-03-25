@@ -175,8 +175,8 @@ const Props = Vue.extend({
   }
 });
 
-@Component<OnTextarea>({
-  name: "OnTextarea",
+@Component<OnTextareaBase>({
+  name: "OnTextareaBase",
   watch: {
     focused(focused) {
       // set focus to input tag
@@ -192,7 +192,7 @@ const Props = Vue.extend({
     },
   }
 })
-export default class OnTextarea extends Props {
+export default class OnTextareaBase extends Props {
   $refs!: Partial<Record<string, HTMLElement>>
 
   updated = false
