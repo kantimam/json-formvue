@@ -11,7 +11,7 @@
   />
 </template>
 <script lang="ts">
-import 'reflect-metadata' // infer vue prop type validation by ts-definition
+import 'reflect-metadata' // infer vue prop type validation by ts-definition; import this before vue-property-decorator!
 import OnCheckboxBase from "../base/checkbox/checkbox.vue";
 import {createInputRules, isRequired} from "@/lib/util.ts";
 import {Component, Prop} from "vue-property-decorator";
