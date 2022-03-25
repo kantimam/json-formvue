@@ -97,6 +97,7 @@ export function createValidatorByKey(validatorKey: string, vArgs: Record<string,
         MaskComplete: Validators.maskComplete(properties.pattern, errorMessage),
         FileSize: Validators.fileSize(vArgs.minimum, vArgs.maximum, errorMessage),
         DateInterval: Validators.dateInterval(vArgs.minDate, vArgs.maxDate, properties.pattern, errorMessage),
+        Url: Validators.url(errorMessage),
         ...validatorMap,  // TODO use this map alone in 2.0
         default: null
     };

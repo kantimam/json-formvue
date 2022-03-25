@@ -1,31 +1,34 @@
 <template>
-  <on-checkbox-base
+  <on-text-field-base
       v-bind="$attrs"
       :properties="properties"
       :identifier="identifier"
 
       :required="isRequired"
+      :requiredLabel="requiredLabel"
+      :placeholder="placeholder"
       :errorMessages="inputError"
       :rules="inputRules"
       v-model="inputValue"
   />
 </template>
+
 <script lang="ts">
 import 'reflect-metadata' // infer vue prop type validation by ts-definition; import this before vue-property-decorator!
-import OnCheckboxBase from "../base/checkbox/checkbox.vue";
-import {createInputRules, isRequired} from "@/lib/util.ts";
+import {createInputRules, createRequiredLabel, getPlaceholder, isRequired,} from "@/lib/util";
+import OnTextFieldBase from "../base/textfield/textfield.vue";
 import {Component, Prop} from "vue-property-decorator";
-import {ElementProperties, InputValidator} from "@/lib/FormDefinition";
 import {mixins} from "vue-class-component";
 import InputValueMixin from "@/components/mixin/InputValueMixin";
+import {ElementProperties, InputValidator} from "@/lib/FormDefinition";
 
-@Component<OnCheckbox>({
-  name: "OnCheckbox",
+@Component<OnTextField>({
+  name: "OnTextField",
   components: {
-    OnCheckboxBase: OnCheckboxBase
-  }
+    OnTextFieldBase: OnTextFieldBase
+  },
 })
-export default class OnCheckbox extends mixins(InputValueMixin) {
+export default class OnTextField extends mixins(InputValueMixin) {
   @Prop({
     default: () => []
   })
@@ -46,7 +49,7 @@ export default class OnCheckbox extends mixins(InputValueMixin) {
   }
 
   get inputValue() {
-    return !!this.$store.getters.getCurrentInputValue(this.identifier);
+    return this.$store.getters.getCurrentInputValue(this.identifier) || '';
   }
 
   set inputValue(value: any) {
@@ -59,5 +62,14 @@ export default class OnCheckbox extends mixins(InputValueMixin) {
   get inputError() {
     return this.$store.getters.getCurrentInputError(this.identifier) || "";
   }
+
+  get placeholder() {
+    return getPlaceholder(this.properties);
+  }
+
+  get requiredLabel() {
+    return createRequiredLabel(this.validators);
+  }
 };
 </script>
+

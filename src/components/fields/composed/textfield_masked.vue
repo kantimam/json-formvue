@@ -43,8 +43,8 @@
 </template>
 <script>
 import IMask from "@ondigo-internal/imask";
-import utils from "../../plugins/utils";
-import {createInputRules, getPlaceholder, isRequired} from "../../lib/util";
+import utils from "../../../plugins/utils";
+import {createInputRules, getPlaceholder, isRequired} from "../../../lib/util";
 
 export default {
   name: "OnTextfieldMasked",

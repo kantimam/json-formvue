@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import TextField from './textfield_text.vue'
+import TextField from './composed/textfield.vue'
 
 export default {
   name: "onCaptcha",

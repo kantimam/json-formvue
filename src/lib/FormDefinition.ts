@@ -54,15 +54,16 @@ export type ElementDefinition = {
     identifier: string
     label: string
     name: string
-    renderingOptions?: Record<string, any>
+    renderingOptions?: ElementRenderingOptions
     properties: ElementProperties
     validators?: InputValidator[]
     type: string
 }
 
-export type ElementProperties = Record<string, any> & CommonProperties;
+export type ElementRenderingOptions = Record<string, any>;
+export type ElementProperties = Record<string, any> & CommonElementProperties;
 
-export type CommonProperties = {
+export type CommonElementProperties = {
     fluidAdditionalAttributes?: FluidAdditionalProperties
 }
 

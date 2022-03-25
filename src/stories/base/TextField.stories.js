@@ -1,8 +1,9 @@
 import {VTextField} from "vuetify/lib/components";
-import TextFieldBase from "../../components/fields/base/textfield/textfield.vue";
+import OnTextFieldBase from "../../components/fields/base/textfield/textfield.vue";
 import Vue from "vue";
 import Vuetify from 'vuetify/lib/framework';
 import {createInputRules} from "@/lib/util.ts";
+import {createDummyRequiredValidator} from "@/stories/helper";
 
 Vue.use(Vuetify);
 const vuetify = new Vuetify({});
@@ -11,13 +12,13 @@ Vue.component('v-text-field', VTextField)
 
 export default {
     title: 'Formvue/Base/TextField',
-    component: TextFieldBase,
+    component: OnTextFieldBase,
 };
 
 const Template = (args, {argTypes}) => ({
     props: Object.keys(argTypes),
     vuetify: vuetify,
-    components: {TextField: TextFieldBase},
+    components: {TextField: OnTextFieldBase},
     template: '<text-field v-bind="$props" />',
 });
 
@@ -44,12 +45,3 @@ Required.args = {
     rules: createInputRules(true, [createDummyRequiredValidator()], {}, true, []),
     requiredLabel: 'This field is required'
 };
-
-function createDummyRequiredValidator() {
-    return {
-        identifier: 'NotEmpty',
-        code: 1221560910,
-        errorMessage: 'This field is required'
-    };
-}
-

@@ -54,7 +54,7 @@
 
 <script>
 import {createInputRules, getPlaceholder, isRequired} from "../../lib/util";
-import MaskedText from "./textfield_masked.vue";
+import MaskedText from "./composed/textfield_masked.vue";
 import {
   compareDateTimes,
   formatISODateFromPattern,

@@ -2,7 +2,7 @@ import {VTextarea} from "vuetify/lib/components";
 import OnTextareaBase from '@/components/fields/base/textarea/textarea';
 import Vue from "vue";
 import Vuetify from 'vuetify/lib/framework';
-import {createInputRules} from "@/lib/util.ts";
+import {defaultProps} from "@/stories/helper";
 
 Vue.use(Vuetify);
 const vuetify = new Vuetify({});
@@ -22,44 +22,16 @@ const Template = (args, {argTypes}) => ({
 });
 
 export const Default = Template.bind({});
-Default.args = {
-    label: 'Textarea',
-    identifier: 'textarea',
-    filled: true,
-    properties: {},
-    name: 'textarea',
-    optional: true
-};
+Default.args = defaultProps('Textarea', 'textarea', true, false);
 Default.storyName = 'Default (optional)'
 
 export const Required = Template.bind({});
 // More on args: https://storybook.js.org/docs/vue/writing-stories/args
-Required.args = {
-    label: 'Textarea',
-    identifier: 'textarea',
-    filled: true,
-    properties: {},
-    name: 'textarea',
-    required: true,
-    rules: createInputRules(true, [createDummyRequiredValidator()], {}, true, []),
-    requiredLabel: 'This field is required'
-};
+Required.args = defaultProps('Textarea', 'textarea', true, true);
 
 export const Counting = Template.bind({});
 // More on args: https://storybook.js.org/docs/vue/writing-stories/args
 Counting.args = {
-    label: 'Textarea',
-    identifier: 'textarea',
-    filled: true,
-    properties: {},
-    name: 'textarea',
+    ...defaultProps('Textarea', 'textarea', true, true),
     maxLength: 200
 };
-
-function createDummyRequiredValidator() {
-    return {
-        identifier: 'NotEmpty',
-        code: 1221560910,
-        errorMessage: 'This field is required'
-    };
-}

@@ -21,7 +21,6 @@
       :loading="loading"
       :name="name"
       :prefix="prefix"
-      :value="value"
       :ref="'ref-' + identifier"
       :required="required"
       :rules="rules"
@@ -33,6 +32,7 @@
         'v-text-field--counting': counter,
         'v-text-field--updated': updated,
       }"
+      v-model="inputValue"
       validate-on-blur
   >
     <template slot="prepend-outer"><slot name="prepend"></slot></template>
@@ -63,6 +63,8 @@
 import utils from "@/plugins/utils";
 import './textfield.scss';
 import {Component, Vue} from 'vue-property-decorator';
+import InputValueMixin from "@/components/mixin/InputValueMixin";
+import {mixins} from "vue-class-component";
 
 const Props = Vue.extend({
   props: {
@@ -159,10 +161,6 @@ const Props = Vue.extend({
       type: String,
       default: null,
     },
-    value: {
-      type: [String, Number],
-      default: ""
-    },
     type: {
       type: String,
       default: 'text'
@@ -174,7 +172,7 @@ const Props = Vue.extend({
   }
 });
 
-@Component<TextFieldBase>({
+@Component<OnTextFieldBase>({
   name: 'OnTextFieldBase',
   watch: {
     focused(focused) {
@@ -193,7 +191,7 @@ const Props = Vue.extend({
     },
   },
 })
-export default class TextFieldBase extends Props {
+export default class OnTextFieldBase extends mixins(Props, InputValueMixin) {
   $refs!: Partial<Record<string, HTMLElement>>
 
   // data

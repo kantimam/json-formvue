@@ -2,8 +2,8 @@ import {VSelect} from "vuetify/lib/components";
 import OnSelectBase from '@/components/fields/base/select/select';
 import Vue from "vue";
 import Vuetify from 'vuetify/lib/framework';
-import {createInputRules} from "@/lib/util.ts";
-import '../_global.scss'; // global storybook styles
+import '../_global.scss';
+import {defaultProps} from "@/stories/helper"; // global storybook styles
 
 Vue.use(Vuetify);
 const vuetify = new Vuetify({});
@@ -22,44 +22,22 @@ const Template = (args, {argTypes}) => ({
     template: '<on-select v-bind="$props" />',
 });
 
+const selectProps = {
+    options: {
+        apple: 'Apple',
+        banana: 'Banana'
+    },
+}
+
 export const Default = Template.bind({});
 Default.args = {
-    label: 'Select',
-    identifier: 'select',
-    filled: true,
-    properties: {
-        options: {
-            apple: 'Apple',
-            banana: 'Banana'
-        },
-    },
-    name: 'select',
-    optional: true
+    ...defaultProps('Select', 'select', true, false),
+    properties: selectProps
 };
 Default.storyName = 'Default (optional)'
 
 export const Required = Template.bind({});
-// More on args: https://storybook.js.org/docs/vue/writing-stories/args
-Required.args = {
-    label: 'Select',
-    identifier: 'select',
-    filled: true,
-    properties: {
-        options: {
-            apple: 'Apple',
-            banana: 'Banana'
-        },
-    },
-    name: 'select',
-    required: true,
-    rules: createInputRules(true, [createDummyRequiredValidator()], {}, true, []),
-    requiredLabel: 'This field is required',
+Required.args  = {
+    ...defaultProps('Select', 'select', true, true),
+    properties: selectProps
 };
-
-function createDummyRequiredValidator() {
-    return {
-        identifier: 'NotEmpty',
-        code: 1221560910,
-        errorMessage: 'This field is required'
-    };
-}
