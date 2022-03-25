@@ -23,7 +23,7 @@ const Template = (args, {argTypes}) => ({
 
 export const Default = Template.bind({});
 Default.args = defaultProps('Number Input', 'number-input', false, false);
-Default.storyName = 'Default (optional)'
+Default.storyName = 'Optional'
 
 export const Required = Template.bind({});
 // More on args: https://storybook.js.org/docs/vue/writing-stories/args

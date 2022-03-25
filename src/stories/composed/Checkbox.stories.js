@@ -23,4 +23,4 @@ const Template = (args, {argTypes}) => ({
 
 export const Default = Template.bind({});
 Default.args = defaultProps('Checkbox', 'checkbox', false, false);
-Default.storyName = 'Default (optional)'
+Default.storyName = 'Optional'

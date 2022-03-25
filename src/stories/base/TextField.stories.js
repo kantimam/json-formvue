@@ -31,7 +31,7 @@ Default.args = {
     name: 'text-input',
     optional: true
 };
-Default.storyName = 'Default (optional)'
+Default.storyName = 'Optional'
 
 export const Required = Template.bind({});
 // More on args: https://storybook.js.org/docs/vue/writing-stories/args

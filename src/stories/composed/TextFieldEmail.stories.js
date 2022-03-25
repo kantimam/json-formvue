@@ -26,7 +26,7 @@ Default.args = {
     ...defaultProps('Email Input', 'email-input', false, false),
     validators: [createDummyEmailValidator()]
 };
-Default.storyName = 'Default (optional)'
+Default.storyName = 'Optional'
 
 export const Required = Template.bind({});
 // More on args: https://storybook.js.org/docs/vue/writing-stories/args

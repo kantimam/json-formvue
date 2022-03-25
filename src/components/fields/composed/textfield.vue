@@ -45,7 +45,7 @@ export default class OnTextField extends mixins(InputValueMixin) {
   }
 
   get inputRules() {
-    return createInputRules(this.isRequired, this.validators, this.properties);
+    return createInputRules(this.isRequired, this.validators, this.properties, true);
   }
 
   get inputValue() {

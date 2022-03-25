@@ -30,8 +30,6 @@ export function defaultProps(label, identifier, primitive = false, required = fa
             props.required = true;
             props.requiredLabel = 'This field is required'
             props.rules = createInputRules(true, [createDummyRequiredValidator()], {}, true, []);
-        } else {
-            props.optional = true;
         }
 
         return props;
@@ -44,6 +42,8 @@ export function defaultProps(label, identifier, primitive = false, required = fa
             }
         };
         props.validators = [createDummyRequiredValidator()];
+    } else {
+        props.optional = true;
     }
 
     return props;

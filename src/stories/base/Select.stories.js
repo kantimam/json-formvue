@@ -34,7 +34,7 @@ Default.args = {
     ...defaultProps('Select', 'select', true, false),
     properties: selectProps
 };
-Default.storyName = 'Default (optional)'
+Default.storyName = 'Optional'
 
 export const Required = Template.bind({});
 Required.args  = {

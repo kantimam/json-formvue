@@ -29,4 +29,4 @@ Default.args = {
     name: 'checkbox',
     optional: true
 };
-Default.storyName = 'Default (optional)'
+Default.storyName = 'Optional'
