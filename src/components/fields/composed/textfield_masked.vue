@@ -1,58 +1,41 @@
 <template>
   <!-- Inspired by https://github.com/rafaelkendrik/imask-vuetify/blob/4b02dffc656c18926df374e3522c6446b1e86c51/components/html/ImaskField.vue -->
-  <v-text-field
+  <on-text-field-base
       ref="field"
+
+      v-bind="$attrs"
+      v-on="$listeners"
+      :properties="properties"
+      :identifier="identifier"
+
+      :required="isRequired"
+      :requiredLabel="requiredLabel"
+      :placeholder="placeholder"
+      :errorMessages="inputError"
+      :rules="inputRules"
       v-model="inputValue"
-      :autocomplete="properties['autoComplete']"
+
       @input="input"
       @focus="focus"
       @blur="blur"
-      v-bind="$attrs"
-      :placeholder="placeholder"
-      :filled="filled"
-      :required="isRequired"
-      :rules="inputRules"
-      :error-messages="inputError"
-      validate-on-blur
-  >
-    <template slot="prepend-outer"><slot name="prepend"></slot></template>
-    <template slot="prepend-inner" v-if="!isRequired">
-      <span class="v-input__label-optional">
-        {{ optionalLabel }}
-      </span>
-    </template>
-    <template slot="prepend-inner" v-if="isRequired">
-      <span class="v-input__label-required">
-        {{ requiredLabel }}
-      </span>
-    </template>
-    <template slot="append">
-      <slot name="append-masked">
-        <div
-            @click="menu = !menu"
-            v-if="isTouchDevice && !!$slots.info"
-            class="v-input__info"
-        >
-          <v-icon color="primary">mdi-information-outline</v-icon>
-        </div>
-      </slot>
-    </template>
-    <template slot="append-outer"><slot name="append"></slot></template>
-  </v-text-field>
+  />
 </template>
 <script lang="ts">
 import 'reflect-metadata' // infer vue prop type validation by ts-definition; import this before vue-property-decorator!
 import IMask from "@ondigo-internal/imask";
-import utils from "../../../plugins/utils";
 import {createInputRules, getPlaceholder, isRequired} from "@/lib/util";
 import {Component, Inject, Prop, Vue} from "vue-property-decorator";
 import {mixins} from "vue-class-component";
 import InputValueMixin from "@/components/mixin/InputValueMixin";
 import {ElementProperties, InputValidator} from "@/lib/FormDefinition";
 import {ValidatorMap} from "@/lib/validators";
+import OnTextFieldBase from "@/components/fields/base/textfield/textfield.vue";
 
 @Component<OnTextFieldMasked>({
   name: "OnTextfieldMasked",
+  components: {
+    OnTextFieldBase: OnTextFieldBase
+  },
   watch: {
     inputBridge(val) {
       if (!this.maskActive || (!this.isRequired && val.length <= 0)) return;
@@ -80,24 +63,9 @@ export default class OnTextFieldMasked extends mixins(InputValueMixin) {
   readonly identifier!: string
 
   @Prop({
-    default: () => false
-  })
-  readonly filled!: boolean;
-
-  @Prop({
     default: () => {}
   })
   readonly rules!: any[];
-
-  @Prop({
-    default: () => false
-  })
-  readonly optional!: boolean;
-
-  @Prop({
-    default: () => 'optional'
-  })
-  readonly optionalLabel!: string;
 
   @Prop({
     default: () => true
@@ -112,18 +80,15 @@ export default class OnTextFieldMasked extends mixins(InputValueMixin) {
   @Inject('validatorsMap')
   readonly validatorsMap!: ValidatorMap
 
-  readonly $refs!: Partial<Record<string, HTMLElement>>
+  readonly $refs!: Partial<Record<string, HTMLElement>> & {
+    field: Vue
+  }
 
   element: HTMLInputElement | null = null;
   masked: IMask.InputMask<IMask.MaskedDateOptions | IMask.MaskedPatternOptions | IMask.MaskedRangeOptions> | null = null;
-  isTouchDevice = utils.isTouchDevice();
 
   get isRequired() {
     return isRequired(this.properties);
-  }
-
-  get placeholder() {
-    return getPlaceholder(this.properties);
   }
 
   get requiredLabel() {
@@ -150,6 +115,10 @@ export default class OnTextFieldMasked extends mixins(InputValueMixin) {
 
   get inputError() {
     return this.$store.getters.getCurrentInputError(this.identifier) || "";
+  }
+
+  get placeholder() {
+    return getPlaceholder(this.properties);
   }
 
   get mask() {
@@ -215,7 +184,7 @@ export default class OnTextFieldMasked extends mixins(InputValueMixin) {
   }
 
   initElement() {
-    this.element = (<Vue | undefined> this.$refs.field)?.$el.querySelector("input") || null;
+    this.element = this.$refs.field.$el.querySelector("input") || null;
   }
 
   initMask() {
