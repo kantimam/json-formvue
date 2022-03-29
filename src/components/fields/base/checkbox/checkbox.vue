@@ -68,7 +68,7 @@ const Props = Vue.extend({
   name: "OnCheckboxBase",
 })
 export default class OnCheckboxBase extends mixins(Props, InputValueMixin) {
-  $refs!: Partial<Record<string, HTMLElement>>
+  readonly $refs!: Partial<Record<string, HTMLElement>>
 
   mounted() {
     const contentLabel = this.$refs['contentLabel'];

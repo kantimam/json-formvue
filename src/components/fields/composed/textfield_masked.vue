@@ -1,28 +1,27 @@
 <template>
   <!-- Inspired by https://github.com/rafaelkendrik/imask-vuetify/blob/4b02dffc656c18926df374e3522c6446b1e86c51/components/html/ImaskField.vue -->
   <v-text-field
-    ref="field"
-    v-model="inputValue"
-    :value="value"
-    :autocomplete="properties['autoComplete']"
-    @input="input"
-    @focus="focus"
-    @blur="blur"
-    v-bind="$attrs"
-    :placeholder="placeholder"
-    :filled="filled"
-    :required="required"
-    :rules="inputRules"
-    :error-messages="inputError"
-    validate-on-blur
+      ref="field"
+      v-model="inputValue"
+      :autocomplete="properties['autoComplete']"
+      @input="input"
+      @focus="focus"
+      @blur="blur"
+      v-bind="$attrs"
+      :placeholder="placeholder"
+      :filled="filled"
+      :required="isRequired"
+      :rules="inputRules"
+      :error-messages="inputError"
+      validate-on-blur
   >
     <template slot="prepend-outer"><slot name="prepend"></slot></template>
-    <template slot="prepend-inner" v-if="!required">
+    <template slot="prepend-inner" v-if="!isRequired">
       <span class="v-input__label-optional">
         {{ optionalLabel }}
       </span>
     </template>
-    <template slot="prepend-inner" v-if="required">
+    <template slot="prepend-inner" v-if="isRequired">
       <span class="v-input__label-required">
         {{ requiredLabel }}
       </span>
@@ -30,9 +29,9 @@
     <template slot="append">
       <slot name="append-masked">
         <div
-          @click="menu = !menu"
-          v-if="isTouchDevice && !!$slots.info"
-          class="v-input__info"
+            @click="menu = !menu"
+            v-if="isTouchDevice && !!$slots.info"
+            class="v-input__info"
         >
           <v-icon color="primary">mdi-information-outline</v-icon>
         </div>
@@ -41,226 +40,241 @@
     <template slot="append-outer"><slot name="append"></slot></template>
   </v-text-field>
 </template>
-<script>
+<script lang="ts">
+import 'reflect-metadata' // infer vue prop type validation by ts-definition; import this before vue-property-decorator!
 import IMask from "@ondigo-internal/imask";
 import utils from "../../../plugins/utils";
-import {createInputRules, getPlaceholder, isRequired} from "../../../lib/util";
+import {createInputRules, getPlaceholder, isRequired} from "@/lib/util";
+import {Component, Inject, Prop, Vue} from "vue-property-decorator";
+import {mixins} from "vue-class-component";
+import InputValueMixin from "@/components/mixin/InputValueMixin";
+import {ElementProperties, InputValidator} from "@/lib/FormDefinition";
+import {ValidatorMap} from "@/lib/validators";
 
-export default {
+@Component<OnTextFieldMasked>({
   name: "OnTextfieldMasked",
+  watch: {
+    inputBridge(val) {
+      if (!this.maskActive || (!this.isRequired && val.length <= 0)) return;
+
+      if (!this.masked || !this.element)
+        this.initMask();
+
+      if (this.element) {
+        this.element.value = val;
+        this.element.dispatchEvent(new Event("input"));
+      }
+    }
+  }
+})
+export default class OnTextFieldMasked extends mixins(InputValueMixin) {
+  @Prop({
+    default: () => []
+  })
+  readonly validators!: InputValidator[]
+
+  @Prop()
+  readonly properties!: ElementProperties
+
+  @Prop()
+  readonly identifier!: string
+
+  @Prop({
+    default: () => false
+  })
+  readonly filled!: boolean;
+
+  @Prop({
+    default: () => {}
+  })
+  readonly rules!: any[];
+
+  @Prop({
+    default: () => false
+  })
+  readonly optional!: boolean;
+
+  @Prop({
+    default: () => 'optional'
+  })
+  readonly optionalLabel!: string;
+
+  @Prop({
+    default: () => true
+  })
+  readonly maskActive!: boolean;
+
+  @Prop({
+    required: false
+  })
+  inputBridge?: string
+
+  @Inject('validatorsMap')
+  readonly validatorsMap!: ValidatorMap
+
+  readonly $refs!: Partial<Record<string, HTMLElement>>
+
+  element: HTMLInputElement | null = null;
+  masked: IMask.InputMask<IMask.MaskedDateOptions | IMask.MaskedPatternOptions | IMask.MaskedRangeOptions> | null = null;
+  isTouchDevice = utils.isTouchDevice();
+
+  get isRequired() {
+    return isRequired(this.properties);
+  }
+
+  get placeholder() {
+    return getPlaceholder(this.properties);
+  }
+
+  get requiredLabel() {
+    if (!this.validators || !this.validators.length) return "required";
+    const notEmptyValidator = this.validators.find(v => v.identifier === "NotEmpty");
+    return (notEmptyValidator && notEmptyValidator.errorMessage) || "required";
+  }
+
+  get inputRules() {
+    if (this.rules && Array.isArray(this.rules)) return this.rules;
+    else return createInputRules(this.isRequired, this.validators, this.properties, true, this.validatorsMap);
+  }
+
+  get inputValue() {
+    return this.$store.getters.getCurrentInputValue(this.identifier) || '';
+  }
+
+  set inputValue(value: any) {
+    this.$store.commit("updateInputValue", {
+      key: this.identifier,
+      value: value
+    });
+  }
+
+  get inputError() {
+    return this.$store.getters.getCurrentInputError(this.identifier) || "";
+  }
+
+  get mask() {
+    const mask: IMask.AnyMaskedOptions = {
+      mask: this.properties.pattern,
+      // custom character definitions
+      definitions: {
+        X: /[0-9a-zA-Z]/,
+        C: /[A-Z]/,
+        c: /[a-z]/,
+      },
+      // custom character block definitions
+      blocks: {
+        YYYY: {
+          mask: IMask.MaskedRange,
+          from: 1900,
+          to: 9999,
+          autofix: true,
+        },
+        mm: {
+          mask: IMask.MaskedRange,
+          from: 1,
+          to: 12,
+          autofix: true,
+        },
+        dd: {
+          mask: IMask.MaskedRange,
+          from: 1,
+          to: 31,
+          autofix: true,
+        },
+        HH: {
+          mask: IMask.MaskedRange,
+          from: 0,
+          to: 23,
+          autofix: true,
+        },
+        ii: {
+          mask: IMask.MaskedRange,
+          from: 0,
+          to: 59,
+          autofix: true,
+        },
+      },
+    };
+
+    let placeholderChar = this.properties.placeholder ? this.properties.placeholder.trim() : "";
+    if (placeholderChar && placeholderChar.length > 0) {
+      placeholderChar = placeholderChar.substring(0, 1); // in case someone put more than one character
+      mask.placeholderChar = placeholderChar;
+      mask.lazy = false;
+    }
+
+    return mask;
+  }
+
   mounted() {
     this.initElement();
 
     // when a default value is set, init mask manually
     if (this.maskActive && this.inputValue && this.inputValue.length > 0)
       this.initMask();
-  },
-  model: {
-    prop: "value",
-    event: "input",
-  },
-  data: () => ({
-    value: "",
-    element: {},
-    masked: {},
-    isTouchDevice: utils.isTouchDevice(),
-  }),
-  props: {
-    filled: {
-      type: Boolean,
-      default: false,
-    },
-    properties: {
-      type: Object | Array,
-      required: true,
-    },
-    rules: {
-      type: [Object, Array],
-      default() {
-        return {} || [];
-      },
-    },
-    validators: {
-      type: Array,
-      required: false,
-    },
-    optional: {
-      type: Boolean,
-      default: false,
-    },
-    optionalLabel: {
-      type: String,
-      default: "optional",
-    },
-    identifier: {
-      type: String,
-      required: true,
-    },
-    maskActive: {
-      type: Boolean,
-      default: true,
-    },
-    inputBridge: {
-      type: String,
-      required: false
+  }
+
+  initElement() {
+    this.element = (<Vue | undefined> this.$refs.field)?.$el.querySelector("input") || null;
+  }
+
+  initMask() {
+    if (!this.maskActive || !this.element) return;
+
+    if (this.masked && this.masked.destroy) this.destroyMask();
+
+    this.masked = IMask(this.element, this.mask);
+  }
+
+  destroyMask() {
+    this.masked?.destroy();
+    this.masked = null;
+  }
+
+  // Event listeners
+  input(e: InputEvent) {
+    this.$emit("input", e);
+  }
+
+  focus() {
+    if (this.maskActive && this.element && this.element.value.length <= 0) {
+      this.initMask();
+      if (!this.masked) return;
+
+      this.element.value = this.masked.value;
+      this.element.dispatchEvent(new Event("input"));
+
+      setTimeout(() => {
+        if (!this.element) return;
+
+        if (this.element.setSelectionRange) {
+          this.element.setSelectionRange(0, 0);
+        } else if ('createTextRange' in this.element) {
+          const range = (this.element as any).createTextRange();
+          range.collapse(true);
+          range.moveEnd("character", 0);
+          range.moveStart("character", 0);
+          range.select();
+        }
+      }, 20);
     }
-  },
-  watch: {
-    inputBridge(val) {
-      if (!this.maskActive || (!this.required && val.length <= 0)) return;
+  }
 
-      if (!this.masked || !this.element) this.initMask();
+  blur() {
+    if (!this.maskActive || !this.element || !this.masked) return;
 
-      this.element.value = val;
+    const isNormalized = this.element.value === this.masked.value;
+    if (!isNormalized) {
+      this.element.value = this.masked.value;
       this.element.dispatchEvent(new Event("input"));
     }
-  },
-  computed: {
-    required() {
-      return isRequired(this.properties);
-    },
-    placeholder() {
-      return getPlaceholder(this.properties);
-    },
-    requiredLabel() {
-      if (!this.validators || !this.validators.length) return "required";
-      const notEmptyValidator = this.validators.find(
-        (v) => v.identifier === "NotEmpty"
-      );
-      return (
-        (notEmptyValidator && notEmptyValidator.errorMessage) || "required"
-      );
-    },
-    mask() {
-      const mask = {
-        mask: this.properties.pattern,
-        // custom character definitions
-        definitions: {
-          X: /[0-9a-zA-Z]/,
-          C: /[A-Z]/,
-          c: /[a-z]/,
-        },
-        // custom character block definitions
-        blocks: {
-          YYYY: {
-            mask: IMask.MaskedRange,
-            from: 1900,
-            to: 9999,
-            autofix: true,
-          },
-          mm: {
-            mask: IMask.MaskedRange,
-            from: 1,
-            to: 12,
-            autofix: true,
-          },
-          dd: {
-            mask: IMask.MaskedRange,
-            from: 1,
-            to: 31,
-            autofix: true,
-          },
-          HH: {
-            mask: IMask.MaskedRange,
-            from: 0,
-            to: 23,
-            autofix: true,
-          },
-          ii: {
-            mask: IMask.MaskedRange,
-            from: 0,
-            to: 59,
-            autofix: true,
-          },
-        },
-      };
 
-      let placeholderChar = this.properties.placeholder
-        ? this.properties.placeholder.trim()
-        : "";
-      if (placeholderChar && placeholderChar.length > 0) {
-        placeholderChar = placeholderChar.substring(0, 1); // in case someone put more than one character
-        mask.placeholderChar = placeholderChar;
-        mask.lazy = false;
-      }
-
-      return mask;
-    },
-    inputRules() {
-      if (this.rules && Array.isArray(this.rules)) return this.rules;
-      else return createInputRules(this.required, this.validators, this.properties, true, this.validatorsMap);
-    },
-    inputValue: {
-      get() {
-        return this.$store.getters.getCurrentInputValue(this.identifier) || "";
-      },
-      set(value) {
-        this.$store.commit("updateInputValue", { key: this.identifier, value: value });
-      },
-    },
-    inputError() {
-      return this.$store.getters.getCurrentInputError(this.identifier) || "";
-    },
-  },
-  methods: {
-    save(date) {
-      this.$refs.menu.save(date);
-    },
-    initElement() {
-      this.element = this.$refs.field.$el.querySelector("input");
-    },
-    initMask() {
-      if (!this.maskActive) return;
-
-      if (this.masked && this.masked.destroy) this.destroyMask();
-
-      this.masked = IMask(this.element, this.mask);
-    },
-    destroyMask() {
-      this.masked.destroy();
-      this.masked = null;
-    },
-    // Event listeners
-    input(value) {
-      this.$emit("input", value);
-    },
-    focus() {
-      if (this.maskActive && this.element.value.length <= 0) {
-        this.initMask();
-
-        this.element.value = this.masked.value;
-        this.element.dispatchEvent(new Event("input"));
-
-        setTimeout(() => {
-          if (this.element.setSelectionRange) {
-            this.element.setSelectionRange(0, 0);
-          } else if (this.element.createTextRange) {
-            const range = this.element.createTextRange();
-            range.collapse(true);
-            range.moveEnd("character", 0);
-            range.moveStart("character", 0);
-            range.select();
-          }
-        }, 20);
-      }
-    },
-    blur() {
-      if (!this.maskActive) return;
-
-      const isNormalized = this.element.value === this.masked.value;
-      if (!isNormalized) {
-        this.element.value = this.masked.value;
-        this.element.dispatchEvent(new Event("input"));
-      }
-
-      // Destroy mask, when element is not required, so that the element will look like before
-      if (this.masked.unmaskedValue.length <= 0 && !this.required) {
-        this.destroyMask();
-        this.element.value = "";
-        this.element.dispatchEvent(new Event("input"));
-      }
+    // Destroy mask, when element is not required, so that the element will look like before
+    if (this.masked.unmaskedValue.length <= 0 && !this.isRequired) {
+      this.destroyMask();
+      this.element.value = "";
+      this.element.dispatchEvent(new Event("input"));
     }
-  },
-  inject: ['validatorsMap']
+  }
 };
 </script>

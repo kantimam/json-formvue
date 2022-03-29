@@ -195,7 +195,7 @@ const Props = Vue.extend({
   }
 })
 export default class OnTextareaBase extends Props {
-  $refs!: Partial<Record<string, HTMLElement>>
+  readonly $refs!: Partial<Record<string, HTMLElement>>
 
   updated = false
 

@@ -8,12 +8,16 @@ export function createDummyEmailValidator() {
     };
 }
 
-export function createDummyRequiredValidator() {
+export function createDummyValidator(identifier, errorMessage, code = 0) {
     return {
-        identifier: 'NotEmpty',
-        code: 1221560910,
-        errorMessage: 'This field is required'
+        identifier: identifier,
+        code: code,
+        errorMessage: errorMessage
     };
+}
+
+export function createDummyRequiredValidator() {
+    return createDummyValidator('NotEmpty', 'This field is required', 1221560910);
 }
 
 export function defaultProps(label, identifier, primitive = false, required = false) {

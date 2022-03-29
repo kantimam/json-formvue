@@ -192,7 +192,7 @@ const Props = Vue.extend({
   },
 })
 export default class OnTextFieldBase extends mixins(Props, InputValueMixin) {
-  $refs!: Partial<Record<string, HTMLElement>>
+  readonly $refs!: Partial<Record<string, HTMLElement>>
 
   // data
   menu = false

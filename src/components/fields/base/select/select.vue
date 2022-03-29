@@ -245,7 +245,7 @@ type SelectItem = {
   },
 })
 export default class OnSelectBase extends Props {
-  $refs!: Partial<Record<string, HTMLElement>>
+  readonly $refs!: Partial<Record<string, HTMLElement>>
 
   menu = false
   markWidth = 0
