@@ -2,14 +2,12 @@
   <v-textarea
       :autocomplete="properties['autoComplete']"
       auto-size
-      @blur="blur"
       :color="color"
       :counter="maxLength"
       :disabled="disabled"
       :filled="filled"
       :outlined="outlined"
       :solo="solo"
-      @focus="focus"
       hide-details="auto"
       :inputmode="inputmode"
       :label="label"
@@ -36,6 +34,10 @@
       `ondigo-input-${identifier}`]
     "
       validate-on-blur
+      @blur="blur"
+      @focus="focus"
+      @change="change"
+      @input="input"
   >
     <template slot="prepend-outer"><slot name="prepend"></slot></template>
     <template slot="prepend-inner" v-if="!required">

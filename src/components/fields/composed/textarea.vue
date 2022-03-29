@@ -1,32 +1,37 @@
 <template>
-  <on-checkbox-base
+  <on-textarea-base
       v-bind="$attrs"
+      v-on="$listeners"
       :properties="properties"
       :identifier="identifier"
 
       :required="isRequired"
       :requiredLabel="requiredLabel"
+      :placeholder="placeholder"
       :errorMessages="inputError"
       :rules="inputRules"
       v-model="inputValue"
+
+      :maxLength="maxLength"
   />
 </template>
+
 <script lang="ts">
 import 'reflect-metadata' // infer vue prop type validation by ts-definition; import this before vue-property-decorator!
-import OnCheckboxBase from "../../base/checkbox/checkbox.vue";
-import {createInputRules, createRequiredLabel, isRequired} from "@/lib/util.ts";
+import OnTextareaBase from "../base/textarea/textarea.vue";
+import {createInputRules, createRequiredLabel, getPlaceholder, isRequired,} from "@/lib/util";
 import {Component, Prop} from "vue-property-decorator";
-import {ElementProperties, InputValidator} from "@/lib/FormDefinition";
 import {mixins} from "vue-class-component";
 import InputValueMixin from "@/components/mixin/InputValueMixin";
+import {ElementProperties, InputValidator} from "@/lib/FormDefinition";
 
-@Component<OnCheckbox>({
-  name: "OnCheckbox",
+@Component<OnTextarea>({
+  name: "OnTextarea",
   components: {
-    OnCheckboxBase: OnCheckboxBase
-  }
+    OnTextareaBase: OnTextareaBase,
+  },
 })
-export default class OnCheckbox extends mixins(InputValueMixin) {
+export default class OnTextarea extends mixins(InputValueMixin) {
   @Prop({
     default: () => []
   })
@@ -47,15 +52,14 @@ export default class OnCheckbox extends mixins(InputValueMixin) {
   }
 
   get inputRules() {
-    return createInputRules(this.isRequired, this.validators, this.properties);
+    return createInputRules(this.isRequired, this.validators, this.properties, true);
   }
 
   get inputValue() {
-    const currentInputValue = this.$store.getters.getCurrentInputValue(this.identifier);
-    return typeof currentInputValue === 'boolean' ? currentInputValue : false;
+    return this.$store.getters.getCurrentInputValue(this.identifier) || "";
   }
 
-  set inputValue(value: any) {
+  set inputValue(value) {
     this.$store.commit("updateInputValue", {
       key: this.identifier,
       value: value
@@ -64,6 +68,20 @@ export default class OnCheckbox extends mixins(InputValueMixin) {
 
   get inputError() {
     return this.$store.getters.getCurrentInputError(this.identifier) || "";
+  }
+
+  get placeholder() {
+    return getPlaceholder(this.properties);
+  }
+
+  get maxLength() {
+    if (this.validators && Array.isArray(this.validators)){
+      const stringLengthValidator = this.validators.find(val => val.identifier === 'StringLength');
+      if (stringLengthValidator && stringLengthValidator.options && stringLengthValidator.options.maximum) {
+        return parseInt(stringLengthValidator.options.maximum);
+      }
+    }
+    return null;
   }
 };
 </script>

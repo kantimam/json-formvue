@@ -1,6 +1,7 @@
 <template>
   <on-text-field-base
       v-bind="$attrs"
+      v-on="$listeners"
       :properties="properties"
       :identifier="identifier"
 
@@ -44,6 +45,10 @@ export default class OnTextField extends mixins(InputValueMixin) {
     return isRequired(this.properties);
   }
 
+  get requiredLabel() {
+    return createRequiredLabel(this.validators);
+  }
+
   get inputRules() {
     return createInputRules(this.isRequired, this.validators, this.properties, true);
   }
@@ -65,10 +70,6 @@ export default class OnTextField extends mixins(InputValueMixin) {
 
   get placeholder() {
     return getPlaceholder(this.properties);
-  }
-
-  get requiredLabel() {
-    return createRequiredLabel(this.validators);
   }
 };
 </script>
