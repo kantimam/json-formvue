@@ -33,5 +33,5 @@ export const Counting = Template.bind({});
 // More on args: https://storybook.js.org/docs/vue/writing-stories/args
 Counting.args = {
     ...defaultProps('Textarea', 'textarea', false, true),
-    maxLength: 200
+    counter: 200
 };

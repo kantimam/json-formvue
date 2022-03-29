@@ -25,7 +25,7 @@
       v-bind:class="
       [{
         'v-text-field--required': required,
-        'v-text-field--optional': !required,
+        'v-text-field--optional': optional && !required,
         'v-text-field--counting': maxLength !== null,
         'v-text-field--updated': updated,
       },
@@ -126,7 +126,7 @@ const Props = Vue.extend({
     },
     optional: {
       type: Boolean,
-      default: false,
+      default: true,
     },
     optionalLabel: {
       type: String,

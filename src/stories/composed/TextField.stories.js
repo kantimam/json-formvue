@@ -28,3 +28,10 @@ Default.storyName = 'Optional'
 export const Required = Template.bind({});
 // More on args: https://storybook.js.org/docs/vue/writing-stories/args
 Required.args = defaultProps('Text Input', 'text-input', false, true);
+
+export const Counter = Template.bind({});
+// More on args: https://storybook.js.org/docs/vue/writing-stories/args
+Counter.args = {
+    ...defaultProps('Text Input', 'text-input', false, true),
+    counter: 64
+}

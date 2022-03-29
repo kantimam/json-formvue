@@ -2,8 +2,7 @@ import {VTextField} from "vuetify/lib/components";
 import OnTextFieldBase from "../../components/fields/base/textfield/textfield.vue";
 import Vue from "vue";
 import Vuetify from 'vuetify/lib/framework';
-import {createInputRules} from "@/lib/util.ts";
-import {createDummyRequiredValidator} from "@/stories/helper";
+import {defaultProps} from "@/stories/helper";
 
 Vue.use(Vuetify);
 const vuetify = new Vuetify({});
@@ -23,25 +22,16 @@ const Template = (args, {argTypes}) => ({
 });
 
 export const Default = Template.bind({});
-Default.args = {
-    label: 'Text Input',
-    identifier: 'text-input',
-    filled: true,
-    properties: {},
-    name: 'text-input',
-    optional: true
-};
+Default.args = defaultProps('Text Input', 'text-input', true, false);
 Default.storyName = 'Optional'
 
 export const Required = Template.bind({});
 // More on args: https://storybook.js.org/docs/vue/writing-stories/args
-Required.args = {
-    label: 'Text Input',
-    identifier: 'text-input',
-    filled: true,
-    properties: {},
-    name: 'text-input',
-    required: true,
-    rules: createInputRules(true, [createDummyRequiredValidator()], {}, true, []),
-    requiredLabel: 'This field is required'
+Required.args = defaultProps('Text Input', 'text-input', true, true);
+
+export const Counting = Template.bind({});
+// More on args: https://storybook.js.org/docs/vue/writing-stories/args
+Counting.args = {
+    ...defaultProps('Text Input', 'text-input', true, true),
+    counter: 64
 };

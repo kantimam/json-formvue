@@ -2,6 +2,7 @@ import {VCheckbox} from "vuetify/lib/components";
 import OnCheckboxBase from '@/components/fields/base/checkbox/checkbox';
 import Vue from "vue";
 import Vuetify from 'vuetify/lib/framework';
+import {defaultProps} from "@/stories/helper";
 
 Vue.use(Vuetify);
 const vuetify = new Vuetify({});
@@ -21,12 +22,6 @@ const Template = (args, {argTypes}) => ({
 });
 
 export const Default = Template.bind({});
-Default.args = {
-    label: 'Checkbox',
-    identifier: 'checkbox',
-    filled: true,
-    properties: {},
-    name: 'checkbox',
-    optional: true
-};
+Default.args = defaultProps('Checkbox', 'checkbox', true, false);;
+
 Default.storyName = 'Optional'

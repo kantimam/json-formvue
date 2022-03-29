@@ -43,6 +43,11 @@ export default class OnTextarea extends mixins(InputValueMixin) {
   @Prop()
   readonly identifier!: string
 
+  @Prop({
+    default: () => null
+  })
+  readonly counter!: number | null
+
   get isRequired() {
     return isRequired(this.properties);
   }
@@ -81,7 +86,7 @@ export default class OnTextarea extends mixins(InputValueMixin) {
         return parseInt(stringLengthValidator.options.maximum);
       }
     }
-    return null;
+    return this.counter;
   }
 };
 </script>

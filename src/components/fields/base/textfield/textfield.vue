@@ -28,7 +28,7 @@
       :autocomplete="properties && properties['autoComplete']"
       v-bind:class="{
         'v-text-field--required': required,
-        'v-text-field--optional': optional,
+        'v-text-field--optional': optional && !required,
         'v-text-field--counting': counter,
         'v-text-field--updated': updated,
       }"
@@ -36,7 +36,7 @@
       validate-on-blur
   >
     <template slot="prepend-outer"><slot name="prepend"></slot></template>
-    <template slot="prepend-inner" v-if="optional"
+    <template slot="prepend-inner" v-if="optional && !required"
     ><span class="v-input__label-optional">{{
         optionalLabel
       }}</span></template
@@ -129,7 +129,7 @@ const Props = Vue.extend({
     },
     optional: {
       type: Boolean,
-      default: false,
+      default: true,
     },
     optionalLabel: {
       type: String,

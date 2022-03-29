@@ -1,1 +1,6 @@
-//@import '~vuetify/src/components/VCounter/VCounter.sass';
+.v-text-field {
+    &.v-text-field--counting .v-text-field__details {
+        opacity: unset;
+        max-height: unset;
+    }
+}
