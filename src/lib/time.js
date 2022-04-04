@@ -162,6 +162,9 @@ export function interpretTime(str) {
     const match = str.match(regex);
     if (!match) return str;
 
+    // matched, but no modifiers
+    if (!match[1] || match[1].length <= 0) return currentIsoTime();
+
     const sign = match[1] === '-' ? -1 : 1;
     const [amount, unit] = match.slice(2);
     const date = addToDate(currentNormalizedDate(), sign * amount, unit);
