@@ -1,5 +1,5 @@
 import {getMaskPatternMapping, matchMaskPattern} from "./pattern";
-import {compareDateTimes, currentIsoTime, parseISODateFromPattern} from "./time";
+import {compareDateTimes, interpretTime, parseISODateFromPattern} from "./time";
 
 export const createInputName = (formName, inputName) => `tx_form_formframework[${formName}][${inputName}]`;
 
@@ -174,8 +174,8 @@ export const validatorDateInterval = (string, invalidMessage, vArgs, context) =>
     if (!parsed) return invalidMessage; // invalid date
 
     // take 'today' into account
-    minDate = minDate && minDate === 'today' ? currentIsoTime() : minDate;
-    maxDate = maxDate && maxDate === 'today' ? currentIsoTime() : maxDate;
+    minDate = interpretTime(minDate);
+    maxDate = interpretTime(minDate);
 
     return (minDate && compareDateTimes(parsed, minDate) < 0) || (maxDate && compareDateTimes(parsed, maxDate) > 0) ? invalidMessage : true;
 }

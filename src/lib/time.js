@@ -58,8 +58,7 @@ export function compareDateTimes(a, b) {
  * @returns {string} The current date as ISO string. e.g. '2021-12-31'
  */
 export function currentIsoTime() {
-    const now = new Date(Date.now() - new Date().getTimezoneOffset() * 60000);
-    return getShortIsoString(now);
+    return getShortIsoString(currentNormalizedDate());
 }
 
 /**
@@ -145,4 +144,51 @@ export function formatISODateFromPattern(date, pattern, extraSubstitutes = {}) {
     }
 
     return patternSegments.join("");
+}
+
+export function currentNormalizedDate() {
+    return new Date(Date.now() - new Date().getTimezoneOffset() * 60000);
+}
+
+/**
+ *
+ * @param {string} str
+ * @return {string} ISO formatted date
+ */
+export function interpretTime(str) {
+    if (!str) return str;
+
+    const regex = /^today(?:([-+])([0-9]+)([YMD]))?$/;
+    const match = str.match(regex);
+    if (!match) return str;
+
+    const sign = match[1] === '-' ? -1 : 1;
+    const [amount, unit] = match.slice(2);
+    const date = addToDate(currentNormalizedDate(), sign * amount, unit);
+
+    return getShortIsoString(date);
+}
+
+/**
+ *
+ * @param {Date} date
+ * @param {number} amount
+ * @param {'Y'|'M'|'D'} unit
+ */
+function addToDate(date, amount, unit) {
+    switch (unit) {
+        case 'Y':
+            date.setFullYear(date.getFullYear() + amount);
+            break;
+        case "M":
+            date.setMonth(date.getMonth() + amount);
+            break;
+        case "D":
+            date.setDate(date.getDate() + amount);
+            break;
+        default:
+            break;
+    }
+
+    return date;
 }
