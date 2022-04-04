@@ -171,13 +171,21 @@ export const validatorDateInterval = (string, invalidMessage, vArgs, context) =>
     if ((!minDate || !minDate.length) && (!maxDate || !maxDate.length)) return true; // no validation required
 
     const parsed = parseISODateFromPattern(string, context.pattern)
-    if (!parsed) return invalidMessage; // invalid date
+    if (!parsed) return invalidMessage || 'invalid date'; // invalid date
 
     // take 'today' into account
     minDate = interpretTime(minDate);
-    maxDate = interpretTime(minDate);
+    maxDate = interpretTime(maxDate);
 
-    return (minDate && compareDateTimes(parsed, minDate) < 0) || (maxDate && compareDateTimes(parsed, maxDate) > 0) ? invalidMessage : true;
+    if (minDate && (compareDateTimes(parsed, minDate) < 0)) {
+        return invalidMessage || `please enter a date after ${minDate}`;
+    }
+
+    if (maxDate && (compareDateTimes(parsed, maxDate) > 0)) {
+        return invalidMessage || `please enter a date before ${maxDate}`;
+    }
+
+    return true;
 }
 
 export const validatorFileSize = (fileInput, invalidMessage, vArgs) => {
