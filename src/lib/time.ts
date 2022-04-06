@@ -5,6 +5,7 @@ export type DateInjectionResult = [string | null, boolean];
 export type DateInjector = (year?: number, month?: number, day?: number) => DateInjectionResult;
 export type IsoInterpretable = string | [number, number, number];
 export type CompareValue = -1 | 0 | 1;
+export type PHPTimeUnit = 'Y' | 'M' | 'D';
 
 /**
  * Formats a date in the ISO8601 UTC format.
@@ -60,12 +61,18 @@ export function compareDateTimes(a: IsoInterpretable, b: IsoInterpretable): Comp
 }
 
 /**
+ * Gets the timezone-offset-freed "normalized" date.
+ */
+export function currentNormalizedDate() {
+    return new Date(Date.now() - new Date().getTimezoneOffset() * 60000);
+}
+
+/**
  * Gets the current date in ISO time.
  * @returns {string} The current date as ISO string. e.g. '2021-12-31'
  */
 export function currentIsoTime(): string {
-    const now = new Date(Date.now() - new Date().getTimezoneOffset() * 60000);
-    return getShortIsoString(now);
+    return getShortIsoString(currentNormalizedDate());
 }
 
 /**
@@ -151,4 +158,53 @@ export function formatISODateFromPattern(date: string, pattern: string, extraSub
     }
 
     return patternSegments.join("");
+}
+
+/**
+ * Interprets a timestamp from the backend.
+ * Can interpret 'today' => current date, as well as 'today-18Y' => current date, 18 years ago.
+ *
+ * @param text The date string to be interpreted.
+ * @return {string} An ISO formatted date.
+ */
+export function interpretTime(text: string) {
+    if (!text) return text;
+
+    const regex = /^today(?:([-+])([0-9]+)([YMD]))?$/;
+    const match = text.match(regex);
+    if (!match) return text;
+
+    // matched, but no modifiers
+    if (!match[1] || match[1].length <= 0) return currentIsoTime();
+
+    const sign = match[1] === '-' ? -1 : 1;
+    const [amount, unit] = match.slice(2);
+    const date = addToDate(currentNormalizedDate(), sign * Number(amount), unit as PHPTimeUnit);
+
+    return getShortIsoString(date);
+}
+
+/**
+ * Adds a given amount of <time unit> to a date.
+ *
+ * @param subject The date to add to.
+ * @param amount The amount of <unit> to add.
+ * @param unit The time unit.
+ */
+function addToDate(subject: Date, amount: number, unit: PHPTimeUnit) {
+    switch (unit) {
+        case 'Y':
+            subject.setFullYear(subject.getFullYear() + amount);
+            break;
+        case "M":
+            subject.setMonth(subject.getMonth() + amount);
+            break;
+        case "D":
+            subject.setDate(subject.getDate() + amount);
+            break;
+        default:
+            break;
+    }
+
+    return subject;
 }

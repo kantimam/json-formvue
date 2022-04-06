@@ -53,16 +53,17 @@
 </template>
 
 <script>
-import {createInputRules, getPlaceholder, isRequired} from "../../lib/util";
+import {createInputRules, getPlaceholder, isRequired} from "@/lib/util";
 import MaskedText from "./composed/textfield_masked.vue";
 import {
   compareDateTimes,
   formatISODateFromPattern,
   getShortIsoString,
+  interpretTime,
   isIsoFormatted,
   parseISODateFromPattern,
   toIsoFormatWithOffset
-} from "../../lib/time";
+} from "@/lib/time";
 
 export default {
   name: "DatePicker",
@@ -173,12 +174,7 @@ export default {
             return [null, false]; // do not override
           }
       );
-    },
-    currentDate() {
-      return new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
-          .toISOString()
-          .substr(0, 10);
-    },
+    }
   },
   props: {
     defaultValue: {
@@ -258,36 +254,32 @@ export default {
     minDate() {
       if (!this.validators) return undefined;
 
-      const validator = this.validators.find(
-          (v) => v.identifier === "DateInterval"
-      );
+      const validator = this.validators.find(v => v.identifier === "DateInterval");
       if (!validator) return undefined;
 
       const minDate = validator.options?.minDate;
       if (!minDate) return undefined;
 
-      if (minDate === "today") return this.currentDate();
+      const interpreted = interpretTime(minDate);
 
       // parse date with date
-      const date = Date.parse(minDate);
-      return !isNaN(date) ? minDate : undefined;
+      const date = Date.parse(interpreted);
+      return !isNaN(date) ? interpreted : undefined;
     },
     maxDate() {
       if (!this.validators) return undefined;
 
-      const validator = this.validators.find(
-          (v) => v.identifier === "DateInterval"
-      );
+      const validator = this.validators.find(v => v.identifier === "DateInterval");
       if (!validator) return undefined;
 
       const maxDate = validator.options?.maxDate;
       if (!maxDate) return undefined;
 
-      if (maxDate === "today") return this.currentDate();
+      const interpreted = interpretTime(maxDate);
 
       // parse date with date
-      const date = Date.parse(maxDate);
-      return !isNaN(date) ? maxDate : undefined;
+      const date = Date.parse(interpreted);
+      return !isNaN(date) ? interpreted : undefined;
     },
     maskPattern() {
       if (!this.maskActive) return "";

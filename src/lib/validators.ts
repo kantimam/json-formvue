@@ -1,6 +1,6 @@
 import {CallbackDefinition} from "@/lib/FormDefinition";
 import {getMaskPatternMapping, matchMaskPattern} from "@/lib/pattern";
-import {compareDateTimes, currentIsoTime, parseISODateFromPattern} from "@/lib/time";
+import {compareDateTimes, interpretTime, parseISODateFromPattern} from "@/lib/time";
 import {CallbackMap, FormCallback} from "@/lib/callbacks";
 
 export type InputValue = string | File | FileList;
@@ -162,22 +162,27 @@ export namespace Validators {
     }
 
     export function dateInterval(minDate: string, maxDate: string, pattern: string, errorMessage?: string) {
-        if (!errorMessage)
-            errorMessage = `date must be between ${minDate} and ${maxDate}`;
-
         return stringValidator(inputValue => {
             if (!inputValue.length) return true;
 
             if ((!minDate || !minDate.length) && (!maxDate || !maxDate.length)) return true; // no validation required
 
             const parsed = parseISODateFromPattern(inputValue, pattern)
-            if (!parsed) return errorMessage!; // invalid date
+            if (!parsed) return errorMessage || 'invalid date'; // invalid date
 
             // take 'today' into account
-            minDate = minDate && minDate === 'today' ? currentIsoTime() : minDate;
-            maxDate = maxDate && maxDate === 'today' ? currentIsoTime() : maxDate;
+            minDate = interpretTime(minDate);
+            maxDate = interpretTime(maxDate);
 
-            return (minDate && compareDateTimes(parsed, minDate) < 0) || (maxDate && compareDateTimes(parsed, maxDate) > 0) ? errorMessage! : true;
+            if (minDate && (compareDateTimes(parsed, minDate) < 0)) {
+                return errorMessage || `please enter a date after ${minDate}`;
+            }
+
+            if (maxDate && (compareDateTimes(parsed, maxDate) > 0)) {
+                return errorMessage || `please enter a date before ${maxDate}`;
+            }
+
+            return true;
         });
     }
 
