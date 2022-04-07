@@ -11,7 +11,6 @@
     :ref="'ref-' + identifier"
     :required="required"
     :rules="inputRules"
-    validate-on-blur
     v-model="inputValue"
     color="red"
     :name="name"

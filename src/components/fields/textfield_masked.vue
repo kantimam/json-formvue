@@ -8,7 +8,7 @@
     @input="input"
     @focus="focus"
     @blur="blur"
-    v-bind="$attrs"
+    v-bind="{...$attrs, identifier: identifier}"
     :placeholder="placeholder"
     :filled="filled"
     :required="required"
