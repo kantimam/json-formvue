@@ -12,6 +12,7 @@
       @focus="focus"
       hide-details="auto"
       :inputmode="inputmode"
+      :identifier="identifier"
       :label="label"
       :loading="loading"
       :error-messages="inputError"

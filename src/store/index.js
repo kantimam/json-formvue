@@ -193,12 +193,16 @@ const createStore = (Vuex, initialState) => {
         let errorCount = 0;
         inputs.forEach(element => {
           if (!element.valid) {
-            const inputModel = formModel[element.id];
+            // TODO: rework validation to native validation instead of vuetify bullshit
+            // Maybe parse input identifier from its name
+            const elementId=element?.$attrs?.identifier || element.id; // Identify the validated vue input by its identifier
+
+            const inputModel = formModel[elementId];
             errorCount++;
             if (inputModel) {
               inputModel.hasError = true;
             } else {
-              formModel[element.id] = {
+              formModel[elementId] = {
                 id: element.id,
                 error: '',
                 hasError: true,

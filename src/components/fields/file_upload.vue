@@ -29,6 +29,7 @@
       :required="required"
       class="ondigo-file-input"
       counter
+      :identifier="identifier"
       :label="label"
       :name="name"
       :rules="inputRules"
@@ -41,8 +42,8 @@
       :hint="inputDescription"
       :filled="filled"
       :error-messages="inputError"
-	  prepend-icon=""
-	  append-icon="mdi-paperclip"
+	    prepend-icon=""
+	    append-icon="mdi-paperclip"
     ></v-file-input>
   </div>
 </template>

@@ -10,6 +10,7 @@
       @click="click"
       @click:append="append"
       @click:clear="clear"
+      :identifier="identifier"
       :clearable="clearable"
       :clear-icon="clearicon || $vuetify.icons.values.clear"
       :color="color || $vuetify.theme.themes.light.primary"

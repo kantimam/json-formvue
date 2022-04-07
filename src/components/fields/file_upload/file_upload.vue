@@ -8,6 +8,7 @@
                   :clearable="false"
                   :disabled="disabled"
                   :filled="filled"
+                  :identifier="identifier"
                   @focus="focus"
                   :multiple="multiple"
                   :readonly="readonly"
