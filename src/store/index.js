@@ -237,6 +237,10 @@ const createStore = (Vuex, initialState) => {
         context.commit('resetFormErrorCount');
 
         if (vuetifyForm.$el && isFormValid) { // check if form element exists and if it is valid
+          if (context.state.onSubmit) {
+            if (context.state.onSubmit()) return;  // submit event was cancelled
+          }
+
           context.commit('setLoading', true);
           context.commit('setFormErrors', []);
           const formId = context.state.formElementId;
