@@ -10,6 +10,7 @@
       @click="click"
       @click:append="append"
       @click:clear="clear"
+      :identifier="identifier"
       :clearable="clearable"
       :clear-icon="clearicon || $vuetify.icons.values.clear"
       :color="color || $vuetify.theme.themes.light.primary"
@@ -89,18 +90,9 @@
 </template>
 
 <script>
-import {
-  VSelect,
-  VListItemTitle,
-  VListItemContent,
-  VListItemSubtitle,
-} from "vuetify/lib";
+import {VListItemContent, VListItemSubtitle, VListItemTitle, VSelect,} from "vuetify/lib";
 
-import {
-  createInputRules,
-  isRequired,
-  createRequiredLabel,
-} from "../../lib/util";
+import {createInputRules, createRequiredLabel, isRequired,} from "../../lib/util";
 
 export default {
   name: "OnSelect",

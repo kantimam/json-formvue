@@ -1,4 +1,4 @@
-import {replaceFormatSpecifiers} from '@/lib/substitution';
+import {replaceFormatSpecifiers, replacePluralizationTokens} from '@/lib/substitution';
 import Vue, {Component} from "vue";
 import Vuex from "vuex";
 import ResponseInterceptor from "./response_interceptor";
@@ -155,7 +155,9 @@ function createStore(v: typeof Vuex, stateInit: FormStateInit) {
                 const schema = getters.getCurrentSchema;
                 const errorCount = state.errorCount;
                 if (errorCount && errorCount > 0 && schema && schema.api && schema.api.page && schema.api.page.errorHint) {
-                    return schema.api.page.errorHint.replace("%s", errorCount);
+                    const replArgs = [errorCount];
+                    const pluralizedErrorHint = replacePluralizationTokens(schema.api.page.errorHint, ...replArgs);
+                    return replaceFormatSpecifiers(pluralizedErrorHint, ...replArgs);
                 }
                 return null;
             },
@@ -283,12 +285,16 @@ function createStore(v: typeof Vuex, stateInit: FormStateInit) {
                 let errorCount = 0;
                 inputs.forEach(element => {
                     if (!element.valid) {
-                        const inputModel = formModel[element.id];
+                        // TODO: rework validation to native validation instead of vuetify bullshit
+                        // Maybe parse input identifier from its name
+                        const elementId = element?.$attrs?.identifier || element.id; // Identify the validated vue input by its identifier
+
+                        const inputModel = formModel[elementId];
                         errorCount++;
                         if (inputModel) {
                             inputModel.hasError = true;
                         } else {
-                            formModel[element.id] = {
+                            formModel[elementId] = {
                                 id: element.id,
                                 error: '',
                                 hasError: true,
@@ -325,6 +331,10 @@ function createStore(v: typeof Vuex, stateInit: FormStateInit) {
                 context.commit('resetFormErrorCount');
 
                 if (vuetifyForm.$el && isFormValid) { // check if form element exists and if it is valid
+                    if (context.state.onSubmit) {
+                        if (context.state.onSubmit()) return;  // submit event was cancelled
+                    }
+
                     context.commit('setLoading', true);
                     context.commit('setFormErrors', []);
                     const formId = context.state.formElementId;

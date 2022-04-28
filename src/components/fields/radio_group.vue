@@ -5,12 +5,12 @@
     @focus="focus"
     :class="`ondigo-input-${identifier} ondigo-radio`"
     :error-messages="inputError"
+    :identifier="identifier"
     @input="input"
     :label="label"
     :ref="'ref-' + identifier"
     :required="required"
     :rules="inputRules"
-    validate-on-blur
     v-model="inputValue"
     color="red"
     :name="name"

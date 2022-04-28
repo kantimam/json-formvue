@@ -4,6 +4,7 @@
     :class="`ondigo-input-${identifier} ondigo-checkbox`"
     :error-messages="errorMessages"
     :label="label"
+    :identifier="identifier"
     :ref="'ref-' + identifier"
     :required="required"
     :rules="rules"

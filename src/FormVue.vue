@@ -112,8 +112,11 @@ export default {
     showErrorResponseInsideForm: {
       type: Boolean,
       default: false
+    },
+    onStepChange: {
+      type: Function,
+      required: false
     }
-
   },
   provide() {
     return {
@@ -122,7 +125,8 @@ export default {
       formSchema: Object.freeze(this.formSchema),
       scrollIntoView: this.scrollIntoView,
       fieldPropsOverwrite: this.fieldPropsOverwrite,
-      validatorsMap: this.validatorsMap
+      validatorsMap: this.validatorsMap,
+      onStepChange: this.onStepChange
     };
   },
   computed: {

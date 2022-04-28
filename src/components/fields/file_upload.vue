@@ -29,6 +29,7 @@
       :required="required"
       class="ondigo-file-input"
       counter
+      :identifier="identifier"
       :label="label"
       :name="name"
       :rules="inputRules"

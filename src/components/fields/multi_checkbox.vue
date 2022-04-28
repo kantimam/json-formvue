@@ -7,6 +7,7 @@
       class="ondigo-checkbox"
       :class="`ondigo-input-${identifier}-${option[0]} ondigo-checkbox`"
       :label="option[1]"
+      :identifier="identifier"
       :ref="`ref-${identifier}-${option[0]}`"
       v-model="checked[option[0]]"
       hide-details="auto"
@@ -24,7 +25,7 @@
 </template>
 
 <script>
-import { createInputRules } from "../../lib/util";
+import {createInputRules} from "../../lib/util";
 
 export default {
   name: "OnMultiCheckbox",

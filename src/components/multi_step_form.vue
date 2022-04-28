@@ -117,7 +117,7 @@ export default {
       );
     },
   },
-  inject: ["scrollIntoView", "componentsMap"],
+  inject: ["scrollIntoView", "componentsMap", "onStepChange"],
   methods: {
     handleFormSubmit() {
       const form = this.$refs.form;
@@ -137,5 +137,14 @@ export default {
       }
     },
   },
+  watch: {
+    currentStep(){
+      if (this.onStepChange && typeof this.onStepChange === 'function') {
+        this.$nextTick(() => {
+          this.onStepChange(this.currentStep, this);
+        })
+      }
+    }
+  }
 };
 </script>
