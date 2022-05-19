@@ -100,7 +100,7 @@ function generateCallbacksList(knownCallbacks: CallbackMap = {}, requestedCallba
 function createStore(v: typeof Vuex, stateInit: FormStateInit) {
     const debug = process.env.NODE_ENV !== 'production';
 
-    return new Vuex.Store({
+    return new v.Store({
         state: initState(stateInit),
         strict: debug,
         getters: {
