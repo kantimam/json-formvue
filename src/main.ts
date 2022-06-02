@@ -38,6 +38,8 @@ import DynamicElement from './components/dynamic_element.vue';
 
 // PUBLIC OPTIONAL FUNCTIONS AND HELPERS
 import {createInputName, createInputRules, createRequiredLabel, getPlaceholder, isRequired} from "./lib/util";
+import ResponseInterceptor from "@/store/response_interceptor";
+import Handler = ResponseInterceptor.Handler;
 
 
 // re export all public modules
@@ -81,5 +83,5 @@ export {
     ContentElement
 }
 
-export { ResponseInterceptor } from '@/store/response_interceptor';
+export { registerResponseInterceptor } from '@/store/response_interceptor';
 
