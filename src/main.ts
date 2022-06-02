@@ -81,5 +81,5 @@ export {
     ContentElement
 }
 
-export { default } from '@/store/response_interceptor';
+export { ResponseInterceptor } from '@/store/response_interceptor';
 

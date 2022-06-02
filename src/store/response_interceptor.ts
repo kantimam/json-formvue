@@ -1,4 +1,4 @@
-namespace ResponseInterceptor {
+export namespace ResponseInterceptor {
     const responseInterceptors: Handler[] = [];
 
     export function register(handler: Handler) {
