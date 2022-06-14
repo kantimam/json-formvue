@@ -95,7 +95,7 @@ import './select.scss';
 const Props = Vue.extend({
   props: {
     defaultValue: {
-      type: String,
+      type: [String, Number],
       required: false,
     },
     appendicon: {

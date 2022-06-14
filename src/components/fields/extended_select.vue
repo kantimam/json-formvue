@@ -103,7 +103,7 @@ export default {
 
   props: {
     defaultValue: {
-      type: String,
+      type: [String, Number],
       required: false,
     },
     appendicon: {

@@ -1,5 +1,6 @@
 <template>
   <v-checkbox
+    :checked="inputValue"
     class="ondigo-checkbox"
     :class="`ondigo-input-${identifier} ondigo-checkbox`"
     :error-messages="errorMessages"
