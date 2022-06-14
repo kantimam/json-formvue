@@ -3204,6 +3204,13 @@ if (DESCRIPTORS && UNSUPPORTED_Y) {
 
 /***/ }),
 
+/***/ "2c42":
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+
 /***/ "2c64":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -17204,8 +17211,8 @@ __webpack_require__.d(__webpack_exports__, "OnTextfieldNumber", function() { ret
 __webpack_require__.d(__webpack_exports__, "OnTextfieldPassword", function() { return /* reexport */ textfield_password; });
 __webpack_require__.d(__webpack_exports__, "HiddenfieldHoneypot", function() { return /* reexport */ hiddenfield_honeypot; });
 __webpack_require__.d(__webpack_exports__, "FormGridRow", function() { return /* reexport */ form_grid_row; });
-__webpack_require__.d(__webpack_exports__, "OnTextArea", function() { return /* reexport */ extended_textarea; });
-__webpack_require__.d(__webpack_exports__, "OnCheckBox", function() { return /* reexport */ checkbox_checkbox; });
+__webpack_require__.d(__webpack_exports__, "OnTextArea", function() { return /* reexport */ composed_textarea; });
+__webpack_require__.d(__webpack_exports__, "OnCheckBox", function() { return /* reexport */ extended_checkbox_checkbox; });
 __webpack_require__.d(__webpack_exports__, "OnRadioGroup", function() { return /* reexport */ radio_group; });
 __webpack_require__.d(__webpack_exports__, "OnSelect", function() { return /* reexport */ extended_select; });
 __webpack_require__.d(__webpack_exports__, "SelectWithRelatedData", function() { return /* reexport */ select_with_related_data; });
@@ -29235,21 +29242,234 @@ var form_grid_row_component = normalizeComponent(
 
 installComponents_default()(form_grid_row_component, {VRow: VRow})
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1ca6af6a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/extended_textarea.vue?vue&type=template&id=93b71070&
-var extended_textareavue_type_template_id_93b71070_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('v-textarea',{ref:'ref-' + _vm.identifier,class:[{
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1ca6af6a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/composed/textarea.vue?vue&type=template&id=589dd961&
+var textareavue_type_template_id_589dd961_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('on-textarea-base',_vm._g(_vm._b({attrs:{"properties":_vm.properties,"identifier":_vm.identifier,"required":_vm.isRequired,"requiredLabel":_vm.requiredLabel,"placeholder":_vm.placeholder,"errorMessages":_vm.inputError,"rules":_vm.inputRules,"maxLength":_vm.maxLength},model:{value:(_vm.inputValue),callback:function ($$v) {_vm.inputValue=$$v},expression:"inputValue"}},'on-textarea-base',_vm.$attrs,false),_vm.$listeners))}
+var textareavue_type_template_id_589dd961_staticRenderFns = []
+
+
+// CONCATENATED MODULE: ./src/components/fields/composed/textarea.vue?vue&type=template&id=589dd961&
+
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1ca6af6a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/base/textarea/textarea.vue?vue&type=template&id=33bb9f62&
+var textareavue_type_template_id_33bb9f62_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('v-textarea',{ref:'ref-' + _vm.identifier,class:[{
         'v-text-field--required': _vm.required,
-        'v-text-field--optional': !_vm.required,
-        'v-text-field--counting': _vm.maxLength,
+        'v-text-field--optional': _vm.optional && !_vm.required,
+        'v-text-field--counting': _vm.maxLength !== null,
         'v-text-field--updated': _vm.updated,
       },
       'ondigo-input',
       'ondigo-textarea',
-      ("ondigo-input-" + _vm.identifier)],attrs:{"autocomplete":_vm.properties['autoComplete'],"auto-size":"","color":_vm.color,"counter":_vm.maxLength,"disabled":_vm.disabled,"filled":_vm.filled,"outlined":_vm.outlined,"solo":_vm.solo,"hide-details":"auto","inputmode":_vm.inputmode,"identifier":_vm.identifier,"label":_vm.label,"loading":_vm.loading,"error-messages":_vm.inputError,"name":_vm.name,"placeholder":_vm.placeholder,"prefix":_vm.prefix,"readonly":_vm.readonly,"required":_vm.required,"rules":_vm.inputRules,"suffix":_vm.suffix,"type":_vm.type,"validate-on-blur":""},on:{"blur":_vm.blur,"focus":_vm.focus},model:{value:(_vm.inputValue),callback:function ($$v) {_vm.inputValue=$$v},expression:"inputValue"}},[_c('template',{slot:"prepend-outer"},[_vm._t("prepend")],2),(!_vm.required)?_c('template',{slot:"prepend-inner"},[_c('span',{staticClass:"v-input__label-optional"},[_vm._v(" "+_vm._s(_vm.optionalLabel)+" ")])]):_vm._e(),(_vm.required)?_c('template',{slot:"prepend-inner"},[_c('span',{staticClass:"v-input__label-required"},[_vm._v(_vm._s(_vm.requiredLabel))])]):_vm._e(),_c('template',{slot:"append-outer"},[_vm._t("append")],2)],2)}
-var extended_textareavue_type_template_id_93b71070_staticRenderFns = []
+      ("ondigo-input-" + _vm.identifier)],attrs:{"autocomplete":_vm.properties['autoComplete'],"auto-size":"","color":_vm.color,"counter":_vm.maxLength,"disabled":_vm.disabled,"filled":_vm.filled,"outlined":_vm.outlined,"solo":_vm.solo,"hide-details":"auto","inputmode":_vm.inputmode,"label":_vm.label,"loading":_vm.loading,"error-messages":_vm.errorMessages,"name":_vm.name,"placeholder":_vm.placeholder,"prefix":_vm.prefix,"readonly":_vm.readonly,"required":_vm.required,"rules":_vm.rules,"suffix":_vm.suffix,"type":_vm.type,"validate-on-blur":""},on:{"blur":_vm.blur,"focus":_vm.focus,"change":_vm.change,"input":_vm.input}},[_c('template',{slot:"prepend-outer"},[_vm._t("prepend")],2),(!_vm.required)?_c('template',{slot:"prepend-inner"},[_c('span',{staticClass:"v-input__label-optional"},[_vm._v(" "+_vm._s(_vm.optionalLabel)+" ")])]):_vm._e(),(_vm.required)?_c('template',{slot:"prepend-inner"},[_c('span',{staticClass:"v-input__label-required"},[_vm._v(_vm._s(_vm.requiredLabel))])]):_vm._e(),_c('template',{slot:"append-outer"},[_vm._t("append")],2)],2)}
+var textareavue_type_template_id_33bb9f62_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/fields/extended_textarea.vue?vue&type=template&id=93b71070&
+// CONCATENATED MODULE: ./src/components/fields/base/textarea/textarea.vue?vue&type=template&id=33bb9f62&
 
+// EXTERNAL MODULE: ./src/components/fields/base/textarea/textarea.scss
+var textarea_textarea = __webpack_require__("2c42");
+
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/@vue/cli-plugin-typescript/node_modules/ts-loader??ref--13-3!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/base/textarea/textarea.vue?vue&type=script&lang=ts&
+
+
+
+
+
+
+
+
+
+var textareavue_type_script_lang_ts_Props = external_commonjs_vue_commonjs2_vue_root_Vue_default.a.extend({
+  props: {
+    autocomplete: {
+      type: String,
+      "default": null
+    },
+    clearable: {
+      type: Boolean,
+      "default": false
+    },
+    type: {
+      type: String,
+      "default": "text"
+    },
+    color: {
+      type: String,
+      "default": null
+    },
+    disabled: {
+      type: Boolean,
+      "default": false
+    },
+    filled: {
+      type: Boolean,
+      "default": false
+    },
+    outlined: {
+      type: Boolean,
+      "default": false
+    },
+    solo: {
+      type: Boolean,
+      "default": false
+    },
+    focused: {
+      type: Boolean,
+      "default": false
+    },
+    hidedetails: {
+      type: Boolean,
+      "default": false
+    },
+    identifier: {
+      type: String,
+      required: true
+    },
+    name: {
+      type: String,
+      required: true
+    },
+    defaultValue: {
+      type: String,
+      required: false
+    },
+    inputmode: {
+      type: String,
+      "default": "text"
+    },
+    label: {
+      type: String,
+      "default": null
+    },
+    loading: {
+      type: Boolean,
+      "default": false
+    },
+    optional: {
+      type: Boolean,
+      "default": true
+    },
+    optionalLabel: {
+      type: String,
+      "default": "optional"
+    },
+    placeholder: {
+      type: String,
+      "default": null
+    },
+    prefix: {
+      type: String,
+      "default": null
+    },
+    readonly: {
+      type: Boolean,
+      "default": false
+    },
+    suffix: {
+      type: String,
+      "default": null
+    },
+    properties: {
+      type: [Object, Array],
+      required: true
+    },
+    required: {
+      type: Boolean,
+      "default": false
+    },
+    requiredLabel: {
+      type: String,
+      required: false
+    },
+    rules: {
+      type: Array,
+      "default": function _default() {
+        return [];
+      }
+    },
+    errorMessages: {
+      type: String,
+      required: false
+    },
+    maxLength: {
+      type: Number,
+      "default": null
+    }
+  }
+});
+
+var textareavue_type_script_lang_ts_OnTextareaBase = /*#__PURE__*/function (_Props) {
+  _inherits(OnTextareaBase, _Props);
+
+  var _super = _createSuper(OnTextareaBase);
+
+  function OnTextareaBase() {
+    var _this;
+
+    _classCallCheck(this, OnTextareaBase);
+
+    _this = _super.apply(this, arguments);
+    _this.updated = false;
+    return _this;
+  }
+
+  _createClass(OnTextareaBase, [{
+    key: "blur",
+    value: function blur(e) {
+      this.$emit("blur", e);
+    }
+  }, {
+    key: "change",
+    value: function change(e) {
+      this.$emit("change", e);
+    }
+  }, {
+    key: "focus",
+    value: function focus(e) {
+      this.$emit("focus", e);
+    }
+  }, {
+    key: "input",
+    value: function input(e) {
+      this.$emit("input", e);
+    }
+  }, {
+    key: "update",
+    value: function update() {
+      var _scope = this;
+
+      this.updated = true;
+      setTimeout(function () {
+        _scope.updated = false;
+      }, 1500);
+    }
+  }]);
+
+  return OnTextareaBase;
+}(textareavue_type_script_lang_ts_Props);
+
+textareavue_type_script_lang_ts_OnTextareaBase = __decorate([vue_class_component_esm({
+  name: "OnTextareaBase",
+  watch: {
+    focused: function focused(_focused) {
+      var _this$$refs, _this$$refs$$refs;
+
+      // set focus to input tag
+      var input = (_this$$refs = this.$refs["ref-" + this.identifier]) === null || _this$$refs === void 0 ? void 0 : (_this$$refs$$refs = _this$$refs.$refs) === null || _this$$refs$$refs === void 0 ? void 0 : _this$$refs$$refs.input;
+
+      if (_focused) {
+        input === null || input === void 0 ? void 0 : input.focus();
+      } else {
+        input === null || input === void 0 ? void 0 : input.blur();
+      }
+    },
+    loading: function loading(_loading) {
+      if (!_loading) return;
+    }
+  }
+})], textareavue_type_script_lang_ts_OnTextareaBase);
+/* harmony default export */ var textareavue_type_script_lang_ts_ = (textareavue_type_script_lang_ts_OnTextareaBase);
+;
+// CONCATENATED MODULE: ./src/components/fields/base/textarea/textarea.vue?vue&type=script&lang=ts&
+ /* harmony default export */ var textarea_textareavue_type_script_lang_ts_ = (textareavue_type_script_lang_ts_); 
 // EXTERNAL MODULE: ./node_modules/vuetify/src/components/VTextarea/VTextarea.sass
 var VTextarea = __webpack_require__("1681");
 
@@ -29349,215 +29569,103 @@ var VTextarea_baseMixins = mixins(VTextField_VTextField);
     }
   }
 }));
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/extended_textarea.vue?vue&type=script&lang=js&
+// CONCATENATED MODULE: ./src/components/fields/base/textarea/textarea.vue
 
 
 
 
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+
+/* normalize component */
+
+var textarea_component = normalizeComponent(
+  textarea_textareavue_type_script_lang_ts_,
+  textareavue_type_template_id_33bb9f62_render,
+  textareavue_type_template_id_33bb9f62_staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* harmony default export */ var base_textarea_textarea = (textarea_component.exports);
+
+/* vuetify-loader */
 
 
-/* harmony default export */ var extended_textareavue_type_script_lang_js_ = ({
-  name: "OnTextarea",
-  components: {
-    VTextarea: VTextarea_VTextarea
-  },
-  props: {
-    autocomplete: {
-      type: String,
-      "default": null
-    },
-    clearable: {
-      type: Boolean,
-      "default": false
-    },
-    type: {
-      type: String,
-      "default": "text"
-    },
-    color: {
-      type: String,
-      "default": null
-    },
-    disabled: {
-      type: Boolean,
-      "default": false
-    },
-    filled: {
-      type: Boolean,
-      "default": false
-    },
-    outlined: {
-      type: Boolean,
-      "default": false
-    },
-    solo: {
-      type: Boolean,
-      "default": false
-    },
-    focused: {
-      type: Boolean,
-      "default": false
-    },
-    hidedetails: {
-      type: Boolean,
-      "default": false
-    },
-    identifier: {
-      type: String,
-      required: true
-    },
-    name: {
-      type: String,
-      required: true
-    },
-    defaultValue: {
-      type: String,
-      required: false
-    },
-    inputmode: {
-      type: String,
-      "default": "text"
-    },
-    label: {
-      type: String,
-      "default": null
-    },
-    loading: {
-      type: Boolean,
-      "default": false
-    },
-    optional: {
-      type: Boolean,
-      "default": false
-    },
-    optionalLabel: {
-      type: String,
-      "default": "optional"
-    },
-    placeholder: {
-      type: String,
-      "default": null
-    },
-    prefix: {
-      type: String,
-      "default": null
-    },
-    readonly: {
-      type: Boolean,
-      "default": false
-    },
-    suffix: {
-      type: String,
-      "default": null
-    },
-    validators: {
-      type: Array,
-      required: false
-    },
-    properties: {
-      type: Object | Array,
-      required: true
-    }
-  },
-  data: function data() {
-    return {
-      updated: false
-    };
-  },
-  watch: {
-    focused: function focused(_focused) {
-      // set focus to input tag
-      if (_focused) {
-        this.$refs["ref-" + this.identifier].$refs.input.focus();
-      } else {
-        this.$refs["ref-" + this.identifier].$refs.input.blur();
-      }
-    },
-    loading: function loading(_loading) {
-      if (!_loading) return;
-    }
-  },
-  computed: {
-    required: function required() {
+installComponents_default()(textarea_component, {VTextarea: VTextarea_VTextarea})
+
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/@vue/cli-plugin-typescript/node_modules/ts-loader??ref--13-3!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/composed/textarea.vue?vue&type=script&lang=ts&
+
+
+
+
+
+
+
+
+var textareavue_type_script_lang_ts_a;
+
+
+ // infer vue prop type validation by ts-definition; import this before vue-property-decorator!
+
+
+
+
+
+
+
+
+var textareavue_type_script_lang_ts_OnTextarea = /*#__PURE__*/function (_mixins) {
+  _inherits(OnTextarea, _mixins);
+
+  var _super = _createSuper(OnTextarea);
+
+  function OnTextarea() {
+    _classCallCheck(this, OnTextarea);
+
+    return _super.apply(this, arguments);
+  }
+
+  _createClass(OnTextarea, [{
+    key: "isRequired",
+    get: function get() {
       return isRequired(this.properties);
-    },
-    requiredLabel: function requiredLabel() {
+    }
+  }, {
+    key: "requiredLabel",
+    get: function get() {
       return createRequiredLabel(this.validators);
+    }
+  }, {
+    key: "inputRules",
+    get: function get() {
+      return createInputRules(this.isRequired, this.validators, this.properties, true);
+    }
+  }, {
+    key: "inputValue",
+    get: function get() {
+      return this.$store.getters.getCurrentInputValue(this.identifier) || "";
     },
-    inputRules: function inputRules() {
-      return createInputRules(this.required, this.validators, this.properties, true);
-    },
-    inputValue: {
-      get: function get() {
-        return this.$store.getters.getCurrentInputValue(this.identifier) || "";
-      },
-      set: function set(value) {
-        this.$store.commit("updateInputValue", {
-          key: this.identifier,
-          value: value
-        });
-      }
-    },
-    inputError: function inputError() {
+    set: function set(value) {
+      this.$store.commit("updateInputValue", {
+        key: this.identifier,
+        value: value
+      });
+    }
+  }, {
+    key: "inputError",
+    get: function get() {
       return this.$store.getters.getCurrentInputError(this.identifier) || "";
-    },
-    maxLength: function maxLength() {
+    }
+  }, {
+    key: "placeholder",
+    get: function get() {
+      return getPlaceholder(this.properties);
+    }
+  }, {
+    key: "maxLength",
+    get: function get() {
       if (this.validators && Array.isArray(this.validators)) {
         var stringLengthValidator = this.validators.find(function (val) {
           return val.identifier === 'StringLength';
@@ -29568,35 +29676,40 @@ var VTextarea_baseMixins = mixins(VTextField_VTextField);
         }
       }
 
-      return null;
+      return this.counter;
     }
-  },
-  methods: {
-    blur: function blur(e) {
-      this.$emit("blur", e);
-    },
-    change: function change(e) {
-      this.$emit("change", e);
-    },
-    focus: function focus(e) {
-      this.$emit("focus", e);
-    },
-    input: function input(e) {
-      this.$emit("input", e);
-    },
-    update: function update() {
-      var _scope = this;
+  }]);
 
-      this.updated = true;
-      setTimeout(function () {
-        _scope.updated = false;
-      }, 1500);
-    }
+  return OnTextarea;
+}(vue_class_component_esm_mixins(mixin_InputValueMixin));
+
+__decorate([Prop({
+  "default": function _default() {
+    return [];
   }
-});
-// CONCATENATED MODULE: ./src/components/fields/extended_textarea.vue?vue&type=script&lang=js&
- /* harmony default export */ var fields_extended_textareavue_type_script_lang_js_ = (extended_textareavue_type_script_lang_js_); 
-// CONCATENATED MODULE: ./src/components/fields/extended_textarea.vue
+}), __metadata("design:type", Array)], textareavue_type_script_lang_ts_OnTextarea.prototype, "validators", void 0);
+
+__decorate([Prop(), __metadata("design:type", typeof (textareavue_type_script_lang_ts_a = typeof /* Cannot get final name for export "ElementProperties" in "./src/lib/FormDefinition.ts" (known exports: isFormDefinition, known reexports: ) */ undefined !== "undefined" && /* Cannot get final name for export "ElementProperties" in "./src/lib/FormDefinition.ts" (known exports: isFormDefinition, known reexports: ) */ undefined) === "function" ? textareavue_type_script_lang_ts_a : Object)], textareavue_type_script_lang_ts_OnTextarea.prototype, "properties", void 0);
+
+__decorate([Prop(), __metadata("design:type", String)], textareavue_type_script_lang_ts_OnTextarea.prototype, "identifier", void 0);
+
+__decorate([Prop({
+  "default": function _default() {
+    return null;
+  }
+}), __metadata("design:type", Object)], textareavue_type_script_lang_ts_OnTextarea.prototype, "counter", void 0);
+
+textareavue_type_script_lang_ts_OnTextarea = __decorate([vue_class_component_esm({
+  name: "OnTextarea",
+  components: {
+    OnTextareaBase: base_textarea_textarea
+  }
+})], textareavue_type_script_lang_ts_OnTextarea);
+/* harmony default export */ var composed_textareavue_type_script_lang_ts_ = (textareavue_type_script_lang_ts_OnTextarea);
+;
+// CONCATENATED MODULE: ./src/components/fields/composed/textarea.vue?vue&type=script&lang=ts&
+ /* harmony default export */ var fields_composed_textareavue_type_script_lang_ts_ = (composed_textareavue_type_script_lang_ts_); 
+// CONCATENATED MODULE: ./src/components/fields/composed/textarea.vue
 
 
 
@@ -29604,10 +29717,10 @@ var VTextarea_baseMixins = mixins(VTextField_VTextField);
 
 /* normalize component */
 
-var extended_textarea_component = normalizeComponent(
-  fields_extended_textareavue_type_script_lang_js_,
-  extended_textareavue_type_template_id_93b71070_render,
-  extended_textareavue_type_template_id_93b71070_staticRenderFns,
+var composed_textarea_component = normalizeComponent(
+  fields_composed_textareavue_type_script_lang_ts_,
+  textareavue_type_template_id_589dd961_render,
+  textareavue_type_template_id_589dd961_staticRenderFns,
   false,
   null,
   null,
@@ -29615,12 +29728,13 @@ var extended_textarea_component = normalizeComponent(
   
 )
 
-/* harmony default export */ var extended_textarea = (extended_textarea_component.exports);
+/* harmony default export */ var composed_textarea = (composed_textarea_component.exports);
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1ca6af6a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/composed/extended_checkbox/checkbox.vue?vue&type=template&id=ae0039c8&
+var checkboxvue_type_template_id_ae0039c8_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('on-checkbox-base',_vm._b({attrs:{"properties":_vm.properties,"identifier":_vm.identifier,"required":_vm.isRequired,"requiredLabel":_vm.requiredLabel,"errorMessages":_vm.inputError,"rules":_vm.inputRules},model:{value:(_vm.inputValue),callback:function ($$v) {_vm.inputValue=$$v},expression:"inputValue"}},'on-checkbox-base',_vm.$attrs,false))}
+var checkboxvue_type_template_id_ae0039c8_staticRenderFns = []
 
-/* vuetify-loader */
 
-
-installComponents_default()(extended_textarea_component, {VTextarea: VTextarea_VTextarea})
+// CONCATENATED MODULE: ./src/components/fields/composed/extended_checkbox/checkbox.vue?vue&type=template&id=ae0039c8&
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1ca6af6a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/base/checkbox/checkbox.vue?vue&type=template&id=5fa13cc4&
 var checkboxvue_type_template_id_5fa13cc4_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('v-checkbox',{ref:'ref-' + _vm.identifier,staticClass:"ondigo-checkbox",class:("ondigo-input-" + _vm.identifier + " ondigo-checkbox"),attrs:{"error-messages":_vm.errorMessages,"label":_vm.label,"identifier":_vm.identifier,"required":_vm.required,"rules":_vm.rules,"validate-on-blur":"","name":_vm.name,"hide-details":"auto","off-icon":"mdi-checkbox-blank"},model:{value:(_vm.inputValue),callback:function ($$v) {_vm.inputValue=$$v},expression:"inputValue"}},[(_vm.properties.content)?_c('div',{ref:"contentLabel",staticClass:"ondigo-content-element-wrapper",attrs:{"slot":"label"},domProps:{"innerHTML":_vm._s(_vm.properties.content)},slot:"label"}):_vm._e()])}
@@ -30068,6 +30182,112 @@ var checkbox_component = normalizeComponent(
 
 installComponents_default()(checkbox_component, {VCheckbox: VCheckbox_VCheckbox})
 
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/@vue/cli-plugin-typescript/node_modules/ts-loader??ref--13-3!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/composed/extended_checkbox/checkbox.vue?vue&type=script&lang=ts&
+
+
+
+
+
+var checkboxvue_type_script_lang_ts_a;
+
+
+ // infer vue prop type validation by ts-definition; import this before vue-property-decorator!
+
+
+
+
+
+
+
+
+var checkboxvue_type_script_lang_ts_OnCheckbox = /*#__PURE__*/function (_mixins) {
+  _inherits(OnCheckbox, _mixins);
+
+  var _super = _createSuper(OnCheckbox);
+
+  function OnCheckbox() {
+    _classCallCheck(this, OnCheckbox);
+
+    return _super.apply(this, arguments);
+  }
+
+  _createClass(OnCheckbox, [{
+    key: "isRequired",
+    get: function get() {
+      return isRequired(this.properties);
+    }
+  }, {
+    key: "requiredLabel",
+    get: function get() {
+      return createRequiredLabel(this.validators);
+    }
+  }, {
+    key: "inputRules",
+    get: function get() {
+      return createInputRules(this.isRequired, this.validators, this.properties);
+    }
+  }, {
+    key: "inputValue",
+    get: function get() {
+      var currentInputValue = this.$store.getters.getCurrentInputValue(this.identifier);
+      return typeof currentInputValue === 'boolean' ? currentInputValue : false;
+    },
+    set: function set(value) {
+      this.$store.commit("updateInputValue", {
+        key: this.identifier,
+        value: value
+      });
+    }
+  }, {
+    key: "inputError",
+    get: function get() {
+      return this.$store.getters.getCurrentInputError(this.identifier) || "";
+    }
+  }]);
+
+  return OnCheckbox;
+}(vue_class_component_esm_mixins(mixin_InputValueMixin));
+
+__decorate([Prop({
+  "default": function _default() {
+    return [];
+  }
+}), __metadata("design:type", Array)], checkboxvue_type_script_lang_ts_OnCheckbox.prototype, "validators", void 0);
+
+__decorate([Prop(), __metadata("design:type", typeof (checkboxvue_type_script_lang_ts_a = typeof /* Cannot get final name for export "ElementProperties" in "./src/lib/FormDefinition.ts" (known exports: isFormDefinition, known reexports: ) */ undefined !== "undefined" && /* Cannot get final name for export "ElementProperties" in "./src/lib/FormDefinition.ts" (known exports: isFormDefinition, known reexports: ) */ undefined) === "function" ? checkboxvue_type_script_lang_ts_a : Object)], checkboxvue_type_script_lang_ts_OnCheckbox.prototype, "properties", void 0);
+
+__decorate([Prop(), __metadata("design:type", String)], checkboxvue_type_script_lang_ts_OnCheckbox.prototype, "identifier", void 0);
+
+checkboxvue_type_script_lang_ts_OnCheckbox = __decorate([vue_class_component_esm({
+  name: "OnCheckbox",
+  components: {
+    OnCheckboxBase: checkbox_checkbox
+  }
+})], checkboxvue_type_script_lang_ts_OnCheckbox);
+/* harmony default export */ var extended_checkbox_checkboxvue_type_script_lang_ts_ = (checkboxvue_type_script_lang_ts_OnCheckbox);
+;
+// CONCATENATED MODULE: ./src/components/fields/composed/extended_checkbox/checkbox.vue?vue&type=script&lang=ts&
+ /* harmony default export */ var composed_extended_checkbox_checkboxvue_type_script_lang_ts_ = (extended_checkbox_checkboxvue_type_script_lang_ts_); 
+// CONCATENATED MODULE: ./src/components/fields/composed/extended_checkbox/checkbox.vue
+
+
+
+
+
+/* normalize component */
+
+var extended_checkbox_checkbox_component = normalizeComponent(
+  composed_extended_checkbox_checkboxvue_type_script_lang_ts_,
+  checkboxvue_type_template_id_ae0039c8_render,
+  checkboxvue_type_template_id_ae0039c8_staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* harmony default export */ var extended_checkbox_checkbox = (extended_checkbox_checkbox_component.exports);
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1ca6af6a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/radio_group.vue?vue&type=template&id=1816f124&
 var radio_groupvue_type_template_id_1816f124_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('v-radio-group',{ref:'ref-' + _vm.identifier,class:("ondigo-input-" + _vm.identifier + " ondigo-radio"),attrs:{"error-messages":_vm.inputError,"identifier":_vm.identifier,"label":_vm.label,"required":_vm.required,"rules":_vm.inputRules,"color":"red","name":_vm.name,"hide-details":"auto"},on:{"blur":_vm.blur,"change":_vm.change,"focus":_vm.focus,"input":_vm.input},model:{value:(_vm.inputValue),callback:function ($$v) {_vm.inputValue=$$v},expression:"inputValue"}},_vm._l((_vm.radioOptions),function(option){return _c('v-radio',{key:option.value,attrs:{"check":_vm.inputValue === option.value,"label":option.label,"value":option.value}})}),1)}
 var radio_groupvue_type_template_id_1816f124_staticRenderFns = []

@@ -13,8 +13,8 @@ import OnTextfieldNumber from "./components/fields/composed/textfield_number.vue
 import OnTextfieldPassword from "./components/fields/composed/textfield_password.vue";
 import HiddenfieldHoneypot from "./components/fields/hiddenfield_honeypot.vue";
 import FormGridRow from "./components/containers/form_grid_row.vue";
-import OnTextArea from './components/fields/extended_textarea.vue'
-import OnCheckBox from './components/fields/base/checkbox/checkbox.vue'
+import OnTextArea from './components/fields/composed/textarea.vue'
+import OnCheckBox from './components/fields/composed/extended_checkbox/checkbox.vue'
 import OnRadioGroup from './components/fields/radio_group.vue'
 import OnSelect from './components/fields/extended_select.vue'
 import SelectWithRelatedData from './components/fields/select_with_related_data.vue'
