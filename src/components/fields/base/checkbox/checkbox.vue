@@ -10,6 +10,7 @@
     :required="required"
     :rules="rules"
     validate-on-blur
+    :value="inputValue"
     :name="name"
     hide-details="auto"
     off-icon="mdi-checkbox-blank"

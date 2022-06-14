@@ -29736,12 +29736,12 @@ var checkboxvue_type_template_id_ae0039c8_staticRenderFns = []
 
 // CONCATENATED MODULE: ./src/components/fields/composed/extended_checkbox/checkbox.vue?vue&type=template&id=ae0039c8&
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1ca6af6a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/base/checkbox/checkbox.vue?vue&type=template&id=8437e346&
-var checkboxvue_type_template_id_8437e346_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('v-checkbox',{ref:'ref-' + _vm.identifier,staticClass:"ondigo-checkbox",class:("ondigo-input-" + _vm.identifier + " ondigo-checkbox"),attrs:{"checked":_vm.inputValue,"error-messages":_vm.errorMessages,"label":_vm.label,"identifier":_vm.identifier,"required":_vm.required,"rules":_vm.rules,"validate-on-blur":"","name":_vm.name,"hide-details":"auto","off-icon":"mdi-checkbox-blank"},model:{value:(_vm.inputValue),callback:function ($$v) {_vm.inputValue=$$v},expression:"inputValue"}},[(_vm.properties.content)?_c('div',{ref:"contentLabel",staticClass:"ondigo-content-element-wrapper",attrs:{"slot":"label"},domProps:{"innerHTML":_vm._s(_vm.properties.content)},slot:"label"}):_vm._e()])}
-var checkboxvue_type_template_id_8437e346_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1ca6af6a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/base/checkbox/checkbox.vue?vue&type=template&id=70285512&
+var checkboxvue_type_template_id_70285512_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('v-checkbox',{ref:'ref-' + _vm.identifier,staticClass:"ondigo-checkbox",class:("ondigo-input-" + _vm.identifier + " ondigo-checkbox"),attrs:{"checked":_vm.inputValue,"error-messages":_vm.errorMessages,"label":_vm.label,"identifier":_vm.identifier,"required":_vm.required,"rules":_vm.rules,"validate-on-blur":"","value":_vm.inputValue,"name":_vm.name,"hide-details":"auto","off-icon":"mdi-checkbox-blank"},model:{value:(_vm.inputValue),callback:function ($$v) {_vm.inputValue=$$v},expression:"inputValue"}},[(_vm.properties.content)?_c('div',{ref:"contentLabel",staticClass:"ondigo-content-element-wrapper",attrs:{"slot":"label"},domProps:{"innerHTML":_vm._s(_vm.properties.content)},slot:"label"}):_vm._e()])}
+var checkboxvue_type_template_id_70285512_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/fields/base/checkbox/checkbox.vue?vue&type=template&id=8437e346&
+// CONCATENATED MODULE: ./src/components/fields/base/checkbox/checkbox.vue?vue&type=template&id=70285512&
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/@vue/cli-plugin-typescript/node_modules/ts-loader??ref--13-3!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/base/checkbox/checkbox.vue?vue&type=script&lang=ts&
 
@@ -30166,8 +30166,8 @@ var VCheckbox_excluded = ["title"];
 
 var checkbox_component = normalizeComponent(
   checkbox_checkboxvue_type_script_lang_ts_,
-  checkboxvue_type_template_id_8437e346_render,
-  checkboxvue_type_template_id_8437e346_staticRenderFns,
+  checkboxvue_type_template_id_70285512_render,
+  checkboxvue_type_template_id_70285512_staticRenderFns,
   false,
   null,
   null,
