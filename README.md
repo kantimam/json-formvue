@@ -307,3 +307,15 @@ src
 ├── store (everything related to the data store)
 └── ...
 ```
+
+## Base components
+Base components should not have anything related to store.
+They should only serve as vuetify wrapper.
+The goal behind base components is, that they can be embedded in other of our components without any problems.
+
+Generally, here are some criteria for base components:
++ they should not use the vuex store
++ Generally, it should be possible to bind `v-model` components extending the base component.
+You can use `InputValueMixin` to transitively bind the v-model.
+When extra handling / custom behaviour is needed in super components, one can overwrite the member functions of that mixin in the component.
++ they should be the minimal building parts of the library
