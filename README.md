@@ -284,3 +284,26 @@ implement
 
 # Extend - Create your own elements
 TODO
+
+# Develop
+## Conventions
+This project tries to follow the following structure:
+```
+src
+├── components (component root)
+│   ├── containers (components rendering other components)
+│   ├── fields
+│   │   ├── base ("atomic" components without store)
+│   │   ├── composed (components extending base components with store)
+│   │   └── ... (either components which are not yet compliant or other fields)
+│   ├── mixin
+│   └── ...
+├── stories (stories root)
+│   ├── base
+│   ├── composed
+│   ├── vuetify (stories about original vuetify components for reference)
+│   └── ...
+├── lib
+├── store (everything related to the data store)
+└── ...
+```
