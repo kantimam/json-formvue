@@ -337,7 +337,7 @@ function createStore(v: typeof Vuex, stateInit: FormStateInit) {
 
                     context.commit('setLoading', true);
                     context.commit('setFormErrors', []);
-                    const formId = context.state.formElementId;
+                    const formId = context.state.id;
                     const formData = new FormData(vuetifyForm.$el); // parse formdata from underlying form element
 
                     // quickfix - radio buttons SOMETIMES not getting put into form data?!
