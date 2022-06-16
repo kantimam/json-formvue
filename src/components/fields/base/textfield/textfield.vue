@@ -114,7 +114,7 @@ const Props = Vue.extend({
     },
     name: {
       type: String,
-      required: true,
+      required: false,
     },
     inputmode: {
       type: String,
