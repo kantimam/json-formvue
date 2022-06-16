@@ -33,8 +33,7 @@
         maxHeight: menuMaxHeight,
         offsetY: true,
         tile: true,
-        top: !dropDown,
-        value: menu,
+        top: !dropDown
       }"
       :name="multiple ? undefined : name"
       :no-data-text="nodatatext"
@@ -225,7 +224,6 @@ export default {
 
   data() {
     return {
-      menu: false,
       markWidth: 0,
       menuMaxHeight: 304,
       updated: false,
@@ -249,7 +247,6 @@ export default {
           }
         } else {
           this.$refs["ref-" + this.identifier].blur();
-          this.menu = false;
         }
       });
     },
@@ -357,9 +354,8 @@ export default {
 
   methods: {
     append() {
-      if (this.menu) {
+      if (this.$refs["ref-" + this.identifier].isMenuActive) {
         this.$refs["ref-" + this.identifier].blur();
-        this.menu = false;
       } else {
         this.$refs["ref-" + this.identifier].focus();
 
@@ -373,7 +369,6 @@ export default {
       this.$emit("blur", e);
 
       this.$refs["ref-" + this.identifier].blur();
-      this.menu = false;
     },
     change(e) {
       this.$emit("change", e);
@@ -391,7 +386,7 @@ export default {
 
       if (!this.readonly) {
         this.setMenuMaxHeight();
-        this.menu = true;
+        this.$refs["ref-" + this.identifier]?.activateMenu();
       }
     },
     input(e) {
@@ -403,13 +398,12 @@ export default {
     },
     onScroll() {
       // only need to close menu if in overlay (do not attach!)
-      if (this.menu && !!this.dialog) {
+      if (this.$refs["ref-" + this.identifier].isMenuActive && !!this.dialog) {
         if (
             this.dialog.scrollTop > this.scrollPos + 25 ||
             this.dialog.scrollTop < this.scrollPos - 25
         ) {
           this.$refs["ref-" + this.identifier].blur();
-          this.menu = false;
         }
       }
     },

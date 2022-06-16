@@ -6,11 +6,6 @@
       attach
       :error-messages="errorMessages"
       :identifier="identifier"
-      @blur="blur"
-      @change="change"
-      @click="click"
-      @click:append="append"
-      @click:clear="clear"
       :clearable="clearable"
       :clear-icon="clearicon || $vuetify.icons.values.clear"
       :color="color || $vuetify.theme.themes.light.primary"
@@ -18,9 +13,7 @@
       :filled="filled"
       :outlined="outlined"
       :solo="solo"
-      @focus="focus"
       :hide-details="hidedetails"
-      @input="input"
       inputmode="none"
       :items="selectItems"
       item-text="label"
@@ -52,6 +45,13 @@
       validate-on-blur
       :value="defaultValue"
       :multiple="multiple"
+      @focus="focus"
+      @blur="blur"
+      @input="input"
+      @change="change"
+      @click="click"
+      @click:append="append"
+      @click:clear="clear"
   >
     <template v-if="customSelectionKeys && Array.isArray(customSelectionKeys)" v-slot:selection="{ item, index }">
       <template v-for="key in customSelectionKeys" >
@@ -247,7 +247,6 @@ type SelectItem = {
 export default class OnSelectBase extends Props {
   readonly $refs!: Partial<Record<string, HTMLElement>>
 
-  menu = false
   markWidth = 0
   menuMaxHeight = 304
   updated = false
