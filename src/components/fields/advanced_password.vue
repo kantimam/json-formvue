@@ -29,11 +29,11 @@
 
 <script>
 import {createInputRules, createRequiredLabel, isRequired,} from "../../lib/util";
-import TextField from "./textfield.vue";
+import OnTextFieldBase from "./base/textfield/textfield.vue";
 
 export default {
   name: "OnAdvancedPassword",
-  components: { TextField },
+  components: { TextField: OnTextFieldBase },
   props: {
     identifier: {
       type: String,

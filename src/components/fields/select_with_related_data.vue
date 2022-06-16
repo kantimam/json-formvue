@@ -302,7 +302,6 @@ export default {
     },
     inputValue: {
       get() {
-
         return this.$store.getters.getCurrentInputValue(this.identifier) || "";
       },
       set(value) {

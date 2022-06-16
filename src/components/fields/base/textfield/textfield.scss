@@ -1,0 +1,173 @@
+@import '../../variables';
+@import '~vuetify/src/components/VTextField/variables';
+@import '~vuetify/src/components/VLabel/variables';
+
+.v-application--is-ltr, .v-application--is-rtl {
+    .v-text-field {
+        .v-input__prepend-inner {
+            margin: 0;
+            padding: 0;
+        }
+    }
+}
+
+.v-text-field {
+    input {
+        margin-top: $text-field-filled-margin-top;
+
+        // remove autofill background color in chrome
+        &:-webkit-autofill,
+        &:-webkit-autofill:hover,
+        &:-webkit-autofill:focus,
+        &:-webkit-autofill:active {
+            // setting background-color to transparent is not accepted by major browsers at the moment
+            // this is a hacky solution to "support" completely transparent autofill background
+            transition: background-color 5000s ease-in-out 0s;
+            transition-delay: 5000s;
+        }
+    }
+
+    .v-label {
+        top: $text-field-filled-full-width-label-top;
+    }
+
+    .v-input__label-required,
+    .v-input__label-optional {
+        left: $text-field-label-optional-left;
+        right: $text-field-label-optional-right;
+        max-width: 90%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        pointer-events: none;
+        font-size: $label-font-size;
+        line-height: $label-line-height;
+        min-height: $label-min-height;
+        transition: .3s map-get($transition, 'swing');
+        position: absolute;
+        top: $text-field-filled-full-width-label-top - 4px;
+        transform: $text-field-filled-full-width-label-active-transform;
+
+        @mixin ltr() {
+            transform-origin: top left
+        }
+
+        @mixin rtl() {
+            transform-origin: top right
+        }
+    }
+
+    .v-input__label-optional {
+        color: rgba(map-get($grey, 'darken-1'), 0.75);
+    }
+
+    .v-input__label-required {
+        opacity: 0;
+        left: -6px;  // weird bug
+    }
+
+    &.error--text {
+        .v-input__label-required {
+            opacity: 1;
+        }
+
+        .v-label {
+            top: $text-field-label-top + 4px;
+        }
+    }
+
+    &.v-input--is-focused,
+    &.v-input--is-label-active {
+        .v-label {
+            transform: $text-field-filled-full-width-label-active-transform;
+        }
+
+        .v-input__label-required,
+        .v-input__label-optional {
+            opacity: 0;
+        }
+
+        &.error--text {
+            .v-input__label-required {
+                opacity: 0;
+            }
+        }
+    }
+
+    &.v-text-field--optional {
+        .v-label {
+            top: $text-field-filled-full-width-label-top + 6px;
+
+            &--active {
+                top: $text-field-filled-full-width-label-top;
+            }
+        }
+    }
+
+    &.v-text-field--required {
+        &.error--text {
+            .v-label {
+                top: $text-field-filled-full-width-label-top + 6px;
+
+                &--active {
+                    top: $text-field-filled-full-width-label-top;
+                }
+            }
+        }
+    }
+
+    &.error--text {
+        .v-label {
+            top: $text-field-filled-full-width-label-top;
+        }
+    }
+
+    &.error--text:not(.v-text-field--required) {
+        .v-text-field__details {
+            opacity: 1;
+            max-height: none;
+            padding-top: $input-slot-margin-bottom;
+        }
+    }
+
+    &.error--text.v-text-field--required.v-input--is-dirty {
+        .v-text-field__details {
+            opacity: 1;
+            max-height: none;
+            padding-top: $input-slot-margin-bottom;
+        }
+    }
+
+    &.v-text-field--enclosed {
+        .v-text-field__details {
+            margin-bottom: 0;
+        }
+
+        &.v-text-field--counting {
+            .v-text-field__details {
+                padding-top: $input-slot-margin-bottom;
+            }
+        }
+    }
+
+    .v-text-field__details {
+        opacity: 0;
+        max-height: 0;
+        overflow: hidden;
+        min-height: 0;
+        margin-bottom: 0;
+    }
+
+    > .v-input__control {
+        padding-bottom: 1px;
+        overflow: hidden;
+        position: relative;
+
+        > .v-input__slot {
+            padding: $text-field-enclosed-details-padding;
+            margin-bottom: 0;
+            align-items: stretch;
+            min-height: $text-field-filled-full-width-outlined-slot-min-height
+        }
+    }
+}

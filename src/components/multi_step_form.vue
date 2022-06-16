@@ -139,7 +139,7 @@ export default {
   },
   watch: {
     currentStep(){
-      if(this.onStepChange && typeof this.onStepChange === 'function'){
+      if (this.onStepChange && typeof this.onStepChange === 'function') {
         this.$nextTick(() => {
           this.onStepChange(this.currentStep, this);
         })

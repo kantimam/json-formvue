@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import {createInputRules, createRequiredLabel, isRequired,} from "../../lib/util";
+import {createInputRules, createRequiredLabel, isRequired} from "../../lib/util";
 
 export default {
   name: "OnRadio",

@@ -3195,6 +3195,13 @@ if (DESCRIPTORS && UNSUPPORTED_Y) {
 
 /***/ }),
 
+/***/ "2c42":
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+
 /***/ "2c64":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -3819,6 +3826,13 @@ exportTypedArrayMethod('findIndex', function findIndex(predicate /* , thisArg */
 
 /***/ }),
 
+/***/ "3af2":
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+
 /***/ "3bbe":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -4111,6 +4125,47 @@ $({ target: 'Array', proto: true, forced: [].forEach != forEach }, {
 var global = __webpack_require__("da84");
 
 module.exports = global;
+
+
+/***/ }),
+
+/***/ "4362":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports.nextTick = function nextTick(fn) {
+    var args = Array.prototype.slice.call(arguments);
+    args.shift();
+    setTimeout(function () {
+        fn.apply(null, args);
+    }, 0);
+};
+
+exports.platform = exports.arch = 
+exports.execPath = exports.title = 'browser';
+exports.pid = 1;
+exports.browser = true;
+exports.env = {};
+exports.argv = [];
+
+exports.binding = function (name) {
+	throw new Error('No such module. (Possibly not yet loaded)')
+};
+
+(function () {
+    var cwd = '/';
+    var path;
+    exports.cwd = function () { return cwd };
+    exports.chdir = function (dir) {
+        if (!path) path = __webpack_require__("df7c");
+        cwd = path.resolve(dir, cwd);
+    };
+})();
+
+exports.exit = exports.kill = 
+exports.umask = exports.dlopen = 
+exports.uptime = exports.memoryUsage = 
+exports.uvCounters = function() {};
+exports.features = {};
 
 
 /***/ }),
@@ -7107,48 +7162,6 @@ module.exports = {
   values: createMethod(false)
 };
 
-
-/***/ }),
-
-/***/ "7037":
-/***/ (function(module, exports, __webpack_require__) {
-
-__webpack_require__("a4d3");
-
-__webpack_require__("e01a");
-
-__webpack_require__("d3b7");
-
-__webpack_require__("d28b");
-
-__webpack_require__("e260");
-
-__webpack_require__("3ca3");
-
-__webpack_require__("ddb0");
-
-function _typeof(obj) {
-  "@babel/helpers - typeof";
-
-  if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-    module.exports = _typeof = function _typeof(obj) {
-      return typeof obj;
-    };
-
-    module.exports["default"] = module.exports, module.exports.__esModule = true;
-  } else {
-    module.exports = _typeof = function _typeof(obj) {
-      return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
-    };
-
-    module.exports["default"] = module.exports, module.exports.__esModule = true;
-  }
-
-  return _typeof(obj);
-}
-
-module.exports = _typeof;
-module.exports["default"] = module.exports, module.exports.__esModule = true;
 
 /***/ }),
 
@@ -10266,6 +10279,1145 @@ module.exports = {
   getState: getInternalParamsState
 };
 
+
+/***/ }),
+
+/***/ "98db":
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function(process, global) {/*! *****************************************************************************
+Copyright (C) Microsoft. All rights reserved.
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+this file except in compliance with the License. You may obtain a copy of the
+License at http://www.apache.org/licenses/LICENSE-2.0
+
+THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
+WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
+MERCHANTABLITY OR NON-INFRINGEMENT.
+
+See the Apache Version 2.0 License for specific language governing permissions
+and limitations under the License.
+***************************************************************************** */
+var Reflect;
+(function (Reflect) {
+    // Metadata Proposal
+    // https://rbuckton.github.io/reflect-metadata/
+    (function (factory) {
+        var root = typeof global === "object" ? global :
+            typeof self === "object" ? self :
+                typeof this === "object" ? this :
+                    Function("return this;")();
+        var exporter = makeExporter(Reflect);
+        if (typeof root.Reflect === "undefined") {
+            root.Reflect = Reflect;
+        }
+        else {
+            exporter = makeExporter(root.Reflect, exporter);
+        }
+        factory(exporter);
+        function makeExporter(target, previous) {
+            return function (key, value) {
+                if (typeof target[key] !== "function") {
+                    Object.defineProperty(target, key, { configurable: true, writable: true, value: value });
+                }
+                if (previous)
+                    previous(key, value);
+            };
+        }
+    })(function (exporter) {
+        var hasOwn = Object.prototype.hasOwnProperty;
+        // feature test for Symbol support
+        var supportsSymbol = typeof Symbol === "function";
+        var toPrimitiveSymbol = supportsSymbol && typeof Symbol.toPrimitive !== "undefined" ? Symbol.toPrimitive : "@@toPrimitive";
+        var iteratorSymbol = supportsSymbol && typeof Symbol.iterator !== "undefined" ? Symbol.iterator : "@@iterator";
+        var supportsCreate = typeof Object.create === "function"; // feature test for Object.create support
+        var supportsProto = { __proto__: [] } instanceof Array; // feature test for __proto__ support
+        var downLevel = !supportsCreate && !supportsProto;
+        var HashMap = {
+            // create an object in dictionary mode (a.k.a. "slow" mode in v8)
+            create: supportsCreate
+                ? function () { return MakeDictionary(Object.create(null)); }
+                : supportsProto
+                    ? function () { return MakeDictionary({ __proto__: null }); }
+                    : function () { return MakeDictionary({}); },
+            has: downLevel
+                ? function (map, key) { return hasOwn.call(map, key); }
+                : function (map, key) { return key in map; },
+            get: downLevel
+                ? function (map, key) { return hasOwn.call(map, key) ? map[key] : undefined; }
+                : function (map, key) { return map[key]; },
+        };
+        // Load global or shim versions of Map, Set, and WeakMap
+        var functionPrototype = Object.getPrototypeOf(Function);
+        var usePolyfill = typeof process === "object" && Object({"NODE_ENV":"production","BASE_URL":"/"}) && Object({"NODE_ENV":"production","BASE_URL":"/"})["REFLECT_METADATA_USE_MAP_POLYFILL"] === "true";
+        var _Map = !usePolyfill && typeof Map === "function" && typeof Map.prototype.entries === "function" ? Map : CreateMapPolyfill();
+        var _Set = !usePolyfill && typeof Set === "function" && typeof Set.prototype.entries === "function" ? Set : CreateSetPolyfill();
+        var _WeakMap = !usePolyfill && typeof WeakMap === "function" ? WeakMap : CreateWeakMapPolyfill();
+        // [[Metadata]] internal slot
+        // https://rbuckton.github.io/reflect-metadata/#ordinary-object-internal-methods-and-internal-slots
+        var Metadata = new _WeakMap();
+        /**
+         * Applies a set of decorators to a property of a target object.
+         * @param decorators An array of decorators.
+         * @param target The target object.
+         * @param propertyKey (Optional) The property key to decorate.
+         * @param attributes (Optional) The property descriptor for the target key.
+         * @remarks Decorators are applied in reverse order.
+         * @example
+         *
+         *     class Example {
+         *         // property declarations are not part of ES6, though they are valid in TypeScript:
+         *         // static staticProperty;
+         *         // property;
+         *
+         *         constructor(p) { }
+         *         static staticMethod(p) { }
+         *         method(p) { }
+         *     }
+         *
+         *     // constructor
+         *     Example = Reflect.decorate(decoratorsArray, Example);
+         *
+         *     // property (on constructor)
+         *     Reflect.decorate(decoratorsArray, Example, "staticProperty");
+         *
+         *     // property (on prototype)
+         *     Reflect.decorate(decoratorsArray, Example.prototype, "property");
+         *
+         *     // method (on constructor)
+         *     Object.defineProperty(Example, "staticMethod",
+         *         Reflect.decorate(decoratorsArray, Example, "staticMethod",
+         *             Object.getOwnPropertyDescriptor(Example, "staticMethod")));
+         *
+         *     // method (on prototype)
+         *     Object.defineProperty(Example.prototype, "method",
+         *         Reflect.decorate(decoratorsArray, Example.prototype, "method",
+         *             Object.getOwnPropertyDescriptor(Example.prototype, "method")));
+         *
+         */
+        function decorate(decorators, target, propertyKey, attributes) {
+            if (!IsUndefined(propertyKey)) {
+                if (!IsArray(decorators))
+                    throw new TypeError();
+                if (!IsObject(target))
+                    throw new TypeError();
+                if (!IsObject(attributes) && !IsUndefined(attributes) && !IsNull(attributes))
+                    throw new TypeError();
+                if (IsNull(attributes))
+                    attributes = undefined;
+                propertyKey = ToPropertyKey(propertyKey);
+                return DecorateProperty(decorators, target, propertyKey, attributes);
+            }
+            else {
+                if (!IsArray(decorators))
+                    throw new TypeError();
+                if (!IsConstructor(target))
+                    throw new TypeError();
+                return DecorateConstructor(decorators, target);
+            }
+        }
+        exporter("decorate", decorate);
+        // 4.1.2 Reflect.metadata(metadataKey, metadataValue)
+        // https://rbuckton.github.io/reflect-metadata/#reflect.metadata
+        /**
+         * A default metadata decorator factory that can be used on a class, class member, or parameter.
+         * @param metadataKey The key for the metadata entry.
+         * @param metadataValue The value for the metadata entry.
+         * @returns A decorator function.
+         * @remarks
+         * If `metadataKey` is already defined for the target and target key, the
+         * metadataValue for that key will be overwritten.
+         * @example
+         *
+         *     // constructor
+         *     @Reflect.metadata(key, value)
+         *     class Example {
+         *     }
+         *
+         *     // property (on constructor, TypeScript only)
+         *     class Example {
+         *         @Reflect.metadata(key, value)
+         *         static staticProperty;
+         *     }
+         *
+         *     // property (on prototype, TypeScript only)
+         *     class Example {
+         *         @Reflect.metadata(key, value)
+         *         property;
+         *     }
+         *
+         *     // method (on constructor)
+         *     class Example {
+         *         @Reflect.metadata(key, value)
+         *         static staticMethod() { }
+         *     }
+         *
+         *     // method (on prototype)
+         *     class Example {
+         *         @Reflect.metadata(key, value)
+         *         method() { }
+         *     }
+         *
+         */
+        function metadata(metadataKey, metadataValue) {
+            function decorator(target, propertyKey) {
+                if (!IsObject(target))
+                    throw new TypeError();
+                if (!IsUndefined(propertyKey) && !IsPropertyKey(propertyKey))
+                    throw new TypeError();
+                OrdinaryDefineOwnMetadata(metadataKey, metadataValue, target, propertyKey);
+            }
+            return decorator;
+        }
+        exporter("metadata", metadata);
+        /**
+         * Define a unique metadata entry on the target.
+         * @param metadataKey A key used to store and retrieve metadata.
+         * @param metadataValue A value that contains attached metadata.
+         * @param target The target object on which to define metadata.
+         * @param propertyKey (Optional) The property key for the target.
+         * @example
+         *
+         *     class Example {
+         *         // property declarations are not part of ES6, though they are valid in TypeScript:
+         *         // static staticProperty;
+         *         // property;
+         *
+         *         constructor(p) { }
+         *         static staticMethod(p) { }
+         *         method(p) { }
+         *     }
+         *
+         *     // constructor
+         *     Reflect.defineMetadata("custom:annotation", options, Example);
+         *
+         *     // property (on constructor)
+         *     Reflect.defineMetadata("custom:annotation", options, Example, "staticProperty");
+         *
+         *     // property (on prototype)
+         *     Reflect.defineMetadata("custom:annotation", options, Example.prototype, "property");
+         *
+         *     // method (on constructor)
+         *     Reflect.defineMetadata("custom:annotation", options, Example, "staticMethod");
+         *
+         *     // method (on prototype)
+         *     Reflect.defineMetadata("custom:annotation", options, Example.prototype, "method");
+         *
+         *     // decorator factory as metadata-producing annotation.
+         *     function MyAnnotation(options): Decorator {
+         *         return (target, key?) => Reflect.defineMetadata("custom:annotation", options, target, key);
+         *     }
+         *
+         */
+        function defineMetadata(metadataKey, metadataValue, target, propertyKey) {
+            if (!IsObject(target))
+                throw new TypeError();
+            if (!IsUndefined(propertyKey))
+                propertyKey = ToPropertyKey(propertyKey);
+            return OrdinaryDefineOwnMetadata(metadataKey, metadataValue, target, propertyKey);
+        }
+        exporter("defineMetadata", defineMetadata);
+        /**
+         * Gets a value indicating whether the target object or its prototype chain has the provided metadata key defined.
+         * @param metadataKey A key used to store and retrieve metadata.
+         * @param target The target object on which the metadata is defined.
+         * @param propertyKey (Optional) The property key for the target.
+         * @returns `true` if the metadata key was defined on the target object or its prototype chain; otherwise, `false`.
+         * @example
+         *
+         *     class Example {
+         *         // property declarations are not part of ES6, though they are valid in TypeScript:
+         *         // static staticProperty;
+         *         // property;
+         *
+         *         constructor(p) { }
+         *         static staticMethod(p) { }
+         *         method(p) { }
+         *     }
+         *
+         *     // constructor
+         *     result = Reflect.hasMetadata("custom:annotation", Example);
+         *
+         *     // property (on constructor)
+         *     result = Reflect.hasMetadata("custom:annotation", Example, "staticProperty");
+         *
+         *     // property (on prototype)
+         *     result = Reflect.hasMetadata("custom:annotation", Example.prototype, "property");
+         *
+         *     // method (on constructor)
+         *     result = Reflect.hasMetadata("custom:annotation", Example, "staticMethod");
+         *
+         *     // method (on prototype)
+         *     result = Reflect.hasMetadata("custom:annotation", Example.prototype, "method");
+         *
+         */
+        function hasMetadata(metadataKey, target, propertyKey) {
+            if (!IsObject(target))
+                throw new TypeError();
+            if (!IsUndefined(propertyKey))
+                propertyKey = ToPropertyKey(propertyKey);
+            return OrdinaryHasMetadata(metadataKey, target, propertyKey);
+        }
+        exporter("hasMetadata", hasMetadata);
+        /**
+         * Gets a value indicating whether the target object has the provided metadata key defined.
+         * @param metadataKey A key used to store and retrieve metadata.
+         * @param target The target object on which the metadata is defined.
+         * @param propertyKey (Optional) The property key for the target.
+         * @returns `true` if the metadata key was defined on the target object; otherwise, `false`.
+         * @example
+         *
+         *     class Example {
+         *         // property declarations are not part of ES6, though they are valid in TypeScript:
+         *         // static staticProperty;
+         *         // property;
+         *
+         *         constructor(p) { }
+         *         static staticMethod(p) { }
+         *         method(p) { }
+         *     }
+         *
+         *     // constructor
+         *     result = Reflect.hasOwnMetadata("custom:annotation", Example);
+         *
+         *     // property (on constructor)
+         *     result = Reflect.hasOwnMetadata("custom:annotation", Example, "staticProperty");
+         *
+         *     // property (on prototype)
+         *     result = Reflect.hasOwnMetadata("custom:annotation", Example.prototype, "property");
+         *
+         *     // method (on constructor)
+         *     result = Reflect.hasOwnMetadata("custom:annotation", Example, "staticMethod");
+         *
+         *     // method (on prototype)
+         *     result = Reflect.hasOwnMetadata("custom:annotation", Example.prototype, "method");
+         *
+         */
+        function hasOwnMetadata(metadataKey, target, propertyKey) {
+            if (!IsObject(target))
+                throw new TypeError();
+            if (!IsUndefined(propertyKey))
+                propertyKey = ToPropertyKey(propertyKey);
+            return OrdinaryHasOwnMetadata(metadataKey, target, propertyKey);
+        }
+        exporter("hasOwnMetadata", hasOwnMetadata);
+        /**
+         * Gets the metadata value for the provided metadata key on the target object or its prototype chain.
+         * @param metadataKey A key used to store and retrieve metadata.
+         * @param target The target object on which the metadata is defined.
+         * @param propertyKey (Optional) The property key for the target.
+         * @returns The metadata value for the metadata key if found; otherwise, `undefined`.
+         * @example
+         *
+         *     class Example {
+         *         // property declarations are not part of ES6, though they are valid in TypeScript:
+         *         // static staticProperty;
+         *         // property;
+         *
+         *         constructor(p) { }
+         *         static staticMethod(p) { }
+         *         method(p) { }
+         *     }
+         *
+         *     // constructor
+         *     result = Reflect.getMetadata("custom:annotation", Example);
+         *
+         *     // property (on constructor)
+         *     result = Reflect.getMetadata("custom:annotation", Example, "staticProperty");
+         *
+         *     // property (on prototype)
+         *     result = Reflect.getMetadata("custom:annotation", Example.prototype, "property");
+         *
+         *     // method (on constructor)
+         *     result = Reflect.getMetadata("custom:annotation", Example, "staticMethod");
+         *
+         *     // method (on prototype)
+         *     result = Reflect.getMetadata("custom:annotation", Example.prototype, "method");
+         *
+         */
+        function getMetadata(metadataKey, target, propertyKey) {
+            if (!IsObject(target))
+                throw new TypeError();
+            if (!IsUndefined(propertyKey))
+                propertyKey = ToPropertyKey(propertyKey);
+            return OrdinaryGetMetadata(metadataKey, target, propertyKey);
+        }
+        exporter("getMetadata", getMetadata);
+        /**
+         * Gets the metadata value for the provided metadata key on the target object.
+         * @param metadataKey A key used to store and retrieve metadata.
+         * @param target The target object on which the metadata is defined.
+         * @param propertyKey (Optional) The property key for the target.
+         * @returns The metadata value for the metadata key if found; otherwise, `undefined`.
+         * @example
+         *
+         *     class Example {
+         *         // property declarations are not part of ES6, though they are valid in TypeScript:
+         *         // static staticProperty;
+         *         // property;
+         *
+         *         constructor(p) { }
+         *         static staticMethod(p) { }
+         *         method(p) { }
+         *     }
+         *
+         *     // constructor
+         *     result = Reflect.getOwnMetadata("custom:annotation", Example);
+         *
+         *     // property (on constructor)
+         *     result = Reflect.getOwnMetadata("custom:annotation", Example, "staticProperty");
+         *
+         *     // property (on prototype)
+         *     result = Reflect.getOwnMetadata("custom:annotation", Example.prototype, "property");
+         *
+         *     // method (on constructor)
+         *     result = Reflect.getOwnMetadata("custom:annotation", Example, "staticMethod");
+         *
+         *     // method (on prototype)
+         *     result = Reflect.getOwnMetadata("custom:annotation", Example.prototype, "method");
+         *
+         */
+        function getOwnMetadata(metadataKey, target, propertyKey) {
+            if (!IsObject(target))
+                throw new TypeError();
+            if (!IsUndefined(propertyKey))
+                propertyKey = ToPropertyKey(propertyKey);
+            return OrdinaryGetOwnMetadata(metadataKey, target, propertyKey);
+        }
+        exporter("getOwnMetadata", getOwnMetadata);
+        /**
+         * Gets the metadata keys defined on the target object or its prototype chain.
+         * @param target The target object on which the metadata is defined.
+         * @param propertyKey (Optional) The property key for the target.
+         * @returns An array of unique metadata keys.
+         * @example
+         *
+         *     class Example {
+         *         // property declarations are not part of ES6, though they are valid in TypeScript:
+         *         // static staticProperty;
+         *         // property;
+         *
+         *         constructor(p) { }
+         *         static staticMethod(p) { }
+         *         method(p) { }
+         *     }
+         *
+         *     // constructor
+         *     result = Reflect.getMetadataKeys(Example);
+         *
+         *     // property (on constructor)
+         *     result = Reflect.getMetadataKeys(Example, "staticProperty");
+         *
+         *     // property (on prototype)
+         *     result = Reflect.getMetadataKeys(Example.prototype, "property");
+         *
+         *     // method (on constructor)
+         *     result = Reflect.getMetadataKeys(Example, "staticMethod");
+         *
+         *     // method (on prototype)
+         *     result = Reflect.getMetadataKeys(Example.prototype, "method");
+         *
+         */
+        function getMetadataKeys(target, propertyKey) {
+            if (!IsObject(target))
+                throw new TypeError();
+            if (!IsUndefined(propertyKey))
+                propertyKey = ToPropertyKey(propertyKey);
+            return OrdinaryMetadataKeys(target, propertyKey);
+        }
+        exporter("getMetadataKeys", getMetadataKeys);
+        /**
+         * Gets the unique metadata keys defined on the target object.
+         * @param target The target object on which the metadata is defined.
+         * @param propertyKey (Optional) The property key for the target.
+         * @returns An array of unique metadata keys.
+         * @example
+         *
+         *     class Example {
+         *         // property declarations are not part of ES6, though they are valid in TypeScript:
+         *         // static staticProperty;
+         *         // property;
+         *
+         *         constructor(p) { }
+         *         static staticMethod(p) { }
+         *         method(p) { }
+         *     }
+         *
+         *     // constructor
+         *     result = Reflect.getOwnMetadataKeys(Example);
+         *
+         *     // property (on constructor)
+         *     result = Reflect.getOwnMetadataKeys(Example, "staticProperty");
+         *
+         *     // property (on prototype)
+         *     result = Reflect.getOwnMetadataKeys(Example.prototype, "property");
+         *
+         *     // method (on constructor)
+         *     result = Reflect.getOwnMetadataKeys(Example, "staticMethod");
+         *
+         *     // method (on prototype)
+         *     result = Reflect.getOwnMetadataKeys(Example.prototype, "method");
+         *
+         */
+        function getOwnMetadataKeys(target, propertyKey) {
+            if (!IsObject(target))
+                throw new TypeError();
+            if (!IsUndefined(propertyKey))
+                propertyKey = ToPropertyKey(propertyKey);
+            return OrdinaryOwnMetadataKeys(target, propertyKey);
+        }
+        exporter("getOwnMetadataKeys", getOwnMetadataKeys);
+        /**
+         * Deletes the metadata entry from the target object with the provided key.
+         * @param metadataKey A key used to store and retrieve metadata.
+         * @param target The target object on which the metadata is defined.
+         * @param propertyKey (Optional) The property key for the target.
+         * @returns `true` if the metadata entry was found and deleted; otherwise, false.
+         * @example
+         *
+         *     class Example {
+         *         // property declarations are not part of ES6, though they are valid in TypeScript:
+         *         // static staticProperty;
+         *         // property;
+         *
+         *         constructor(p) { }
+         *         static staticMethod(p) { }
+         *         method(p) { }
+         *     }
+         *
+         *     // constructor
+         *     result = Reflect.deleteMetadata("custom:annotation", Example);
+         *
+         *     // property (on constructor)
+         *     result = Reflect.deleteMetadata("custom:annotation", Example, "staticProperty");
+         *
+         *     // property (on prototype)
+         *     result = Reflect.deleteMetadata("custom:annotation", Example.prototype, "property");
+         *
+         *     // method (on constructor)
+         *     result = Reflect.deleteMetadata("custom:annotation", Example, "staticMethod");
+         *
+         *     // method (on prototype)
+         *     result = Reflect.deleteMetadata("custom:annotation", Example.prototype, "method");
+         *
+         */
+        function deleteMetadata(metadataKey, target, propertyKey) {
+            if (!IsObject(target))
+                throw new TypeError();
+            if (!IsUndefined(propertyKey))
+                propertyKey = ToPropertyKey(propertyKey);
+            var metadataMap = GetOrCreateMetadataMap(target, propertyKey, /*Create*/ false);
+            if (IsUndefined(metadataMap))
+                return false;
+            if (!metadataMap.delete(metadataKey))
+                return false;
+            if (metadataMap.size > 0)
+                return true;
+            var targetMetadata = Metadata.get(target);
+            targetMetadata.delete(propertyKey);
+            if (targetMetadata.size > 0)
+                return true;
+            Metadata.delete(target);
+            return true;
+        }
+        exporter("deleteMetadata", deleteMetadata);
+        function DecorateConstructor(decorators, target) {
+            for (var i = decorators.length - 1; i >= 0; --i) {
+                var decorator = decorators[i];
+                var decorated = decorator(target);
+                if (!IsUndefined(decorated) && !IsNull(decorated)) {
+                    if (!IsConstructor(decorated))
+                        throw new TypeError();
+                    target = decorated;
+                }
+            }
+            return target;
+        }
+        function DecorateProperty(decorators, target, propertyKey, descriptor) {
+            for (var i = decorators.length - 1; i >= 0; --i) {
+                var decorator = decorators[i];
+                var decorated = decorator(target, propertyKey, descriptor);
+                if (!IsUndefined(decorated) && !IsNull(decorated)) {
+                    if (!IsObject(decorated))
+                        throw new TypeError();
+                    descriptor = decorated;
+                }
+            }
+            return descriptor;
+        }
+        function GetOrCreateMetadataMap(O, P, Create) {
+            var targetMetadata = Metadata.get(O);
+            if (IsUndefined(targetMetadata)) {
+                if (!Create)
+                    return undefined;
+                targetMetadata = new _Map();
+                Metadata.set(O, targetMetadata);
+            }
+            var metadataMap = targetMetadata.get(P);
+            if (IsUndefined(metadataMap)) {
+                if (!Create)
+                    return undefined;
+                metadataMap = new _Map();
+                targetMetadata.set(P, metadataMap);
+            }
+            return metadataMap;
+        }
+        // 3.1.1.1 OrdinaryHasMetadata(MetadataKey, O, P)
+        // https://rbuckton.github.io/reflect-metadata/#ordinaryhasmetadata
+        function OrdinaryHasMetadata(MetadataKey, O, P) {
+            var hasOwn = OrdinaryHasOwnMetadata(MetadataKey, O, P);
+            if (hasOwn)
+                return true;
+            var parent = OrdinaryGetPrototypeOf(O);
+            if (!IsNull(parent))
+                return OrdinaryHasMetadata(MetadataKey, parent, P);
+            return false;
+        }
+        // 3.1.2.1 OrdinaryHasOwnMetadata(MetadataKey, O, P)
+        // https://rbuckton.github.io/reflect-metadata/#ordinaryhasownmetadata
+        function OrdinaryHasOwnMetadata(MetadataKey, O, P) {
+            var metadataMap = GetOrCreateMetadataMap(O, P, /*Create*/ false);
+            if (IsUndefined(metadataMap))
+                return false;
+            return ToBoolean(metadataMap.has(MetadataKey));
+        }
+        // 3.1.3.1 OrdinaryGetMetadata(MetadataKey, O, P)
+        // https://rbuckton.github.io/reflect-metadata/#ordinarygetmetadata
+        function OrdinaryGetMetadata(MetadataKey, O, P) {
+            var hasOwn = OrdinaryHasOwnMetadata(MetadataKey, O, P);
+            if (hasOwn)
+                return OrdinaryGetOwnMetadata(MetadataKey, O, P);
+            var parent = OrdinaryGetPrototypeOf(O);
+            if (!IsNull(parent))
+                return OrdinaryGetMetadata(MetadataKey, parent, P);
+            return undefined;
+        }
+        // 3.1.4.1 OrdinaryGetOwnMetadata(MetadataKey, O, P)
+        // https://rbuckton.github.io/reflect-metadata/#ordinarygetownmetadata
+        function OrdinaryGetOwnMetadata(MetadataKey, O, P) {
+            var metadataMap = GetOrCreateMetadataMap(O, P, /*Create*/ false);
+            if (IsUndefined(metadataMap))
+                return undefined;
+            return metadataMap.get(MetadataKey);
+        }
+        // 3.1.5.1 OrdinaryDefineOwnMetadata(MetadataKey, MetadataValue, O, P)
+        // https://rbuckton.github.io/reflect-metadata/#ordinarydefineownmetadata
+        function OrdinaryDefineOwnMetadata(MetadataKey, MetadataValue, O, P) {
+            var metadataMap = GetOrCreateMetadataMap(O, P, /*Create*/ true);
+            metadataMap.set(MetadataKey, MetadataValue);
+        }
+        // 3.1.6.1 OrdinaryMetadataKeys(O, P)
+        // https://rbuckton.github.io/reflect-metadata/#ordinarymetadatakeys
+        function OrdinaryMetadataKeys(O, P) {
+            var ownKeys = OrdinaryOwnMetadataKeys(O, P);
+            var parent = OrdinaryGetPrototypeOf(O);
+            if (parent === null)
+                return ownKeys;
+            var parentKeys = OrdinaryMetadataKeys(parent, P);
+            if (parentKeys.length <= 0)
+                return ownKeys;
+            if (ownKeys.length <= 0)
+                return parentKeys;
+            var set = new _Set();
+            var keys = [];
+            for (var _i = 0, ownKeys_1 = ownKeys; _i < ownKeys_1.length; _i++) {
+                var key = ownKeys_1[_i];
+                var hasKey = set.has(key);
+                if (!hasKey) {
+                    set.add(key);
+                    keys.push(key);
+                }
+            }
+            for (var _a = 0, parentKeys_1 = parentKeys; _a < parentKeys_1.length; _a++) {
+                var key = parentKeys_1[_a];
+                var hasKey = set.has(key);
+                if (!hasKey) {
+                    set.add(key);
+                    keys.push(key);
+                }
+            }
+            return keys;
+        }
+        // 3.1.7.1 OrdinaryOwnMetadataKeys(O, P)
+        // https://rbuckton.github.io/reflect-metadata/#ordinaryownmetadatakeys
+        function OrdinaryOwnMetadataKeys(O, P) {
+            var keys = [];
+            var metadataMap = GetOrCreateMetadataMap(O, P, /*Create*/ false);
+            if (IsUndefined(metadataMap))
+                return keys;
+            var keysObj = metadataMap.keys();
+            var iterator = GetIterator(keysObj);
+            var k = 0;
+            while (true) {
+                var next = IteratorStep(iterator);
+                if (!next) {
+                    keys.length = k;
+                    return keys;
+                }
+                var nextValue = IteratorValue(next);
+                try {
+                    keys[k] = nextValue;
+                }
+                catch (e) {
+                    try {
+                        IteratorClose(iterator);
+                    }
+                    finally {
+                        throw e;
+                    }
+                }
+                k++;
+            }
+        }
+        // 6 ECMAScript Data Typ0es and Values
+        // https://tc39.github.io/ecma262/#sec-ecmascript-data-types-and-values
+        function Type(x) {
+            if (x === null)
+                return 1 /* Null */;
+            switch (typeof x) {
+                case "undefined": return 0 /* Undefined */;
+                case "boolean": return 2 /* Boolean */;
+                case "string": return 3 /* String */;
+                case "symbol": return 4 /* Symbol */;
+                case "number": return 5 /* Number */;
+                case "object": return x === null ? 1 /* Null */ : 6 /* Object */;
+                default: return 6 /* Object */;
+            }
+        }
+        // 6.1.1 The Undefined Type
+        // https://tc39.github.io/ecma262/#sec-ecmascript-language-types-undefined-type
+        function IsUndefined(x) {
+            return x === undefined;
+        }
+        // 6.1.2 The Null Type
+        // https://tc39.github.io/ecma262/#sec-ecmascript-language-types-null-type
+        function IsNull(x) {
+            return x === null;
+        }
+        // 6.1.5 The Symbol Type
+        // https://tc39.github.io/ecma262/#sec-ecmascript-language-types-symbol-type
+        function IsSymbol(x) {
+            return typeof x === "symbol";
+        }
+        // 6.1.7 The Object Type
+        // https://tc39.github.io/ecma262/#sec-object-type
+        function IsObject(x) {
+            return typeof x === "object" ? x !== null : typeof x === "function";
+        }
+        // 7.1 Type Conversion
+        // https://tc39.github.io/ecma262/#sec-type-conversion
+        // 7.1.1 ToPrimitive(input [, PreferredType])
+        // https://tc39.github.io/ecma262/#sec-toprimitive
+        function ToPrimitive(input, PreferredType) {
+            switch (Type(input)) {
+                case 0 /* Undefined */: return input;
+                case 1 /* Null */: return input;
+                case 2 /* Boolean */: return input;
+                case 3 /* String */: return input;
+                case 4 /* Symbol */: return input;
+                case 5 /* Number */: return input;
+            }
+            var hint = PreferredType === 3 /* String */ ? "string" : PreferredType === 5 /* Number */ ? "number" : "default";
+            var exoticToPrim = GetMethod(input, toPrimitiveSymbol);
+            if (exoticToPrim !== undefined) {
+                var result = exoticToPrim.call(input, hint);
+                if (IsObject(result))
+                    throw new TypeError();
+                return result;
+            }
+            return OrdinaryToPrimitive(input, hint === "default" ? "number" : hint);
+        }
+        // 7.1.1.1 OrdinaryToPrimitive(O, hint)
+        // https://tc39.github.io/ecma262/#sec-ordinarytoprimitive
+        function OrdinaryToPrimitive(O, hint) {
+            if (hint === "string") {
+                var toString_1 = O.toString;
+                if (IsCallable(toString_1)) {
+                    var result = toString_1.call(O);
+                    if (!IsObject(result))
+                        return result;
+                }
+                var valueOf = O.valueOf;
+                if (IsCallable(valueOf)) {
+                    var result = valueOf.call(O);
+                    if (!IsObject(result))
+                        return result;
+                }
+            }
+            else {
+                var valueOf = O.valueOf;
+                if (IsCallable(valueOf)) {
+                    var result = valueOf.call(O);
+                    if (!IsObject(result))
+                        return result;
+                }
+                var toString_2 = O.toString;
+                if (IsCallable(toString_2)) {
+                    var result = toString_2.call(O);
+                    if (!IsObject(result))
+                        return result;
+                }
+            }
+            throw new TypeError();
+        }
+        // 7.1.2 ToBoolean(argument)
+        // https://tc39.github.io/ecma262/2016/#sec-toboolean
+        function ToBoolean(argument) {
+            return !!argument;
+        }
+        // 7.1.12 ToString(argument)
+        // https://tc39.github.io/ecma262/#sec-tostring
+        function ToString(argument) {
+            return "" + argument;
+        }
+        // 7.1.14 ToPropertyKey(argument)
+        // https://tc39.github.io/ecma262/#sec-topropertykey
+        function ToPropertyKey(argument) {
+            var key = ToPrimitive(argument, 3 /* String */);
+            if (IsSymbol(key))
+                return key;
+            return ToString(key);
+        }
+        // 7.2 Testing and Comparison Operations
+        // https://tc39.github.io/ecma262/#sec-testing-and-comparison-operations
+        // 7.2.2 IsArray(argument)
+        // https://tc39.github.io/ecma262/#sec-isarray
+        function IsArray(argument) {
+            return Array.isArray
+                ? Array.isArray(argument)
+                : argument instanceof Object
+                    ? argument instanceof Array
+                    : Object.prototype.toString.call(argument) === "[object Array]";
+        }
+        // 7.2.3 IsCallable(argument)
+        // https://tc39.github.io/ecma262/#sec-iscallable
+        function IsCallable(argument) {
+            // NOTE: This is an approximation as we cannot check for [[Call]] internal method.
+            return typeof argument === "function";
+        }
+        // 7.2.4 IsConstructor(argument)
+        // https://tc39.github.io/ecma262/#sec-isconstructor
+        function IsConstructor(argument) {
+            // NOTE: This is an approximation as we cannot check for [[Construct]] internal method.
+            return typeof argument === "function";
+        }
+        // 7.2.7 IsPropertyKey(argument)
+        // https://tc39.github.io/ecma262/#sec-ispropertykey
+        function IsPropertyKey(argument) {
+            switch (Type(argument)) {
+                case 3 /* String */: return true;
+                case 4 /* Symbol */: return true;
+                default: return false;
+            }
+        }
+        // 7.3 Operations on Objects
+        // https://tc39.github.io/ecma262/#sec-operations-on-objects
+        // 7.3.9 GetMethod(V, P)
+        // https://tc39.github.io/ecma262/#sec-getmethod
+        function GetMethod(V, P) {
+            var func = V[P];
+            if (func === undefined || func === null)
+                return undefined;
+            if (!IsCallable(func))
+                throw new TypeError();
+            return func;
+        }
+        // 7.4 Operations on Iterator Objects
+        // https://tc39.github.io/ecma262/#sec-operations-on-iterator-objects
+        function GetIterator(obj) {
+            var method = GetMethod(obj, iteratorSymbol);
+            if (!IsCallable(method))
+                throw new TypeError(); // from Call
+            var iterator = method.call(obj);
+            if (!IsObject(iterator))
+                throw new TypeError();
+            return iterator;
+        }
+        // 7.4.4 IteratorValue(iterResult)
+        // https://tc39.github.io/ecma262/2016/#sec-iteratorvalue
+        function IteratorValue(iterResult) {
+            return iterResult.value;
+        }
+        // 7.4.5 IteratorStep(iterator)
+        // https://tc39.github.io/ecma262/#sec-iteratorstep
+        function IteratorStep(iterator) {
+            var result = iterator.next();
+            return result.done ? false : result;
+        }
+        // 7.4.6 IteratorClose(iterator, completion)
+        // https://tc39.github.io/ecma262/#sec-iteratorclose
+        function IteratorClose(iterator) {
+            var f = iterator["return"];
+            if (f)
+                f.call(iterator);
+        }
+        // 9.1 Ordinary Object Internal Methods and Internal Slots
+        // https://tc39.github.io/ecma262/#sec-ordinary-object-internal-methods-and-internal-slots
+        // 9.1.1.1 OrdinaryGetPrototypeOf(O)
+        // https://tc39.github.io/ecma262/#sec-ordinarygetprototypeof
+        function OrdinaryGetPrototypeOf(O) {
+            var proto = Object.getPrototypeOf(O);
+            if (typeof O !== "function" || O === functionPrototype)
+                return proto;
+            // TypeScript doesn't set __proto__ in ES5, as it's non-standard.
+            // Try to determine the superclass constructor. Compatible implementations
+            // must either set __proto__ on a subclass constructor to the superclass constructor,
+            // or ensure each class has a valid `constructor` property on its prototype that
+            // points back to the constructor.
+            // If this is not the same as Function.[[Prototype]], then this is definately inherited.
+            // This is the case when in ES6 or when using __proto__ in a compatible browser.
+            if (proto !== functionPrototype)
+                return proto;
+            // If the super prototype is Object.prototype, null, or undefined, then we cannot determine the heritage.
+            var prototype = O.prototype;
+            var prototypeProto = prototype && Object.getPrototypeOf(prototype);
+            if (prototypeProto == null || prototypeProto === Object.prototype)
+                return proto;
+            // If the constructor was not a function, then we cannot determine the heritage.
+            var constructor = prototypeProto.constructor;
+            if (typeof constructor !== "function")
+                return proto;
+            // If we have some kind of self-reference, then we cannot determine the heritage.
+            if (constructor === O)
+                return proto;
+            // we have a pretty good guess at the heritage.
+            return constructor;
+        }
+        // naive Map shim
+        function CreateMapPolyfill() {
+            var cacheSentinel = {};
+            var arraySentinel = [];
+            var MapIterator = /** @class */ (function () {
+                function MapIterator(keys, values, selector) {
+                    this._index = 0;
+                    this._keys = keys;
+                    this._values = values;
+                    this._selector = selector;
+                }
+                MapIterator.prototype["@@iterator"] = function () { return this; };
+                MapIterator.prototype[iteratorSymbol] = function () { return this; };
+                MapIterator.prototype.next = function () {
+                    var index = this._index;
+                    if (index >= 0 && index < this._keys.length) {
+                        var result = this._selector(this._keys[index], this._values[index]);
+                        if (index + 1 >= this._keys.length) {
+                            this._index = -1;
+                            this._keys = arraySentinel;
+                            this._values = arraySentinel;
+                        }
+                        else {
+                            this._index++;
+                        }
+                        return { value: result, done: false };
+                    }
+                    return { value: undefined, done: true };
+                };
+                MapIterator.prototype.throw = function (error) {
+                    if (this._index >= 0) {
+                        this._index = -1;
+                        this._keys = arraySentinel;
+                        this._values = arraySentinel;
+                    }
+                    throw error;
+                };
+                MapIterator.prototype.return = function (value) {
+                    if (this._index >= 0) {
+                        this._index = -1;
+                        this._keys = arraySentinel;
+                        this._values = arraySentinel;
+                    }
+                    return { value: value, done: true };
+                };
+                return MapIterator;
+            }());
+            return /** @class */ (function () {
+                function Map() {
+                    this._keys = [];
+                    this._values = [];
+                    this._cacheKey = cacheSentinel;
+                    this._cacheIndex = -2;
+                }
+                Object.defineProperty(Map.prototype, "size", {
+                    get: function () { return this._keys.length; },
+                    enumerable: true,
+                    configurable: true
+                });
+                Map.prototype.has = function (key) { return this._find(key, /*insert*/ false) >= 0; };
+                Map.prototype.get = function (key) {
+                    var index = this._find(key, /*insert*/ false);
+                    return index >= 0 ? this._values[index] : undefined;
+                };
+                Map.prototype.set = function (key, value) {
+                    var index = this._find(key, /*insert*/ true);
+                    this._values[index] = value;
+                    return this;
+                };
+                Map.prototype.delete = function (key) {
+                    var index = this._find(key, /*insert*/ false);
+                    if (index >= 0) {
+                        var size = this._keys.length;
+                        for (var i = index + 1; i < size; i++) {
+                            this._keys[i - 1] = this._keys[i];
+                            this._values[i - 1] = this._values[i];
+                        }
+                        this._keys.length--;
+                        this._values.length--;
+                        if (key === this._cacheKey) {
+                            this._cacheKey = cacheSentinel;
+                            this._cacheIndex = -2;
+                        }
+                        return true;
+                    }
+                    return false;
+                };
+                Map.prototype.clear = function () {
+                    this._keys.length = 0;
+                    this._values.length = 0;
+                    this._cacheKey = cacheSentinel;
+                    this._cacheIndex = -2;
+                };
+                Map.prototype.keys = function () { return new MapIterator(this._keys, this._values, getKey); };
+                Map.prototype.values = function () { return new MapIterator(this._keys, this._values, getValue); };
+                Map.prototype.entries = function () { return new MapIterator(this._keys, this._values, getEntry); };
+                Map.prototype["@@iterator"] = function () { return this.entries(); };
+                Map.prototype[iteratorSymbol] = function () { return this.entries(); };
+                Map.prototype._find = function (key, insert) {
+                    if (this._cacheKey !== key) {
+                        this._cacheIndex = this._keys.indexOf(this._cacheKey = key);
+                    }
+                    if (this._cacheIndex < 0 && insert) {
+                        this._cacheIndex = this._keys.length;
+                        this._keys.push(key);
+                        this._values.push(undefined);
+                    }
+                    return this._cacheIndex;
+                };
+                return Map;
+            }());
+            function getKey(key, _) {
+                return key;
+            }
+            function getValue(_, value) {
+                return value;
+            }
+            function getEntry(key, value) {
+                return [key, value];
+            }
+        }
+        // naive Set shim
+        function CreateSetPolyfill() {
+            return /** @class */ (function () {
+                function Set() {
+                    this._map = new _Map();
+                }
+                Object.defineProperty(Set.prototype, "size", {
+                    get: function () { return this._map.size; },
+                    enumerable: true,
+                    configurable: true
+                });
+                Set.prototype.has = function (value) { return this._map.has(value); };
+                Set.prototype.add = function (value) { return this._map.set(value, value), this; };
+                Set.prototype.delete = function (value) { return this._map.delete(value); };
+                Set.prototype.clear = function () { this._map.clear(); };
+                Set.prototype.keys = function () { return this._map.keys(); };
+                Set.prototype.values = function () { return this._map.values(); };
+                Set.prototype.entries = function () { return this._map.entries(); };
+                Set.prototype["@@iterator"] = function () { return this.keys(); };
+                Set.prototype[iteratorSymbol] = function () { return this.keys(); };
+                return Set;
+            }());
+        }
+        // naive WeakMap shim
+        function CreateWeakMapPolyfill() {
+            var UUID_SIZE = 16;
+            var keys = HashMap.create();
+            var rootKey = CreateUniqueKey();
+            return /** @class */ (function () {
+                function WeakMap() {
+                    this._key = CreateUniqueKey();
+                }
+                WeakMap.prototype.has = function (target) {
+                    var table = GetOrCreateWeakMapTable(target, /*create*/ false);
+                    return table !== undefined ? HashMap.has(table, this._key) : false;
+                };
+                WeakMap.prototype.get = function (target) {
+                    var table = GetOrCreateWeakMapTable(target, /*create*/ false);
+                    return table !== undefined ? HashMap.get(table, this._key) : undefined;
+                };
+                WeakMap.prototype.set = function (target, value) {
+                    var table = GetOrCreateWeakMapTable(target, /*create*/ true);
+                    table[this._key] = value;
+                    return this;
+                };
+                WeakMap.prototype.delete = function (target) {
+                    var table = GetOrCreateWeakMapTable(target, /*create*/ false);
+                    return table !== undefined ? delete table[this._key] : false;
+                };
+                WeakMap.prototype.clear = function () {
+                    // NOTE: not a real clear, just makes the previous data unreachable
+                    this._key = CreateUniqueKey();
+                };
+                return WeakMap;
+            }());
+            function CreateUniqueKey() {
+                var key;
+                do
+                    key = "@@WeakMap@@" + CreateUUID();
+                while (HashMap.has(keys, key));
+                keys[key] = true;
+                return key;
+            }
+            function GetOrCreateWeakMapTable(target, create) {
+                if (!hasOwn.call(target, rootKey)) {
+                    if (!create)
+                        return undefined;
+                    Object.defineProperty(target, rootKey, { value: HashMap.create() });
+                }
+                return target[rootKey];
+            }
+            function FillRandomBytes(buffer, size) {
+                for (var i = 0; i < size; ++i)
+                    buffer[i] = Math.random() * 0xff | 0;
+                return buffer;
+            }
+            function GenRandomBytes(size) {
+                if (typeof Uint8Array === "function") {
+                    if (typeof crypto !== "undefined")
+                        return crypto.getRandomValues(new Uint8Array(size));
+                    if (typeof msCrypto !== "undefined")
+                        return msCrypto.getRandomValues(new Uint8Array(size));
+                    return FillRandomBytes(new Uint8Array(size), size);
+                }
+                return FillRandomBytes(new Array(size), size);
+            }
+            function CreateUUID() {
+                var data = GenRandomBytes(UUID_SIZE);
+                // mark as random - RFC 4122 § 4.4
+                data[6] = data[6] & 0x4f | 0x40;
+                data[8] = data[8] & 0xbf | 0x80;
+                var result = "";
+                for (var offset = 0; offset < UUID_SIZE; ++offset) {
+                    var byte = data[offset];
+                    if (offset === 4 || offset === 6 || offset === 8)
+                        result += "-";
+                    if (byte < 16)
+                        result += "0";
+                    result += byte.toString(16).toLowerCase();
+                }
+                return result;
+            }
+        }
+        // uses a heuristic used by v8 and chakra to force an object into dictionary mode.
+        function MakeDictionary(obj) {
+            obj.__ = undefined;
+            delete obj.__;
+            return obj;
+        }
+    });
+})(Reflect || (Reflect = {}));
+
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__("4362"), __webpack_require__("c8ba")))
 
 /***/ }),
 
@@ -14056,6 +15208,316 @@ module.exports = Object.keys || function keys(O) {
 
 /***/ }),
 
+/***/ "df7c":
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function(process) {// .dirname, .basename, and .extname methods are extracted from Node.js v8.11.1,
+// backported and transplited with Babel, with backwards-compat fixes
+
+// Copyright Joyent, Inc. and other Node contributors.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a
+// copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to permit
+// persons to whom the Software is furnished to do so, subject to the
+// following conditions:
+//
+// The above copyright notice and this permission notice shall be included
+// in all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
+// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+// USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+// resolves . and .. elements in a path array with directory names there
+// must be no slashes, empty elements, or device names (c:\) in the array
+// (so also no leading and trailing slashes - it does not distinguish
+// relative and absolute paths)
+function normalizeArray(parts, allowAboveRoot) {
+  // if the path tries to go above the root, `up` ends up > 0
+  var up = 0;
+  for (var i = parts.length - 1; i >= 0; i--) {
+    var last = parts[i];
+    if (last === '.') {
+      parts.splice(i, 1);
+    } else if (last === '..') {
+      parts.splice(i, 1);
+      up++;
+    } else if (up) {
+      parts.splice(i, 1);
+      up--;
+    }
+  }
+
+  // if the path is allowed to go above the root, restore leading ..s
+  if (allowAboveRoot) {
+    for (; up--; up) {
+      parts.unshift('..');
+    }
+  }
+
+  return parts;
+}
+
+// path.resolve([from ...], to)
+// posix version
+exports.resolve = function() {
+  var resolvedPath = '',
+      resolvedAbsolute = false;
+
+  for (var i = arguments.length - 1; i >= -1 && !resolvedAbsolute; i--) {
+    var path = (i >= 0) ? arguments[i] : process.cwd();
+
+    // Skip empty and invalid entries
+    if (typeof path !== 'string') {
+      throw new TypeError('Arguments to path.resolve must be strings');
+    } else if (!path) {
+      continue;
+    }
+
+    resolvedPath = path + '/' + resolvedPath;
+    resolvedAbsolute = path.charAt(0) === '/';
+  }
+
+  // At this point the path should be resolved to a full absolute path, but
+  // handle relative paths to be safe (might happen when process.cwd() fails)
+
+  // Normalize the path
+  resolvedPath = normalizeArray(filter(resolvedPath.split('/'), function(p) {
+    return !!p;
+  }), !resolvedAbsolute).join('/');
+
+  return ((resolvedAbsolute ? '/' : '') + resolvedPath) || '.';
+};
+
+// path.normalize(path)
+// posix version
+exports.normalize = function(path) {
+  var isAbsolute = exports.isAbsolute(path),
+      trailingSlash = substr(path, -1) === '/';
+
+  // Normalize the path
+  path = normalizeArray(filter(path.split('/'), function(p) {
+    return !!p;
+  }), !isAbsolute).join('/');
+
+  if (!path && !isAbsolute) {
+    path = '.';
+  }
+  if (path && trailingSlash) {
+    path += '/';
+  }
+
+  return (isAbsolute ? '/' : '') + path;
+};
+
+// posix version
+exports.isAbsolute = function(path) {
+  return path.charAt(0) === '/';
+};
+
+// posix version
+exports.join = function() {
+  var paths = Array.prototype.slice.call(arguments, 0);
+  return exports.normalize(filter(paths, function(p, index) {
+    if (typeof p !== 'string') {
+      throw new TypeError('Arguments to path.join must be strings');
+    }
+    return p;
+  }).join('/'));
+};
+
+
+// path.relative(from, to)
+// posix version
+exports.relative = function(from, to) {
+  from = exports.resolve(from).substr(1);
+  to = exports.resolve(to).substr(1);
+
+  function trim(arr) {
+    var start = 0;
+    for (; start < arr.length; start++) {
+      if (arr[start] !== '') break;
+    }
+
+    var end = arr.length - 1;
+    for (; end >= 0; end--) {
+      if (arr[end] !== '') break;
+    }
+
+    if (start > end) return [];
+    return arr.slice(start, end - start + 1);
+  }
+
+  var fromParts = trim(from.split('/'));
+  var toParts = trim(to.split('/'));
+
+  var length = Math.min(fromParts.length, toParts.length);
+  var samePartsLength = length;
+  for (var i = 0; i < length; i++) {
+    if (fromParts[i] !== toParts[i]) {
+      samePartsLength = i;
+      break;
+    }
+  }
+
+  var outputParts = [];
+  for (var i = samePartsLength; i < fromParts.length; i++) {
+    outputParts.push('..');
+  }
+
+  outputParts = outputParts.concat(toParts.slice(samePartsLength));
+
+  return outputParts.join('/');
+};
+
+exports.sep = '/';
+exports.delimiter = ':';
+
+exports.dirname = function (path) {
+  if (typeof path !== 'string') path = path + '';
+  if (path.length === 0) return '.';
+  var code = path.charCodeAt(0);
+  var hasRoot = code === 47 /*/*/;
+  var end = -1;
+  var matchedSlash = true;
+  for (var i = path.length - 1; i >= 1; --i) {
+    code = path.charCodeAt(i);
+    if (code === 47 /*/*/) {
+        if (!matchedSlash) {
+          end = i;
+          break;
+        }
+      } else {
+      // We saw the first non-path separator
+      matchedSlash = false;
+    }
+  }
+
+  if (end === -1) return hasRoot ? '/' : '.';
+  if (hasRoot && end === 1) {
+    // return '//';
+    // Backwards-compat fix:
+    return '/';
+  }
+  return path.slice(0, end);
+};
+
+function basename(path) {
+  if (typeof path !== 'string') path = path + '';
+
+  var start = 0;
+  var end = -1;
+  var matchedSlash = true;
+  var i;
+
+  for (i = path.length - 1; i >= 0; --i) {
+    if (path.charCodeAt(i) === 47 /*/*/) {
+        // If we reached a path separator that was not part of a set of path
+        // separators at the end of the string, stop now
+        if (!matchedSlash) {
+          start = i + 1;
+          break;
+        }
+      } else if (end === -1) {
+      // We saw the first non-path separator, mark this as the end of our
+      // path component
+      matchedSlash = false;
+      end = i + 1;
+    }
+  }
+
+  if (end === -1) return '';
+  return path.slice(start, end);
+}
+
+// Uses a mixed approach for backwards-compatibility, as ext behavior changed
+// in new Node.js versions, so only basename() above is backported here
+exports.basename = function (path, ext) {
+  var f = basename(path);
+  if (ext && f.substr(-1 * ext.length) === ext) {
+    f = f.substr(0, f.length - ext.length);
+  }
+  return f;
+};
+
+exports.extname = function (path) {
+  if (typeof path !== 'string') path = path + '';
+  var startDot = -1;
+  var startPart = 0;
+  var end = -1;
+  var matchedSlash = true;
+  // Track the state of characters (if any) we see before our first dot and
+  // after any path separator we find
+  var preDotState = 0;
+  for (var i = path.length - 1; i >= 0; --i) {
+    var code = path.charCodeAt(i);
+    if (code === 47 /*/*/) {
+        // If we reached a path separator that was not part of a set of path
+        // separators at the end of the string, stop now
+        if (!matchedSlash) {
+          startPart = i + 1;
+          break;
+        }
+        continue;
+      }
+    if (end === -1) {
+      // We saw the first non-path separator, mark this as the end of our
+      // extension
+      matchedSlash = false;
+      end = i + 1;
+    }
+    if (code === 46 /*.*/) {
+        // If this is our first dot, mark it as the start of our extension
+        if (startDot === -1)
+          startDot = i;
+        else if (preDotState !== 1)
+          preDotState = 1;
+    } else if (startDot !== -1) {
+      // We saw a non-dot and non-path separator before our dot, so we should
+      // have a good chance at having a non-empty extension
+      preDotState = -1;
+    }
+  }
+
+  if (startDot === -1 || end === -1 ||
+      // We saw a non-dot character immediately before the dot
+      preDotState === 0 ||
+      // The (right-most) trimmed path component is exactly '..'
+      preDotState === 1 && startDot === end - 1 && startDot === startPart + 1) {
+    return '';
+  }
+  return path.slice(startDot, end);
+};
+
+function filter (xs, f) {
+    if (xs.filter) return xs.filter(f);
+    var res = [];
+    for (var i = 0; i < xs.length; i++) {
+        if (f(xs[i], i, xs)) res.push(xs[i]);
+    }
+    return res;
+}
+
+// String.prototype.substr - negative index don't work in IE8
+var substr = 'ab'.substr(-1) === 'b'
+    ? function (str, start, len) { return str.substr(start, len) }
+    : function (str, start, len) {
+        if (start < 0) start = str.length + start;
+        return str.substr(start, len);
+    }
+;
+
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__("4362")))
+
+/***/ }),
+
 /***/ "df86":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -15729,19 +17191,19 @@ __webpack_require__.d(__webpack_exports__, "FormVue", function() { return /* ree
 __webpack_require__.d(__webpack_exports__, "createStore", function() { return /* reexport */ store; });
 __webpack_require__.d(__webpack_exports__, "createInputName", function() { return /* reexport */ createInputName; });
 __webpack_require__.d(__webpack_exports__, "isRequired", function() { return /* reexport */ isRequired; });
-__webpack_require__.d(__webpack_exports__, "getPlaceholder", function() { return /* reexport */ util_getPlaceholder; });
+__webpack_require__.d(__webpack_exports__, "getPlaceholder", function() { return /* reexport */ getPlaceholder; });
 __webpack_require__.d(__webpack_exports__, "createRequiredLabel", function() { return /* reexport */ createRequiredLabel; });
 __webpack_require__.d(__webpack_exports__, "createInputRules", function() { return /* reexport */ createInputRules; });
 __webpack_require__.d(__webpack_exports__, "BaseInput", function() { return /* reexport */ base_input; });
 __webpack_require__.d(__webpack_exports__, "DynamicElement", function() { return /* reexport */ dynamic_element; });
-__webpack_require__.d(__webpack_exports__, "OnTextfieldText", function() { return /* reexport */ textfield_text; });
+__webpack_require__.d(__webpack_exports__, "OnTextfieldText", function() { return /* reexport */ composed_textfield; });
 __webpack_require__.d(__webpack_exports__, "OnTextfieldEmail", function() { return /* reexport */ textfield_email; });
 __webpack_require__.d(__webpack_exports__, "OnTextfieldNumber", function() { return /* reexport */ textfield_number; });
 __webpack_require__.d(__webpack_exports__, "OnTextfieldPassword", function() { return /* reexport */ textfield_password; });
 __webpack_require__.d(__webpack_exports__, "HiddenfieldHoneypot", function() { return /* reexport */ hiddenfield_honeypot; });
 __webpack_require__.d(__webpack_exports__, "FormGridRow", function() { return /* reexport */ form_grid_row; });
-__webpack_require__.d(__webpack_exports__, "OnTextArea", function() { return /* reexport */ extended_textarea; });
-__webpack_require__.d(__webpack_exports__, "OnCheckBox", function() { return /* reexport */ checkbox_checkbox; });
+__webpack_require__.d(__webpack_exports__, "OnTextArea", function() { return /* reexport */ composed_textarea; });
+__webpack_require__.d(__webpack_exports__, "OnCheckBox", function() { return /* reexport */ extended_checkbox_checkbox; });
 __webpack_require__.d(__webpack_exports__, "OnRadioGroup", function() { return /* reexport */ radio_group; });
 __webpack_require__.d(__webpack_exports__, "OnSelect", function() { return /* reexport */ extended_select; });
 __webpack_require__.d(__webpack_exports__, "SelectWithRelatedData", function() { return /* reexport */ select_with_related_data; });
@@ -15759,7 +17221,6 @@ __webpack_require__.d(__webpack_exports__, "MultiSelect", function() { return /*
 __webpack_require__.d(__webpack_exports__, "MultiCheckbox", function() { return /* reexport */ multi_checkbox; });
 __webpack_require__.d(__webpack_exports__, "DatePicker", function() { return /* reexport */ datepicker; });
 __webpack_require__.d(__webpack_exports__, "ContentElement", function() { return /* reexport */ content_element; });
-__webpack_require__.d(__webpack_exports__, "InternalTextField", function() { return /* reexport */ textfield; });
 __webpack_require__.d(__webpack_exports__, "registerResponseInterceptor", function() { return /* reexport */ registerResponseInterceptor; });
 
 // NAMESPACE OBJECT: ./node_modules/vuetify/lib/services/goto/easing-patterns.js
@@ -15869,14 +17330,9 @@ function ownKeys(object, enumerableOnly) {
 
   if (Object.getOwnPropertySymbols) {
     var symbols = Object.getOwnPropertySymbols(object);
-
-    if (enumerableOnly) {
-      symbols = symbols.filter(function (sym) {
-        return Object.getOwnPropertyDescriptor(object, sym).enumerable;
-      });
-    }
-
-    keys.push.apply(keys, symbols);
+    enumerableOnly && (symbols = symbols.filter(function (sym) {
+      return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+    })), keys.push.apply(keys, symbols);
   }
 
   return keys;
@@ -15884,19 +17340,12 @@ function ownKeys(object, enumerableOnly) {
 
 function _objectSpread2(target) {
   for (var i = 1; i < arguments.length; i++) {
-    var source = arguments[i] != null ? arguments[i] : {};
-
-    if (i % 2) {
-      ownKeys(Object(source), true).forEach(function (key) {
-        _defineProperty(target, key, source[key]);
-      });
-    } else if (Object.getOwnPropertyDescriptors) {
-      Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
-    } else {
-      ownKeys(Object(source)).forEach(function (key) {
-        Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
-      });
-    }
+    var source = null != arguments[i] ? arguments[i] : {};
+    i % 2 ? ownKeys(Object(source), !0).forEach(function (key) {
+      _defineProperty(target, key, source[key]);
+    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) {
+      Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+    });
   }
 
   return target;
@@ -16151,7 +17600,7 @@ var es_number_constructor = __webpack_require__("a9e3");
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.join.js
 var es_array_join = __webpack_require__("a15b");
 
-// CONCATENATED MODULE: ./src/lib/substitution.js
+// CONCATENATED MODULE: ./src/lib/substitution.ts
 
 
 
@@ -16179,7 +17628,7 @@ function replaceFormatSpecifiers(text) {
   matches.forEach(function (match, nMatch) {
     var str = match[0];
     var idx = match['index'];
-    if (idx > 0 && text[idx - 1] === '%') return; // escaped
+    if (idx === undefined || idx > 0 && text[idx - 1] === '%') return; // no match or escaped match
 
     var prefix = text.substring(cursor, idx);
     if (prefix.length > 0) segments.push(prefix); // prepend prefix
@@ -16230,12 +17679,12 @@ function replacePluralizationTokens(text) {
     param[_key2 - 1] = arguments[_key2];
   }
 
-  var matches = Array.from(text.matchAll(/\(([0-9]+)\|([^()]+)\|([^()]+)\)/g));
+  var matches = Array.from(text.matchAll(/\((\d+)\|([^()]+)\|([^()]+)\)/g));
   var segments = [];
   var cursor = 0;
   matches.forEach(function (match) {
     var idx = match['index'];
-    if (idx > 0 && text[idx - 1] === '\\') return; // escaped
+    if (idx === undefined || idx > 0 && text[idx - 1] === '\\') return; // no match or escaped match
 
     var amountParamRef = Number(match[1]);
     if (amountParamRef < 0 || amountParamRef >= param.length) return; // invalid index
@@ -16340,89 +17789,109 @@ function _createForOfIteratorHelper(o, allowArrayLike) {
     }
   };
 }
-// CONCATENATED MODULE: ./src/store/response_interceptor.js
+// CONCATENATED MODULE: ./src/store/response_interceptor.ts
 
 
 
-var responseInterceptors = [];
-function registerResponseInterceptor(interceptor) {
-  responseInterceptors.push(interceptor);
+function registerResponseInterceptor(handler) {
+  return response_interceptor_ResponseInterceptor.register(handler);
 }
-function handleResponse(_x, _x2) {
-  return _handleResponse.apply(this, arguments);
-}
+var response_interceptor_ResponseInterceptor;
 
-function _handleResponse() {
-  _handleResponse = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(context, successJson) {
-    var _iterator, _step, interceptor;
+(function (ResponseInterceptor) {
+  var responseInterceptors = [];
 
-    return regeneratorRuntime.wrap(function _callee$(_context) {
-      while (1) {
-        switch (_context.prev = _context.next) {
-          case 0:
-            _iterator = _createForOfIteratorHelper(responseInterceptors);
-            _context.prev = 1;
+  function register(handler) {
+    responseInterceptors.push(handler);
+  }
 
-            _iterator.s();
+  ResponseInterceptor.register = register;
 
-          case 3:
-            if ((_step = _iterator.n()).done) {
-              _context.next = 11;
+  function handleResponse(_x, _x2) {
+    return _handleResponse.apply(this, arguments);
+  }
+
+  function _handleResponse() {
+    _handleResponse = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(context, successJson) {
+      var _iterator, _step, interceptor;
+
+      return regeneratorRuntime.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              _iterator = _createForOfIteratorHelper(responseInterceptors);
+              _context.prev = 1;
+
+              _iterator.s();
+
+            case 3:
+              if ((_step = _iterator.n()).done) {
+                _context.next = 11;
+                break;
+              }
+
+              interceptor = _step.value;
+              _context.next = 7;
+              return interceptor(context, successJson);
+
+            case 7:
+              if (!_context.sent) {
+                _context.next = 9;
+                break;
+              }
+
+              return _context.abrupt("return", true);
+
+            case 9:
+              _context.next = 3;
               break;
-            }
 
-            interceptor = _step.value;
-            _context.next = 7;
-            return interceptor(context, successJson);
-
-          case 7:
-            if (!_context.sent) {
-              _context.next = 9;
+            case 11:
+              _context.next = 16;
               break;
-            }
 
-            return _context.abrupt("return", true);
+            case 13:
+              _context.prev = 13;
+              _context.t0 = _context["catch"](1);
 
-          case 9:
-            _context.next = 3;
-            break;
+              _iterator.e(_context.t0);
 
-          case 11:
-            _context.next = 16;
-            break;
+            case 16:
+              _context.prev = 16;
 
-          case 13:
-            _context.prev = 13;
-            _context.t0 = _context["catch"](1);
+              _iterator.f();
 
-            _iterator.e(_context.t0);
+              return _context.finish(16);
 
-          case 16:
-            _context.prev = 16;
+            case 19:
+              return _context.abrupt("return", false);
 
-            _iterator.f();
-
-            return _context.finish(16);
-
-          case 19:
-            return _context.abrupt("return", false);
-
-          case 20:
-          case "end":
-            return _context.stop();
+            case 20:
+            case "end":
+              return _context.stop();
+          }
         }
-      }
-    }, _callee, null, [[1, 13, 16, 19]]);
-  }));
-  return _handleResponse.apply(this, arguments);
+      }, _callee, null, [[1, 13, 16, 19]]);
+    }));
+    return _handleResponse.apply(this, arguments);
+  }
+
+  ResponseInterceptor.handleResponse = handleResponse;
+})(response_interceptor_ResponseInterceptor || (response_interceptor_ResponseInterceptor = {}));
+
+/* harmony default export */ var response_interceptor = (response_interceptor_ResponseInterceptor);
+// CONCATENATED MODULE: ./src/lib/FormDefinition.ts
+function isFormDefinition(obj) {
+  return 'api' in obj;
 }
-// CONCATENATED MODULE: ./src/store/index.js
+// CONCATENATED MODULE: ./src/store/index.ts
 
 
 
 
 
 var _excluded = ["formData", "callbacksMap"];
+
 
 
 
@@ -16453,39 +17922,41 @@ var _excluded = ["formData", "callbacksMap"];
 function generateCallbacksList() {
   var knownCallbacks = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
   var requestedCallbacks = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
-  if (!knownCallbacks) return;
-  var callbacks = requestedCallbacks.map(function (callbackDescription) {
-    var foundCallback = knownCallbacks[callbackDescription.action];
-    if (foundCallback) return foundCallback(callbackDescription.arguments);
+  if (!knownCallbacks) return Promise.resolve();
+  var callbacks = requestedCallbacks.map(function (cb) {
+    var foundCallback = knownCallbacks[cb.action];
+
+    if (foundCallback) {
+      return foundCallback(cb.arguments);
+    } else {
+      console.warn("[Callback] Unknown callback '".concat(cb.action, "'"));
+      return Promise.resolve();
+    }
   });
   var defaultCallback = knownCallbacks['defaultCallback'];
-
-  if (defaultCallback) {
-    callbacks.push(defaultCallback());
-  }
-
-  if (!callbacks || !callbacks.length) return;
-  return Promise.all(callbacks);
+  if (defaultCallback) callbacks.push(defaultCallback(null));
+  if (!callbacks || !callbacks.length) return Promise.resolve();
+  return Promise.all(callbacks).then();
 }
 /**
  *
- * @param Vuex
- * @param {Object} initialState
- * @param {Object} initialState.formData - object containing the form configuration.
- * @param {Object} [initialState.callbacksMap={}] - object containing form submit callbacks.
+ * @param {Vuex} v The Vuex instance.
+ * @param {FormStateInit} stateInit
+ * @param {Object} stateInit.formData - object containing the form configuration.
+ * @param {Object} [stateInit.callbacksMap={}] - object containing form submit callbacks.
  * @returns {Promise<unknown[]>|*}
  */
 
 
-var store_createStore = function createStore(Vuex, initialState) {
+function createStore(v, stateInit) {
   var debug = "production" !== 'production';
-  return new Vuex.Store({
-    state: initState(initialState),
+  return new v.Store({
+    state: initState(stateInit),
     strict: debug,
     getters: {
       getCurrentStep: function getCurrentStep(state) {
         var validIndex = state.currentStep ? state.currentStep - 1 : 0;
-        return state.steps[validIndex];
+        return state.steps ? state.steps[validIndex] : undefined;
       },
       getIsSingleStep: function getIsSingleStep(state) {
         return state.lastStep === 1;
@@ -16494,10 +17965,13 @@ var store_createStore = function createStore(Vuex, initialState) {
         return state.currentStep === state.lastStep;
       },
       getCurrentSchema: function getCurrentSchema(_, getters) {
-        return getters.getCurrentStep.schema;
+        var currentStep = getters.getCurrentStep;
+        return currentStep ? currentStep.schema : undefined;
       },
       getCurrentModel: function getCurrentModel(_, getters) {
-        return getters.getCurrentStep.inputModel;
+        var _getters$getCurrentSt;
+
+        return (_getters$getCurrentSt = getters.getCurrentStep) === null || _getters$getCurrentSt === void 0 ? void 0 : _getters$getCurrentSt.inputModel;
       },
       getCurrentInputValue: function getCurrentInputValue(_, getters) {
         return function (inputKey) {
@@ -16528,7 +18002,7 @@ var store_createStore = function createStore(Vuex, initialState) {
         var schema = getters.getCurrentSchema;
         var errorCount = state.errorCount;
 
-        if (errorCount > 0 && schema && schema.api && schema.api.page && schema.api.page.errorHint) {
+        if (errorCount && errorCount > 0 && schema && schema.api && schema.api.page && schema.api.page.errorHint) {
           var replArgs = [errorCount];
           var pluralizedErrorHint = replacePluralizationTokens.apply(void 0, [schema.api.page.errorHint].concat(replArgs));
           return replaceFormatSpecifiers.apply(void 0, [pluralizedErrorHint].concat(replArgs));
@@ -16537,31 +18011,32 @@ var store_createStore = function createStore(Vuex, initialState) {
         return null;
       },
       getPageSummaryText: function getPageSummaryText(_state, getters) {
-        var _schema$api, _schema$api$page;
-
         var schema = getters.getCurrentSchema;
-        var text = schema === null || schema === void 0 ? void 0 : (_schema$api = schema.api) === null || _schema$api === void 0 ? void 0 : (_schema$api$page = _schema$api.page) === null || _schema$api$page === void 0 ? void 0 : _schema$api$page.pageSummaryText;
-        return text ? replaceFormatSpecifiers(text, schema.api.page.current, schema.api.page.pages) : null;
+        var text = schema === null || schema === void 0 ? void 0 : schema.api.page.pageSummaryText;
+        return text && schema ? replaceFormatSpecifiers(text, schema.api.page.current, schema.api.page.pages) : null;
       },
       getFormErrors: function getFormErrors(state) {
-        if (!Array.isArray(state.formErrors)) return [state.formErrors];
-        return state.formErrors || [];
+        var formErrors = state.formErrors;
+        if (typeof formErrors === 'string') return [formErrors];else return formErrors || [];
       }
     },
     mutations: {
       updateInputValue: function updateInputValue(state, payload) {
         var validIndex = state.currentStep ? state.currentStep - 1 : 0;
+        if (!state.steps) return;
         var currentStep = state.steps[validIndex];
         if (!currentStep) return;
         var currentModel = currentStep.inputModel[payload.key] ? currentStep.inputModel[payload.key] : {
           id: payload.key,
+          value: '',
+          error: '',
           hasError: false,
           "default": true
         };
         currentModel.value = payload.value;
         currentModel.error = '';
 
-        if (currentModel.hasError && state.errorCount > 0) {
+        if (currentModel.hasError && state.errorCount && state.errorCount > 0) {
           state.errorCount = state.errorCount - 1;
           currentModel.hasError = false;
         }
@@ -16592,8 +18067,12 @@ var store_createStore = function createStore(Vuex, initialState) {
         state.lastStep = formConfig.api.page.pages || 1;
         state.formResponse = null;
         var updatedSteps = state.steps;
-        updatedSteps[formConfigStep - 1] = createStepFromFormConfig(formConfig);
-        state.steps = updatedSteps;
+
+        if (updatedSteps) {
+          updatedSteps[formConfigStep - 1] = createStepFromFormConfig(formConfig);
+          state.steps = updatedSteps;
+        }
+
         state.loading = false;
       },
       setFormErrors: function setFormErrors(state, errorMessages) {
@@ -16605,6 +18084,7 @@ var store_createStore = function createStore(Vuex, initialState) {
       setModelErrors: function setModelErrors(state, model) {
         if (!model) return;
         var validIndex = state.currentStep ? state.currentStep - 1 : 0;
+        if (!state.steps) return;
         var currentStep = state.steps[validIndex];
         if (!currentStep) return;
         var currentModel = currentStep.inputModel;
@@ -16623,6 +18103,7 @@ var store_createStore = function createStore(Vuex, initialState) {
       },
       calcFormErrorCount: function calcFormErrorCount(state, vuetifyFormComponent) {
         var validIndex = state.currentStep ? state.currentStep - 1 : 0;
+        if (!state.steps) return;
         var currentStep = state.steps[validIndex];
         if (!currentStep) return;
         var formModel = currentStep.inputModel;
@@ -16632,7 +18113,8 @@ var store_createStore = function createStore(Vuex, initialState) {
           formModel[inputKey].hasError = false;
         }
 
-        var inputs = vuetifyFormComponent.inputs;
+        var inputs = vuetifyFormComponent.inputs; // actually it's Component[] TODO fix this later
+
         var errorCount = 0;
         inputs.forEach(function (element) {
           if (!element.valid) {
@@ -16661,6 +18143,7 @@ var store_createStore = function createStore(Vuex, initialState) {
       },
       resetFormErrorCount: function resetFormErrorCount(state) {
         var validIndex = state.currentStep ? state.currentStep - 1 : 0;
+        if (!state.steps) return;
         var currentStep = state.steps[validIndex];
         if (!currentStep) return;
         var formModel = currentStep.inputModel;
@@ -16680,7 +18163,7 @@ var store_createStore = function createStore(Vuex, initialState) {
         context.commit('resetFormErrorCount');
 
         if (vuetifyForm.$el && isFormValid) {
-          var _context$getters$getC;
+          var _currentSchema$elemen, _context$getters$getC;
 
           // check if form element exists and if it is valid
           if (context.state.onSubmit) {
@@ -16689,29 +18172,26 @@ var store_createStore = function createStore(Vuex, initialState) {
 
           context.commit('setLoading', true);
           context.commit('setFormErrors', []);
-          var formId = context.state.formElementId;
+          var formId = context.state.id;
           var formData = new FormData(vuetifyForm.$el); // parse formdata from underlying form element
           // quickfix - radio buttons SOMETIMES not getting put into form data?!
 
-          var modelSupplier = context.getters.getCurrentModel;
+          var model = context.getters.getCurrentModel;
+          model && Object.entries(model).forEach(function (_ref) {
+            var _ref2 = _slicedToArray(_ref, 2),
+                key = _ref2[0],
+                value = _ref2[1];
 
-          if (modelSupplier) {
-            Object.entries(modelSupplier).forEach(function (_ref) {
-              var _ref2 = _slicedToArray(_ref, 2),
-                  key = _ref2[0],
-                  value = _ref2[1];
+            var mappedKey = "tx_form_formframework[".concat(formId, "][").concat(key, "]");
+            if (value.hasError || key.startsWith('__') || value.value.length <= 0 || formData.has(mappedKey)) return;
+            formData.append(mappedKey, value.value);
+          }); // append all hidden fields to form data
 
-              var mappedKey = "tx_form_formframework[".concat(formId, "][").concat(key, "]");
-              if (!!value.hasError || key.startsWith('__') || value.value.length <= 0 || formData.has(mappedKey)) return;
-              formData.append(mappedKey, value.value);
-            });
-          } // append all hidden fields to form data
-
-
-          var hiddenFields = (_context$getters$getC = context.getters.getCurrentSchema) === null || _context$getters$getC === void 0 ? void 0 : _context$getters$getC.elements.filter(function (element) {
+          var currentSchema = context.getters.getCurrentSchema;
+          var hiddenFields = currentSchema === null || currentSchema === void 0 ? void 0 : (_currentSchema$elemen = currentSchema.elements) === null || _currentSchema$elemen === void 0 ? void 0 : _currentSchema$elemen.filter(function (element) {
             return element.type === 'Hidden';
           });
-          hiddenFields.forEach(function (field) {
+          hiddenFields && hiddenFields.forEach(function (field) {
             if (field.identifier === '__trustedProperties') {
               // trusted properties has a different naming convention for whatever reason, maybe fix that in the backend later...
               formData.append('tx_form_formframework[__trustedProperties]', field.defaultValue);
@@ -16719,7 +18199,7 @@ var store_createStore = function createStore(Vuex, initialState) {
               formData.append(field.name, field.defaultValue);
             }
           });
-          var currentAction = context.getters.getCurrentStep.formAction;
+          var currentAction = (_context$getters$getC = context.getters.getCurrentStep) === null || _context$getters$getC === void 0 ? void 0 : _context$getters$getC.formAction;
           if (!currentAction) return;
           fetch(currentAction, {
             method: "POST",
@@ -16732,7 +18212,6 @@ var store_createStore = function createStore(Vuex, initialState) {
           })["catch"](function (error) {
             var _context$getters$getC2, _context$getters$getC3;
 
-            // does not catch handleSuccessResponse errors
             var labels = (_context$getters$getC2 = context.getters.getCurrentSchema) === null || _context$getters$getC2 === void 0 ? void 0 : (_context$getters$getC3 = _context$getters$getC2.global) === null || _context$getters$getC3 === void 0 ? void 0 : _context$getters$getC3.labels;
             context.commit('setFormResponse', {
               title: (labels === null || labels === void 0 ? void 0 : labels.error) || 'Ein Fehler ist aufgetreten, bitte versuchen Sie es später erneut',
@@ -16762,7 +18241,7 @@ var store_createStore = function createStore(Vuex, initialState) {
 
                 case 2:
                   _context.next = 4;
-                  return handleResponse(context, successJson);
+                  return response_interceptor.handleResponse(context, successJson);
 
                 case 4:
                   if (!_context.sent) {
@@ -16845,14 +18324,13 @@ var store_createStore = function createStore(Vuex, initialState) {
       },
       handleResponseCallbacks: function handleResponseCallbacks(context, successJson) {
         return _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
-          var _successJson$api, requestedCallbacks, callbacksList;
-
+          var requestedCallbacks, callbacksList;
           return regeneratorRuntime.wrap(function _callee2$(_context2) {
             while (1) {
               switch (_context2.prev = _context2.next) {
                 case 0:
                   _context2.prev = 0;
-                  requestedCallbacks = (successJson === null || successJson === void 0 ? void 0 : (_successJson$api = successJson.api) === null || _successJson$api === void 0 ? void 0 : _successJson$api.callbacks) || (successJson === null || successJson === void 0 ? void 0 : successJson.callbacks);
+                  requestedCallbacks = isFormDefinition(successJson) ? successJson.api.callbacks : successJson.callbacks;
 
                   if (!requestedCallbacks) {
                     _context2.next = 7;
@@ -16893,7 +18371,7 @@ var store_createStore = function createStore(Vuex, initialState) {
       }
     }
   });
-};
+}
 /**
  *
  * @param formData
@@ -16911,8 +18389,7 @@ function initState(_ref3) {
 
   var formConfig = formData.configuration;
   if (!formConfig) return {};
-
-  var state = _objectSpread2({
+  return _objectSpread2({
     id: formConfig.id,
     formElementId: formConfig.identifier || formConfig.id,
     currentStep: formConfig.api.page.current || 1,
@@ -16920,7 +18397,6 @@ function initState(_ref3) {
     formDisabled: false,
     errorCount: 0,
     nextStep: formConfig.api.page.nextPage || 1,
-    previousStep: formConfig.api.page.previousPage || 1,
     lastStep: formConfig.api.page.pages || 1,
     formResponse: null,
     formFinished: false,
@@ -16928,16 +18404,12 @@ function initState(_ref3) {
     steps: [createStepFromFormConfig(formConfig)],
     callbacksMap: Object.freeze(callbacksMap)
   }, rest);
-
-  return state;
 }
 
 function createStepFromFormConfig(formConfig) {
   return {
     schema: Object.freeze(formConfig),
-    // the original shape of the form with all the nesting for reconstruction
-    inputModel: createModelFromFormConfig(inputArrayFromSchema(formConfig.elements)),
-    // actually reactive form state
+    inputModel: createModelFromFormConfig(flattenElements(formConfig.elements)),
     formStepError: null,
     formId: formConfig.id,
     formElementId: formConfig.identifier || formConfig.id,
@@ -16961,7 +18433,7 @@ function createModelFromFormConfig(elements) {
 } // recursive function that generates a flat array of only inputs from a nested form schema
 
 
-function inputArrayFromSchema(elements) {
+function flattenElements(elements) {
   var inputs = [];
   elements.forEach(function (element) {
     if (element.elements && element.elements.length) {
@@ -16970,35 +18442,37 @@ function inputArrayFromSchema(elements) {
         inputs.push(element);
       }
 
-      inputs.push.apply(inputs, _toConsumableArray(inputArrayFromSchema(element.elements)));
-    } else inputs.push(element);
+      inputs.push.apply(inputs, _toConsumableArray(flattenElements(element.elements)));
+    } else {
+      inputs.push(element);
+    }
   });
   return inputs;
 }
 
-/* harmony default export */ var store = (store_createStore);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"222cafe2-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/FormVue.vue?vue&type=template&id=55e09ee9&
-var FormVuevue_type_template_id_55e09ee9_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('v-app',{class:("ondigo-formvue-app formvue-" + (_vm.formSchema.configuration.identifier)),attrs:{"id":("formvue-" + (_vm.formSchema.configuration.id))}},[_c('div',{class:("ondigo-formvue " + (_vm.formFinished? 'finished' : ''))},[(!_vm.formFinished)?_c('div',{staticClass:"ondigo-form-wrapper"},[(_vm.isSingleStepForm)?[_c(_vm.singleStepForm,{tag:"component"},[(_vm.showErrorResponseInsideForm)?_c('template',{slot:"append-inner"},[_c('div',{ref:"formResponseElement",staticClass:"response-wrapper"},[(this.mixedComponents['FormResponse'])?_c(this.mixedComponents['FormResponse'],{tag:"component",attrs:{"formName":_vm.formSchema.configuration.id,"response":_vm.formResponse}}):(_vm.formResponse)?_c('div',{domProps:{"innerHTML":_vm._s(_vm.formResponse)}}):_vm._e()],1)]):_vm._e()],2)]:[_c(_vm.multiStepForm,{tag:"component"})]],2):_vm._e(),(!_vm.showErrorResponseInsideForm || _vm.formFinished)?_c('div',{ref:"formResponseElement",staticClass:"response-wrapper"},[(this.mixedComponents['FormResponse'])?_c(this.mixedComponents['FormResponse'],{tag:"component",attrs:{"formName":_vm.formSchema.configuration.id,"response":_vm.formResponse}}):(_vm.formResponse)?_c('div',{domProps:{"innerHTML":_vm._s(_vm.formResponse)}}):_vm._e()],1):_vm._e()])])}
+/* harmony default export */ var store = (createStore);
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1ca6af6a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/FormVue.vue?vue&type=template&id=bb043fd2&
+var FormVuevue_type_template_id_bb043fd2_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('v-app',{class:("ondigo-formvue-app formvue-" + (_vm.formSchema.configuration.identifier)),attrs:{"id":("formvue-" + (_vm.formSchema.configuration.id))}},[_c('div',{class:("ondigo-formvue " + (_vm.formFinished? 'finished' : ''))},[(!_vm.formFinished)?_c('div',{staticClass:"ondigo-form-wrapper"},[(_vm.isSingleStepForm)?[_c(_vm.singleStepForm,{tag:"component"},[(_vm.showErrorResponseInsideForm)?_c('template',{slot:"append-inner"},[_c('div',{ref:"formResponseElement",staticClass:"response-wrapper"},[(this.mixedComponents['FormResponse'])?_c(this.mixedComponents['FormResponse'],{tag:"component",attrs:{"formName":_vm.formSchema.configuration.id,"response":_vm.formResponse}}):(_vm.formResponse)?_c('div',{domProps:{"innerHTML":_vm._s(_vm.formResponse)}}):_vm._e()],1)]):_vm._e()],2)]:[_c(_vm.multiStepForm,{tag:"component"})]],2):_vm._e(),(!_vm.showErrorResponseInsideForm || _vm.formFinished)?_c('div',{ref:"formResponseElement",staticClass:"response-wrapper"},[(this.mixedComponents['FormResponse'])?_c(this.mixedComponents['FormResponse'],{tag:"component",attrs:{"formName":_vm.formSchema.configuration.id,"response":_vm.formResponse}}):(_vm.formResponse)?_c('div',{domProps:{"innerHTML":_vm._s(_vm.formResponse)}}):_vm._e()],1):_vm._e()])])}
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/FormVue.vue?vue&type=template&id=55e09ee9&
+// CONCATENATED MODULE: ./src/FormVue.vue?vue&type=template&id=bb043fd2&
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"222cafe2-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/multi_step_form.vue?vue&type=template&id=66587b66&
-var multi_step_formvue_type_template_id_66587b66_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"ondigo-multistep-form-wrapper"},[(_vm.pageSummaryLabel)?_c('h2',{staticClass:"mb-4 ondigo-form-header"},[_vm._v(" "+_vm._s(_vm.pageSummaryLabel)+" ")]):_vm._e(),_c('v-form',{ref:"form",class:("ondigo-multi-step-form ondigo-form form-" + (_vm.formConfig.identifier)),attrs:{"data-form-identifier":_vm.formConfig.id,"loading":_vm.loading,"disabled":_vm.disabled},on:{"submit":function($event){$event.preventDefault();return _vm.handleFormSubmit.apply(null, arguments)}}},[_vm._l((_vm.formConfig.elements),function(element){return _c('dynamic-element',{key:element.identifier,attrs:{"formName":_vm.formConfig.id,"element":element}})}),_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.errorCountLabel),expression:"errorCountLabel"}],staticClass:"error-summary input-errors"},[_c('a',{attrs:{"target":"#"},on:{"click":function($event){$event.preventDefault();return _vm.scrollToFirstError.apply(null, arguments)}}},[_vm._v(_vm._s(_vm.errorCountLabel))])]),_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.formErrors && _vm.formErrors.length),expression:"formErrors && formErrors.length"}],staticClass:"error-summary form-errors"},_vm._l((_vm.formErrors),function(error){return _c('p',{staticClass:"error-summary-item"},[_vm._v(_vm._s(error))])}),0),_c('div',{staticClass:"d-flex justify-space-between mt-4"},[(_vm.currentStep > 1)?_c('v-btn',{staticClass:"ondigo-btn ondigo-btn-back",attrs:{"type":"button","color":"secondary","disabled":_vm.disabled},on:{"click":_vm.loadPreviousStep}},[_vm._v(" "+_vm._s(_vm.previousButtonLabel)+" ")]):_vm._e(),(_vm.isLastStep && _vm.componentsMap['SubmitButton'])?_c(_vm.componentsMap['SubmitButton'],{tag:"component",attrs:{"loading":_vm.loading,"btn-label":_vm.nextButtonLabel,"alignment":"","disabled":_vm.disabled,"formName":_vm.formConfig.id}}):_c('v-btn',{staticClass:"ondigo-btn ondigo-btn-next",attrs:{"type":"submit","loading":_vm.loading,"color":"primary","disabled":_vm.disabled}},[_vm._v(" "+_vm._s(_vm.nextButtonLabel)+" ")])],1)],2)],1)}
-var multi_step_formvue_type_template_id_66587b66_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1ca6af6a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/multi_step_form.vue?vue&type=template&id=379882cc&
+var multi_step_formvue_type_template_id_379882cc_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"ondigo-multistep-form-wrapper"},[(_vm.pageSummaryLabel)?_c('h2',{staticClass:"mb-4 ondigo-form-header"},[_vm._v(" "+_vm._s(_vm.pageSummaryLabel)+" ")]):_vm._e(),_c('v-form',{ref:"form",class:("ondigo-multi-step-form ondigo-form form-" + (_vm.formConfig.identifier)),attrs:{"data-form-identifier":_vm.formConfig.id,"loading":_vm.loading,"disabled":_vm.disabled},on:{"submit":function($event){$event.preventDefault();return _vm.handleFormSubmit.apply(null, arguments)}}},[_vm._l((_vm.formConfig.elements),function(element){return _c('dynamic-element',{key:element.identifier,attrs:{"formName":_vm.formConfig.id,"element":element}})}),_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.errorCountLabel),expression:"errorCountLabel"}],staticClass:"error-summary input-errors"},[_c('a',{attrs:{"target":"#"},on:{"click":function($event){$event.preventDefault();return _vm.scrollToFirstError.apply(null, arguments)}}},[_vm._v(_vm._s(_vm.errorCountLabel))])]),_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.formErrors && _vm.formErrors.length),expression:"formErrors && formErrors.length"}],staticClass:"error-summary form-errors"},_vm._l((_vm.formErrors),function(error){return _c('p',{staticClass:"error-summary-item"},[_vm._v(_vm._s(error))])}),0),_c('div',{staticClass:"d-flex justify-space-between mt-4"},[(_vm.currentStep > 1)?_c('v-btn',{staticClass:"ondigo-btn ondigo-btn-back",attrs:{"type":"button","color":"secondary","disabled":_vm.disabled},on:{"click":_vm.loadPreviousStep}},[_vm._v(" "+_vm._s(_vm.previousButtonLabel)+" ")]):_vm._e(),(_vm.isLastStep && _vm.componentsMap['SubmitButton'])?_c(_vm.componentsMap['SubmitButton'],{tag:"component",attrs:{"loading":_vm.loading,"btn-label":_vm.nextButtonLabel,"alignment":"","disabled":_vm.disabled,"formName":_vm.formConfig.id}}):_c('v-btn',{staticClass:"ondigo-btn ondigo-btn-next",attrs:{"type":"submit","loading":_vm.loading,"color":"primary","disabled":_vm.disabled}},[_vm._v(" "+_vm._s(_vm.nextButtonLabel)+" ")])],1)],2)],1)}
+var multi_step_formvue_type_template_id_379882cc_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/multi_step_form.vue?vue&type=template&id=66587b66&
+// CONCATENATED MODULE: ./src/components/multi_step_form.vue?vue&type=template&id=379882cc&
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"222cafe2-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/dynamic_element.vue?vue&type=template&id=f5e5e3e8&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1ca6af6a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/dynamic_element.vue?vue&type=template&id=f5e5e3e8&
 var dynamic_elementvue_type_template_id_f5e5e3e8_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.componentsMap[_vm.element.type])?_c(_vm.componentsMap[_vm.element.type],_vm._b({tag:"component",attrs:{"formName":_vm.formName}},'component',Object.assign({}, _vm.filteredElement, _vm.fieldPropsOverwrite),false)):(_vm.element.type !== 'Hidden')?_c('fallback-field',{attrs:{"type":_vm.element.type}}):_vm._e()}
 var dynamic_elementvue_type_template_id_f5e5e3e8_staticRenderFns = []
 
 
 // CONCATENATED MODULE: ./src/components/dynamic_element.vue?vue&type=template&id=f5e5e3e8&
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"222cafe2-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/fallback_field.vue?vue&type=template&id=35ff4351&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1ca6af6a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/fallback_field.vue?vue&type=template&id=35ff4351&
 var fallback_fieldvue_type_template_id_35ff4351_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"fallback-field"},[_vm._v(" could not find component for the key "+_vm._s(_vm.type)+" ")])}
 var fallback_fieldvue_type_template_id_35ff4351_staticRenderFns = []
 
@@ -17358,17 +18832,11 @@ var installComponents_default = /*#__PURE__*/__webpack_require__.n(installCompon
 function _typeof(obj) {
   "@babel/helpers - typeof";
 
-  if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-    _typeof = function _typeof(obj) {
-      return typeof obj;
-    };
-  } else {
-    _typeof = function _typeof(obj) {
-      return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
-    };
-  }
-
-  return _typeof(obj);
+  return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {
+    return typeof obj;
+  } : function (obj) {
+    return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+  }, _typeof(obj);
 }
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.fixed.js
 var es_string_fixed = __webpack_require__("c7cd");
@@ -17470,6 +18938,9 @@ function _defineProperties(target, props) {
 function _createClass(Constructor, protoProps, staticProps) {
   if (protoProps) _defineProperties(Constructor.prototype, protoProps);
   if (staticProps) _defineProperties(Constructor, staticProps);
+  Object.defineProperty(Constructor, "prototype", {
+    writable: false
+  });
   return Constructor;
 }
 // CONCATENATED MODULE: ./node_modules/vuetify/lib/install.js
@@ -17563,6 +19034,7 @@ function _setPrototypeOf(o, p) {
 // CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/inherits.js
 
 
+
 function _inherits(subClass, superClass) {
   if (typeof superClass !== "function" && superClass !== null) {
     throw new TypeError("Super expression must either be null or a function");
@@ -17574,6 +19046,9 @@ function _inherits(subClass, superClass) {
       writable: true,
       configurable: true
     }
+  });
+  Object.defineProperty(subClass, "prototype", {
+    writable: false
   });
   if (superClass) _setPrototypeOf(subClass, superClass);
 }
@@ -17606,10 +19081,6 @@ function _isNativeReflectConstruct() {
     return false;
   }
 }
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/typeof.js
-var helpers_typeof = __webpack_require__("7037");
-var typeof_default = /*#__PURE__*/__webpack_require__.n(helpers_typeof);
-
 // CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/assertThisInitialized.js
 function _assertThisInitialized(self) {
   if (self === void 0) {
@@ -17622,7 +19093,7 @@ function _assertThisInitialized(self) {
 
 
 function _possibleConstructorReturn(self, call) {
-  if (call && (typeof_default()(call) === "object" || typeof call === "function")) {
+  if (call && (_typeof(call) === "object" || typeof call === "function")) {
     return call;
   } else if (call !== void 0) {
     throw new TypeError("Derived constructors may only return object or undefined");
@@ -21730,8 +23201,8 @@ var baseMixins = mixins(components_VSheet, routable, positionable, sizeable, fac
 
 var multi_step_form_component = normalizeComponent(
   components_multi_step_formvue_type_script_lang_js_,
-  multi_step_formvue_type_template_id_66587b66_render,
-  multi_step_formvue_type_template_id_66587b66_staticRenderFns,
+  multi_step_formvue_type_template_id_379882cc_render,
+  multi_step_formvue_type_template_id_379882cc_staticRenderFns,
   false,
   null,
   null,
@@ -21747,7 +23218,7 @@ var multi_step_form_component = normalizeComponent(
 
 installComponents_default()(multi_step_form_component, {VBtn: VBtn_VBtn,VForm: VForm})
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"222cafe2-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/single_step_form.vue?vue&type=template&id=7e885213&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1ca6af6a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/single_step_form.vue?vue&type=template&id=7e885213&
 var single_step_formvue_type_template_id_7e885213_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('v-form',{ref:"form",class:("ondigo-form form-" + (_vm.formConfig.identifier)),attrs:{"data-form-identifier":_vm.formConfig.id,"loading":_vm.loading,"disabled":_vm.disabled},on:{"submit":function($event){$event.preventDefault();return _vm.handleFormSubmit.apply(null, arguments)}}},[_vm._t("prepend-inner"),_vm._l((_vm.formConfig.elements),function(element){return _c('dynamic-element',{key:element.identifier,attrs:{"formName":_vm.formConfig.id,"element":element}})}),_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.errorCountLabel),expression:"errorCountLabel"}],staticClass:"error-summary input-errors"},[_c('a',{attrs:{"target":"#"},on:{"click":function($event){$event.preventDefault();return _vm.scrollToFirstError.apply(null, arguments)}}},[_vm._v(_vm._s(_vm.errorCountLabel))])]),_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.formErrors && _vm.formErrors.length),expression:"formErrors && formErrors.length"}],staticClass:"error-summary form-errors"},_vm._l((_vm.formErrors),function(error){return _c('p',{staticClass:"error-summary-item"},[_vm._v(_vm._s(error))])}),0),_vm._t("append-inner"),(_vm.componentsMap['SubmitButton'])?_c(_vm.componentsMap['SubmitButton'],{tag:"component",attrs:{"loading":_vm.loading,"btn-label":_vm.nextButtonLabel,"alignment":_vm.nextButtonAlignment,"disabled":_vm.disabled,"formName":_vm.formConfig.id}}):_c('v-btn',{staticClass:"ondigo-btn",attrs:{"type":"submit","loading":_vm.loading,"color":"primary","disabled":_vm.disabled}},[_vm._v(" "+_vm._s(_vm.nextButtonLabel)+" ")])],2)}
 var single_step_formvue_type_template_id_7e885213_staticRenderFns = []
 
@@ -21884,7 +23355,7 @@ var single_step_form_component = normalizeComponent(
 
 installComponents_default()(single_step_form_component, {VBtn: VBtn_VBtn,VForm: VForm})
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"222cafe2-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/misc/submit_button.vue?vue&type=template&id=a890c168&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1ca6af6a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/misc/submit_button.vue?vue&type=template&id=a890c168&
 var submit_buttonvue_type_template_id_a890c168_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('v-btn',_vm._b({class:("ondigo-btn-submit ondigo-btn " + _vm.alignment),attrs:{"type":"submit","loading":_vm.loading,"color":"primary"}},'v-btn',Object.assign({}, _vm.$attrs),false),[_vm._v(" "+_vm._s(_vm.btnLabel)+" ")])}
 var submit_buttonvue_type_template_id_a890c168_staticRenderFns = []
 
@@ -21949,7 +23420,7 @@ var submit_button_component = normalizeComponent(
 
 installComponents_default()(submit_button_component, {VBtn: VBtn_VBtn})
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"222cafe2-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/misc/form_response/form_response.vue?vue&type=template&id=09acf2d7&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1ca6af6a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/misc/form_response/form_response.vue?vue&type=template&id=09acf2d7&
 var form_responsevue_type_template_id_09acf2d7_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.isResponseObject && !_vm.isHtml)?_c('div',{class:("ondigo-response" + (_vm.isError ? ' ondigo-response-error error--text' : ''))},[(_vm.title)?_c('h3',[_vm._v(_vm._s(_vm.title))]):_vm._e(),(_vm.text)?_c('p',[_vm._v(_vm._s(_vm.text))]):_vm._e()]):_c('div',{class:("ondigo-response" + (_vm.isError ? ' ondigo-response-error error--text' : '')),domProps:{"innerHTML":_vm._s(_vm.isResponseObject ? _vm.response.html : _vm.response)}})}
 var form_responsevue_type_template_id_09acf2d7_staticRenderFns = []
 
@@ -22269,7 +23740,7 @@ var VApp = __webpack_require__("df86");
 
 var FormVue_component = normalizeComponent(
   src_FormVuevue_type_script_lang_js_,
-  FormVuevue_type_template_id_55e09ee9_render,
+  FormVuevue_type_template_id_bb043fd2_render,
   staticRenderFns,
   false,
   null,
@@ -22285,10 +23756,960 @@ var FormVue_component = normalizeComponent(
 
 installComponents_default()(FormVue_component, {VApp: VApp_VApp})
 
+// CONCATENATED MODULE: ./node_modules/tslib/tslib.es6.js
+/*! *****************************************************************************
+Copyright (c) Microsoft Corporation.
+
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+PERFORMANCE OF THIS SOFTWARE.
+***************************************************************************** */
+/* global Reflect, Promise */
+
+var extendStatics = function(d, b) {
+    extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+    return extendStatics(d, b);
+};
+
+function __extends(d, b) {
+    if (typeof b !== "function" && b !== null)
+        throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+    extendStatics(d, b);
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+}
+
+var __assign = function() {
+    __assign = Object.assign || function __assign(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+        }
+        return t;
+    }
+    return __assign.apply(this, arguments);
+}
+
+function __rest(s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
+    return t;
+}
+
+function __decorate(decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+}
+
+function __param(paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+}
+
+function __metadata(metadataKey, metadataValue) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(metadataKey, metadataValue);
+}
+
+function __awaiter(thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+}
+
+function __generator(thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+}
+
+var __createBinding = Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+});
+
+function __exportStar(m, o) {
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(o, p)) __createBinding(o, m, p);
+}
+
+function __values(o) {
+    var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
+    if (m) return m.call(o);
+    if (o && typeof o.length === "number") return {
+        next: function () {
+            if (o && i >= o.length) o = void 0;
+            return { value: o && o[i++], done: !o };
+        }
+    };
+    throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
+}
+
+function __read(o, n) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator];
+    if (!m) return o;
+    var i = m.call(o), r, ar = [], e;
+    try {
+        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+    }
+    catch (error) { e = { error: error }; }
+    finally {
+        try {
+            if (r && !r.done && (m = i["return"])) m.call(i);
+        }
+        finally { if (e) throw e.error; }
+    }
+    return ar;
+}
+
+/** @deprecated */
+function __spread() {
+    for (var ar = [], i = 0; i < arguments.length; i++)
+        ar = ar.concat(__read(arguments[i]));
+    return ar;
+}
+
+/** @deprecated */
+function __spreadArrays() {
+    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+    for (var r = Array(s), k = 0, i = 0; i < il; i++)
+        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
+            r[k] = a[j];
+    return r;
+}
+
+function __spreadArray(to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
+}
+
+function __await(v) {
+    return this instanceof __await ? (this.v = v, this) : new __await(v);
+}
+
+function __asyncGenerator(thisArg, _arguments, generator) {
+    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
+    var g = generator.apply(thisArg, _arguments || []), i, q = [];
+    return i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i;
+    function verb(n) { if (g[n]) i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; }
+    function resume(n, v) { try { step(g[n](v)); } catch (e) { settle(q[0][3], e); } }
+    function step(r) { r.value instanceof __await ? Promise.resolve(r.value.v).then(fulfill, reject) : settle(q[0][2], r); }
+    function fulfill(value) { resume("next", value); }
+    function reject(value) { resume("throw", value); }
+    function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
+}
+
+function __asyncDelegator(o) {
+    var i, p;
+    return i = {}, verb("next"), verb("throw", function (e) { throw e; }), verb("return"), i[Symbol.iterator] = function () { return this; }, i;
+    function verb(n, f) { i[n] = o[n] ? function (v) { return (p = !p) ? { value: __await(o[n](v)), done: n === "return" } : f ? f(v) : v; } : f; }
+}
+
+function __asyncValues(o) {
+    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
+    var m = o[Symbol.asyncIterator], i;
+    return m ? m.call(o) : (o = typeof __values === "function" ? __values(o) : o[Symbol.iterator](), i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i);
+    function verb(n) { i[n] = o[n] && function (v) { return new Promise(function (resolve, reject) { v = o[n](v), settle(resolve, reject, v.done, v.value); }); }; }
+    function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
+}
+
+function __makeTemplateObject(cooked, raw) {
+    if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
+    return cooked;
+};
+
+var __setModuleDefault = Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+};
+
+function __importStar(mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+}
+
+function __importDefault(mod) {
+    return (mod && mod.__esModule) ? mod : { default: mod };
+}
+
+function __classPrivateFieldGet(receiver, state, kind, f) {
+    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");
+    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
+    return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
+}
+
+function __classPrivateFieldSet(receiver, state, value, kind, f) {
+    if (kind === "m") throw new TypeError("Private method is not writable");
+    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a setter");
+    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot write private member to an object whose class did not declare it");
+    return (kind === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value)), value;
+}
+
+// EXTERNAL MODULE: ./node_modules/reflect-metadata/Reflect.js
+var reflect_metadata_Reflect = __webpack_require__("98db");
+
+// CONCATENATED MODULE: ./node_modules/vue-class-component/dist/vue-class-component.esm.js
+/**
+  * vue-class-component v7.2.6
+  * (c) 2015-present Evan You
+  * @license MIT
+  */
+
+
+function vue_class_component_esm_typeof(obj) {
+  if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
+    vue_class_component_esm_typeof = function (obj) {
+      return typeof obj;
+    };
+  } else {
+    vue_class_component_esm_typeof = function (obj) {
+      return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+    };
+  }
+
+  return vue_class_component_esm_typeof(obj);
+}
+
+function vue_class_component_esm_defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+function vue_class_component_esm_toConsumableArray(arr) {
+  return vue_class_component_esm_arrayWithoutHoles(arr) || vue_class_component_esm_iterableToArray(arr) || vue_class_component_esm_nonIterableSpread();
+}
+
+function vue_class_component_esm_arrayWithoutHoles(arr) {
+  if (Array.isArray(arr)) {
+    for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];
+
+    return arr2;
+  }
+}
+
+function vue_class_component_esm_iterableToArray(iter) {
+  if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter);
+}
+
+function vue_class_component_esm_nonIterableSpread() {
+  throw new TypeError("Invalid attempt to spread non-iterable instance");
+}
+
+// The rational behind the verbose Reflect-feature check below is the fact that there are polyfills
+// which add an implementation for Reflect.defineMetadata but not for Reflect.getOwnMetadataKeys.
+// Without this check consumers will encounter hard to track down runtime errors.
+function reflectionIsSupported() {
+  return typeof Reflect !== 'undefined' && Reflect.defineMetadata && Reflect.getOwnMetadataKeys;
+}
+function copyReflectionMetadata(to, from) {
+  forwardMetadata(to, from);
+  Object.getOwnPropertyNames(from.prototype).forEach(function (key) {
+    forwardMetadata(to.prototype, from.prototype, key);
+  });
+  Object.getOwnPropertyNames(from).forEach(function (key) {
+    forwardMetadata(to, from, key);
+  });
+}
+
+function forwardMetadata(to, from, propertyKey) {
+  var metaKeys = propertyKey ? Reflect.getOwnMetadataKeys(from, propertyKey) : Reflect.getOwnMetadataKeys(from);
+  metaKeys.forEach(function (metaKey) {
+    var metadata = propertyKey ? Reflect.getOwnMetadata(metaKey, from, propertyKey) : Reflect.getOwnMetadata(metaKey, from);
+
+    if (propertyKey) {
+      Reflect.defineMetadata(metaKey, metadata, to, propertyKey);
+    } else {
+      Reflect.defineMetadata(metaKey, metadata, to);
+    }
+  });
+}
+
+var fakeArray = {
+  __proto__: []
+};
+var hasProto = fakeArray instanceof Array;
+function createDecorator(factory) {
+  return function (target, key, index) {
+    var Ctor = typeof target === 'function' ? target : target.constructor;
+
+    if (!Ctor.__decorators__) {
+      Ctor.__decorators__ = [];
+    }
+
+    if (typeof index !== 'number') {
+      index = undefined;
+    }
+
+    Ctor.__decorators__.push(function (options) {
+      return factory(options, key, index);
+    });
+  };
+}
+function vue_class_component_esm_mixins() {
+  for (var _len = arguments.length, Ctors = new Array(_len), _key = 0; _key < _len; _key++) {
+    Ctors[_key] = arguments[_key];
+  }
+
+  return external_commonjs_vue_commonjs2_vue_root_Vue_default.a.extend({
+    mixins: Ctors
+  });
+}
+function isPrimitive(value) {
+  var type = vue_class_component_esm_typeof(value);
+
+  return value == null || type !== 'object' && type !== 'function';
+}
+function warn(message) {
+  if (typeof console !== 'undefined') {
+    console.warn('[vue-class-component] ' + message);
+  }
+}
+
+function collectDataFromConstructor(vm, Component) {
+  // override _init to prevent to init as Vue instance
+  var originalInit = Component.prototype._init;
+
+  Component.prototype._init = function () {
+    var _this = this;
+
+    // proxy to actual vm
+    var keys = Object.getOwnPropertyNames(vm); // 2.2.0 compat (props are no longer exposed as self properties)
+
+    if (vm.$options.props) {
+      for (var key in vm.$options.props) {
+        if (!vm.hasOwnProperty(key)) {
+          keys.push(key);
+        }
+      }
+    }
+
+    keys.forEach(function (key) {
+      Object.defineProperty(_this, key, {
+        get: function get() {
+          return vm[key];
+        },
+        set: function set(value) {
+          vm[key] = value;
+        },
+        configurable: true
+      });
+    });
+  }; // should be acquired class property values
+
+
+  var data = new Component(); // restore original _init to avoid memory leak (#209)
+
+  Component.prototype._init = originalInit; // create plain data object
+
+  var plainData = {};
+  Object.keys(data).forEach(function (key) {
+    if (data[key] !== undefined) {
+      plainData[key] = data[key];
+    }
+  });
+
+  if (false) {}
+
+  return plainData;
+}
+
+var $internalHooks = ['data', 'beforeCreate', 'created', 'beforeMount', 'mounted', 'beforeDestroy', 'destroyed', 'beforeUpdate', 'updated', 'activated', 'deactivated', 'render', 'errorCaptured', 'serverPrefetch' // 2.6
+];
+function componentFactory(Component) {
+  var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+  options.name = options.name || Component._componentTag || Component.name; // prototype props.
+
+  var proto = Component.prototype;
+  Object.getOwnPropertyNames(proto).forEach(function (key) {
+    if (key === 'constructor') {
+      return;
+    } // hooks
+
+
+    if ($internalHooks.indexOf(key) > -1) {
+      options[key] = proto[key];
+      return;
+    }
+
+    var descriptor = Object.getOwnPropertyDescriptor(proto, key);
+
+    if (descriptor.value !== void 0) {
+      // methods
+      if (typeof descriptor.value === 'function') {
+        (options.methods || (options.methods = {}))[key] = descriptor.value;
+      } else {
+        // typescript decorated data
+        (options.mixins || (options.mixins = [])).push({
+          data: function data() {
+            return vue_class_component_esm_defineProperty({}, key, descriptor.value);
+          }
+        });
+      }
+    } else if (descriptor.get || descriptor.set) {
+      // computed properties
+      (options.computed || (options.computed = {}))[key] = {
+        get: descriptor.get,
+        set: descriptor.set
+      };
+    }
+  });
+  (options.mixins || (options.mixins = [])).push({
+    data: function data() {
+      return collectDataFromConstructor(this, Component);
+    }
+  }); // decorate options
+
+  var decorators = Component.__decorators__;
+
+  if (decorators) {
+    decorators.forEach(function (fn) {
+      return fn(options);
+    });
+    delete Component.__decorators__;
+  } // find super
+
+
+  var superProto = Object.getPrototypeOf(Component.prototype);
+  var Super = superProto instanceof external_commonjs_vue_commonjs2_vue_root_Vue_default.a ? superProto.constructor : external_commonjs_vue_commonjs2_vue_root_Vue_default.a;
+  var Extended = Super.extend(options);
+  forwardStaticMembers(Extended, Component, Super);
+
+  if (reflectionIsSupported()) {
+    copyReflectionMetadata(Extended, Component);
+  }
+
+  return Extended;
+}
+var reservedPropertyNames = [// Unique id
+'cid', // Super Vue constructor
+'super', // Component options that will be used by the component
+'options', 'superOptions', 'extendOptions', 'sealedOptions', // Private assets
+'component', 'directive', 'filter'];
+var shouldIgnore = {
+  prototype: true,
+  arguments: true,
+  callee: true,
+  caller: true
+};
+
+function forwardStaticMembers(Extended, Original, Super) {
+  // We have to use getOwnPropertyNames since Babel registers methods as non-enumerable
+  Object.getOwnPropertyNames(Original).forEach(function (key) {
+    // Skip the properties that should not be overwritten
+    if (shouldIgnore[key]) {
+      return;
+    } // Some browsers does not allow reconfigure built-in properties
+
+
+    var extendedDescriptor = Object.getOwnPropertyDescriptor(Extended, key);
+
+    if (extendedDescriptor && !extendedDescriptor.configurable) {
+      return;
+    }
+
+    var descriptor = Object.getOwnPropertyDescriptor(Original, key); // If the user agent does not support `__proto__` or its family (IE <= 10),
+    // the sub class properties may be inherited properties from the super class in TypeScript.
+    // We need to exclude such properties to prevent to overwrite
+    // the component options object which stored on the extended constructor (See #192).
+    // If the value is a referenced value (object or function),
+    // we can check equality of them and exclude it if they have the same reference.
+    // If it is a primitive value, it will be forwarded for safety.
+
+    if (!hasProto) {
+      // Only `cid` is explicitly exluded from property forwarding
+      // because we cannot detect whether it is a inherited property or not
+      // on the no `__proto__` environment even though the property is reserved.
+      if (key === 'cid') {
+        return;
+      }
+
+      var superDescriptor = Object.getOwnPropertyDescriptor(Super, key);
+
+      if (!isPrimitive(descriptor.value) && superDescriptor && superDescriptor.value === descriptor.value) {
+        return;
+      }
+    } // Warn if the users manually declare reserved properties
+
+
+    if (false) {}
+
+    Object.defineProperty(Extended, key, descriptor);
+  });
+}
+
+function vue_class_component_esm_Component(options) {
+  if (typeof options === 'function') {
+    return componentFactory(options);
+  }
+
+  return function (Component) {
+    return componentFactory(Component, options);
+  };
+}
+
+vue_class_component_esm_Component.registerHooks = function registerHooks(keys) {
+  $internalHooks.push.apply($internalHooks, vue_class_component_esm_toConsumableArray(keys));
+};
+
+/* harmony default export */ var vue_class_component_esm = (vue_class_component_esm_Component);
+
+
+// CONCATENATED MODULE: ./node_modules/vue-property-decorator/lib/decorators/Emit.js
+var Emit_spreadArrays = (undefined && undefined.__spreadArrays) || function () {
+    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+    for (var r = Array(s), k = 0, i = 0; i < il; i++)
+        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
+            r[k] = a[j];
+    return r;
+};
+// Code copied from Vue/src/shared/util.js
+var hyphenateRE = /\B([A-Z])/g;
+var hyphenate = function (str) { return str.replace(hyphenateRE, '-$1').toLowerCase(); };
+/**
+ * decorator of an event-emitter function
+ * @param  event The name of the event
+ * @return MethodDecorator
+ */
+function Emit(event) {
+    return function (_target, propertyKey, descriptor) {
+        var key = hyphenate(propertyKey);
+        var original = descriptor.value;
+        descriptor.value = function emitter() {
+            var _this = this;
+            var args = [];
+            for (var _i = 0; _i < arguments.length; _i++) {
+                args[_i] = arguments[_i];
+            }
+            var emit = function (returnValue) {
+                var emitName = event || key;
+                if (returnValue === undefined) {
+                    if (args.length === 0) {
+                        _this.$emit(emitName);
+                    }
+                    else if (args.length === 1) {
+                        _this.$emit(emitName, args[0]);
+                    }
+                    else {
+                        _this.$emit.apply(_this, Emit_spreadArrays([emitName], args));
+                    }
+                }
+                else {
+                    args.unshift(returnValue);
+                    _this.$emit.apply(_this, Emit_spreadArrays([emitName], args));
+                }
+            };
+            var returnValue = original.apply(this, args);
+            if (isPromise(returnValue)) {
+                returnValue.then(emit);
+            }
+            else {
+                emit(returnValue);
+            }
+            return returnValue;
+        };
+    };
+}
+function isPromise(obj) {
+    return obj instanceof Promise || (obj && typeof obj.then === 'function');
+}
+
+// CONCATENATED MODULE: ./node_modules/vue-property-decorator/lib/decorators/Inject.js
+
+/**
+ * decorator of an inject
+ * @param from key
+ * @return PropertyDecorator
+ */
+function Inject(options) {
+    return createDecorator(function (componentOptions, key) {
+        if (typeof componentOptions.inject === 'undefined') {
+            componentOptions.inject = {};
+        }
+        if (!Array.isArray(componentOptions.inject)) {
+            componentOptions.inject[key] = options || key;
+        }
+    });
+}
+
+// CONCATENATED MODULE: ./node_modules/vue-property-decorator/lib/helpers/provideInject.js
+function needToProduceProvide(original) {
+    return (typeof original !== 'function' ||
+        (!original.managed && !original.managedReactive));
+}
+function produceProvide(original) {
+    var provide = function () {
+        var _this = this;
+        var rv = typeof original === 'function' ? original.call(this) : original;
+        rv = Object.create(rv || null);
+        // set reactive services (propagates previous services if necessary)
+        rv[reactiveInjectKey] = Object.create(this[reactiveInjectKey] || {});
+        for (var i in provide.managed) {
+            rv[provide.managed[i]] = this[i];
+        }
+        var _loop_1 = function (i) {
+            rv[provide.managedReactive[i]] = this_1[i]; // Duplicates the behavior of `@Provide`
+            Object.defineProperty(rv[reactiveInjectKey], provide.managedReactive[i], {
+                enumerable: true,
+                configurable: true,
+                get: function () { return _this[i]; },
+            });
+        };
+        var this_1 = this;
+        for (var i in provide.managedReactive) {
+            _loop_1(i);
+        }
+        return rv;
+    };
+    provide.managed = {};
+    provide.managedReactive = {};
+    return provide;
+}
+/** Used for keying reactive provide/inject properties */
+var reactiveInjectKey = '__reactiveInject__';
+function inheritInjected(componentOptions) {
+    // inject parent reactive services (if any)
+    if (!Array.isArray(componentOptions.inject)) {
+        componentOptions.inject = componentOptions.inject || {};
+        componentOptions.inject[reactiveInjectKey] = {
+            from: reactiveInjectKey,
+            default: {},
+        };
+    }
+}
+
+// CONCATENATED MODULE: ./node_modules/vue-property-decorator/lib/decorators/InjectReactive.js
+
+
+/**
+ * decorator of a reactive inject
+ * @param from key
+ * @return PropertyDecorator
+ */
+function InjectReactive(options) {
+    return createDecorator(function (componentOptions, key) {
+        if (typeof componentOptions.inject === 'undefined') {
+            componentOptions.inject = {};
+        }
+        if (!Array.isArray(componentOptions.inject)) {
+            var fromKey_1 = !!options ? options.from || options : key;
+            var defaultVal_1 = (!!options && options.default) || undefined;
+            if (!componentOptions.computed)
+                componentOptions.computed = {};
+            componentOptions.computed[key] = function () {
+                var obj = this[reactiveInjectKey];
+                return obj ? obj[fromKey_1] : defaultVal_1;
+            };
+            componentOptions.inject[reactiveInjectKey] = reactiveInjectKey;
+        }
+    });
+}
+
+// CONCATENATED MODULE: ./node_modules/vue-property-decorator/lib/helpers/metadata.js
+/** @see {@link https://github.com/vuejs/vue-class-component/blob/master/src/reflect.ts} */
+var reflectMetadataIsSupported = typeof Reflect !== 'undefined' && typeof Reflect.getMetadata !== 'undefined';
+function applyMetadata(options, target, key) {
+    if (reflectMetadataIsSupported) {
+        if (!Array.isArray(options) &&
+            typeof options !== 'function' &&
+            !options.hasOwnProperty('type') &&
+            typeof options.type === 'undefined') {
+            var type = Reflect.getMetadata('design:type', target, key);
+            if (type !== Object) {
+                options.type = type;
+            }
+        }
+    }
+}
+
+// CONCATENATED MODULE: ./node_modules/vue-property-decorator/lib/decorators/Model.js
+
+
+/**
+ * decorator of model
+ * @param  event event name
+ * @param options options
+ * @return PropertyDecorator
+ */
+function Model(event, options) {
+    if (options === void 0) { options = {}; }
+    return function (target, key) {
+        applyMetadata(options, target, key);
+        createDecorator(function (componentOptions, k) {
+            ;
+            (componentOptions.props || (componentOptions.props = {}))[k] = options;
+            componentOptions.model = { prop: k, event: event || k };
+        })(target, key);
+    };
+}
+
+// CONCATENATED MODULE: ./node_modules/vue-property-decorator/lib/decorators/ModelSync.js
+
+
+/**
+ * decorator of synced model and prop
+ * @param propName the name to interface with from outside, must be different from decorated property
+ * @param  event event name
+ * @param options options
+ * @return PropertyDecorator
+ */
+function ModelSync(propName, event, options) {
+    if (options === void 0) { options = {}; }
+    return function (target, key) {
+        applyMetadata(options, target, key);
+        createDecorator(function (componentOptions, k) {
+            ;
+            (componentOptions.props || (componentOptions.props = {}))[propName] = options;
+            componentOptions.model = { prop: propName, event: event || k };
+            (componentOptions.computed || (componentOptions.computed = {}))[k] = {
+                get: function () {
+                    return this[propName];
+                },
+                set: function (value) {
+                    // @ts-ignore
+                    this.$emit(event, value);
+                },
+            };
+        })(target, key);
+    };
+}
+
+// CONCATENATED MODULE: ./node_modules/vue-property-decorator/lib/decorators/Prop.js
+
+
+/**
+ * decorator of a prop
+ * @param  options the options for the prop
+ * @return PropertyDecorator | void
+ */
+function Prop(options) {
+    if (options === void 0) { options = {}; }
+    return function (target, key) {
+        applyMetadata(options, target, key);
+        createDecorator(function (componentOptions, k) {
+            ;
+            (componentOptions.props || (componentOptions.props = {}))[k] = options;
+        })(target, key);
+    };
+}
+
+// CONCATENATED MODULE: ./node_modules/vue-property-decorator/lib/decorators/PropSync.js
+
+
+/**
+ * decorator of a synced prop
+ * @param propName the name to interface with from outside, must be different from decorated property
+ * @param options the options for the synced prop
+ * @return PropertyDecorator | void
+ */
+function PropSync(propName, options) {
+    if (options === void 0) { options = {}; }
+    return function (target, key) {
+        applyMetadata(options, target, key);
+        createDecorator(function (componentOptions, k) {
+            ;
+            (componentOptions.props || (componentOptions.props = {}))[propName] = options;
+            (componentOptions.computed || (componentOptions.computed = {}))[k] = {
+                get: function () {
+                    return this[propName];
+                },
+                set: function (value) {
+                    this.$emit("update:" + propName, value);
+                },
+            };
+        })(target, key);
+    };
+}
+
+// CONCATENATED MODULE: ./node_modules/vue-property-decorator/lib/decorators/Provide.js
+
+
+/**
+ * decorator of a provide
+ * @param key key
+ * @return PropertyDecorator | void
+ */
+function Provide(key) {
+    return createDecorator(function (componentOptions, k) {
+        var provide = componentOptions.provide;
+        inheritInjected(componentOptions);
+        if (needToProduceProvide(provide)) {
+            provide = componentOptions.provide = produceProvide(provide);
+        }
+        provide.managed[k] = key || k;
+    });
+}
+
+// CONCATENATED MODULE: ./node_modules/vue-property-decorator/lib/decorators/ProvideReactive.js
+
+
+/**
+ * decorator of a reactive provide
+ * @param key key
+ * @return PropertyDecorator | void
+ */
+function ProvideReactive(key) {
+    return createDecorator(function (componentOptions, k) {
+        var provide = componentOptions.provide;
+        inheritInjected(componentOptions);
+        if (needToProduceProvide(provide)) {
+            provide = componentOptions.provide = produceProvide(provide);
+        }
+        provide.managedReactive[k] = key || k;
+    });
+}
+
+// CONCATENATED MODULE: ./node_modules/vue-property-decorator/lib/decorators/Ref.js
+
+/**
+ * decorator of a ref prop
+ * @param refKey the ref key defined in template
+ */
+function Ref(refKey) {
+    return createDecorator(function (options, key) {
+        options.computed = options.computed || {};
+        options.computed[key] = {
+            cache: false,
+            get: function () {
+                return this.$refs[refKey || key];
+            },
+        };
+    });
+}
+
+// CONCATENATED MODULE: ./node_modules/vue-property-decorator/lib/decorators/VModel.js
+
+/**
+ * decorator for capturings v-model binding to component
+ * @param options the options for the prop
+ */
+function VModel(options) {
+    if (options === void 0) { options = {}; }
+    var valueKey = 'value';
+    return createDecorator(function (componentOptions, key) {
+        ;
+        (componentOptions.props || (componentOptions.props = {}))[valueKey] = options;
+        (componentOptions.computed || (componentOptions.computed = {}))[key] = {
+            get: function () {
+                return this[valueKey];
+            },
+            set: function (value) {
+                this.$emit('input', value);
+            },
+        };
+    });
+}
+
+// CONCATENATED MODULE: ./node_modules/vue-property-decorator/lib/decorators/Watch.js
+
+/**
+ * decorator of a watch function
+ * @param  path the path or the expression to observe
+ * @param  WatchOption
+ * @return MethodDecorator
+ */
+function Watch(path, options) {
+    if (options === void 0) { options = {}; }
+    var _a = options.deep, deep = _a === void 0 ? false : _a, _b = options.immediate, immediate = _b === void 0 ? false : _b;
+    return createDecorator(function (componentOptions, handler) {
+        if (typeof componentOptions.watch !== 'object') {
+            componentOptions.watch = Object.create(null);
+        }
+        var watch = componentOptions.watch;
+        if (typeof watch[path] === 'object' && !Array.isArray(watch[path])) {
+            watch[path] = [watch[path]];
+        }
+        else if (typeof watch[path] === 'undefined') {
+            watch[path] = [];
+        }
+        watch[path].push({ handler: handler, deep: deep, immediate: immediate });
+    });
+}
+
+// CONCATENATED MODULE: ./node_modules/vue-property-decorator/lib/index.js
+/** vue-property-decorator verson 9.1.2 MIT LICENSE copyright 2020 kaorun343 */
+/// <reference types='reflect-metadata'/>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.regexp.constructor.js
 var es_regexp_constructor = __webpack_require__("4d63");
 
-// CONCATENATED MODULE: ./src/lib/pattern.js
+// CONCATENATED MODULE: ./src/lib/pattern.ts
 
 
 
@@ -22308,36 +24729,32 @@ var es_regexp_constructor = __webpack_require__("4d63");
 
 /**
  * Gets the default pattern mapping.
- * The rule tuples (rules) are defined like the following: 
+ * The rule tuples (rules) are defined like the following:
  * @example [
  *   'min_value': 'The minimum integer value accepted',
  *   'max_value': 'The maximum integer value accepted',
  *   'min_digits': 'The minimum amount of digits which can be parsed of the character in a group'
  * ]
- * @returns A dictionary that holds records for every known identifier and it's rule tuple
+ * @returns {MaskPatternMapping} A dictionary that holds records for every known identifier and it's rule tuple
  */
 function getMaskPatternMapping() {
   return {
     // identifier (char): [min_value, max_value, min_digits]
     // omit min_digits to set to max_digits (derived by given format)
     'H': [0, 23, 1],
-    // hour
     'i': [0, 59, 1],
-    // minute
     'd': [0, 31, 1],
-    // day of month
     'm': [1, 12, 1],
-    // month
     'Y': [0, undefined] // year
 
   };
 }
 /**
  * Gets all matches in the process mask pattern to regex.
- * 
+ *
  * @param {string} format The mask pattern to convert.
- * @param {object} mapping The identifier dictionary.
- * @returns {string[]} An array of string matches.
+ * @param mapping The identifier dictionary.
+ * @returns {RegExpMatchArray[]} An array of string matches.
  */
 
 function getMaskPatternToRegexMatches(format) {
@@ -22350,14 +24767,14 @@ function getMaskPatternToRegexMatches(format) {
 }
 /**
  * Converts a mask pattern to a regex pattern.
- * 
+ *
  * @example
  * convertMaskPatternToRegex('dd.mm.YYYY', getMaskPatternMapping())
  * -> [
- *      '[0-9]{1,2}\.[0-9]{1,2}\.[0-9]{4}', 
+ *      '[0-9]{1,2}\.[0-9]{1,2}\.[0-9]{4}',
  *      ['d','m','Y']
  *    ]
- * 
+ *
  * @param {string} format The fornmat to convert
  * @param {object} mapping The identifier dictionary.
  * @returns {[string, string[]]} A tuple with first, the generated pattern string; and second, an ordered array with the occurrences of identifiers.
@@ -22369,15 +24786,11 @@ function convertMaskPatternToRegex(format, mapping) {
   var patternSegments = [];
   var groupOrder = [];
   matches.forEach(function (match) {
+    if (match.index === undefined) return;
     var str = match[0];
     var len = str.length;
     var firstChar = str[0];
-
-    var _mapping$firstChar = _slicedToArray(mapping[firstChar], 3),
-        _min = _mapping$firstChar[0],
-        _max = _mapping$firstChar[1],
-        minDigits = _mapping$firstChar[2];
-
+    var minDigits = mapping[firstChar][2];
     groupOrder.push(firstChar);
     var group = "([0-9]{".concat(minDigits || len, ",").concat(len, "})");
     var preRemainder = escapeRegexSpecialChars(format.slice(cursor, match.index));
@@ -22397,19 +24810,19 @@ function escapeRegexSpecialChars(text) {
 }
 /**
  * Matches an input against a mask pattern and returns the matches as well as their mapping.
- * 
+ *
  * @example
- * 
+ *
  * matchMaskPattern('31.12.2021', 'dd.mm.YYYY')
  * -> [
  *      ['31', '12', '2021'],
  *      ['d', 'm', 'Y']
  *    ]
- * 
+ *
  * @param {string} input The input string to process
  * @param {string} maskPattern The mask pattern
  * @param {object} mapping The pattern identifier dictionary to match against
- * @returns {[string[], string[]] | null} A tuple with first, an ordered array of matches in the input; 
+ * @returns {[string[], string[]] | null} A tuple with first, an ordered array of matches in the input;
  * and second, an ordered array of the order of occurrences of identifiers, so that the match types can be identified.
  * Returns null, if the input doesn't match the maskPattern
  */
@@ -22430,13 +24843,13 @@ function matchMaskPattern(input, maskPattern) {
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.pad-start.js
 var es_string_pad_start = __webpack_require__("4d90");
 
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.date.to-iso-string.js
-var es_date_to_iso_string = __webpack_require__("accc");
-
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.date.now.js
 var es_date_now = __webpack_require__("6eba");
 
-// CONCATENATED MODULE: ./src/lib/time.js
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.date.to-iso-string.js
+var es_date_to_iso_string = __webpack_require__("accc");
+
+// CONCATENATED MODULE: ./src/lib/time.ts
 
 
 
@@ -22474,12 +24887,12 @@ function toIsoFormatWithOffset(date) {
 }
 /**
  * Decomposes an ISO date into year, month and date
- * @param {string} date An ISO Date as string, e.g. '2021-12-31'
+ * @param {string} dateString An ISO Date as string, e.g. '2021-12-31'
  * @returns {[number, number, number]} A tuple of year, month and date
  */
 
-function splitIsoDate(date) {
-  return date.split('-').map(function (x) {
+function splitIsoDate(dateString) {
+  return dateString.split('-').map(function (x) {
     return Number(x);
   });
 }
@@ -22495,8 +24908,8 @@ function isIsoFormatted(str) {
 }
 /**
  * Compares two ISO formatted dates.
- * @param {string|[number, number, number]} a Date a in ISO format
- * @param {string|[number, number, number]} $b Date b in ISO format
+ * @param {IsoInterpretable} a Date a in ISO format
+ * @param {IsoInterpretable} b Date b in ISO format
  * @returns {number} Either -1, 0 or 1; if Date a is before, the same or after b.
  */
 
@@ -22524,6 +24937,13 @@ function compareDateTimes(a, b) {
   return intcmp(dayA, dayB);
 }
 /**
+ * Gets the timezone-offset-freed "normalized" date.
+ */
+
+function currentNormalizedDate() {
+  return new Date(Date.now() - new Date().getTimezoneOffset() * 60000);
+}
+/**
  * Gets the current date in ISO time.
  * @returns {string} The current date as ISO string. e.g. '2021-12-31'
  */
@@ -22543,20 +24963,20 @@ function getShortIsoString(date) {
 /**
  * Formats a pattern date to an ISO Date (e.g. '2021-12-31').
  *
- * @param {string} date A pattern formatted date string.
+ * @param {string} dateStr A pattern formatted date string.
  * @param {string} pattern A masked element pattern.
- * @param {function(string[], string[], string):number} getter An optional getter that supplies date numbers.
- * @param {function(number, number, number):[string|null, boolean]} interceptor An optional interceptor that takes year, month and day and returns a result and a boolean, whether to override the functions result with it.
+ * @param {DatePartSupplier} getter An optional getter that supplies date numbers.
+ * @param interceptor An optional interceptor that takes year, month and day and returns a result and a boolean, whether to override the functions result with it.
  * @returns {string|null} The ISO formatted string, or null, if there was an error.
  */
 
-function parseISODateFromPattern(date, pattern) {
+function parseISODateFromPattern(dateStr, pattern) {
   var getter = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : function (match, order, identifier) {
     var idx = order.indexOf(identifier);
     return idx >= 0 ? Number(match[idx + 1]) : undefined; // order[i] = match[i + 1]
   };
-  var interceptor = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : undefined;
-  var res = matchMaskPattern(date, pattern);
+  var interceptor = arguments.length > 3 ? arguments[3] : undefined;
+  var res = matchMaskPattern(dateStr, pattern);
   if (!res) return null;
 
   var _res = _slicedToArray(res, 2),
@@ -22584,7 +25004,7 @@ function parseISODateFromPattern(date, pattern) {
  *
  * @param {string} date An ISO formatted date string.
  * @param {string} pattern A masked element pattern
- * @param {object} substitutes A dictionary with character substitutes
+ * @param extraSubstitutes A dictionary with character substitutes
  * @returns {string|null} The formatted string, or null, if there was an error.
  */
 
@@ -22607,6 +25027,7 @@ function formatISODateFromPattern(date, pattern) {
   var cursor = 0;
   var patternSegments = [];
   matches.forEach(function (match) {
+    if (match.index === undefined) return;
     var str = match[0];
     var len = str.length;
     var firstChar = str[0];
@@ -22623,20 +25044,19 @@ function formatISODateFromPattern(date, pattern) {
 
   return patternSegments.join("");
 }
-function currentNormalizedDate() {
-  return new Date(Date.now() - new Date().getTimezoneOffset() * 60000);
-}
 /**
+ * Interprets a timestamp from the backend.
+ * Can interpret 'today' => current date, as well as 'today-18Y' => current date, 18 years ago.
  *
- * @param {string} str
- * @return {string} ISO formatted date
+ * @param text The date string to be interpreted.
+ * @return {string} An ISO formatted date.
  */
 
-function interpretTime(str) {
-  if (!str) return str;
+function interpretTime(text) {
+  if (!text) return text;
   var regex = /^today(?:([-+])([0-9]+)([YMD]))?$/;
-  var match = str.match(regex);
-  if (!match) return str; // matched, but no modifiers
+  var match = text.match(regex);
+  if (!match) return text; // matched, but no modifiers
 
   if (!match[1] || match[1].length <= 0) return currentIsoTime();
   var sign = match[1] === '-' ? -1 : 1;
@@ -22646,37 +25066,38 @@ function interpretTime(str) {
       amount = _match$slice2[0],
       unit = _match$slice2[1];
 
-  var date = addToDate(currentNormalizedDate(), sign * amount, unit);
+  var date = addToDate(currentNormalizedDate(), sign * Number(amount), unit);
   return getShortIsoString(date);
 }
 /**
+ * Adds a given amount of <time unit> to a date.
  *
- * @param {Date} date
- * @param {number} amount
- * @param {'Y'|'M'|'D'} unit
+ * @param subject The date to add to.
+ * @param amount The amount of <unit> to add.
+ * @param unit The time unit.
  */
 
-function addToDate(date, amount, unit) {
+function addToDate(subject, amount, unit) {
   switch (unit) {
     case 'Y':
-      date.setFullYear(date.getFullYear() + amount);
+      subject.setFullYear(subject.getFullYear() + amount);
       break;
 
     case "M":
-      date.setMonth(date.getMonth() + amount);
+      subject.setMonth(subject.getMonth() + amount);
       break;
 
     case "D":
-      date.setDate(date.getDate() + amount);
+      subject.setDate(subject.getDate() + amount);
       break;
 
     default:
       break;
   }
 
-  return date;
+  return subject;
 }
-// CONCATENATED MODULE: ./src/lib/util.js
+// CONCATENATED MODULE: ./src/lib/validators.ts
 
 
 
@@ -22692,12 +25113,308 @@ function addToDate(date, amount, unit) {
 
 
 
+var validators_Validators;
+
+(function (Validators) {
+  function stringValidator(validator) {
+    return typedValidator(validator, function (inputValue) {
+      return typeof inputValue === 'string';
+    });
+  }
+
+  function typedValidator(validator, predicate) {
+    return function (inputValue) {
+      if (!predicate(inputValue)) return true; // can't validate, because of type mismatch
+
+      return validator(inputValue);
+    };
+  }
+
+  function required() {
+    var errorMessage = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'this field is required';
+    return stringValidator(function (inputValue) {
+      return !!inputValue || errorMessage;
+    });
+  }
+
+  Validators.required = required;
+
+  function stringLength(minimum, maximum, errorMessage) {
+    minimum = Math.floor(minimum);
+    maximum = Math.floor(maximum);
+    if (!errorMessage) errorMessage = "input length must be between ".concat(minimum, " and ").concat(maximum);
+    return stringValidator(function (inputValue) {
+      if (!inputValue.length) return true;
+      var trimmedString = inputValue.trim();
+      return trimmedString.length >= minimum && trimmedString.length <= maximum || errorMessage;
+    });
+  }
+
+  Validators.stringLength = stringLength;
+
+  function alphanumeric() {
+    var errorMessage = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'this field must be alphanumeric (different alphabets need to be implemented)';
+    return stringValidator(function (inputValue) {
+      if (!inputValue.length) return true;
+      return /^[a-z0-9]+$/i.test(inputValue) || errorMessage;
+    });
+  }
+
+  Validators.alphanumeric = alphanumeric;
+
+  function email() {
+    var errorMessage = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'invalid email';
+    return stringValidator(function (inputValue) {
+      if (!inputValue.length) return true; // Modified Regex which ensures at least 2 TLD chars
+      // const emailRegex = /^(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9]{2,}|\[(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)])$/
+
+      var emailRegex = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)])/;
+      return emailRegex.test(inputValue) || errorMessage;
+    });
+  }
+
+  Validators.email = email;
+
+  function integer() {
+    var errorMessage = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'positive integer required';
+    return stringValidator(function (inputValue) {
+      if (!inputValue.length) return true;
+      return /^\d+$/.test(inputValue) || errorMessage;
+    });
+  }
+
+  Validators.integer = integer;
+
+  function _float() {
+    var errorMessage = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'positive float required';
+    return stringValidator(function (inputValue) {
+      if (!inputValue.length) return true;
+      return /^([1-9]\d*([.,])\d*|0?([.,])\d*[1-9]\d*|[1-9]\d*)$/.test(inputValue) || errorMessage;
+    });
+  }
+
+  Validators["float"] = _float;
+
+  function numberRange(minimum, maximum, errorMessage) {
+    if (!errorMessage) errorMessage = "number must be between ".concat(minimum, " and ").concat(maximum);
+    return stringValidator(function (inputValue) {
+      if (!inputValue.length) return true;
+      var num = parseFloat(inputValue);
+      if (isNaN(num)) return errorMessage;
+      return num >= minimum && num < maximum || errorMessage;
+    });
+  }
+
+  Validators.numberRange = numberRange;
+
+  function regex(pattern, errorMessage) {
+    if (!errorMessage) errorMessage = "input must match following regular expression ".concat(pattern);
+    return stringValidator(function (inputValue) {
+      if (!inputValue.length) return true;
+
+      try {
+        var _regex = new RegExp(pattern);
+
+        return _regex.test(inputValue) || errorMessage;
+      } catch (error) {
+        return true; // Could not compile pattern
+      }
+    });
+  }
+
+  Validators.regex = regex;
+
+  function min(minimum, errorMessage) {
+    if (!errorMessage) errorMessage = "number must be greater than ".concat(minimum);
+    return stringValidator(function (inputValue) {
+      if (!inputValue.length) return true;
+      var num = parseFloat(inputValue);
+      if (isNaN(num)) return errorMessage;
+      return num >= minimum || errorMessage;
+    });
+  }
+
+  Validators.min = min;
+
+  function timeFormat(format, errorMessage) {
+    if (!errorMessage) errorMessage = "the datetime must be in this format: '".concat(format, "'");
+    return stringValidator(function (inputValue) {
+      if (!inputValue.length) return true;
+      var mapping = getMaskPatternMapping();
+      var res = matchMaskPattern(inputValue, format, mapping);
+      if (!res) return errorMessage;
+
+      var _res = _slicedToArray(res, 2),
+          match = _res[0],
+          order = _res[1]; // validate each pattern group
+
+
+      for (var i = 1; i < match.length; i++) {
+        var num = Number(match[i]);
+
+        var _mapping$order = _slicedToArray(mapping[order[i - 1]], 2),
+            _min = _mapping$order[0],
+            max = _mapping$order[1];
+
+        if (num < _min || max !== undefined && num > max) return errorMessage;
+      }
+
+      return true;
+    });
+  }
+
+  Validators.timeFormat = timeFormat;
+
+  function maskComplete(maskPattern) {
+    var errorMessage = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'please complete the input';
+    return stringValidator(function (inputValue) {
+      if (!inputValue.length || !maskPattern) return true;
+      var placeholder = '_'; // TODO substitute with context.placeholder, when implemented
+
+      var pattern = "\\".concat(placeholder);
+      var patternPlaceholderOcurrences = (maskPattern.match(new RegExp(pattern, 'g')) || []).length;
+      var inputPlaceholderOcurrences = (inputValue.match(new RegExp(pattern, 'g')) || []).length;
+      return inputPlaceholderOcurrences - patternPlaceholderOcurrences <= 0 ? true : errorMessage; // completed, when there are no placeholders left
+    });
+  }
+
+  Validators.maskComplete = maskComplete;
+
+  function dateInterval(minDate, maxDate, pattern, errorMessage) {
+    return stringValidator(function (inputValue) {
+      if (!inputValue.length) return true;
+      if ((!minDate || !minDate.length) && (!maxDate || !maxDate.length)) return true; // no validation required
+
+      var parsed = parseISODateFromPattern(inputValue, pattern);
+      if (!parsed) return errorMessage || 'invalid date'; // invalid date
+      // take 'today' into account
+
+      minDate = interpretTime(minDate);
+      maxDate = interpretTime(maxDate);
+
+      if (minDate && compareDateTimes(parsed, minDate) < 0) {
+        return errorMessage || "please enter a date after ".concat(minDate);
+      }
+
+      if (maxDate && compareDateTimes(parsed, maxDate) > 0) {
+        return errorMessage || "please enter a date before ".concat(maxDate);
+      }
+
+      return true;
+    });
+  }
+
+  Validators.dateInterval = dateInterval;
+  /**
+   * @param minimum Minimum filesize with unit. E.g. '20M' or '800K'
+   * @param maximum Maximum filesize with unit. E.g. '20M' or '800K'
+   * @param errorMessage Error message.
+   */
+
+  function fileSize(minimum, maximum, errorMessage) {
+    return function (inputValue) {
+      if (!inputValue) return true; // if fileList is empty this is valid
+
+      var minSize = typo3FileSizeToBytes(minimum);
+      var maxSize = typo3FileSizeToBytes(maximum);
+      var totalSize = 0;
+      var valid = true;
+
+      if (inputValue instanceof FileList) {
+        var fileCount = inputValue.length;
+        var index = 0;
+
+        for (; index < fileCount; index++) {
+          var file = inputValue[index];
+
+          if (file instanceof File) {
+            var size = file.size;
+            if (isNaN(size)) continue;
+            totalSize += size;
+          }
+        }
+      } else if (inputValue instanceof File) {
+        var _size = inputValue.size;
+
+        if (isNaN(_size)) {
+          valid = false;
+        } else {
+          totalSize += _size;
+        }
+      }
+
+      if (totalSize > maxSize || totalSize < minSize) valid = false;
+      return valid || errorMessage || "combined size of all files needs to be between ".concat(minimum, " (").concat(minSize, " bytes) and ").concat(maximum, " (").concat(maxSize, " bytes) but was ").concat(totalSize, " bytes.`");
+    };
+  }
+
+  Validators.fileSize = fileSize;
+
+  function typo3FileSizeToBytes(sizeString) {
+    if (sizeString.length < 2) return sizeString;
+    var str = sizeString.trim();
+    var num = Number(str.slice(0, -1));
+    var modifier = str[str.length - 1];
+
+    switch (modifier) {
+      case "B":
+        return num;
+
+      case "K":
+        return num * 1024;
+
+      case "M":
+        return num * 1024 * 1024;
+
+      case "G":
+        return num * 1024 * 1024 * 1024;
+    }
+
+    return num;
+  }
+
+  Validators.typo3FileSizeToBytes = typo3FileSizeToBytes;
+
+  function url() {
+    var errorMessage = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'Invalid URL';
+    return stringValidator(function (inputValue) {
+      if (!inputValue.length) return true;
+      var pattern = /^((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=+$,\w]+@)?[A-Za-z0-9.-]+(:[0-9]+)?|(?:www.|[-;:&=+$,\w]+@)[A-Za-z0-9.-]+)((?:\/[+~%\/.\w-_]*)?\??[-+=&;%@.\w_]*#?[\w]*)?)$/;
+      return pattern.test(inputValue) || errorMessage;
+    });
+  }
+
+  Validators.url = url;
+
+  function createCallbackList(callbacks) {
+    return callbacks.map(function (callback) {
+      return createCallbackByKey(callback.action, callback.arguments);
+    });
+  }
+
+  Validators.createCallbackList = createCallbackList;
+
+  function createCallbackByKey(callbackKey, callbackArgs) {
+    // inject payload and error message into the selected validation function
+    var knownCallbacks = {
+      "default": function _default() {
+        return Promise.resolve(callbackArgs);
+      }
+    };
+    return knownCallbacks[callbackKey] || knownCallbacks["default"];
+  }
+
+  Validators.createCallbackByKey = createCallbackByKey;
+})(validators_Validators || (validators_Validators = {}));
+// CONCATENATED MODULE: ./src/lib/util.ts
 
 
 
-var createInputName = function createInputName(formName, inputName) {
+
+
+function createInputName(formName, inputName) {
   return "tx_form_formframework[".concat(formName, "][").concat(inputName, "]");
-};
+}
 /**
  *
  * @param properties
@@ -22707,7 +25424,7 @@ var createInputName = function createInputName(formName, inputName) {
 function isRequired(properties) {
   var _properties$fluidAddi;
 
-  return (properties === null || properties === void 0 ? void 0 : (_properties$fluidAddi = properties.fluidAdditionalAttributes) === null || _properties$fluidAddi === void 0 ? void 0 : _properties$fluidAddi.required) === 'required';
+  return ((_properties$fluidAddi = properties.fluidAdditionalAttributes) === null || _properties$fluidAddi === void 0 ? void 0 : _properties$fluidAddi.required) === 'required';
 }
 /**
  *
@@ -22715,43 +25432,43 @@ function isRequired(properties) {
  * @returns {string} placeholder label
  */
 
-function util_getPlaceholder(properties) {
+function getPlaceholder(properties) {
   var _properties$fluidAddi2;
 
-  return properties === null || properties === void 0 ? void 0 : (_properties$fluidAddi2 = properties.fluidAdditionalAttributes) === null || _properties$fluidAddi2 === void 0 ? void 0 : _properties$fluidAddi2.placeholder;
+  return (_properties$fluidAddi2 = properties.fluidAdditionalAttributes) === null || _properties$fluidAddi2 === void 0 ? void 0 : _properties$fluidAddi2.placeholder;
 }
 /**
- *
- * @param {ElementValidators} validators
  * @returns {string} error message for required validator
  */
 
-var createRequiredLabel = function createRequiredLabel(validators) {
+function createRequiredLabel(validators) {
   if (!validators || !validators.length) return "required";
   var notEmptyValidator = validators.find(function (v) {
     return v.identifier === "NotEmpty";
   });
   return notEmptyValidator && notEmptyValidator.errorMessage || "required";
-};
+}
 /**
  *
  * @param {boolean} required
- * @param {ElementValidators} validators
- * @param {ElementProperties} context
+ * @param {InputValidator[]} validators
+ * @param {ElementProperties} properties
  * @param {boolean} overwriteRequiredRules - if true deletes the required and NotEmpty validator (you might want this for inputs that use createRequiredLabel for their required validation).
- * @param {object} componentsMap Custom validators.
+ * @param {object} validatorMap Custom validators.
  * @returns {*[]}
  */
 
-var createInputRules = function createInputRules(required, validators, context, overwriteRequiredRules, componentsMap) {
-  var rules = util_createValidatorsMap(validators, context, componentsMap);
+function createInputRules(required, validators, properties) {
+  var overwriteRequiredRules = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
+  var validatorMap = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : {};
+  var rules = createValidatorsMap(validators, properties, validatorMap);
 
   if (required && overwriteRequiredRules) {
     if (rules.required) delete rules.required;
     if (rules.NotEmpty) delete rules.NotEmpty;
   }
 
-  if (!!required) rules.required = function (v) {
+  if (required) rules.required = function (v) {
     return !!v;
   };
   var rulesArray = [];
@@ -22761,8 +25478,8 @@ var createInputRules = function createInputRules(required, validators, context, 
   }
 
   return rulesArray;
-};
-var util_createValidatorsMap = function createValidatorsMap(validators, context, componentsMap) {
+}
+function createValidatorsMap(validators, properties, validatorMap) {
   if (!validators || !validators.length) return {};
   var validatorsMap = {};
 
@@ -22775,7 +25492,7 @@ var util_createValidatorsMap = function createValidatorsMap(validators, context,
       var id = validator.identifier;
       var validatorArguments = validator.options;
       var errorMessage = validator.errorMessage;
-      var validatorFunction = util_createValidatorByKey(id, validatorArguments, errorMessage, context, componentsMap);
+      var validatorFunction = createValidatorByKey(id, validatorArguments || {}, errorMessage, properties, validatorMap);
       if (validatorFunction) validatorsMap[id] = validatorFunction;
     }
   } catch (err) {
@@ -22785,236 +25502,49 @@ var util_createValidatorsMap = function createValidatorsMap(validators, context,
   }
 
   return validatorsMap;
-}; // create a function and wrap it inside the payload
+} // create a function and wrap it inside the payload
 
-var util_createValidatorByKey = function createValidatorByKey(validatorKey, vArgs, errorMessage, context) {
-  var componentsMap = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : {};
-
+function createValidatorByKey(validatorKey, vArgs, errorMessage, properties) {
+  var validatorMap = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : {};
   // inject payload and error message into the selected validation function
-  var inputIntegerValidator = function inputIntegerValidator(inputValue) {
-    return !inputValue.length || validatorInteger(inputValue, errorMessage || "positive integer required");
-  };
+  var required = validators_Validators.required(errorMessage);
+  var integer = validators_Validators.integer(errorMessage);
 
   var knownFunctions = _objectSpread2(_objectSpread2({
-    required: function required(inputValue) {
-      return validatorRequired(inputValue, errorMessage || "this field is required");
-    },
-    NotEmpty: function NotEmpty(inputValue) {
-      return validatorRequired(inputValue, errorMessage || "this field is required");
-    },
-    StringLength: function StringLength(inputValue) {
-      return !inputValue.length || validatorLength(inputValue, errorMessage || "input length must be between ".concat(vArgs.minimum, " and ").concat(vArgs.maximum), vArgs);
-    },
-    Alphanumeric: function Alphanumeric(inputValue) {
-      return !inputValue.length || validatorAlphanumeric(inputValue, errorMessage || "this field must be alphanumeric (different alphabets need to be implemented)");
-    },
-    EmailAddress: function EmailAddress(inputValue) {
-      return !inputValue.length || validatorEmail(inputValue, errorMessage || "invalid email");
-    },
-    Integer: inputIntegerValidator,
-    Number: inputIntegerValidator,
-    Float: function Float(inputValue) {
-      return !inputValue.length || validatorFloat(inputValue, errorMessage || "positive float required");
-    },
-    Text: function Text(inputValue) {
-      return validatorRequired(inputValue, errorMessage || "this field is required");
-    },
-    NumberRange: function NumberRange(inputValue) {
-      return !inputValue.length || validatorNumberRange(inputValue, errorMessage || "number must be between ".concat(vArgs.minimum, " and ").concat(vArgs.maximum), vArgs);
-    },
-    RegularExpression: function RegularExpression(inputValue) {
-      return !inputValue.length || validatorRegex(inputValue, errorMessage || "input must match following regular expression ".concat(vArgs.regularExpression), vArgs);
-    },
-    MinimumNumber: function MinimumNumber(inputValue) {
-      return !inputValue.length || validatorMinimumNumber(inputValue, errorMessage || "number must be greater than ".concat(vArgs.minimum), vArgs);
-    },
-    TimeFormat: function TimeFormat(inputValue) {
-      return !inputValue.length || util_validatorTimeFormat(inputValue, errorMessage || "the datetime must be in this format: '".concat(vArgs.format, "'"), vArgs);
-    },
-    MaskComplete: function MaskComplete(inputValue) {
-      return !inputValue.length || validatorMaskComplete(inputValue, errorMessage || "please complete the input", vArgs, context);
-    },
-    FileSize: function FileSize(inputValue) {
-      return validatorFileSize(inputValue, errorMessage, vArgs);
-    },
-    DateInterval: function DateInterval(inputValue) {
-      return !inputValue.length || util_validatorDateInterval(inputValue, errorMessage, vArgs, context);
-    }
-  }, componentsMap), {}, {
-    // TODO use this map alone in 2.0
+    required: required,
+    NotEmpty: required,
+    Text: required,
+    StringLength: validators_Validators.stringLength(vArgs.minimum, vArgs.maximum, errorMessage),
+    Alphanumeric: validators_Validators.alphanumeric(errorMessage),
+    EmailAddress: validators_Validators.email(errorMessage),
+    Integer: integer,
+    Number: integer,
+    Float: validators_Validators["float"](errorMessage),
+    NumberRange: validators_Validators.numberRange(vArgs.minimum, vArgs.maximum, errorMessage),
+    RegularExpression: validators_Validators.regex(vArgs.regularExpression, errorMessage),
+    MinimumNumber: validators_Validators.min(vArgs.minimum, errorMessage),
+    TimeFormat: validators_Validators.timeFormat(vArgs.format, errorMessage),
+    MaskComplete: validators_Validators.maskComplete(properties.pattern, errorMessage),
+    FileSize: validators_Validators.fileSize(vArgs.minimum, vArgs.maximum, errorMessage),
+    DateInterval: validators_Validators.dateInterval(vArgs.minDate, vArgs.maxDate, properties.pattern, errorMessage),
+    Url: validators_Validators.url(errorMessage)
+  }, validatorMap), {}, {
     "default": null
   });
 
   return knownFunctions[validatorKey] || knownFunctions["default"];
-};
-var validatorRequired = function validatorRequired(string, invalidMessage) {
-  return !!string || invalidMessage;
-};
-var validatorLength = function validatorLength(string, invalidMessage, vArgs) {
-  if (!string.length) return invalidMessage;
-  var trimmedString = string.trim();
-  return trimmedString.length >= vArgs.minimum && trimmedString.length <= vArgs.maximum || invalidMessage;
-};
-var validatorAlphanumeric = function validatorAlphanumeric(string, invalidMessage) {
-  return /^[a-z0-9]+$/i.test(string) || invalidMessage;
-};
-var validatorEmail = function validatorEmail(string, invalidMessage) {
-  // Modified Regex which ensures at least 2 TLD chars
-  // const emailRegex = /^(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9]{2,}|\[(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)])$/
-  var emailRegex = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/;
-  return emailRegex.test(string) || invalidMessage;
-};
-var validatorInteger = function validatorInteger(string, invalidMessage) {
-  return /^\d+$/.test(string) || invalidMessage;
-};
-var validatorFloat = function validatorFloat(string, invalidMessage) {
-  return /^([1-9]\d*(\.|\,)\d*|0?(\.|\,)\d*[1-9]\d*|[1-9]\d*)$/.test(string) || invalidMessage;
-};
-var validatorNumberRange = function validatorNumberRange(string, invalidMessage, vArgs) {
-  if (isNaN(string)) return invalidMessage;
-  var num = parseFloat(string);
-  return num >= vArgs.minimum && num < vArgs.maximum || invalidMessage;
-};
-var validatorRegex = function validatorRegex(string, invalidMessage, vArgs) {
-  /* when no regex or a invalid regex was provided return true = valid so this does not break the form */
-  if (!vArgs.regularExpression) return true;
-
-  try {
-    var regex = new RegExp(vArgs.regularExpression);
-    return regex.test(string) || invalidMessage;
-  } catch (error) {
-    return true;
-  }
-};
-var validatorMinimumNumber = function validatorMinimumNumber(string, invalidMessage, vArgs) {
-  if (isNaN(string)) return invalidMessage;
-  var num = parseFloat(string);
-  return num >= vArgs.minimum || invalidMessage;
-};
-var util_validatorTimeFormat = function validatorTimeFormat(string, invalidMessage, vArgs) {
-  var mapping = getMaskPatternMapping();
-  var res = matchMaskPattern(string, vArgs.format, mapping);
-  if (!res) return invalidMessage;
-
-  var _res = _slicedToArray(res, 2),
-      match = _res[0],
-      order = _res[1]; // validate each pattern group
+}
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/@vue/cli-plugin-typescript/node_modules/ts-loader??ref--13-3!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/base_input.vue?vue&type=script&lang=ts&
 
 
-  for (var i = 1; i < match.length; i++) {
-    var num = Number(match[i]);
 
-    var _mapping$order = _slicedToArray(mapping[order[i - 1]], 2),
-        min = _mapping$order[0],
-        max = _mapping$order[1];
 
-    if (num < min || max !== undefined && num > max) return invalidMessage;
-  }
 
-  return true;
-};
-var validatorMaskComplete = function validatorMaskComplete(string, invalidMessage, _vArgs, context) {
-  var maskPattern = context.pattern;
-  if (!maskPattern) return true; // invalid validator for element
+ // infer vue prop type validation by ts-definition; import this before vue-property-decorator!
 
-  var placeholder = '_'; // TODO substitute with context.placeholder, when implemented
 
-  var pattern = "\\".concat(placeholder);
-  var patternPlaceholderOcurrences = (maskPattern.match(new RegExp(pattern, 'g')) || []).length;
-  var inputPlaceholderOcurrences = (string.match(new RegExp(pattern, 'g')) || []).length;
-  return inputPlaceholderOcurrences - patternPlaceholderOcurrences <= 0 ? true : invalidMessage; // completed, when there are no placeholders left
-};
-var util_validatorDateInterval = function validatorDateInterval(string, invalidMessage, vArgs, context) {
-  var minDate = vArgs.minDate,
-      maxDate = vArgs.maxDate;
-  if ((!minDate || !minDate.length) && (!maxDate || !maxDate.length)) return true; // no validation required
 
-  var parsed = parseISODateFromPattern(string, context.pattern);
-  if (!parsed) return invalidMessage || 'invalid date'; // invalid date
-  // take 'today' into account
-
-  minDate = interpretTime(minDate);
-  maxDate = interpretTime(maxDate);
-
-  if (minDate && compareDateTimes(parsed, minDate) < 0) {
-    return invalidMessage || "please enter a date after ".concat(minDate);
-  }
-
-  if (maxDate && compareDateTimes(parsed, maxDate) > 0) {
-    return invalidMessage || "please enter a date before ".concat(maxDate);
-  }
-
-  return true;
-};
-var validatorFileSize = function validatorFileSize(fileInput, invalidMessage, vArgs) {
-  var valid = true;
-  if (!fileInput) return valid; // if fileList is empty this is valid
-
-  var minSize = typo3FileSizeToBytes(vArgs.minimum);
-  var maxSize = typo3FileSizeToBytes(vArgs.maximum);
-  var totalSize = 0;
-
-  if (fileInput instanceof FileList) {
-    var fileCount = fileInput.length;
-    var index = 0;
-
-    for (; index < fileCount; index++) {
-      var file = fileInput[index];
-
-      if (file instanceof File) {
-        var size = file.size;
-        if (isNaN(size)) continue;
-        totalSize += size;
-      } else continue;
-    }
-  } else if (fileInput instanceof File) {
-    var _size = fileInput.size;
-    if (isNaN(_size)) valid = false;else {
-      totalSize += _size;
-    }
-  }
-
-  if (totalSize > maxSize || totalSize < minSize) valid = false;
-  return valid || invalidMessage || "combined size of all files needs to be between ".concat(vArgs.minimum, " (").concat(minSize, " bytes) and ").concat(vArgs.maximum, " (").concat(maxSize, " bytes) but was ").concat(totalSize, " bytes.");
-};
-var typo3FileSizeToBytes = function typo3FileSizeToBytes(sizeString) {
-  if (sizeString.length < 2) return sizeString;
-  var str = sizeString.trim();
-  var num = str.slice(0, -1);
-  var modifier = str[str.length - 1];
-
-  switch (modifier) {
-    case "B":
-      return num;
-
-    case "K":
-      return num * 1024;
-
-    case "M":
-      return num * 1024 * 1024;
-
-    case "G":
-      return num * 1024 * 1024 * 1024;
-  }
-
-  return num;
-};
-var createCallbackList = function createCallbackList(callbacks) {
-  return callbacks.map(function (callback) {
-    return createCallbackByKey(callback.action, callback.arguments);
-  });
-};
-var createCallbackByKey = function createCallbackByKey(callbackKey, callbackArgs) {
-  // inject payload and error message into the selected validation function
-  var knownCallbacks = {
-    "default": Promise.resolve(callbackArgs)
-  };
-  return knownCallbacks[callbackKey] || knownCallbacks["default"];
-};
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/base_input.vue?vue&type=script&lang=js&
-
-/* harmony default export */ var base_inputvue_type_script_lang_js_ = ({
-  name: "BaseInput",
+var Props = external_commonjs_vue_commonjs2_vue_root_Vue_default.a.extend({
   props: {
     identifier: {
       type: String,
@@ -23033,38 +25563,72 @@ var createCallbackByKey = function createCallbackByKey(callbackKey, callbackArgs
       required: false
     },
     properties: {
-      type: Object | Array,
+      type: [Object, Array],
       required: true
-    }
-  },
-  computed: {
-    required: function required() {
-      return isRequired(this.properties);
-    },
-    requiredLabel: function requiredLabel() {
-      return createRequiredLabel(this.validators);
-    },
-    inputRules: function inputRules() {
-      return createInputRules(this.required, this.validators, this.properties);
-    },
-    inputValue: {
-      get: function get() {
-        return this.$store.getters.getCurrentInputValue(this.identifier) || "";
-      },
-      set: function set(value) {
-        this.$store.commit("updateInputValue", {
-          key: this.identifier,
-          value: value
-        });
-      }
-    },
-    inputError: function inputError() {
-      return this.$store.getters.getCurrentInputError(this.identifier) || "";
     }
   }
 });
-// CONCATENATED MODULE: ./src/components/fields/base_input.vue?vue&type=script&lang=js&
- /* harmony default export */ var fields_base_inputvue_type_script_lang_js_ = (base_inputvue_type_script_lang_js_); 
+
+var base_inputvue_type_script_lang_ts_BaseInput = /*#__PURE__*/function (_Props) {
+  _inherits(BaseInput, _Props);
+
+  var _super = _createSuper(BaseInput);
+
+  function BaseInput() {
+    _classCallCheck(this, BaseInput);
+
+    return _super.apply(this, arguments);
+  }
+
+  _createClass(BaseInput, [{
+    key: "required",
+    get: function get() {
+      return isRequired(this.properties);
+    }
+  }, {
+    key: "requiredLabel",
+    get: function get() {
+      return createRequiredLabel(this.validators);
+    }
+  }, {
+    key: "inputRules",
+    get: function get() {
+      return createInputRules(this.required, this.validators, this.properties);
+    }
+  }, {
+    key: "inputValue",
+    get: function get() {
+      return this.$store.getters.getCurrentInputValue(this.identifier) || "";
+    },
+    set: function set(value) {
+      this.$store.commit("updateInputValue", {
+        key: this.identifier,
+        value: value
+      });
+    }
+  }, {
+    key: "inputError",
+    get: function get() {
+      return this.$store.getters.getCurrentInputError(this.identifier) || "";
+    }
+  }]);
+
+  return BaseInput;
+}(Props);
+
+__decorate([Prop({
+  "default": function _default() {
+    return [];
+  }
+}), __metadata("design:type", Array)], base_inputvue_type_script_lang_ts_BaseInput.prototype, "validators", void 0);
+
+base_inputvue_type_script_lang_ts_BaseInput = __decorate([vue_class_component_esm({
+  name: "BaseInput"
+})], base_inputvue_type_script_lang_ts_BaseInput);
+/* harmony default export */ var base_inputvue_type_script_lang_ts_ = (base_inputvue_type_script_lang_ts_BaseInput);
+;
+// CONCATENATED MODULE: ./src/components/fields/base_input.vue?vue&type=script&lang=ts&
+ /* harmony default export */ var fields_base_inputvue_type_script_lang_ts_ = (base_inputvue_type_script_lang_ts_); 
 // CONCATENATED MODULE: ./src/components/fields/base_input.vue
 var base_input_render, base_input_staticRenderFns
 
@@ -23074,7 +25638,7 @@ var base_input_render, base_input_staticRenderFns
 /* normalize component */
 
 var base_input_component = normalizeComponent(
-  fields_base_inputvue_type_script_lang_js_,
+  fields_base_inputvue_type_script_lang_ts_,
   base_input_render,
   base_input_staticRenderFns,
   false,
@@ -23085,39 +25649,33 @@ var base_input_component = normalizeComponent(
 )
 
 /* harmony default export */ var base_input = (base_input_component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"222cafe2-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/textfield_text.vue?vue&type=template&id=497b066a&
-var textfield_textvue_type_template_id_497b066a_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('text-field',_vm._g(_vm._b({attrs:{"type":"text"}},'text-field',_vm.$attrs,false),_vm.$listeners))}
-var textfield_textvue_type_template_id_497b066a_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1ca6af6a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/composed/textfield.vue?vue&type=template&id=42a23b04&
+var textfieldvue_type_template_id_42a23b04_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('on-text-field-base',_vm._g(_vm._b({attrs:{"properties":_vm.properties,"identifier":_vm.identifier,"required":_vm.isRequired,"requiredLabel":_vm.requiredLabel,"placeholder":_vm.placeholder,"errorMessages":_vm.inputError,"rules":_vm.inputRules},model:{value:(_vm.inputValue),callback:function ($$v) {_vm.inputValue=$$v},expression:"inputValue"}},'on-text-field-base',_vm.$attrs,false),_vm.$listeners))}
+var textfieldvue_type_template_id_42a23b04_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/fields/textfield_text.vue?vue&type=template&id=497b066a&
+// CONCATENATED MODULE: ./src/components/fields/composed/textfield.vue?vue&type=template&id=42a23b04&
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"222cafe2-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/extended_text_field.vue?vue&type=template&id=09355e01&
-var extended_text_fieldvue_type_template_id_09355e01_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('text-field',_vm._b({attrs:{"rules":_vm.inputRules,"value":_vm.inputValue,"required":_vm.required,"requiredLabel":_vm.requiredLabel,"errorMessages":_vm.inputError},on:{"input":function (val){ return _vm.inputValue=val; }}},'text-field',Object.assign({}, _vm.$attrs, _vm.$props),false))}
-var extended_text_fieldvue_type_template_id_09355e01_staticRenderFns = []
-
-
-// CONCATENATED MODULE: ./src/components/fields/extended_text_field.vue?vue&type=template&id=09355e01&
-
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"222cafe2-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/textfield.vue?vue&type=template&id=3c5036cb&
-var textfieldvue_type_template_id_3c5036cb_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('v-text-field',{ref:'ref-' + _vm.identifier,class:{
-        'v-text-field--required': _vm.required,
-        'v-text-field--optional': _vm.optional,
-        'v-text-field--counting': _vm.counter,
-        'v-text-field--updated': _vm.updated,
-      },attrs:{"type":_vm.type,"clear-icon":"mdi-close","counter":_vm.counter,"debounce":"2000","error-messages":_vm.errorMessages,"hide-details":_vm.hidedetails,"identifier":_vm.identifier,"disabled":_vm.disabled,"filled":_vm.filled,"outlined":_vm.outlined,"solor":_vm.solo,"inputmode":_vm.inputmode,"label":_vm.label,"loading":_vm.loading,"name":_vm.name,"prefix":_vm.prefix,"value":_vm.value,"required":_vm.required,"rules":_vm.rules,"suffix":_vm.suffix,"autocomplete":_vm.properties['autoComplete'],"validate-on-blur":""},on:{"blur":_vm.blur,"change":_vm.change,"click":_vm.click,"click:clear":_vm.clear,"focus":_vm.focus,"input":_vm.input}},[_c('template',{slot:"prepend-outer"},[_vm._t("prepend")],2),(!_vm.required)?_c('template',{slot:"prepend-inner"},[_c('span',{staticClass:"v-input__label-optional"},[_vm._v(_vm._s(_vm.optionalLabel))])]):_vm._e(),(_vm.required)?_c('template',{slot:"prepend-inner"},[_c('span',{staticClass:"v-input__label-required"},[_vm._v(_vm._s(_vm.requiredLabel))])]):_vm._e(),_c('template',{slot:"append"},[(_vm.isTouchDevice && !!_vm.$slots.info)?_c('div',{staticClass:"v-input__info",on:{"click":function($event){_vm.menu = !_vm.menu}}},[_c('v-icon',{attrs:{"color":"primary"}},[_vm._v("mdi-information-outline")])],1):_vm._e()]),_c('template',{slot:"append-outer"},[_vm._t("append")],2)],2)}
-var textfieldvue_type_template_id_3c5036cb_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1ca6af6a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/base/textfield/textfield.vue?vue&type=template&id=bb925a84&
+var textfieldvue_type_template_id_bb925a84_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('v-text-field',{ref:'ref-' + _vm.identifier,class:{
+      'v-text-field--required': _vm.required,
+      'v-text-field--optional': _vm.optional && !_vm.required,
+      'v-text-field--counting': _vm.counter,
+      'v-text-field--updated': _vm.updated,
+    },attrs:{"type":_vm.type,"clear-icon":"mdi-close","counter":_vm.counter,"debounce":"2000","error-messages":_vm.errorMessages,"hide-details":_vm.hidedetails,"identifier":_vm.identifier,"disabled":_vm.disabled,"filled":_vm.filled,"outlined":_vm.outlined,"solor":_vm.solo,"inputmode":_vm.inputmode,"label":_vm.label,"loading":_vm.loading,"name":_vm.name,"prefix":_vm.prefix,"required":_vm.required,"rules":_vm.rules,"suffix":_vm.suffix,"autocomplete":_vm.properties && _vm.properties['autoComplete'],"validate-on-blur":""},on:{"blur":_vm.blur,"change":_vm.change,"click":_vm.click,"click:clear":_vm.clear,"focus":_vm.focus,"input":_vm.input},model:{value:(_vm.inputValue),callback:function ($$v) {_vm.inputValue=$$v},expression:"inputValue"}},[_c('template',{slot:"prepend-outer"},[_vm._t("prepend")],2),(_vm.optional && !_vm.required)?_c('template',{slot:"prepend-inner"},[_c('span',{staticClass:"v-input__label-optional"},[_vm._v(_vm._s(_vm.optionalLabel))])]):_vm._e(),(_vm.required)?_c('template',{slot:"prepend-inner"},[_c('span',{staticClass:"v-input__label-required"},[_vm._v(_vm._s(_vm.requiredLabel))])]):_vm._e(),_c('template',{slot:"append"},[(_vm.isTouchDevice && !!_vm.$slots.info)?_c('div',{staticClass:"v-input__info",on:{"click":function($event){_vm.menu = !_vm.menu}}},[_c('v-icon',{attrs:{"color":"primary"}},[_vm._v("mdi-information-outline")])],1):_vm._e()]),_c('template',{slot:"append-outer"},[_vm._t("append")],2)],2)}
+var textfieldvue_type_template_id_bb925a84_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/fields/textfield.vue?vue&type=template&id=3c5036cb&
+// CONCATENATED MODULE: ./src/components/fields/base/textfield/textfield.vue?vue&type=template&id=bb925a84&
 
-// CONCATENATED MODULE: ./src/plugins/utils.js
+// CONCATENATED MODULE: ./src/plugins/utils.ts
+
 
 
 var utils = {
   disablePageScroll: function disablePageScroll() {
     var scrollPosition = window.pageYOffset;
-    window.document.body.setAttribute('data-top', scrollPosition);
+    window.document.body.setAttribute('data-top', String(scrollPosition));
     window.document.body.style.overflow = 'hidden';
     window.document.body.style.position = 'fixed';
     window.document.body.style.top = "-".concat(scrollPosition, "px");
@@ -23142,7 +25700,8 @@ var utils = {
     window.document.body.style.removeProperty('position');
     window.document.body.style.removeProperty('top');
     window.document.body.style.removeProperty('width');
-    window.scrollTo(0, window.document.body.getAttribute('data-top'));
+    var dataTop = window.document.body.getAttribute('data-top');
+    window.scrollTo(0, Number(dataTop));
     window.document.body.removeAttribute('data-top');
   },
   isIOS: function isIOS() {
@@ -23153,74 +25712,68 @@ var utils = {
   }
 };
 /* harmony default export */ var plugins_utils = (utils);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/textfield.vue?vue&type=script&lang=js&
+// EXTERNAL MODULE: ./src/components/fields/base/textfield/textfield.scss
+var textfield = __webpack_require__("3af2");
+
+// CONCATENATED MODULE: ./src/components/mixin/InputValueMixin.ts
 
 
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
-/* harmony default export */ var textfieldvue_type_script_lang_js_ = ({
-  name: "TextField",
+
+
+
+/**
+ * Use on components, which should be controlled by v-model.
+ * The internal value of inputValue is entirely controlled by the parent, passing the 'value' prop.
+ * Parent components may use this mixin themselves and override the getter / setter.
+ */
+
+var InputValueMixin_InputValueMixin = /*#__PURE__*/function (_Vue) {
+  _inherits(InputValueMixin, _Vue);
+
+  var _super = _createSuper(InputValueMixin);
+
+  function InputValueMixin() {
+    _classCallCheck(this, InputValueMixin);
+
+    return _super.apply(this, arguments);
+  }
+
+  _createClass(InputValueMixin, [{
+    key: "inputValue",
+    get: function get() {
+      return this.value;
+    },
+    set: function set(value) {
+      this.$emit('input', value);
+    }
+  }]);
+
+  return InputValueMixin;
+}(external_commonjs_vue_commonjs2_vue_root_Vue_default.a);
+
+__decorate([Prop({
+  "default": function _default() {
+    return null;
+  }
+}), __metadata("design:type", Object)], InputValueMixin_InputValueMixin.prototype, "value", void 0);
+
+InputValueMixin_InputValueMixin = __decorate([vue_class_component_esm], InputValueMixin_InputValueMixin);
+/* harmony default export */ var mixin_InputValueMixin = (InputValueMixin_InputValueMixin);
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/@vue/cli-plugin-typescript/node_modules/ts-loader??ref--13-3!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/base/textfield/textfield.vue?vue&type=script&lang=ts&
+
+
+
+
+
+
+
+
+
+
+
+
+var textfieldvue_type_script_lang_ts_Props = external_commonjs_vue_commonjs2_vue_root_Vue_default.a.extend({
   props: {
     counter: {
       type: [Number, String],
@@ -23230,11 +25783,12 @@ var utils = {
       }
     },
     properties: {
-      type: Object | Array,
+      type: [Object, Array],
       required: true
     },
     errorMessages: {
-      type: String | null
+      type: String,
+      required: false
     },
     focused: {
       type: Boolean,
@@ -23282,7 +25836,7 @@ var utils = {
     },
     optional: {
       type: Boolean,
-      "default": false
+      "default": true
     },
     optionalLabel: {
       type: String,
@@ -23301,96 +25855,114 @@ var utils = {
       "default": false
     },
     requiredLabel: {
-      type: String | null
+      type: String,
+      required: false
     },
     rules: {
-      type: [Object, Array],
+      type: Array,
       "default": function _default() {
-        return {} || [];
+        return [];
       }
     },
     suffix: {
       type: String,
       "default": null
     },
-    value: {
-      type: String | Number,
-      "default": ""
-    },
     type: {
-      value: String,
+      type: String,
       "default": 'text'
+    },
+    readonly: {
+      type: Boolean,
+      "default": false
     }
-  },
-  data: function data() {
-    return {
-      menu: false,
-      menuMaxHeight: 304,
-      updated: false,
-      dialog: null,
-      dropDown: true,
-      scrollPos: 0,
-      isTouchDevice: plugins_utils.isTouchDevice(),
-      windowHeight: window.innerHeight
-    };
-  },
-  mounted: function mounted() {
-    this.dialog = this.$refs["ref-" + this.identifier].$el.closest(".v-dialog");
+  }
+});
 
-    if (this.isTouchDevice) {
-      window.addEventListener("orientationchange", this.onResize);
-    } else {
-      window.addEventListener("resize", this.onResize);
-    }
+var textfieldvue_type_script_lang_ts_OnTextFieldBase = /*#__PURE__*/function (_mixins) {
+  _inherits(OnTextFieldBase, _mixins);
 
-    if (!!this.dialog) {
-      this.scrollPos = this.dialog.scrollTop;
-      this.dialog.addEventListener("scroll", this.onScroll, true);
-    }
-  },
-  beforeDestroy: function beforeDestroy() {
-    if (this.isTouchDevice) {
-      window.removeEventListener("orientationchange", this.onResize);
-    } else {
-      window.removeEventListener("resize", this.onResize);
-    }
+  var _super = _createSuper(OnTextFieldBase);
 
-    if (!!this.dialog) {
-      this.dialog.removeEventListener("scroll", this.onScroll);
-    }
-  },
-  watch: {
-    focused: function focused(_focused) {
-      // set focus to input tag
-      if (_focused) {
-        this.$refs["ref-" + this.identifier].$refs.input.focus();
+  function OnTextFieldBase() {
+    var _this;
 
-        if (!this.readonly && !this.isTouchDevice) {
-          this.menu = true;
-        }
+    _classCallCheck(this, OnTextFieldBase);
+
+    _this = _super.apply(this, arguments); // data
+
+    _this.menu = false;
+    _this.menuMaxHeight = 304;
+    _this.updated = false;
+    _this.dialog = null;
+    _this.dropDown = true;
+    _this.scrollPos = 0;
+    _this.isTouchDevice = plugins_utils.isTouchDevice();
+    _this.windowHeight = window.innerHeight;
+    return _this;
+  } // hooks
+
+
+  _createClass(OnTextFieldBase, [{
+    key: "mounted",
+    value: function mounted() {
+      var ref = this.$refs["ref-" + this.identifier];
+      var element = ref === null || ref === void 0 ? void 0 : ref.$el;
+      this.dialog = (element === null || element === void 0 ? void 0 : element.closest(".v-dialog")) || null;
+
+      if (this.isTouchDevice) {
+        window.addEventListener("orientationchange", this.onResize);
       } else {
-        this.$refs["ref-" + this.identifier].$refs.input.blur();
-        this.menu = false;
+        window.addEventListener("resize", this.onResize);
+      }
+
+      if (!!this.dialog) {
+        this.scrollPos = this.dialog.scrollTop;
+        this.dialog.addEventListener("scroll", this.onScroll, true);
       }
     }
-  },
-  methods: {
-    blur: function blur(e) {
+  }, {
+    key: "beforeDestroy",
+    value: function beforeDestroy() {
+      if (this.isTouchDevice) {
+        window.removeEventListener("orientationchange", this.onResize);
+      } else {
+        window.removeEventListener("resize", this.onResize);
+      }
+
+      if (!!this.dialog) {
+        this.dialog.removeEventListener("scroll", this.onScroll);
+      }
+    } // methods
+
+  }, {
+    key: "blur",
+    value: function blur(e) {
+      var _this$$refs;
+
       this.$emit("blur", e);
-      this.$refs["ref-" + this.identifier].blur();
+      (_this$$refs = this.$refs["ref-" + this.identifier]) === null || _this$$refs === void 0 ? void 0 : _this$$refs.blur();
       this.menu = false;
-    },
-    change: function change(e) {
+    }
+  }, {
+    key: "change",
+    value: function change(e) {
       this.$emit("change", e);
-    },
-    clear: function clear(e) {
+    }
+  }, {
+    key: "clear",
+    value: function clear(e) {
       this.$emit("clear", e);
       this.blur(e);
-    },
-    click: function click(e) {
+    }
+  }, {
+    key: "click",
+    value: function click(e) {
       this.$emit("click", e);
-    },
-    focus: function focus(e) {
+    }
+  }, {
+    key: "focus",
+    value: function focus(e) {
       this.$emit("focus", e);
       this.windowHeight = window.innerHeight;
 
@@ -23398,43 +25970,58 @@ var utils = {
         this.setMenuMaxHeight();
         this.menu = true;
       }
-    },
-    input: function input(e) {
+    }
+  }, {
+    key: "input",
+    value: function input(e) {
       this.$emit("input", e);
-    },
-    onResize: function onResize() {
+    }
+  }, {
+    key: "onResize",
+    value: function onResize() {
       this.setMenuMaxHeight();
-    },
-    onScroll: function onScroll() {
+    }
+  }, {
+    key: "onScroll",
+    value: function onScroll() {
       // remove focus only if menu exisits
       if (!!this.$slots.info) {
         // only need to close menu if in overlay (do not attach!)
         if (this.menu && !!this.dialog) {
           if (this.dialog.scrollTop > this.scrollPos + 50 || this.dialog.scrollTop < this.scrollPos - 50) {
-            this.$refs["ref-" + this.identifier].blur();
+            var _this$$refs2;
+
+            (_this$$refs2 = this.$refs["ref-" + this.identifier]) === null || _this$$refs2 === void 0 ? void 0 : _this$$refs2.blur();
             this.menu = false;
           }
         }
       }
-    },
-    setMenuMaxHeight: function setMenuMaxHeight() {
+    }
+  }, {
+    key: "setMenuMaxHeight",
+    value: function setMenuMaxHeight() {
+      var ref = this.$refs["ref-" + this.identifier];
+      var element = ref === null || ref === void 0 ? void 0 : ref.$el;
+      if (!element) return;
       var keyboardHeight = this.isTouchDevice ? this.windowHeight / 2 : this.windowHeight,
           // assumed keyboard height
-      fieldHeight = this.$refs["ref-" + this.identifier].$el.clientHeight,
-          maxHeight = this.menuMaxHeight,
+      fieldHeight = element.clientHeight,
+          maxHeight,
           offset = 10;
 
-      if (this.$refs["ref-" + this.identifier].$el.getBoundingClientRect().top + fieldHeight + 100 < keyboardHeight) {
+      if (element.getBoundingClientRect().top + fieldHeight + 100 < keyboardHeight) {
         this.dropDown = true;
-        maxHeight = keyboardHeight - this.$refs["ref-" + this.identifier].$el.getBoundingClientRect().top - fieldHeight - offset;
+        maxHeight = keyboardHeight - element.getBoundingClientRect().top - fieldHeight - offset;
       } else {
         this.dropDown = false;
-        maxHeight = this.$refs["ref-" + this.identifier].$el.getBoundingClientRect().top - offset;
+        maxHeight = element.getBoundingClientRect().top - offset;
       }
 
       this.menuMaxHeight = maxHeight;
-    },
-    update: function update() {
+    }
+  }, {
+    key: "update",
+    value: function update() {
       var _scope = this;
 
       this.updated = true;
@@ -23442,10 +26029,35 @@ var utils = {
         _scope.updated = false;
       }, 1500);
     }
+  }]);
+
+  return OnTextFieldBase;
+}(vue_class_component_esm_mixins(textfieldvue_type_script_lang_ts_Props, mixin_InputValueMixin));
+
+textfieldvue_type_script_lang_ts_OnTextFieldBase = __decorate([vue_class_component_esm({
+  name: 'OnTextFieldBase',
+  watch: {
+    focused: function focused(_focused) {
+      // set focus to input tag
+      var input = this.$refs["ref-" + this.identifier].$refs.input.blur();
+
+      if (_focused) {
+        input === null || input === void 0 ? void 0 : input.focus();
+
+        if (!this.readonly && !this.isTouchDevice) {
+          this.menu = true;
+        }
+      } else {
+        input === null || input === void 0 ? void 0 : input.blur();
+        this.menu = false;
+      }
+    }
   }
-});
-// CONCATENATED MODULE: ./src/components/fields/textfield.vue?vue&type=script&lang=js&
- /* harmony default export */ var fields_textfieldvue_type_script_lang_js_ = (textfieldvue_type_script_lang_js_); 
+})], textfieldvue_type_script_lang_ts_OnTextFieldBase);
+/* harmony default export */ var textfieldvue_type_script_lang_ts_ = (textfieldvue_type_script_lang_ts_OnTextFieldBase);
+;
+// CONCATENATED MODULE: ./src/components/fields/base/textfield/textfield.vue?vue&type=script&lang=ts&
+ /* harmony default export */ var textfield_textfieldvue_type_script_lang_ts_ = (textfieldvue_type_script_lang_ts_); 
 // EXTERNAL MODULE: ./node_modules/vuetify/src/components/VIcon/VIcon.sass
 var VIcon = __webpack_require__("4804");
 
@@ -25734,7 +28346,7 @@ var dirtyTypes = ['color', 'file', 'time', 'date', 'datetime-local', 'week', 'mo
     }
   }
 }));
-// CONCATENATED MODULE: ./src/components/fields/textfield.vue
+// CONCATENATED MODULE: ./src/components/fields/base/textfield/textfield.vue
 
 
 
@@ -25743,9 +28355,9 @@ var dirtyTypes = ['color', 'file', 'time', 'date', 'datetime-local', 'week', 'mo
 /* normalize component */
 
 var textfield_component = normalizeComponent(
-  fields_textfieldvue_type_script_lang_js_,
-  textfieldvue_type_template_id_3c5036cb_render,
-  textfieldvue_type_template_id_3c5036cb_staticRenderFns,
+  textfield_textfieldvue_type_script_lang_ts_,
+  textfieldvue_type_template_id_bb925a84_render,
+  textfieldvue_type_template_id_bb925a84_staticRenderFns,
   false,
   null,
   null,
@@ -25753,7 +28365,7 @@ var textfield_component = normalizeComponent(
   
 )
 
-/* harmony default export */ var textfield = (textfield_component.exports);
+/* harmony default export */ var textfield_textfield = (textfield_component.exports);
 
 /* vuetify-loader */
 
@@ -25761,72 +28373,97 @@ var textfield_component = normalizeComponent(
 
 installComponents_default()(textfield_component, {VIcon: components_VIcon_VIcon,VTextField: VTextField_VTextField})
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/extended_text_field.vue?vue&type=script&lang=js&
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/@vue/cli-plugin-typescript/node_modules/ts-loader??ref--13-3!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/composed/textfield.vue?vue&type=script&lang=ts&
 
 
-/* harmony default export */ var extended_text_fieldvue_type_script_lang_js_ = ({
-  name: "OnTextfield",
-  components: {
-    TextField: textfield
-  },
-  props: {
-    identifier: {
-      type: String,
-      required: true
-    },
-    properties: {
-      type: Object | Array,
-      required: true
-    },
-    validators: {
-      type: Array,
-      required: false
-    }
-  },
-  computed: {
-    required: function required() {
+
+
+
+var textfieldvue_type_script_lang_ts_a;
+
+
+ // infer vue prop type validation by ts-definition; import this before vue-property-decorator!
+
+
+
+
+
+
+
+
+var textfieldvue_type_script_lang_ts_OnTextField = /*#__PURE__*/function (_mixins) {
+  _inherits(OnTextField, _mixins);
+
+  var _super = _createSuper(OnTextField);
+
+  function OnTextField() {
+    _classCallCheck(this, OnTextField);
+
+    return _super.apply(this, arguments);
+  }
+
+  _createClass(OnTextField, [{
+    key: "isRequired",
+    get: function get() {
       return isRequired(this.properties);
-    },
-    placeholder: function placeholder() {
-      return getPlaceholder(this.properties);
-    },
-    requiredLabel: function requiredLabel() {
+    }
+  }, {
+    key: "requiredLabel",
+    get: function get() {
       return createRequiredLabel(this.validators);
+    }
+  }, {
+    key: "inputRules",
+    get: function get() {
+      return createInputRules(this.isRequired, this.validators, this.properties, true);
+    }
+  }, {
+    key: "inputValue",
+    get: function get() {
+      return this.$store.getters.getCurrentInputValue(this.identifier) || '';
     },
-    inputRules: function inputRules() {
-      return createInputRules(this.required, this.validators, this.properties, true);
-    },
-    inputValue: {
-      get: function get() {
-        return this.$store.getters.getCurrentInputValue(this.identifier) || "";
-      },
-      set: function set(value) {
-        this.$store.commit("updateInputValue", {
-          key: this.identifier,
-          value: value
-        });
-      }
-    },
-    inputError: function inputError() {
+    set: function set(value) {
+      this.$store.commit("updateInputValue", {
+        key: this.identifier,
+        value: value
+      });
+    }
+  }, {
+    key: "inputError",
+    get: function get() {
       return this.$store.getters.getCurrentInputError(this.identifier) || "";
     }
+  }, {
+    key: "placeholder",
+    get: function get() {
+      return getPlaceholder(this.properties);
+    }
+  }]);
+
+  return OnTextField;
+}(vue_class_component_esm_mixins(mixin_InputValueMixin));
+
+__decorate([Prop({
+  "default": function _default() {
+    return [];
   }
-});
-// CONCATENATED MODULE: ./src/components/fields/extended_text_field.vue?vue&type=script&lang=js&
- /* harmony default export */ var fields_extended_text_fieldvue_type_script_lang_js_ = (extended_text_fieldvue_type_script_lang_js_); 
-// CONCATENATED MODULE: ./src/components/fields/extended_text_field.vue
+}), __metadata("design:type", Array)], textfieldvue_type_script_lang_ts_OnTextField.prototype, "validators", void 0);
+
+__decorate([Prop(), __metadata("design:type", typeof (textfieldvue_type_script_lang_ts_a = typeof /* Cannot get final name for export "ElementProperties" in "./src/lib/FormDefinition.ts" (known exports: isFormDefinition, known reexports: ) */ undefined !== "undefined" && /* Cannot get final name for export "ElementProperties" in "./src/lib/FormDefinition.ts" (known exports: isFormDefinition, known reexports: ) */ undefined) === "function" ? textfieldvue_type_script_lang_ts_a : Object)], textfieldvue_type_script_lang_ts_OnTextField.prototype, "properties", void 0);
+
+__decorate([Prop(), __metadata("design:type", String)], textfieldvue_type_script_lang_ts_OnTextField.prototype, "identifier", void 0);
+
+textfieldvue_type_script_lang_ts_OnTextField = __decorate([vue_class_component_esm({
+  name: "OnTextField",
+  components: {
+    OnTextFieldBase: textfield_textfield
+  }
+})], textfieldvue_type_script_lang_ts_OnTextField);
+/* harmony default export */ var composed_textfieldvue_type_script_lang_ts_ = (textfieldvue_type_script_lang_ts_OnTextField);
+;
+// CONCATENATED MODULE: ./src/components/fields/composed/textfield.vue?vue&type=script&lang=ts&
+ /* harmony default export */ var fields_composed_textfieldvue_type_script_lang_ts_ = (composed_textfieldvue_type_script_lang_ts_); 
+// CONCATENATED MODULE: ./src/components/fields/composed/textfield.vue
 
 
 
@@ -25834,10 +28471,10 @@ installComponents_default()(textfield_component, {VIcon: components_VIcon_VIcon,
 
 /* normalize component */
 
-var extended_text_field_component = normalizeComponent(
-  fields_extended_text_fieldvue_type_script_lang_js_,
-  extended_text_fieldvue_type_template_id_09355e01_render,
-  extended_text_fieldvue_type_template_id_09355e01_staticRenderFns,
+var composed_textfield_component = normalizeComponent(
+  fields_composed_textfieldvue_type_script_lang_ts_,
+  textfieldvue_type_template_id_42a23b04_render,
+  textfieldvue_type_template_id_42a23b04_staticRenderFns,
   false,
   null,
   null,
@@ -25845,61 +28482,47 @@ var extended_text_field_component = normalizeComponent(
   
 )
 
-/* harmony default export */ var extended_text_field = (extended_text_field_component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/textfield_text.vue?vue&type=script&lang=js&
-//
-//
-//
+/* harmony default export */ var composed_textfield = (composed_textfield_component.exports);
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1ca6af6a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/composed/textfield_email.vue?vue&type=template&id=2461de80&
+var textfield_emailvue_type_template_id_2461de80_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('on-text-field',_vm._g(_vm._b({attrs:{"type":"email"}},'on-text-field',_vm.$attrs,false),_vm.$listeners))}
+var textfield_emailvue_type_template_id_2461de80_staticRenderFns = []
 
-/* harmony default export */ var textfield_textvue_type_script_lang_js_ = ({
-  name: "OnTextfieldText",
-  components: {
-    TextField: extended_text_field
+
+// CONCATENATED MODULE: ./src/components/fields/composed/textfield_email.vue?vue&type=template&id=2461de80&
+
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/@vue/cli-plugin-typescript/node_modules/ts-loader??ref--13-3!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/composed/textfield_email.vue?vue&type=script&lang=ts&
+
+
+
+
+
+
+
+var textfield_emailvue_type_script_lang_ts_OnTextFieldEmail = /*#__PURE__*/function (_Vue) {
+  _inherits(OnTextFieldEmail, _Vue);
+
+  var _super = _createSuper(OnTextFieldEmail);
+
+  function OnTextFieldEmail() {
+    _classCallCheck(this, OnTextFieldEmail);
+
+    return _super.apply(this, arguments);
   }
-});
-// CONCATENATED MODULE: ./src/components/fields/textfield_text.vue?vue&type=script&lang=js&
- /* harmony default export */ var fields_textfield_textvue_type_script_lang_js_ = (textfield_textvue_type_script_lang_js_); 
-// CONCATENATED MODULE: ./src/components/fields/textfield_text.vue
 
+  return OnTextFieldEmail;
+}(external_commonjs_vue_commonjs2_vue_root_Vue_default.a);
 
-
-
-
-/* normalize component */
-
-var textfield_text_component = normalizeComponent(
-  fields_textfield_textvue_type_script_lang_js_,
-  textfield_textvue_type_template_id_497b066a_render,
-  textfield_textvue_type_template_id_497b066a_staticRenderFns,
-  false,
-  null,
-  null,
-  null
-  
-)
-
-/* harmony default export */ var textfield_text = (textfield_text_component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"222cafe2-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/textfield_email.vue?vue&type=template&id=3d4ffcaf&
-var textfield_emailvue_type_template_id_3d4ffcaf_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('text-field',_vm._g(_vm._b({attrs:{"type":"email"}},'text-field',_vm.$attrs,false),_vm.$listeners))}
-var textfield_emailvue_type_template_id_3d4ffcaf_staticRenderFns = []
-
-
-// CONCATENATED MODULE: ./src/components/fields/textfield_email.vue?vue&type=template&id=3d4ffcaf&
-
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/textfield_email.vue?vue&type=script&lang=js&
-//
-//
-//
-
-/* harmony default export */ var textfield_emailvue_type_script_lang_js_ = ({
-  name: "OnTextfieldText",
+textfield_emailvue_type_script_lang_ts_OnTextFieldEmail = __decorate([vue_class_component_esm({
+  name: "OnTextFieldEmail",
   components: {
-    TextField: extended_text_field
+    OnTextField: composed_textfield
   }
-});
-// CONCATENATED MODULE: ./src/components/fields/textfield_email.vue?vue&type=script&lang=js&
- /* harmony default export */ var fields_textfield_emailvue_type_script_lang_js_ = (textfield_emailvue_type_script_lang_js_); 
-// CONCATENATED MODULE: ./src/components/fields/textfield_email.vue
+})], textfield_emailvue_type_script_lang_ts_OnTextFieldEmail);
+/* harmony default export */ var textfield_emailvue_type_script_lang_ts_ = (textfield_emailvue_type_script_lang_ts_OnTextFieldEmail);
+;
+// CONCATENATED MODULE: ./src/components/fields/composed/textfield_email.vue?vue&type=script&lang=ts&
+ /* harmony default export */ var composed_textfield_emailvue_type_script_lang_ts_ = (textfield_emailvue_type_script_lang_ts_); 
+// CONCATENATED MODULE: ./src/components/fields/composed/textfield_email.vue
 
 
 
@@ -25908,9 +28531,9 @@ var textfield_emailvue_type_template_id_3d4ffcaf_staticRenderFns = []
 /* normalize component */
 
 var textfield_email_component = normalizeComponent(
-  fields_textfield_emailvue_type_script_lang_js_,
-  textfield_emailvue_type_template_id_3d4ffcaf_render,
-  textfield_emailvue_type_template_id_3d4ffcaf_staticRenderFns,
+  composed_textfield_emailvue_type_script_lang_ts_,
+  textfield_emailvue_type_template_id_2461de80_render,
+  textfield_emailvue_type_template_id_2461de80_staticRenderFns,
   false,
   null,
   null,
@@ -25919,27 +28542,46 @@ var textfield_email_component = normalizeComponent(
 )
 
 /* harmony default export */ var textfield_email = (textfield_email_component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"222cafe2-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/textfield_number.vue?vue&type=template&id=48feb1e5&
-var textfield_numbervue_type_template_id_48feb1e5_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('text-field',_vm._g(_vm._b({attrs:{"type":"number"}},'text-field',_vm.$attrs,false),_vm.$listeners))}
-var textfield_numbervue_type_template_id_48feb1e5_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1ca6af6a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/composed/textfield_number.vue?vue&type=template&id=0b953148&
+var textfield_numbervue_type_template_id_0b953148_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('on-text-field',_vm._g(_vm._b({attrs:{"type":"number"}},'on-text-field',_vm.$attrs,false),_vm.$listeners))}
+var textfield_numbervue_type_template_id_0b953148_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/fields/textfield_number.vue?vue&type=template&id=48feb1e5&
+// CONCATENATED MODULE: ./src/components/fields/composed/textfield_number.vue?vue&type=template&id=0b953148&
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/textfield_number.vue?vue&type=script&lang=js&
-//
-//
-//
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/@vue/cli-plugin-typescript/node_modules/ts-loader??ref--13-3!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/composed/textfield_number.vue?vue&type=script&lang=ts&
 
-/* harmony default export */ var textfield_numbervue_type_script_lang_js_ = ({
-  name: "OnTextfieldText",
-  components: {
-    TextField: extended_text_field
+
+
+
+
+
+
+var textfield_numbervue_type_script_lang_ts_OnTextFieldNumber = /*#__PURE__*/function (_Vue) {
+  _inherits(OnTextFieldNumber, _Vue);
+
+  var _super = _createSuper(OnTextFieldNumber);
+
+  function OnTextFieldNumber() {
+    _classCallCheck(this, OnTextFieldNumber);
+
+    return _super.apply(this, arguments);
   }
-});
-// CONCATENATED MODULE: ./src/components/fields/textfield_number.vue?vue&type=script&lang=js&
- /* harmony default export */ var fields_textfield_numbervue_type_script_lang_js_ = (textfield_numbervue_type_script_lang_js_); 
-// CONCATENATED MODULE: ./src/components/fields/textfield_number.vue
+
+  return OnTextFieldNumber;
+}(external_commonjs_vue_commonjs2_vue_root_Vue_default.a);
+
+textfield_numbervue_type_script_lang_ts_OnTextFieldNumber = __decorate([vue_class_component_esm({
+  name: "OnTextFieldNumber",
+  components: {
+    OnTextField: composed_textfield
+  }
+})], textfield_numbervue_type_script_lang_ts_OnTextFieldNumber);
+/* harmony default export */ var textfield_numbervue_type_script_lang_ts_ = (textfield_numbervue_type_script_lang_ts_OnTextFieldNumber);
+;
+// CONCATENATED MODULE: ./src/components/fields/composed/textfield_number.vue?vue&type=script&lang=ts&
+ /* harmony default export */ var composed_textfield_numbervue_type_script_lang_ts_ = (textfield_numbervue_type_script_lang_ts_); 
+// CONCATENATED MODULE: ./src/components/fields/composed/textfield_number.vue
 
 
 
@@ -25948,9 +28590,9 @@ var textfield_numbervue_type_template_id_48feb1e5_staticRenderFns = []
 /* normalize component */
 
 var textfield_number_component = normalizeComponent(
-  fields_textfield_numbervue_type_script_lang_js_,
-  textfield_numbervue_type_template_id_48feb1e5_render,
-  textfield_numbervue_type_template_id_48feb1e5_staticRenderFns,
+  composed_textfield_numbervue_type_script_lang_ts_,
+  textfield_numbervue_type_template_id_0b953148_render,
+  textfield_numbervue_type_template_id_0b953148_staticRenderFns,
   false,
   null,
   null,
@@ -25959,27 +28601,46 @@ var textfield_number_component = normalizeComponent(
 )
 
 /* harmony default export */ var textfield_number = (textfield_number_component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"222cafe2-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/textfield_password.vue?vue&type=template&id=5afc6bfe&
-var textfield_passwordvue_type_template_id_5afc6bfe_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('text-field',_vm._g(_vm._b({attrs:{"type":"password"}},'text-field',_vm.$attrs,false),_vm.$listeners))}
-var textfield_passwordvue_type_template_id_5afc6bfe_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1ca6af6a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/composed/textfield_password.vue?vue&type=template&id=0774d0a4&
+var textfield_passwordvue_type_template_id_0774d0a4_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('on-text-field',_vm._g(_vm._b({attrs:{"type":"password"}},'on-text-field',_vm.$attrs,false),_vm.$listeners))}
+var textfield_passwordvue_type_template_id_0774d0a4_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/fields/textfield_password.vue?vue&type=template&id=5afc6bfe&
+// CONCATENATED MODULE: ./src/components/fields/composed/textfield_password.vue?vue&type=template&id=0774d0a4&
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/textfield_password.vue?vue&type=script&lang=js&
-//
-//
-//
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/@vue/cli-plugin-typescript/node_modules/ts-loader??ref--13-3!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/composed/textfield_password.vue?vue&type=script&lang=ts&
 
-/* harmony default export */ var textfield_passwordvue_type_script_lang_js_ = ({
-  name: "OnTextfieldText",
-  components: {
-    TextField: extended_text_field
+
+
+
+
+
+
+var textfield_passwordvue_type_script_lang_ts_OnTextFieldPassword = /*#__PURE__*/function (_Vue) {
+  _inherits(OnTextFieldPassword, _Vue);
+
+  var _super = _createSuper(OnTextFieldPassword);
+
+  function OnTextFieldPassword() {
+    _classCallCheck(this, OnTextFieldPassword);
+
+    return _super.apply(this, arguments);
   }
-});
-// CONCATENATED MODULE: ./src/components/fields/textfield_password.vue?vue&type=script&lang=js&
- /* harmony default export */ var fields_textfield_passwordvue_type_script_lang_js_ = (textfield_passwordvue_type_script_lang_js_); 
-// CONCATENATED MODULE: ./src/components/fields/textfield_password.vue
+
+  return OnTextFieldPassword;
+}(external_commonjs_vue_commonjs2_vue_root_Vue_default.a);
+
+textfield_passwordvue_type_script_lang_ts_OnTextFieldPassword = __decorate([vue_class_component_esm({
+  name: "OnTextFieldPassword",
+  components: {
+    OnTextField: composed_textfield
+  }
+})], textfield_passwordvue_type_script_lang_ts_OnTextFieldPassword);
+/* harmony default export */ var textfield_passwordvue_type_script_lang_ts_ = (textfield_passwordvue_type_script_lang_ts_OnTextFieldPassword);
+;
+// CONCATENATED MODULE: ./src/components/fields/composed/textfield_password.vue?vue&type=script&lang=ts&
+ /* harmony default export */ var composed_textfield_passwordvue_type_script_lang_ts_ = (textfield_passwordvue_type_script_lang_ts_); 
+// CONCATENATED MODULE: ./src/components/fields/composed/textfield_password.vue
 
 
 
@@ -25988,9 +28649,9 @@ var textfield_passwordvue_type_template_id_5afc6bfe_staticRenderFns = []
 /* normalize component */
 
 var textfield_password_component = normalizeComponent(
-  fields_textfield_passwordvue_type_script_lang_js_,
-  textfield_passwordvue_type_template_id_5afc6bfe_render,
-  textfield_passwordvue_type_template_id_5afc6bfe_staticRenderFns,
+  composed_textfield_passwordvue_type_script_lang_ts_,
+  textfield_passwordvue_type_template_id_0774d0a4_render,
+  textfield_passwordvue_type_template_id_0774d0a4_staticRenderFns,
   false,
   null,
   null,
@@ -25999,7 +28660,7 @@ var textfield_password_component = normalizeComponent(
 )
 
 /* harmony default export */ var textfield_password = (textfield_password_component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"222cafe2-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/hiddenfield_honeypot.vue?vue&type=template&id=528d740e&scoped=true&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1ca6af6a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/hiddenfield_honeypot.vue?vue&type=template&id=528d740e&scoped=true&
 var hiddenfield_honeypotvue_type_template_id_528d740e_scoped_true_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('input',{style:({
       position: 'absolute',
       margin: '0 0 0 -999em',
@@ -26059,14 +28720,14 @@ var hiddenfield_honeypot_component = normalizeComponent(
 )
 
 /* harmony default export */ var hiddenfield_honeypot = (hiddenfield_honeypot_component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"222cafe2-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/containers/form_grid_row.vue?vue&type=template&id=76c56070&
-var form_grid_rowvue_type_template_id_76c56070_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('v-row',{attrs:{"v-if":_vm.identifier && _vm.elements && _vm.elements.length>0,"identifier":_vm.identifier}},_vm._l((_vm.elements),function(element){return _c('form-grid-col',_vm._b({key:element.identifier,attrs:{"formName":_vm.formName}},'form-grid-col',element,false))}),1)}
-var form_grid_rowvue_type_template_id_76c56070_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1ca6af6a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/containers/form_grid_row.vue?vue&type=template&id=62e3ff02&
+var form_grid_rowvue_type_template_id_62e3ff02_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('v-row',{attrs:{"v-if":_vm.identifier && _vm.elements && _vm.elements.length>0}},_vm._l((_vm.elements),function(element){return _c('form-grid-col',_vm._b({key:element.identifier,attrs:{"formName":_vm.formName}},'form-grid-col',element,false))}),1)}
+var form_grid_rowvue_type_template_id_62e3ff02_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/containers/form_grid_row.vue?vue&type=template&id=76c56070&
+// CONCATENATED MODULE: ./src/components/containers/form_grid_row.vue?vue&type=template&id=62e3ff02&
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"222cafe2-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/containers/form_grid_col.vue?vue&type=template&id=5a66e7fe&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1ca6af6a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/containers/form_grid_col.vue?vue&type=template&id=5a66e7fe&
 var form_grid_colvue_type_template_id_5a66e7fe_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('v-col',{attrs:{"xl":_vm.columnSizes.lg,"lg":_vm.columnSizes.lg,"md":_vm.columnSizes.md,"sm":_vm.columnSizes.sm,"cols":_vm.columnSizes.xs}},[_c('child-dynamic-element',{attrs:{"formName":_vm.formName,"element":Object.assign({}, _vm.$props, _vm.$attrs)}})],1)}
 var form_grid_colvue_type_template_id_5a66e7fe_staticRenderFns = []
 
@@ -26556,8 +29217,8 @@ var VRow_cache = new Map();
 
 var form_grid_row_component = normalizeComponent(
   containers_form_grid_rowvue_type_script_lang_js_,
-  form_grid_rowvue_type_template_id_76c56070_render,
-  form_grid_rowvue_type_template_id_76c56070_staticRenderFns,
+  form_grid_rowvue_type_template_id_62e3ff02_render,
+  form_grid_rowvue_type_template_id_62e3ff02_staticRenderFns,
   false,
   null,
   null,
@@ -26572,21 +29233,234 @@ var form_grid_row_component = normalizeComponent(
 
 installComponents_default()(form_grid_row_component, {VRow: VRow})
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"222cafe2-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/extended_textarea.vue?vue&type=template&id=93b71070&
-var extended_textareavue_type_template_id_93b71070_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('v-textarea',{ref:'ref-' + _vm.identifier,class:[{
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1ca6af6a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/composed/textarea.vue?vue&type=template&id=589dd961&
+var textareavue_type_template_id_589dd961_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('on-textarea-base',_vm._g(_vm._b({attrs:{"properties":_vm.properties,"identifier":_vm.identifier,"required":_vm.isRequired,"requiredLabel":_vm.requiredLabel,"placeholder":_vm.placeholder,"errorMessages":_vm.inputError,"rules":_vm.inputRules,"maxLength":_vm.maxLength},model:{value:(_vm.inputValue),callback:function ($$v) {_vm.inputValue=$$v},expression:"inputValue"}},'on-textarea-base',_vm.$attrs,false),_vm.$listeners))}
+var textareavue_type_template_id_589dd961_staticRenderFns = []
+
+
+// CONCATENATED MODULE: ./src/components/fields/composed/textarea.vue?vue&type=template&id=589dd961&
+
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1ca6af6a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/base/textarea/textarea.vue?vue&type=template&id=33bb9f62&
+var textareavue_type_template_id_33bb9f62_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('v-textarea',{ref:'ref-' + _vm.identifier,class:[{
         'v-text-field--required': _vm.required,
-        'v-text-field--optional': !_vm.required,
-        'v-text-field--counting': _vm.maxLength,
+        'v-text-field--optional': _vm.optional && !_vm.required,
+        'v-text-field--counting': _vm.maxLength !== null,
         'v-text-field--updated': _vm.updated,
       },
       'ondigo-input',
       'ondigo-textarea',
-      ("ondigo-input-" + _vm.identifier)],attrs:{"autocomplete":_vm.properties['autoComplete'],"auto-size":"","color":_vm.color,"counter":_vm.maxLength,"disabled":_vm.disabled,"filled":_vm.filled,"outlined":_vm.outlined,"solo":_vm.solo,"hide-details":"auto","inputmode":_vm.inputmode,"identifier":_vm.identifier,"label":_vm.label,"loading":_vm.loading,"error-messages":_vm.inputError,"name":_vm.name,"placeholder":_vm.placeholder,"prefix":_vm.prefix,"readonly":_vm.readonly,"required":_vm.required,"rules":_vm.inputRules,"suffix":_vm.suffix,"type":_vm.type,"validate-on-blur":""},on:{"blur":_vm.blur,"focus":_vm.focus},model:{value:(_vm.inputValue),callback:function ($$v) {_vm.inputValue=$$v},expression:"inputValue"}},[_c('template',{slot:"prepend-outer"},[_vm._t("prepend")],2),(!_vm.required)?_c('template',{slot:"prepend-inner"},[_c('span',{staticClass:"v-input__label-optional"},[_vm._v(" "+_vm._s(_vm.optionalLabel)+" ")])]):_vm._e(),(_vm.required)?_c('template',{slot:"prepend-inner"},[_c('span',{staticClass:"v-input__label-required"},[_vm._v(_vm._s(_vm.requiredLabel))])]):_vm._e(),_c('template',{slot:"append-outer"},[_vm._t("append")],2)],2)}
-var extended_textareavue_type_template_id_93b71070_staticRenderFns = []
+      ("ondigo-input-" + _vm.identifier)],attrs:{"autocomplete":_vm.properties['autoComplete'],"auto-size":"","color":_vm.color,"counter":_vm.maxLength,"disabled":_vm.disabled,"filled":_vm.filled,"outlined":_vm.outlined,"solo":_vm.solo,"hide-details":"auto","inputmode":_vm.inputmode,"label":_vm.label,"loading":_vm.loading,"error-messages":_vm.errorMessages,"name":_vm.name,"placeholder":_vm.placeholder,"prefix":_vm.prefix,"readonly":_vm.readonly,"required":_vm.required,"rules":_vm.rules,"suffix":_vm.suffix,"type":_vm.type,"validate-on-blur":""},on:{"blur":_vm.blur,"focus":_vm.focus,"change":_vm.change,"input":_vm.input}},[_c('template',{slot:"prepend-outer"},[_vm._t("prepend")],2),(!_vm.required)?_c('template',{slot:"prepend-inner"},[_c('span',{staticClass:"v-input__label-optional"},[_vm._v(" "+_vm._s(_vm.optionalLabel)+" ")])]):_vm._e(),(_vm.required)?_c('template',{slot:"prepend-inner"},[_c('span',{staticClass:"v-input__label-required"},[_vm._v(_vm._s(_vm.requiredLabel))])]):_vm._e(),_c('template',{slot:"append-outer"},[_vm._t("append")],2)],2)}
+var textareavue_type_template_id_33bb9f62_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/fields/extended_textarea.vue?vue&type=template&id=93b71070&
+// CONCATENATED MODULE: ./src/components/fields/base/textarea/textarea.vue?vue&type=template&id=33bb9f62&
 
+// EXTERNAL MODULE: ./src/components/fields/base/textarea/textarea.scss
+var textarea_textarea = __webpack_require__("2c42");
+
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/@vue/cli-plugin-typescript/node_modules/ts-loader??ref--13-3!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/base/textarea/textarea.vue?vue&type=script&lang=ts&
+
+
+
+
+
+
+
+
+
+var textareavue_type_script_lang_ts_Props = external_commonjs_vue_commonjs2_vue_root_Vue_default.a.extend({
+  props: {
+    autocomplete: {
+      type: String,
+      "default": null
+    },
+    clearable: {
+      type: Boolean,
+      "default": false
+    },
+    type: {
+      type: String,
+      "default": "text"
+    },
+    color: {
+      type: String,
+      "default": null
+    },
+    disabled: {
+      type: Boolean,
+      "default": false
+    },
+    filled: {
+      type: Boolean,
+      "default": false
+    },
+    outlined: {
+      type: Boolean,
+      "default": false
+    },
+    solo: {
+      type: Boolean,
+      "default": false
+    },
+    focused: {
+      type: Boolean,
+      "default": false
+    },
+    hidedetails: {
+      type: Boolean,
+      "default": false
+    },
+    identifier: {
+      type: String,
+      required: true
+    },
+    name: {
+      type: String,
+      required: true
+    },
+    defaultValue: {
+      type: String,
+      required: false
+    },
+    inputmode: {
+      type: String,
+      "default": "text"
+    },
+    label: {
+      type: String,
+      "default": null
+    },
+    loading: {
+      type: Boolean,
+      "default": false
+    },
+    optional: {
+      type: Boolean,
+      "default": true
+    },
+    optionalLabel: {
+      type: String,
+      "default": "optional"
+    },
+    placeholder: {
+      type: String,
+      "default": null
+    },
+    prefix: {
+      type: String,
+      "default": null
+    },
+    readonly: {
+      type: Boolean,
+      "default": false
+    },
+    suffix: {
+      type: String,
+      "default": null
+    },
+    properties: {
+      type: [Object, Array],
+      required: true
+    },
+    required: {
+      type: Boolean,
+      "default": false
+    },
+    requiredLabel: {
+      type: String,
+      required: false
+    },
+    rules: {
+      type: Array,
+      "default": function _default() {
+        return [];
+      }
+    },
+    errorMessages: {
+      type: String,
+      required: false
+    },
+    maxLength: {
+      type: Number,
+      "default": null
+    }
+  }
+});
+
+var textareavue_type_script_lang_ts_OnTextareaBase = /*#__PURE__*/function (_Props) {
+  _inherits(OnTextareaBase, _Props);
+
+  var _super = _createSuper(OnTextareaBase);
+
+  function OnTextareaBase() {
+    var _this;
+
+    _classCallCheck(this, OnTextareaBase);
+
+    _this = _super.apply(this, arguments);
+    _this.updated = false;
+    return _this;
+  }
+
+  _createClass(OnTextareaBase, [{
+    key: "blur",
+    value: function blur(e) {
+      this.$emit("blur", e);
+    }
+  }, {
+    key: "change",
+    value: function change(e) {
+      this.$emit("change", e);
+    }
+  }, {
+    key: "focus",
+    value: function focus(e) {
+      this.$emit("focus", e);
+    }
+  }, {
+    key: "input",
+    value: function input(e) {
+      this.$emit("input", e);
+    }
+  }, {
+    key: "update",
+    value: function update() {
+      var _scope = this;
+
+      this.updated = true;
+      setTimeout(function () {
+        _scope.updated = false;
+      }, 1500);
+    }
+  }]);
+
+  return OnTextareaBase;
+}(textareavue_type_script_lang_ts_Props);
+
+textareavue_type_script_lang_ts_OnTextareaBase = __decorate([vue_class_component_esm({
+  name: "OnTextareaBase",
+  watch: {
+    focused: function focused(_focused) {
+      var _this$$refs, _this$$refs$$refs;
+
+      // set focus to input tag
+      var input = (_this$$refs = this.$refs["ref-" + this.identifier]) === null || _this$$refs === void 0 ? void 0 : (_this$$refs$$refs = _this$$refs.$refs) === null || _this$$refs$$refs === void 0 ? void 0 : _this$$refs$$refs.input;
+
+      if (_focused) {
+        input === null || input === void 0 ? void 0 : input.focus();
+      } else {
+        input === null || input === void 0 ? void 0 : input.blur();
+      }
+    },
+    loading: function loading(_loading) {
+      if (!_loading) return;
+    }
+  }
+})], textareavue_type_script_lang_ts_OnTextareaBase);
+/* harmony default export */ var textareavue_type_script_lang_ts_ = (textareavue_type_script_lang_ts_OnTextareaBase);
+;
+// CONCATENATED MODULE: ./src/components/fields/base/textarea/textarea.vue?vue&type=script&lang=ts&
+ /* harmony default export */ var textarea_textareavue_type_script_lang_ts_ = (textareavue_type_script_lang_ts_); 
 // EXTERNAL MODULE: ./node_modules/vuetify/src/components/VTextarea/VTextarea.sass
 var VTextarea = __webpack_require__("1681");
 
@@ -26686,215 +29560,103 @@ var VTextarea_baseMixins = mixins(VTextField_VTextField);
     }
   }
 }));
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/extended_textarea.vue?vue&type=script&lang=js&
+// CONCATENATED MODULE: ./src/components/fields/base/textarea/textarea.vue
 
 
 
 
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+
+/* normalize component */
+
+var textarea_component = normalizeComponent(
+  textarea_textareavue_type_script_lang_ts_,
+  textareavue_type_template_id_33bb9f62_render,
+  textareavue_type_template_id_33bb9f62_staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* harmony default export */ var base_textarea_textarea = (textarea_component.exports);
+
+/* vuetify-loader */
 
 
-/* harmony default export */ var extended_textareavue_type_script_lang_js_ = ({
-  name: "OnTextarea",
-  components: {
-    VTextarea: VTextarea_VTextarea
-  },
-  props: {
-    autocomplete: {
-      type: String,
-      "default": null
-    },
-    clearable: {
-      type: Boolean,
-      "default": false
-    },
-    type: {
-      type: String,
-      "default": "text"
-    },
-    color: {
-      type: String,
-      "default": null
-    },
-    disabled: {
-      type: Boolean,
-      "default": false
-    },
-    filled: {
-      type: Boolean,
-      "default": false
-    },
-    outlined: {
-      type: Boolean,
-      "default": false
-    },
-    solo: {
-      type: Boolean,
-      "default": false
-    },
-    focused: {
-      type: Boolean,
-      "default": false
-    },
-    hidedetails: {
-      type: Boolean,
-      "default": false
-    },
-    identifier: {
-      type: String,
-      required: true
-    },
-    name: {
-      type: String,
-      required: true
-    },
-    defaultValue: {
-      type: String,
-      required: false
-    },
-    inputmode: {
-      type: String,
-      "default": "text"
-    },
-    label: {
-      type: String,
-      "default": null
-    },
-    loading: {
-      type: Boolean,
-      "default": false
-    },
-    optional: {
-      type: Boolean,
-      "default": false
-    },
-    optionalLabel: {
-      type: String,
-      "default": "optional"
-    },
-    placeholder: {
-      type: String,
-      "default": null
-    },
-    prefix: {
-      type: String,
-      "default": null
-    },
-    readonly: {
-      type: Boolean,
-      "default": false
-    },
-    suffix: {
-      type: String,
-      "default": null
-    },
-    validators: {
-      type: Array,
-      required: false
-    },
-    properties: {
-      type: Object | Array,
-      required: true
-    }
-  },
-  data: function data() {
-    return {
-      updated: false
-    };
-  },
-  watch: {
-    focused: function focused(_focused) {
-      // set focus to input tag
-      if (_focused) {
-        this.$refs["ref-" + this.identifier].$refs.input.focus();
-      } else {
-        this.$refs["ref-" + this.identifier].$refs.input.blur();
-      }
-    },
-    loading: function loading(_loading) {
-      if (!_loading) return;
-    }
-  },
-  computed: {
-    required: function required() {
+installComponents_default()(textarea_component, {VTextarea: VTextarea_VTextarea})
+
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/@vue/cli-plugin-typescript/node_modules/ts-loader??ref--13-3!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/composed/textarea.vue?vue&type=script&lang=ts&
+
+
+
+
+
+
+
+
+var textareavue_type_script_lang_ts_a;
+
+
+ // infer vue prop type validation by ts-definition; import this before vue-property-decorator!
+
+
+
+
+
+
+
+
+var textareavue_type_script_lang_ts_OnTextarea = /*#__PURE__*/function (_mixins) {
+  _inherits(OnTextarea, _mixins);
+
+  var _super = _createSuper(OnTextarea);
+
+  function OnTextarea() {
+    _classCallCheck(this, OnTextarea);
+
+    return _super.apply(this, arguments);
+  }
+
+  _createClass(OnTextarea, [{
+    key: "isRequired",
+    get: function get() {
       return isRequired(this.properties);
-    },
-    requiredLabel: function requiredLabel() {
+    }
+  }, {
+    key: "requiredLabel",
+    get: function get() {
       return createRequiredLabel(this.validators);
+    }
+  }, {
+    key: "inputRules",
+    get: function get() {
+      return createInputRules(this.isRequired, this.validators, this.properties, true);
+    }
+  }, {
+    key: "inputValue",
+    get: function get() {
+      return this.$store.getters.getCurrentInputValue(this.identifier) || "";
     },
-    inputRules: function inputRules() {
-      return createInputRules(this.required, this.validators, this.properties, true);
-    },
-    inputValue: {
-      get: function get() {
-        return this.$store.getters.getCurrentInputValue(this.identifier) || "";
-      },
-      set: function set(value) {
-        this.$store.commit("updateInputValue", {
-          key: this.identifier,
-          value: value
-        });
-      }
-    },
-    inputError: function inputError() {
+    set: function set(value) {
+      this.$store.commit("updateInputValue", {
+        key: this.identifier,
+        value: value
+      });
+    }
+  }, {
+    key: "inputError",
+    get: function get() {
       return this.$store.getters.getCurrentInputError(this.identifier) || "";
-    },
-    maxLength: function maxLength() {
+    }
+  }, {
+    key: "placeholder",
+    get: function get() {
+      return getPlaceholder(this.properties);
+    }
+  }, {
+    key: "maxLength",
+    get: function get() {
       if (this.validators && Array.isArray(this.validators)) {
         var stringLengthValidator = this.validators.find(function (val) {
           return val.identifier === 'StringLength';
@@ -26905,35 +29667,40 @@ var VTextarea_baseMixins = mixins(VTextField_VTextField);
         }
       }
 
-      return null;
+      return this.counter;
     }
-  },
-  methods: {
-    blur: function blur(e) {
-      this.$emit("blur", e);
-    },
-    change: function change(e) {
-      this.$emit("change", e);
-    },
-    focus: function focus(e) {
-      this.$emit("focus", e);
-    },
-    input: function input(e) {
-      this.$emit("input", e);
-    },
-    update: function update() {
-      var _scope = this;
+  }]);
 
-      this.updated = true;
-      setTimeout(function () {
-        _scope.updated = false;
-      }, 1500);
-    }
+  return OnTextarea;
+}(vue_class_component_esm_mixins(mixin_InputValueMixin));
+
+__decorate([Prop({
+  "default": function _default() {
+    return [];
   }
-});
-// CONCATENATED MODULE: ./src/components/fields/extended_textarea.vue?vue&type=script&lang=js&
- /* harmony default export */ var fields_extended_textareavue_type_script_lang_js_ = (extended_textareavue_type_script_lang_js_); 
-// CONCATENATED MODULE: ./src/components/fields/extended_textarea.vue
+}), __metadata("design:type", Array)], textareavue_type_script_lang_ts_OnTextarea.prototype, "validators", void 0);
+
+__decorate([Prop(), __metadata("design:type", typeof (textareavue_type_script_lang_ts_a = typeof /* Cannot get final name for export "ElementProperties" in "./src/lib/FormDefinition.ts" (known exports: isFormDefinition, known reexports: ) */ undefined !== "undefined" && /* Cannot get final name for export "ElementProperties" in "./src/lib/FormDefinition.ts" (known exports: isFormDefinition, known reexports: ) */ undefined) === "function" ? textareavue_type_script_lang_ts_a : Object)], textareavue_type_script_lang_ts_OnTextarea.prototype, "properties", void 0);
+
+__decorate([Prop(), __metadata("design:type", String)], textareavue_type_script_lang_ts_OnTextarea.prototype, "identifier", void 0);
+
+__decorate([Prop({
+  "default": function _default() {
+    return null;
+  }
+}), __metadata("design:type", Object)], textareavue_type_script_lang_ts_OnTextarea.prototype, "counter", void 0);
+
+textareavue_type_script_lang_ts_OnTextarea = __decorate([vue_class_component_esm({
+  name: "OnTextarea",
+  components: {
+    OnTextareaBase: base_textarea_textarea
+  }
+})], textareavue_type_script_lang_ts_OnTextarea);
+/* harmony default export */ var composed_textareavue_type_script_lang_ts_ = (textareavue_type_script_lang_ts_OnTextarea);
+;
+// CONCATENATED MODULE: ./src/components/fields/composed/textarea.vue?vue&type=script&lang=ts&
+ /* harmony default export */ var fields_composed_textareavue_type_script_lang_ts_ = (composed_textareavue_type_script_lang_ts_); 
+// CONCATENATED MODULE: ./src/components/fields/composed/textarea.vue
 
 
 
@@ -26941,10 +29708,10 @@ var VTextarea_baseMixins = mixins(VTextField_VTextField);
 
 /* normalize component */
 
-var extended_textarea_component = normalizeComponent(
-  fields_extended_textareavue_type_script_lang_js_,
-  extended_textareavue_type_template_id_93b71070_render,
-  extended_textareavue_type_template_id_93b71070_staticRenderFns,
+var composed_textarea_component = normalizeComponent(
+  fields_composed_textareavue_type_script_lang_ts_,
+  textareavue_type_template_id_589dd961_render,
+  textareavue_type_template_id_589dd961_staticRenderFns,
   false,
   null,
   null,
@@ -26952,51 +29719,35 @@ var extended_textarea_component = normalizeComponent(
   
 )
 
-/* harmony default export */ var extended_textarea = (extended_textarea_component.exports);
-
-/* vuetify-loader */
-
-
-installComponents_default()(extended_textarea_component, {VTextarea: VTextarea_VTextarea})
-
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"222cafe2-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/checkbox/checkbox.vue?vue&type=template&id=00ce4894&
-var checkboxvue_type_template_id_00ce4894_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('v-checkbox',{ref:'ref-' + _vm.identifier,staticClass:"ondigo-checkbox",class:("ondigo-input-" + _vm.identifier + " ondigo-checkbox"),attrs:{"error-messages":_vm.inputError,"label":_vm.label,"identifier":_vm.identifier,"required":_vm.required,"rules":_vm.inputRules,"validate-on-blur":"","value":_vm.inputValue,"checked":_vm.inputValue,"name":_vm.name,"hide-details":"auto","off-icon":"mdi-checkbox-blank"},model:{value:(_vm.inputValue),callback:function ($$v) {_vm.inputValue=$$v},expression:"inputValue"}},[(_vm.properties.content)?_c('div',{ref:"contentLabel",staticClass:"ondigo-content-element-wrapper",attrs:{"slot":"label"},domProps:{"innerHTML":_vm._s(_vm.properties.content)},slot:"label"}):_vm._e()])}
-var checkboxvue_type_template_id_00ce4894_staticRenderFns = []
+/* harmony default export */ var composed_textarea = (composed_textarea_component.exports);
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1ca6af6a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/composed/extended_checkbox/checkbox.vue?vue&type=template&id=ae0039c8&
+var checkboxvue_type_template_id_ae0039c8_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('on-checkbox-base',_vm._b({attrs:{"properties":_vm.properties,"identifier":_vm.identifier,"required":_vm.isRequired,"requiredLabel":_vm.requiredLabel,"errorMessages":_vm.inputError,"rules":_vm.inputRules},model:{value:(_vm.inputValue),callback:function ($$v) {_vm.inputValue=$$v},expression:"inputValue"}},'on-checkbox-base',_vm.$attrs,false))}
+var checkboxvue_type_template_id_ae0039c8_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/fields/checkbox/checkbox.vue?vue&type=template&id=00ce4894&
+// CONCATENATED MODULE: ./src/components/fields/composed/extended_checkbox/checkbox.vue?vue&type=template&id=ae0039c8&
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/checkbox/checkbox.vue?vue&type=script&lang=js&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1ca6af6a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/base/checkbox/checkbox.vue?vue&type=template&id=70285512&
+var checkboxvue_type_template_id_70285512_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('v-checkbox',{ref:'ref-' + _vm.identifier,staticClass:"ondigo-checkbox",class:("ondigo-input-" + _vm.identifier + " ondigo-checkbox"),attrs:{"checked":_vm.inputValue,"error-messages":_vm.errorMessages,"label":_vm.label,"identifier":_vm.identifier,"required":_vm.required,"rules":_vm.rules,"validate-on-blur":"","value":_vm.inputValue,"name":_vm.name,"hide-details":"auto","off-icon":"mdi-checkbox-blank"},model:{value:(_vm.inputValue),callback:function ($$v) {_vm.inputValue=$$v},expression:"inputValue"}},[(_vm.properties.content)?_c('div',{ref:"contentLabel",staticClass:"ondigo-content-element-wrapper",attrs:{"slot":"label"},domProps:{"innerHTML":_vm._s(_vm.properties.content)},slot:"label"}):_vm._e()])}
+var checkboxvue_type_template_id_70285512_staticRenderFns = []
+
+
+// CONCATENATED MODULE: ./src/components/fields/base/checkbox/checkbox.vue?vue&type=template&id=70285512&
+
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/@vue/cli-plugin-typescript/node_modules/ts-loader??ref--13-3!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/base/checkbox/checkbox.vue?vue&type=script&lang=ts&
 
 
 
 
 
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
-/* harmony default export */ var checkboxvue_type_script_lang_js_ = ({
-  name: "OnCheckbox",
+
+
+
+
+
+
+var checkboxvue_type_script_lang_ts_Props = external_commonjs_vue_commonjs2_vue_root_Vue_default.a.extend({
   props: {
     identifier: {
       type: String,
@@ -27010,70 +29761,70 @@ var checkboxvue_type_template_id_00ce4894_staticRenderFns = []
       "default": null
     },
     properties: {
-      type: Object | Array,
+      type: [Object, Array],
       required: true
     },
     requiredLabel: {
       type: String,
       "default": "required"
     },
-    rules: {
-      type: [Object, Array],
-      "default": function _default() {
-        return {} || [];
-      }
-    },
     type: {
       type: String,
       "default": "text"
     },
-    value: {
-      type: [String, Number, Boolean],
-      "default": null
+    required: {
+      type: Boolean,
+      "default": false
     },
-    validators: {
+    rules: {
       type: Array,
-      required: false
-    }
-  },
-  mounted: function mounted() {
-    var contentLabel = this.$refs['contentLabel'];
-
-    if (contentLabel) {
-      /** @type HTMLElement[] */
-      var links = Array.from(contentLabel.querySelectorAll('a'));
-      links.forEach(function (elem) {
-        return elem.addEventListener('click', function (e) {
-          return e.stopPropagation();
-        });
-      });
-    }
-  },
-  computed: {
-    required: function required() {
-      return isRequired(this.properties);
-    },
-    inputRules: function inputRules() {
-      return createInputRules(this.required, this.validators, this.properties);
-    },
-    inputValue: {
-      get: function get() {
-        return !!this.$store.getters.getCurrentInputValue(this.identifier);
-      },
-      set: function set(value) {
-        this.$store.commit("updateInputValue", {
-          key: this.identifier,
-          value: value
-        });
+      "default": function _default() {
+        return [];
       }
     },
-    inputError: function inputError() {
-      return this.$store.getters.getCurrentInputError(this.identifier) || "";
+    errorMessages: {
+      type: String,
+      required: false
     }
   }
 });
-// CONCATENATED MODULE: ./src/components/fields/checkbox/checkbox.vue?vue&type=script&lang=js&
- /* harmony default export */ var checkbox_checkboxvue_type_script_lang_js_ = (checkboxvue_type_script_lang_js_); 
+
+var checkboxvue_type_script_lang_ts_OnCheckboxBase = /*#__PURE__*/function (_mixins) {
+  _inherits(OnCheckboxBase, _mixins);
+
+  var _super = _createSuper(OnCheckboxBase);
+
+  function OnCheckboxBase() {
+    _classCallCheck(this, OnCheckboxBase);
+
+    return _super.apply(this, arguments);
+  }
+
+  _createClass(OnCheckboxBase, [{
+    key: "mounted",
+    value: function mounted() {
+      var contentLabel = this.$refs['contentLabel'];
+
+      if (contentLabel) {
+        var links = Array.from(contentLabel.querySelectorAll('a'));
+        links.forEach(function (elem) {
+          return elem.addEventListener('click', function (e) {
+            return e.stopPropagation();
+          });
+        });
+      }
+    }
+  }]);
+
+  return OnCheckboxBase;
+}(vue_class_component_esm_mixins(checkboxvue_type_script_lang_ts_Props, mixin_InputValueMixin));
+
+checkboxvue_type_script_lang_ts_OnCheckboxBase = __decorate([vue_class_component_esm({
+  name: "OnCheckboxBase"
+})], checkboxvue_type_script_lang_ts_OnCheckboxBase);
+/* harmony default export */ var checkboxvue_type_script_lang_ts_ = (checkboxvue_type_script_lang_ts_OnCheckboxBase);
+// CONCATENATED MODULE: ./src/components/fields/base/checkbox/checkbox.vue?vue&type=script&lang=ts&
+ /* harmony default export */ var checkbox_checkboxvue_type_script_lang_ts_ = (checkboxvue_type_script_lang_ts_); 
 // EXTERNAL MODULE: ./node_modules/vuetify/src/components/VCheckbox/VCheckbox.sass
 var VCheckbox = __webpack_require__("6ca7");
 
@@ -27396,7 +30147,7 @@ var VCheckbox_excluded = ["title"];
     }
   }
 }));
-// CONCATENATED MODULE: ./src/components/fields/checkbox/checkbox.vue
+// CONCATENATED MODULE: ./src/components/fields/base/checkbox/checkbox.vue
 
 
 
@@ -27405,9 +30156,9 @@ var VCheckbox_excluded = ["title"];
 /* normalize component */
 
 var checkbox_component = normalizeComponent(
-  checkbox_checkboxvue_type_script_lang_js_,
-  checkboxvue_type_template_id_00ce4894_render,
-  checkboxvue_type_template_id_00ce4894_staticRenderFns,
+  checkbox_checkboxvue_type_script_lang_ts_,
+  checkboxvue_type_template_id_70285512_render,
+  checkboxvue_type_template_id_70285512_staticRenderFns,
   false,
   null,
   null,
@@ -27422,12 +30173,118 @@ var checkbox_component = normalizeComponent(
 
 installComponents_default()(checkbox_component, {VCheckbox: VCheckbox_VCheckbox})
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"222cafe2-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/radio_group.vue?vue&type=template&id=72ac73c4&
-var radio_groupvue_type_template_id_72ac73c4_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('v-radio-group',{ref:'ref-' + _vm.identifier,class:("ondigo-input-" + _vm.identifier + " ondigo-radio"),attrs:{"error-messages":_vm.inputError,"identifier":_vm.identifier,"label":_vm.label,"required":_vm.required,"rules":_vm.inputRules,"color":"red","name":_vm.name,"hide-details":"auto"},on:{"blur":_vm.blur,"change":_vm.change,"focus":_vm.focus,"input":_vm.input},model:{value:(_vm.inputValue),callback:function ($$v) {_vm.inputValue=$$v},expression:"inputValue"}},_vm._l((_vm.radioOptions),function(option){return _c('v-radio',{key:option.value,attrs:{"check":_vm.inputValue === option.value,"label":option.label,"value":option.value}})}),1)}
-var radio_groupvue_type_template_id_72ac73c4_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/@vue/cli-plugin-typescript/node_modules/ts-loader??ref--13-3!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/composed/extended_checkbox/checkbox.vue?vue&type=script&lang=ts&
 
 
-// CONCATENATED MODULE: ./src/components/fields/radio_group.vue?vue&type=template&id=72ac73c4&
+
+
+
+var checkboxvue_type_script_lang_ts_a;
+
+
+ // infer vue prop type validation by ts-definition; import this before vue-property-decorator!
+
+
+
+
+
+
+
+
+var checkboxvue_type_script_lang_ts_OnCheckbox = /*#__PURE__*/function (_mixins) {
+  _inherits(OnCheckbox, _mixins);
+
+  var _super = _createSuper(OnCheckbox);
+
+  function OnCheckbox() {
+    _classCallCheck(this, OnCheckbox);
+
+    return _super.apply(this, arguments);
+  }
+
+  _createClass(OnCheckbox, [{
+    key: "isRequired",
+    get: function get() {
+      return isRequired(this.properties);
+    }
+  }, {
+    key: "requiredLabel",
+    get: function get() {
+      return createRequiredLabel(this.validators);
+    }
+  }, {
+    key: "inputRules",
+    get: function get() {
+      return createInputRules(this.isRequired, this.validators, this.properties);
+    }
+  }, {
+    key: "inputValue",
+    get: function get() {
+      var currentInputValue = this.$store.getters.getCurrentInputValue(this.identifier);
+      return typeof currentInputValue === 'boolean' ? currentInputValue : false;
+    },
+    set: function set(value) {
+      this.$store.commit("updateInputValue", {
+        key: this.identifier,
+        value: value
+      });
+    }
+  }, {
+    key: "inputError",
+    get: function get() {
+      return this.$store.getters.getCurrentInputError(this.identifier) || "";
+    }
+  }]);
+
+  return OnCheckbox;
+}(vue_class_component_esm_mixins(mixin_InputValueMixin));
+
+__decorate([Prop({
+  "default": function _default() {
+    return [];
+  }
+}), __metadata("design:type", Array)], checkboxvue_type_script_lang_ts_OnCheckbox.prototype, "validators", void 0);
+
+__decorate([Prop(), __metadata("design:type", typeof (checkboxvue_type_script_lang_ts_a = typeof /* Cannot get final name for export "ElementProperties" in "./src/lib/FormDefinition.ts" (known exports: isFormDefinition, known reexports: ) */ undefined !== "undefined" && /* Cannot get final name for export "ElementProperties" in "./src/lib/FormDefinition.ts" (known exports: isFormDefinition, known reexports: ) */ undefined) === "function" ? checkboxvue_type_script_lang_ts_a : Object)], checkboxvue_type_script_lang_ts_OnCheckbox.prototype, "properties", void 0);
+
+__decorate([Prop(), __metadata("design:type", String)], checkboxvue_type_script_lang_ts_OnCheckbox.prototype, "identifier", void 0);
+
+checkboxvue_type_script_lang_ts_OnCheckbox = __decorate([vue_class_component_esm({
+  name: "OnCheckbox",
+  components: {
+    OnCheckboxBase: checkbox_checkbox
+  }
+})], checkboxvue_type_script_lang_ts_OnCheckbox);
+/* harmony default export */ var extended_checkbox_checkboxvue_type_script_lang_ts_ = (checkboxvue_type_script_lang_ts_OnCheckbox);
+;
+// CONCATENATED MODULE: ./src/components/fields/composed/extended_checkbox/checkbox.vue?vue&type=script&lang=ts&
+ /* harmony default export */ var composed_extended_checkbox_checkboxvue_type_script_lang_ts_ = (extended_checkbox_checkboxvue_type_script_lang_ts_); 
+// CONCATENATED MODULE: ./src/components/fields/composed/extended_checkbox/checkbox.vue
+
+
+
+
+
+/* normalize component */
+
+var extended_checkbox_checkbox_component = normalizeComponent(
+  composed_extended_checkbox_checkboxvue_type_script_lang_ts_,
+  checkboxvue_type_template_id_ae0039c8_render,
+  checkboxvue_type_template_id_ae0039c8_staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* harmony default export */ var extended_checkbox_checkbox = (extended_checkbox_checkbox_component.exports);
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1ca6af6a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/radio_group.vue?vue&type=template&id=1816f124&
+var radio_groupvue_type_template_id_1816f124_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('v-radio-group',{ref:'ref-' + _vm.identifier,class:("ondigo-input-" + _vm.identifier + " ondigo-radio"),attrs:{"error-messages":_vm.inputError,"identifier":_vm.identifier,"label":_vm.label,"required":_vm.required,"rules":_vm.inputRules,"color":"red","name":_vm.name,"hide-details":"auto"},on:{"blur":_vm.blur,"change":_vm.change,"focus":_vm.focus,"input":_vm.input},model:{value:(_vm.inputValue),callback:function ($$v) {_vm.inputValue=$$v},expression:"inputValue"}},_vm._l((_vm.radioOptions),function(option){return _c('v-radio',{key:option.value,attrs:{"check":_vm.inputValue === option.value,"label":option.label,"value":option.value}})}),1)}
+var radio_groupvue_type_template_id_1816f124_staticRenderFns = []
+
+
+// CONCATENATED MODULE: ./src/components/fields/radio_group.vue?vue&type=template&id=1816f124&
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/radio_group.vue?vue&type=script&lang=js&
 
@@ -28104,8 +30961,8 @@ var VRadioGroup_baseMixins = mixins(comparable, BaseItemGroup, components_VInput
 
 var radio_group_component = normalizeComponent(
   fields_radio_groupvue_type_script_lang_js_,
-  radio_groupvue_type_template_id_72ac73c4_render,
-  radio_groupvue_type_template_id_72ac73c4_staticRenderFns,
+  radio_groupvue_type_template_id_1816f124_render,
+  radio_groupvue_type_template_id_1816f124_staticRenderFns,
   false,
   null,
   null,
@@ -28121,26 +30978,27 @@ var radio_group_component = normalizeComponent(
 
 installComponents_default()(radio_group_component, {VRadio: VRadioGroup_VRadio,VRadioGroup: VRadioGroup_VRadioGroup})
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"222cafe2-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/extended_select.vue?vue&type=template&id=0b599305&
-var extended_selectvue_type_template_id_0b599305_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('v-select',{ref:'ref-' + _vm.identifier,class:[{
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1ca6af6a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/extended_select.vue?vue&type=template&id=2024cd1a&
+var extended_selectvue_type_template_id_2024cd1a_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('v-select',{ref:'ref-' + _vm.identifier,class:[{
       'v-text-field--required': _vm.required,
       'v-text-field--optional': !_vm.required,
       'v-text-field--updated': _vm.updated,
     }, ("select-" + _vm.identifier)],attrs:{"allow-overflow":true,"append-icon":_vm.appendicon || _vm.$vuetify.icons.values.dropdown,"autocomplete":_vm.autocomplete || 'chrome-off',"attach":"","error-messages":_vm.inputError,"identifier":_vm.identifier,"clearable":_vm.clearable,"clear-icon":_vm.clearicon || _vm.$vuetify.icons.values.clear,"color":_vm.color || _vm.$vuetify.theme.themes.light.primary,"disabled":_vm.disabled,"filled":_vm.filled,"outlined":_vm.outlined,"solo":_vm.solo,"hide-details":_vm.hidedetails,"inputmode":"none","items":_vm.selectItems,"item-text":"label","item-value":"value","label":_vm.label,"loading":_vm.loading,"menu-props":{
-        bottom: _vm.dropDown,
-        contentClass: 'v-select__dropdown',
-        maxHeight: _vm.menuMaxHeight,
-        offsetY: true,
-        tile: true,
-        top: !_vm.dropDown
-      },"name":_vm.multiple ? undefined : _vm.name,"no-data-text":_vm.nodatatext,"placeholder":_vm.placeholder,"prefix":_vm.prefix,"readonly":_vm.readonly,"required":_vm.required,"rules":_vm.inputRules,"suffix":_vm.suffix,"validate-on-blur":"","value":_vm.defaultValue,"multiple":_vm.multiple},on:{"blur":_vm.blur,"change":_vm.change,"click":_vm.click,"click:append":_vm.append,"click:clear":_vm.clear,"focus":_vm.focus,"input":_vm.input},scopedSlots:_vm._u([(_vm.customSelectionKeys && Array.isArray(_vm.customSelectionKeys))?{key:"selection",fn:function(ref){
-      var item = ref.item;
-      var index = ref.index;
+      bottom: _vm.dropDown,
+      contentClass: 'v-select__dropdown',
+      maxHeight: _vm.menuMaxHeight,
+      offsetY: true,
+      tile: true,
+      top: !_vm.dropDown,
+      value: _vm.menu,
+    },"name":_vm.multiple ? undefined : _vm.name,"no-data-text":_vm.nodatatext,"placeholder":_vm.placeholder,"prefix":_vm.prefix,"readonly":_vm.readonly,"required":_vm.required,"rules":_vm.inputRules,"suffix":_vm.suffix,"validate-on-blur":"","value":_vm.defaultValue,"multiple":_vm.multiple},on:{"blur":_vm.blur,"change":_vm.change,"click":_vm.click,"click:append":_vm.append,"click:clear":_vm.clear,"focus":_vm.focus,"input":_vm.input},scopedSlots:_vm._u([(_vm.customSelectionKeys && Array.isArray(_vm.customSelectionKeys))?{key:"selection",fn:function(ref){
+    var item = ref.item;
+    var index = ref.index;
 return [_vm._l((_vm.customSelectionKeys),function(key){return [(item.hasOwnProperty(key))?_c('span',{class:[("custom-selection custom-selection-" + key)]},[_vm._v(" "+_vm._s(item[key])+" ")]):_vm._e()]})]}}:null],null,true),model:{value:(_vm.inputValue),callback:function ($$v) {_vm.inputValue=$$v},expression:"inputValue"}},[(!!_vm.$slots.prepend)?_c('template',{slot:"prepend-outer"},[_vm._t("prepend")],2):_vm._e(),(!!_vm.$slots.info)?_c('template',{slot:"prepend-item"},[_c('div',{staticClass:"v-select__dropdown-info"},[_vm._t("info")],2)]):_vm._e(),(!_vm.required)?_c('template',{slot:"prepend-inner"},[_c('span',{staticClass:"v-input__label-optional"},[_vm._v(" "+_vm._s(_vm.optionalLabel)+" ")])]):_vm._e(),(_vm.required)?_c('template',{slot:"prepend-inner"},[_c('span',{staticClass:"v-input__label-required"},[_vm._v(_vm._s(_vm.requiredLabel))])]):_vm._e(),_c('template',{slot:"append-item"},[_c('span',{staticClass:"v-select__shadow"})]),(!!_vm.$slots.append)?_c('template',{slot:"append-outer"},[_vm._t("append")],2):_vm._e()],2)}
-var extended_selectvue_type_template_id_0b599305_staticRenderFns = []
+var extended_selectvue_type_template_id_2024cd1a_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/fields/extended_select.vue?vue&type=template&id=0b599305&
+// CONCATENATED MODULE: ./src/components/fields/extended_select.vue?vue&type=template&id=2024cd1a&
 
 // EXTERNAL MODULE: ./node_modules/vuetify/src/components/VSelect/VSelect.sass
 var VSelect = __webpack_require__("68dd");
@@ -31894,6 +34752,7 @@ var VSelect_baseMixins = mixins(VTextField_VTextField, comparable, dependent, fi
 //
 //
 //
+//
 
 
 /* harmony default export */ var extended_selectvue_type_script_lang_js_ = ({
@@ -31906,7 +34765,7 @@ var VSelect_baseMixins = mixins(VTextField_VTextField, comparable, dependent, fi
   },
   props: {
     defaultValue: {
-      type: String,
+      type: [String, Number],
       required: false
     },
     appendicon: {
@@ -32022,6 +34881,7 @@ var VSelect_baseMixins = mixins(VTextField_VTextField, comparable, dependent, fi
   },
   data: function data() {
     return {
+      menu: false,
       markWidth: 0,
       menuMaxHeight: 304,
       updated: false,
@@ -32047,6 +34907,8 @@ var VSelect_baseMixins = mixins(VTextField_VTextField, comparable, dependent, fi
           }
         } else {
           _this.$refs["ref-" + _this.identifier].blur();
+
+          _this.menu = false;
         }
       });
     }
@@ -32141,8 +35003,9 @@ var VSelect_baseMixins = mixins(VTextField_VTextField, comparable, dependent, fi
   },
   methods: {
     append: function append() {
-      if (this.$refs["ref-" + this.identifier].isMenuActive) {
+      if (this.menu) {
         this.$refs["ref-" + this.identifier].blur();
+        this.menu = false;
       } else {
         this.$refs["ref-" + this.identifier].focus();
 
@@ -32155,6 +35018,7 @@ var VSelect_baseMixins = mixins(VTextField_VTextField, comparable, dependent, fi
     blur: function blur(e) {
       this.$emit("blur", e);
       this.$refs["ref-" + this.identifier].blur();
+      this.menu = false;
     },
     change: function change(e) {
       this.$emit("change", e);
@@ -32171,10 +35035,8 @@ var VSelect_baseMixins = mixins(VTextField_VTextField, comparable, dependent, fi
       this.windowHeight = window.innerHeight;
 
       if (!this.readonly) {
-        var _this$$refs;
-
         this.setMenuMaxHeight();
-        (_this$$refs = this.$refs["ref-" + this.identifier]) === null || _this$$refs === void 0 ? void 0 : _this$$refs.activateMenu();
+        this.menu = true;
       }
     },
     input: function input(e) {
@@ -32186,9 +35048,10 @@ var VSelect_baseMixins = mixins(VTextField_VTextField, comparable, dependent, fi
     },
     onScroll: function onScroll() {
       // only need to close menu if in overlay (do not attach!)
-      if (this.$refs["ref-" + this.identifier].isMenuActive && !!this.dialog) {
+      if (this.menu && !!this.dialog) {
         if (this.dialog.scrollTop > this.scrollPos + 25 || this.dialog.scrollTop < this.scrollPos - 25) {
           this.$refs["ref-" + this.identifier].blur();
+          this.menu = false;
         }
       }
     },
@@ -32229,8 +35092,8 @@ var VSelect_baseMixins = mixins(VTextField_VTextField, comparable, dependent, fi
 
 var extended_select_component = normalizeComponent(
   fields_extended_selectvue_type_script_lang_js_,
-  extended_selectvue_type_template_id_0b599305_render,
-  extended_selectvue_type_template_id_0b599305_staticRenderFns,
+  extended_selectvue_type_template_id_2024cd1a_render,
+  extended_selectvue_type_template_id_2024cd1a_staticRenderFns,
   false,
   null,
   null,
@@ -32245,8 +35108,8 @@ var extended_select_component = normalizeComponent(
 
 installComponents_default()(extended_select_component, {VSelect: VSelect_VSelect})
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"222cafe2-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/select_with_related_data.vue?vue&type=template&id=633b0bd5&
-var select_with_related_datavue_type_template_id_633b0bd5_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('v-select',{ref:'ref-' + _vm.identifier,class:[{
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1ca6af6a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/select_with_related_data.vue?vue&type=template&id=3eab60a6&
+var select_with_related_datavue_type_template_id_3eab60a6_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('v-select',{ref:'ref-' + _vm.identifier,class:[{
       'v-text-field--required': _vm.required,
       'v-text-field--optional': !_vm.required,
       'v-text-field--updated': _vm.updated,
@@ -32261,10 +35124,10 @@ var select_with_related_datavue_type_template_id_633b0bd5_render = function () {
       var item = ref.item;
       var index = ref.index;
 return [_vm._l((_vm.customSelectionKeys),function(key){return [(item.hasOwnProperty(key))?_c('span',{class:[("custom-selection custom-selection-" + key)]},[_vm._v(" "+_vm._s(item[key])+" ")]):_vm._e()]})]}}:null],null,true),model:{value:(_vm.inputValue),callback:function ($$v) {_vm.inputValue=$$v},expression:"inputValue"}},[(!!_vm.$slots.prepend)?_c('template',{slot:"prepend-outer"},[_vm._t("prepend")],2):_vm._e(),(!!_vm.$slots.info)?_c('template',{slot:"prepend-item"},[_c('div',{staticClass:"v-select__dropdown-info"},[_vm._t("info")],2)]):_vm._e(),(!_vm.required)?_c('template',{slot:"prepend-inner"},[_c('span',{staticClass:"v-input__label-optional"},[_vm._v(" "+_vm._s(_vm.optionalLabel)+" ")])]):_vm._e(),(_vm.required)?_c('template',{slot:"prepend-inner"},[_c('span',{staticClass:"v-input__label-required"},[_vm._v(_vm._s(_vm.requiredLabel))])]):_vm._e(),_c('template',{slot:"append-item"},[_c('span',{staticClass:"v-select__shadow"})]),(!!_vm.$slots.append)?_c('template',{slot:"append-outer"},[_vm._t("append")],2):_vm._e()],2)}
-var select_with_related_datavue_type_template_id_633b0bd5_staticRenderFns = []
+var select_with_related_datavue_type_template_id_3eab60a6_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/fields/select_with_related_data.vue?vue&type=template&id=633b0bd5&
+// CONCATENATED MODULE: ./src/components/fields/select_with_related_data.vue?vue&type=template&id=3eab60a6&
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/select_with_related_data.vue?vue&type=script&lang=js&
 
@@ -32717,8 +35580,8 @@ var select_with_related_datavue_type_template_id_633b0bd5_staticRenderFns = []
 
 var select_with_related_data_component = normalizeComponent(
   fields_select_with_related_datavue_type_script_lang_js_,
-  select_with_related_datavue_type_template_id_633b0bd5_render,
-  select_with_related_datavue_type_template_id_633b0bd5_staticRenderFns,
+  select_with_related_datavue_type_template_id_3eab60a6_render,
+  select_with_related_datavue_type_template_id_3eab60a6_staticRenderFns,
   false,
   null,
   null,
@@ -32733,12 +35596,12 @@ var select_with_related_data_component = normalizeComponent(
 
 installComponents_default()(select_with_related_data_component, {VSelect: VSelect_VSelect})
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"222cafe2-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/advanced_password.vue?vue&type=template&id=7e380694&
-var advanced_passwordvue_type_template_id_7e380694_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"ondigo-advanced-password"},[_c('text-field',_vm._b({ref:"password",attrs:{"label":_vm.label,"name":(_vm.name + "[password]"),"rules":_vm.inputRules,"required":_vm.required,"requiredLabel":_vm.requiredLabel,"outlined":"","type":"password"},model:{value:(_vm.passwordValue),callback:function ($$v) {_vm.passwordValue=$$v},expression:"passwordValue"}},'text-field',_vm.$attrs,false)),_c('text-field',_vm._b({ref:"passwordConfirm",attrs:{"label":(_vm.label + " repeat"),"name":(_vm.name + "[confirmation]"),"rules":_vm.passwordMatchingValidator,"required":_vm.required,"requiredLabel":_vm.requiredLabel,"outlined":"","type":"password"},model:{value:(_vm.passwordRepeatValue),callback:function ($$v) {_vm.passwordRepeatValue=$$v},expression:"passwordRepeatValue"}},'text-field',_vm.$attrs,false))],1)}
-var advanced_passwordvue_type_template_id_7e380694_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1ca6af6a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/advanced_password.vue?vue&type=template&id=213e28fa&
+var advanced_passwordvue_type_template_id_213e28fa_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"ondigo-advanced-password"},[_c('text-field',_vm._b({ref:"password",attrs:{"label":_vm.label,"name":(_vm.name + "[password]"),"rules":_vm.inputRules,"required":_vm.required,"requiredLabel":_vm.requiredLabel,"outlined":"","type":"password"},model:{value:(_vm.passwordValue),callback:function ($$v) {_vm.passwordValue=$$v},expression:"passwordValue"}},'text-field',_vm.$attrs,false)),_c('text-field',_vm._b({ref:"passwordConfirm",attrs:{"label":(_vm.label + " repeat"),"name":(_vm.name + "[confirmation]"),"rules":_vm.passwordMatchingValidator,"required":_vm.required,"requiredLabel":_vm.requiredLabel,"outlined":"","type":"password"},model:{value:(_vm.passwordRepeatValue),callback:function ($$v) {_vm.passwordRepeatValue=$$v},expression:"passwordRepeatValue"}},'text-field',_vm.$attrs,false))],1)}
+var advanced_passwordvue_type_template_id_213e28fa_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/fields/advanced_password.vue?vue&type=template&id=7e380694&
+// CONCATENATED MODULE: ./src/components/fields/advanced_password.vue?vue&type=template&id=213e28fa&
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/advanced_password.vue?vue&type=script&lang=js&
 //
@@ -32775,7 +35638,7 @@ var advanced_passwordvue_type_template_id_7e380694_staticRenderFns = []
 /* harmony default export */ var advanced_passwordvue_type_script_lang_js_ = ({
   name: "OnAdvancedPassword",
   components: {
-    TextField: textfield
+    TextField: textfield_textfield
   },
   props: {
     identifier: {
@@ -32876,8 +35739,8 @@ var advanced_passwordvue_type_template_id_7e380694_staticRenderFns = []
 
 var advanced_password_component = normalizeComponent(
   fields_advanced_passwordvue_type_script_lang_js_,
-  advanced_passwordvue_type_template_id_7e380694_render,
-  advanced_passwordvue_type_template_id_7e380694_staticRenderFns,
+  advanced_passwordvue_type_template_id_213e28fa_render,
+  advanced_passwordvue_type_template_id_213e28fa_staticRenderFns,
   false,
   null,
   null,
@@ -32886,16 +35749,16 @@ var advanced_password_component = normalizeComponent(
 )
 
 /* harmony default export */ var advanced_password = (advanced_password_component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"222cafe2-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/file_upload.vue?vue&type=template&id=d6570f36&
-var file_uploadvue_type_template_id_d6570f36_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{class:({
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1ca6af6a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/file_upload.vue?vue&type=template&id=c78d8836&
+var file_uploadvue_type_template_id_c78d8836_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{class:({
         'ondigo-file-drop': _vm.showDropZone,
         'ondigo-file-multiple': _vm.allowMultiple,
       },
       'ondigo-file-wrapper')},[(_vm.showDropZone)?_c('v-sheet',{ref:"dropZoneRef",class:({ 'ondigo-drop-inside': _vm.dragIn }, 'ondigo-drop'),attrs:{"bindex":"0","title":_vm.dropZoneTitle,"width":"100%","height":"200","rounded":""},on:{"dragenter":function($event){$event.preventDefault();return _vm.handleDragEnter.apply(null, arguments)},"dragleave":function($event){$event.preventDefault();return _vm.handleDragLeave.apply(null, arguments)},"dragover":function($event){$event.preventDefault();return _vm.handleDragOver.apply(null, arguments)},"drop":function($event){$event.preventDefault();return _vm.handleDrop.apply(null, arguments)},"click":_vm.handleDropZoneClick}}):_vm._e(),_c('v-file-input',{ref:"inputRef",staticClass:"ondigo-file-input",attrs:{"accept":_vm.allowedMimeTypes,"required":_vm.required,"counter":"","identifier":_vm.identifier,"label":_vm.label,"name":_vm.name,"rules":_vm.inputRules,"show-size":"","chips":_vm.allowMultiple,"multiple":_vm.allowMultiple,"persistent-hint":"","hint":_vm.inputDescription,"filled":_vm.filled,"error-messages":_vm.inputError,"prepend-icon":"","append-icon":"mdi-paperclip"},model:{value:(_vm.inputValue),callback:function ($$v) {_vm.inputValue=$$v},expression:"inputValue"}})],1)}
-var file_uploadvue_type_template_id_d6570f36_staticRenderFns = []
+var file_uploadvue_type_template_id_c78d8836_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/fields/file_upload.vue?vue&type=template&id=d6570f36&
+// CONCATENATED MODULE: ./src/components/fields/file_upload.vue?vue&type=template&id=c78d8836&
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/file_upload.vue?vue&type=script&lang=js&
 
@@ -33372,8 +36235,8 @@ var VFileInput = __webpack_require__("5803");
 
 var file_upload_component = normalizeComponent(
   fields_file_uploadvue_type_script_lang_js_,
-  file_uploadvue_type_template_id_d6570f36_render,
-  file_uploadvue_type_template_id_d6570f36_staticRenderFns,
+  file_uploadvue_type_template_id_c78d8836_render,
+  file_uploadvue_type_template_id_c78d8836_staticRenderFns,
   false,
   null,
   null,
@@ -33389,14 +36252,14 @@ var file_upload_component = normalizeComponent(
 
 installComponents_default()(file_upload_component, {VFileInput: VFileInput_VFileInput,VSheet: VSheet_VSheet})
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"222cafe2-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/static_text/static_text.vue?vue&type=template&id=29dccbaf&
-var static_textvue_type_template_id_29dccbaf_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',_vm._b({staticClass:"ongigo-text-wrapper",attrs:{"identifier":_vm.identifier}},'div',_vm.$attrs,false),[_c('h2',{staticClass:"ondigo-text-label"},[_vm._v(_vm._s(_vm.label))]),_c('p',{staticClass:"ondigo-text-content"},[_vm._v(_vm._s(_vm.properties.text))])])}
-var static_textvue_type_template_id_29dccbaf_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1ca6af6a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/other/static_text/static_text.vue?vue&type=template&id=03658f4d&
+var static_textvue_type_template_id_03658f4d_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',_vm._b({staticClass:"ongigo-text-wrapper"},'div',_vm.$attrs,false),[_c('h2',{staticClass:"ondigo-text-label"},[_vm._v(_vm._s(_vm.label))]),_c('p',{staticClass:"ondigo-text-content"},[_vm._v(_vm._s(_vm.properties.text))])])}
+var static_textvue_type_template_id_03658f4d_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/fields/static_text/static_text.vue?vue&type=template&id=29dccbaf&
+// CONCATENATED MODULE: ./src/components/fields/other/static_text/static_text.vue?vue&type=template&id=03658f4d&
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/static_text/static_text.vue?vue&type=script&lang=js&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/other/static_text/static_text.vue?vue&type=script&lang=js&
 //
 //
 //
@@ -33420,9 +36283,9 @@ var static_textvue_type_template_id_29dccbaf_staticRenderFns = []
     }
   }
 });
-// CONCATENATED MODULE: ./src/components/fields/static_text/static_text.vue?vue&type=script&lang=js&
+// CONCATENATED MODULE: ./src/components/fields/other/static_text/static_text.vue?vue&type=script&lang=js&
  /* harmony default export */ var static_text_static_textvue_type_script_lang_js_ = (static_textvue_type_script_lang_js_); 
-// CONCATENATED MODULE: ./src/components/fields/static_text/static_text.vue
+// CONCATENATED MODULE: ./src/components/fields/other/static_text/static_text.vue
 
 
 
@@ -33432,8 +36295,8 @@ var static_textvue_type_template_id_29dccbaf_staticRenderFns = []
 
 var static_text_component = normalizeComponent(
   static_text_static_textvue_type_script_lang_js_,
-  static_textvue_type_template_id_29dccbaf_render,
-  static_textvue_type_template_id_29dccbaf_staticRenderFns,
+  static_textvue_type_template_id_03658f4d_render,
+  static_textvue_type_template_id_03658f4d_staticRenderFns,
   false,
   null,
   null,
@@ -33442,12 +36305,12 @@ var static_text_component = normalizeComponent(
 )
 
 /* harmony default export */ var static_text = (static_text_component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"222cafe2-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/onCaptcha/onCaptcha.vue?vue&type=template&id=4d3647a4&
-var onCaptchavue_type_template_id_4d3647a4_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.properties && _vm.properties.gencaptchaUri)?_c('div',{staticClass:"ondigo-captcha-container"},[_c('div',{staticClass:"ondigo-captcha-img-container"},[_c('img',{ref:"img",attrs:{"src":_vm.data,"alt":"Captcha"},on:{"load":_vm.imgLoaded}}),_c('div',{ref:"imgOverlay",staticClass:"ondigo-captcha-img-overlay",class:{ show: _vm.loading }},[(_vm.loading)?_c('v-progress-circular',{attrs:{"color":"primary","indeterminate":"","size":"40"}}):_vm._e()],1)]),_c('div',{staticClass:"ondigo-captcha-refresh-container"},[(true)?_c('a',{staticClass:"ondigo-captcha-refresh-text",class:{ disabled: _vm.loading },attrs:{"aria-disabled":_vm.loading,"href":"#"},on:{"click":_vm.refresh}},[_vm._v(" "+_vm._s(_vm.properties.refreshText)+" ")]):undefined]),(_vm.error)?_c('div',{staticClass:"ondigo-captch-error"},[_c('p',[_vm._v(" "+_vm._s(_vm.error)+" ")])]):_vm._e(),_c('text-field',_vm._g(_vm._b({ref:"input",attrs:{"type":"text"}},'text-field',Object.assign({}, _vm.$props, _vm.$attrs),false),_vm.$listeners))],1):_c('div',{staticClass:"ondigo-captch-error"},[_c('p',[_vm._v("could not load Captcha try refreshing the page")])])}
-var onCaptchavue_type_template_id_4d3647a4_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1ca6af6a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/onCaptcha/onCaptcha.vue?vue&type=template&id=81c5a3b4&
+var onCaptchavue_type_template_id_81c5a3b4_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.properties && _vm.properties.gencaptchaUri)?_c('div',{staticClass:"ondigo-captcha-container"},[_c('div',{staticClass:"ondigo-captcha-img-container"},[_c('img',{ref:"img",attrs:{"src":_vm.data,"alt":"Captcha"},on:{"load":_vm.imgLoaded}}),_c('div',{ref:"imgOverlay",staticClass:"ondigo-captcha-img-overlay",class:{ show: _vm.loading }},[(_vm.loading)?_c('v-progress-circular',{attrs:{"color":"primary","indeterminate":"","size":"40"}}):_vm._e()],1)]),_c('div',{staticClass:"ondigo-captcha-refresh-container"},[(true)?_c('a',{staticClass:"ondigo-captcha-refresh-text",class:{ disabled: _vm.loading },attrs:{"aria-disabled":_vm.loading,"href":"#"},on:{"click":_vm.refresh}},[_vm._v(" "+_vm._s(_vm.properties.refreshText)+" ")]):undefined]),(_vm.error)?_c('div',{staticClass:"ondigo-captch-error"},[_c('p',[_vm._v(" "+_vm._s(_vm.error)+" ")])]):_vm._e(),_c('text-field',_vm._g(_vm._b({ref:"input",attrs:{"type":"text"}},'text-field',Object.assign({}, _vm.$props, _vm.$attrs),false),_vm.$listeners))],1):_c('div',{staticClass:"ondigo-captch-error"},[_c('p',[_vm._v("could not load Captcha try refreshing the page")])])}
+var onCaptchavue_type_template_id_81c5a3b4_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/fields/onCaptcha/onCaptcha.vue?vue&type=template&id=4d3647a4&
+// CONCATENATED MODULE: ./src/components/fields/onCaptcha/onCaptcha.vue?vue&type=template&id=81c5a3b4&
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/web.url.js
 var web_url = __webpack_require__("2b3d");
@@ -33522,7 +36385,7 @@ var web_url_search_params = __webpack_require__("9861");
 /* harmony default export */ var onCaptchavue_type_script_lang_js_ = ({
   name: 'OnCaptcha',
   components: {
-    TextField: extended_text_field
+    TextField: composed_textfield
   },
   data: function data() {
     return {
@@ -33673,8 +36536,8 @@ var web_url_search_params = __webpack_require__("9861");
 
 var onCaptcha_component = normalizeComponent(
   onCaptcha_onCaptchavue_type_script_lang_js_,
-  onCaptchavue_type_template_id_4d3647a4_render,
-  onCaptchavue_type_template_id_4d3647a4_staticRenderFns,
+  onCaptchavue_type_template_id_81c5a3b4_render,
+  onCaptchavue_type_template_id_81c5a3b4_staticRenderFns,
   false,
   null,
   null,
@@ -33689,8 +36552,8 @@ var onCaptcha_component = normalizeComponent(
 
 installComponents_default()(onCaptcha_component, {VProgressCircular: VProgressCircular_VProgressCircular})
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"222cafe2-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/datepicker.vue?vue&type=template&id=300ce6c0&
-var datepickervue_type_template_id_300ce6c0_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.formattedInput),expression:"formattedInput"}],attrs:{"type":"hidden","name":_vm.name},domProps:{"value":(_vm.formattedInput)},on:{"input":function($event){if($event.target.composing){ return; }_vm.formattedInput=$event.target.value}}}),_c('v-menu',{ref:"menu",attrs:{"close-on-content-click":false,"transition":"scale-transition","offset-y":"","min-width":"auto"},scopedSlots:_vm._u([{key:"activator",fn:function(ref){
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1ca6af6a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/datepicker.vue?vue&type=template&id=1f9d1a2b&
+var datepickervue_type_template_id_1f9d1a2b_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.formattedInput),expression:"formattedInput"}],attrs:{"type":"hidden","name":_vm.name},domProps:{"value":(_vm.formattedInput)},on:{"input":function($event){if($event.target.composing){ return; }_vm.formattedInput=$event.target.value}}}),_c('v-menu',{ref:"menu",attrs:{"close-on-content-click":false,"transition":"scale-transition","offset-y":"","min-width":"auto"},scopedSlots:_vm._u([{key:"activator",fn:function(ref){
 var on = ref.on;
 var attrs = ref.attrs;
 return [_c('masked-text',_vm._g(_vm._b({ref:"masked",class:("ondigo-input ondigo-textfield ondigo-input-" + _vm.identifier),attrs:{"mask-active":_vm.maskActive,"label":_vm.label,"placeholder":_vm.placeholder,"filled":_vm.filled,"rules":_vm.menu ? [] : _vm.inputRules,"inputBridge":_vm.inputBridge,"identifier":_vm.identifier}},'masked-text',Object.assign({}, _vm.$attrs,
@@ -33700,17 +36563,17 @@ return [_c('masked-text',_vm._g(_vm._b({ref:"masked",class:("ondigo-input ondigo
             // mixin generated MaskedText properties
             {pattern: _vm.maskPattern,
             placeholder: '_'})}),false),_vm.$listeners),[_c('template',{slot:"append-masked"},[_c('div',_vm._g(_vm._b({staticClass:"ondigo-icon-button"},'div',attrs,false),on),[_c('v-icon',{attrs:{"color":_vm.menu ? 'primary' : ''}},[_vm._v("mdi-calendar")])],1)])],2)]}}]),model:{value:(_vm.menu),callback:function ($$v) {_vm.menu=$$v},expression:"menu"}},[_c('v-date-picker',{attrs:{"active-picker":_vm.activePicker,"max":_vm.maxDate,"min":_vm.minDate,"locale":_vm.locale || _vm.navigator.language || 'en-US'},on:{"update:activePicker":function($event){_vm.activePicker=$event},"update:active-picker":function($event){_vm.activePicker=$event},"change":_vm.save},model:{value:(_vm.date),callback:function ($$v) {_vm.date=$$v},expression:"date"}})],1)],1)}
-var datepickervue_type_template_id_300ce6c0_staticRenderFns = []
+var datepickervue_type_template_id_1f9d1a2b_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/fields/datepicker.vue?vue&type=template&id=300ce6c0&
+// CONCATENATED MODULE: ./src/components/fields/datepicker.vue?vue&type=template&id=1f9d1a2b&
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"222cafe2-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/textfield_masked.vue?vue&type=template&id=4b44f3de&
-var textfield_maskedvue_type_template_id_4b44f3de_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('v-text-field',_vm._b({ref:"field",attrs:{"value":_vm.value,"autocomplete":_vm.properties['autoComplete'],"placeholder":_vm.placeholder,"filled":_vm.filled,"required":_vm.required,"rules":_vm.inputRules,"error-messages":_vm.inputError,"validate-on-blur":""},on:{"input":_vm.input,"focus":_vm.focus,"blur":_vm.blur},model:{value:(_vm.inputValue),callback:function ($$v) {_vm.inputValue=$$v},expression:"inputValue"}},'v-text-field',Object.assign({}, _vm.$attrs, {identifier: _vm.identifier}),false),[_c('template',{slot:"prepend-outer"},[_vm._t("prepend")],2),(!_vm.required)?_c('template',{slot:"prepend-inner"},[_c('span',{staticClass:"v-input__label-optional"},[_vm._v(" "+_vm._s(_vm.optionalLabel)+" ")])]):_vm._e(),(_vm.required)?_c('template',{slot:"prepend-inner"},[_c('span',{staticClass:"v-input__label-required"},[_vm._v(" "+_vm._s(_vm.requiredLabel)+" ")])]):_vm._e(),_c('template',{slot:"append"},[_vm._t("append-masked",function(){return [(_vm.isTouchDevice && !!_vm.$slots.info)?_c('div',{staticClass:"v-input__info",on:{"click":function($event){_vm.menu = !_vm.menu}}},[_c('v-icon',{attrs:{"color":"primary"}},[_vm._v("mdi-information-outline")])],1):_vm._e()]})],2),_c('template',{slot:"append-outer"},[_vm._t("append")],2)],2)}
-var textfield_maskedvue_type_template_id_4b44f3de_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1ca6af6a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/composed/textfield_masked.vue?vue&type=template&id=2c078e6c&
+var textfield_maskedvue_type_template_id_2c078e6c_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('on-text-field-base',_vm._g(_vm._b({ref:"field",attrs:{"properties":_vm.properties,"identifier":_vm.identifier,"required":_vm.isRequired,"requiredLabel":_vm.requiredLabel,"placeholder":_vm.placeholder,"errorMessages":_vm.inputError,"rules":_vm.inputRules},on:{"input":_vm.input,"focus":_vm.focus,"blur":_vm.blur},model:{value:(_vm.inputValue),callback:function ($$v) {_vm.inputValue=$$v},expression:"inputValue"}},'on-text-field-base',_vm.$attrs,false),_vm.$listeners))}
+var textfield_maskedvue_type_template_id_2c078e6c_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/fields/textfield_masked.vue?vue&type=template&id=4b44f3de&
+// CONCATENATED MODULE: ./src/components/fields/composed/textfield_masked.vue?vue&type=template&id=2c078e6c&
 
 // CONCATENATED MODULE: ./node_modules/@ondigo-internal/imask/esm/_rollupPluginBabelHelpers-a0b34764.js
 function _rollupPluginBabelHelpers_a0b34764_typeof(obj) {
@@ -38109,139 +40972,89 @@ try {
   globalThis.IMask = IMask;
 } catch (e) {}
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/textfield_masked.vue?vue&type=script&lang=js&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/@vue/cli-plugin-typescript/node_modules/ts-loader??ref--13-3!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/composed/textfield_masked.vue?vue&type=script&lang=ts&
 
 
 
 
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 
-/* harmony default export */ var textfield_maskedvue_type_script_lang_js_ = ({
-  name: "OnTextfieldMasked",
-  mounted: function mounted() {
-    this.initElement(); // when a default value is set, init mask manually
 
-    if (this.maskActive && this.inputValue && this.inputValue.length > 0) this.initMask();
-  },
-  model: {
-    prop: "value",
-    event: "input"
-  },
-  data: function data() {
-    return {
-      value: "",
-      element: {},
-      masked: {},
-      isTouchDevice: plugins_utils.isTouchDevice()
-    };
-  },
-  props: {
-    filled: {
-      type: Boolean,
-      "default": false
-    },
-    properties: {
-      type: Object | Array,
-      required: true
-    },
-    rules: {
-      type: [Object, Array],
-      "default": function _default() {
-        return {} || [];
-      }
-    },
-    validators: {
-      type: Array,
-      required: false
-    },
-    optional: {
-      type: Boolean,
-      "default": false
-    },
-    optionalLabel: {
-      type: String,
-      "default": "optional"
-    },
-    identifier: {
-      type: String,
-      required: true
-    },
-    maskActive: {
-      type: Boolean,
-      "default": true
-    },
-    inputBridge: {
-      type: String,
-      required: false
-    }
-  },
-  watch: {
-    inputBridge: function inputBridge(val) {
-      if (!this.maskActive || !this.required && val.length <= 0) return;
-      if (!this.masked || !this.element) this.initMask();
-      this.element.value = val;
-      this.element.dispatchEvent(new Event("input"));
-    }
-  },
-  computed: {
-    required: function required() {
+
+var textfield_maskedvue_type_script_lang_ts_a, textfield_maskedvue_type_script_lang_ts_b;
+
+
+ // infer vue prop type validation by ts-definition; import this before vue-property-decorator!
+
+
+
+
+
+
+
+
+
+
+var textfield_maskedvue_type_script_lang_ts_OnTextFieldMasked = /*#__PURE__*/function (_mixins) {
+  _inherits(OnTextFieldMasked, _mixins);
+
+  var _super = _createSuper(OnTextFieldMasked);
+
+  function OnTextFieldMasked() {
+    var _this;
+
+    _classCallCheck(this, OnTextFieldMasked);
+
+    _this = _super.apply(this, arguments);
+    _this.element = null;
+    _this.masked = null;
+    return _this;
+  }
+
+  _createClass(OnTextFieldMasked, [{
+    key: "isRequired",
+    get: function get() {
       return isRequired(this.properties);
-    },
-    placeholder: function placeholder() {
-      return util_getPlaceholder(this.properties);
-    },
-    requiredLabel: function requiredLabel() {
+    }
+  }, {
+    key: "requiredLabel",
+    get: function get() {
       if (!this.validators || !this.validators.length) return "required";
       var notEmptyValidator = this.validators.find(function (v) {
         return v.identifier === "NotEmpty";
       });
       return notEmptyValidator && notEmptyValidator.errorMessage || "required";
+    }
+  }, {
+    key: "inputRules",
+    get: function get() {
+      if (this.rules && Array.isArray(this.rules)) return this.rules;else return createInputRules(this.isRequired, this.validators, this.properties, true, this.validatorsMap);
+    }
+  }, {
+    key: "inputValue",
+    get: function get() {
+      return this.$store.getters.getCurrentInputValue(this.identifier) || '';
     },
-    mask: function mask() {
+    set: function set(value) {
+      this.$store.commit("updateInputValue", {
+        key: this.identifier,
+        value: value
+      });
+    }
+  }, {
+    key: "inputError",
+    get: function get() {
+      return this.$store.getters.getCurrentInputError(this.identifier) || "";
+    }
+  }, {
+    key: "placeholder",
+    get: function get() {
+      return getPlaceholder(this.properties);
+    }
+  }, {
+    key: "mask",
+    get: function get() {
       var mask = {
         mask: this.properties.pattern,
         // custom character definitions
@@ -38294,57 +41107,57 @@ try {
       }
 
       return mask;
-    },
-    inputRules: function inputRules() {
-      if (this.rules && Array.isArray(this.rules)) return this.rules;else return createInputRules(this.required, this.validators, this.properties, true, this.validatorsMap);
-    },
-    inputValue: {
-      get: function get() {
-        return this.$store.getters.getCurrentInputValue(this.identifier) || "";
-      },
-      set: function set(value) {
-        this.$store.commit("updateInputValue", {
-          key: this.identifier,
-          value: value
-        });
-      }
-    },
-    inputError: function inputError() {
-      return this.$store.getters.getCurrentInputError(this.identifier) || "";
     }
-  },
-  methods: {
-    save: function save(date) {
-      this.$refs.menu.save(date);
-    },
-    initElement: function initElement() {
-      this.element = this.$refs.field.$el.querySelector("input");
-    },
-    initMask: function initMask() {
-      if (!this.maskActive) return;
+  }, {
+    key: "mounted",
+    value: function mounted() {
+      this.initElement(); // when a default value is set, init mask manually
+
+      if (this.maskActive && this.inputValue && this.inputValue.length > 0) this.initMask();
+    }
+  }, {
+    key: "initElement",
+    value: function initElement() {
+      this.element = this.$refs.field.$el.querySelector("input") || null;
+    }
+  }, {
+    key: "initMask",
+    value: function initMask() {
+      if (!this.maskActive || !this.element) return;
       if (this.masked && this.masked.destroy) this.destroyMask();
       this.masked = IMask(this.element, this.mask);
-    },
-    destroyMask: function destroyMask() {
-      this.masked.destroy();
-      this.masked = null;
-    },
-    // Event listeners
-    input: function input(value) {
-      this.$emit("input", value);
-    },
-    focus: function focus() {
-      var _this = this;
+    }
+  }, {
+    key: "destroyMask",
+    value: function destroyMask() {
+      var _this$masked;
 
-      if (this.maskActive && this.element.value.length <= 0) {
+      (_this$masked = this.masked) === null || _this$masked === void 0 ? void 0 : _this$masked.destroy();
+      this.masked = null;
+    } // Event listeners
+
+  }, {
+    key: "input",
+    value: function input(e) {
+      this.$emit("input", e);
+    }
+  }, {
+    key: "focus",
+    value: function focus() {
+      var _this2 = this;
+
+      if (this.maskActive && this.element && this.element.value.length <= 0) {
         this.initMask();
+        if (!this.masked) return;
         this.element.value = this.masked.value;
         this.element.dispatchEvent(new Event("input"));
         setTimeout(function () {
-          if (_this.element.setSelectionRange) {
-            _this.element.setSelectionRange(0, 0);
-          } else if (_this.element.createTextRange) {
-            var range = _this.element.createTextRange();
+          if (!_this2.element) return;
+
+          if (_this2.element.setSelectionRange) {
+            _this2.element.setSelectionRange(0, 0);
+          } else if ('createTextRange' in _this2.element) {
+            var range = _this2.element.createTextRange();
 
             range.collapse(true);
             range.moveEnd("character", 0);
@@ -38353,9 +41166,11 @@ try {
           }
         }, 20);
       }
-    },
-    blur: function blur() {
-      if (!this.maskActive) return;
+    }
+  }, {
+    key: "blur",
+    value: function blur() {
+      if (!this.maskActive || !this.element || !this.masked) return;
       var isNormalized = this.element.value === this.masked.value;
 
       if (!isNormalized) {
@@ -38364,18 +41179,65 @@ try {
       } // Destroy mask, when element is not required, so that the element will look like before
 
 
-      if (this.masked.unmaskedValue.length <= 0 && !this.required) {
+      if (this.masked.unmaskedValue.length <= 0 && !this.isRequired) {
         this.destroyMask();
         this.element.value = "";
         this.element.dispatchEvent(new Event("input"));
       }
     }
+  }]);
+
+  return OnTextFieldMasked;
+}(vue_class_component_esm_mixins(mixin_InputValueMixin));
+
+__decorate([Prop({
+  "default": function _default() {
+    return [];
+  }
+}), __metadata("design:type", Array)], textfield_maskedvue_type_script_lang_ts_OnTextFieldMasked.prototype, "validators", void 0);
+
+__decorate([Prop(), __metadata("design:type", typeof (textfield_maskedvue_type_script_lang_ts_a = typeof /* Cannot get final name for export "ElementProperties" in "./src/lib/FormDefinition.ts" (known exports: isFormDefinition, known reexports: ) */ undefined !== "undefined" && /* Cannot get final name for export "ElementProperties" in "./src/lib/FormDefinition.ts" (known exports: isFormDefinition, known reexports: ) */ undefined) === "function" ? textfield_maskedvue_type_script_lang_ts_a : Object)], textfield_maskedvue_type_script_lang_ts_OnTextFieldMasked.prototype, "properties", void 0);
+
+__decorate([Prop(), __metadata("design:type", String)], textfield_maskedvue_type_script_lang_ts_OnTextFieldMasked.prototype, "identifier", void 0);
+
+__decorate([Prop({
+  "default": function _default() {}
+}), __metadata("design:type", Array)], textfield_maskedvue_type_script_lang_ts_OnTextFieldMasked.prototype, "rules", void 0);
+
+__decorate([Prop({
+  "default": function _default() {
+    return true;
+  }
+}), __metadata("design:type", Boolean)], textfield_maskedvue_type_script_lang_ts_OnTextFieldMasked.prototype, "maskActive", void 0);
+
+__decorate([Prop({
+  required: false
+}), __metadata("design:type", String)], textfield_maskedvue_type_script_lang_ts_OnTextFieldMasked.prototype, "inputBridge", void 0);
+
+__decorate([Inject('validatorsMap'), __metadata("design:type", typeof (textfield_maskedvue_type_script_lang_ts_b = typeof /* Cannot get final name for export "ValidatorMap" in "./src/lib/validators.ts" (known exports: Validators, known reexports: ) */ undefined !== "undefined" && /* Cannot get final name for export "ValidatorMap" in "./src/lib/validators.ts" (known exports: Validators, known reexports: ) */ undefined) === "function" ? textfield_maskedvue_type_script_lang_ts_b : Object)], textfield_maskedvue_type_script_lang_ts_OnTextFieldMasked.prototype, "validatorsMap", void 0);
+
+textfield_maskedvue_type_script_lang_ts_OnTextFieldMasked = __decorate([vue_class_component_esm({
+  name: "OnTextfieldMasked",
+  components: {
+    OnTextFieldBase: textfield_textfield
   },
-  inject: ['validatorsMap']
-});
-// CONCATENATED MODULE: ./src/components/fields/textfield_masked.vue?vue&type=script&lang=js&
- /* harmony default export */ var fields_textfield_maskedvue_type_script_lang_js_ = (textfield_maskedvue_type_script_lang_js_); 
-// CONCATENATED MODULE: ./src/components/fields/textfield_masked.vue
+  watch: {
+    inputBridge: function inputBridge(val) {
+      if (!this.maskActive || !this.isRequired && val.length <= 0) return;
+      if (!this.masked || !this.element) this.initMask();
+
+      if (this.element) {
+        this.element.value = val;
+        this.element.dispatchEvent(new Event("input"));
+      }
+    }
+  }
+})], textfield_maskedvue_type_script_lang_ts_OnTextFieldMasked);
+/* harmony default export */ var textfield_maskedvue_type_script_lang_ts_ = (textfield_maskedvue_type_script_lang_ts_OnTextFieldMasked);
+;
+// CONCATENATED MODULE: ./src/components/fields/composed/textfield_masked.vue?vue&type=script&lang=ts&
+ /* harmony default export */ var composed_textfield_maskedvue_type_script_lang_ts_ = (textfield_maskedvue_type_script_lang_ts_); 
+// CONCATENATED MODULE: ./src/components/fields/composed/textfield_masked.vue
 
 
 
@@ -38384,9 +41246,9 @@ try {
 /* normalize component */
 
 var textfield_masked_component = normalizeComponent(
-  fields_textfield_maskedvue_type_script_lang_js_,
-  textfield_maskedvue_type_template_id_4b44f3de_render,
-  textfield_maskedvue_type_template_id_4b44f3de_staticRenderFns,
+  composed_textfield_maskedvue_type_script_lang_ts_,
+  textfield_maskedvue_type_template_id_2c078e6c_render,
+  textfield_maskedvue_type_template_id_2c078e6c_staticRenderFns,
   false,
   null,
   null,
@@ -38395,13 +41257,6 @@ var textfield_masked_component = normalizeComponent(
 )
 
 /* harmony default export */ var textfield_masked = (textfield_masked_component.exports);
-
-/* vuetify-loader */
-
-
-
-installComponents_default()(textfield_masked_component, {VIcon: components_VIcon_VIcon,VTextField: VTextField_VTextField})
-
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/datepicker.vue?vue&type=script&lang=js&
 
 
@@ -38574,7 +41429,9 @@ installComponents_default()(textfield_masked_component, {VIcon: components_VIcon
 
         var inputDate = [year, month, day];
 
-        if (_this2.minDate && compareDateTimes(inputDate, _this2.minDate) < 0 || _this2.maxDate && compareDateTimes(inputDate, _this2.maxDate) > 0
+        if (_this2.minDate && compareDateTimes(inputDate, _this2.minDate) < 0
+        /* date is before minDate */
+        || _this2.maxDate && compareDateTimes(inputDate, _this2.maxDate) > 0
         /* date is after maxDate */
         ) {
           return [null, true]; // date out of selectable range, override with null
@@ -38640,7 +41497,7 @@ installComponents_default()(textfield_masked_component, {VIcon: components_VIcon
       return isRequired(this.properties);
     },
     placeholder: function placeholder() {
-      return util_getPlaceholder(this.properties);
+      return getPlaceholder(this.properties);
     },
     maskActive: function maskActive() {
       return !!this.properties.enableMask;
@@ -41093,8 +43950,8 @@ function timestamp_createNativeLocaleFormatter(locale, getOptions) {
 
 var datepicker_component = normalizeComponent(
   fields_datepickervue_type_script_lang_js_,
-  datepickervue_type_template_id_300ce6c0_render,
-  datepickervue_type_template_id_300ce6c0_staticRenderFns,
+  datepickervue_type_template_id_1f9d1a2b_render,
+  datepickervue_type_template_id_1f9d1a2b_staticRenderFns,
   false,
   null,
   null,
@@ -41111,12 +43968,12 @@ var datepicker_component = normalizeComponent(
 
 installComponents_default()(datepicker_component, {VDatePicker: VDatePicker,VIcon: components_VIcon_VIcon,VMenu: VMenu_VMenu})
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"222cafe2-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/containers/condition_radio.vue?vue&type=template&id=54b59f90&
-var condition_radiovue_type_template_id_54b59f90_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('v-radio-group',{ref:'ref-' + _vm.identifier,class:("ondigo-input-" + _vm.identifier + " ondigo-radio"),attrs:{"label":_vm.label,"required":_vm.required,"hide-details":"auto"},model:{value:(_vm.inputValue),callback:function ($$v) {_vm.inputValue=$$v},expression:"inputValue"}},_vm._l((_vm.radioOptions),function(option){return _c('v-radio',{key:option.value,attrs:{"name":_vm.name,"label":option.label,"value":option.value}})}),1),_vm._l((_vm.elements),function(element){return _c('child-dynamic-element',{key:element.identifier,attrs:{"element":Object.assign({}, {conditionalValue: _vm.inputValue}, element),"formName":_vm.formName}})})],2)}
-var condition_radiovue_type_template_id_54b59f90_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1ca6af6a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/containers/condition_radio.vue?vue&type=template&id=18d75ec6&
+var condition_radiovue_type_template_id_18d75ec6_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('v-radio-group',{ref:'ref-' + _vm.identifier,class:("ondigo-input-" + _vm.identifier + " ondigo-radio"),attrs:{"label":_vm.label,"required":_vm.required,"hide-details":"auto"},model:{value:(_vm.inputValue),callback:function ($$v) {_vm.inputValue=$$v},expression:"inputValue"}},_vm._l((_vm.radioOptions),function(option){return _c('v-radio',{key:option.value,attrs:{"name":_vm.name,"label":option.label,"value":option.value}})}),1),_vm._l((_vm.elements),function(element){return _c('child-dynamic-element',{key:element.identifier,attrs:{"element":Object.assign({}, {conditionalValue: _vm.inputValue}, element),"formName":_vm.formName}})})],2)}
+var condition_radiovue_type_template_id_18d75ec6_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/containers/condition_radio.vue?vue&type=template&id=54b59f90&
+// CONCATENATED MODULE: ./src/components/containers/condition_radio.vue?vue&type=template&id=18d75ec6&
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/containers/condition_radio.vue?vue&type=script&lang=js&
 
@@ -41233,8 +44090,8 @@ var condition_radiovue_type_template_id_54b59f90_staticRenderFns = []
 
 var condition_radio_component = normalizeComponent(
   containers_condition_radiovue_type_script_lang_js_,
-  condition_radiovue_type_template_id_54b59f90_render,
-  condition_radiovue_type_template_id_54b59f90_staticRenderFns,
+  condition_radiovue_type_template_id_18d75ec6_render,
+  condition_radiovue_type_template_id_18d75ec6_staticRenderFns,
   false,
   null,
   null,
@@ -41250,12 +44107,12 @@ var condition_radio_component = normalizeComponent(
 
 installComponents_default()(condition_radio_component, {VRadio: VRadioGroup_VRadio,VRadioGroup: VRadioGroup_VRadioGroup})
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"222cafe2-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/containers/condition_checkbox.vue?vue&type=template&id=6ef6615b&
-var condition_checkboxvue_type_template_id_6ef6615b_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('v-checkbox',{ref:'ref-' + _vm.identifier,staticClass:"ondigo-checkbox",class:("ondigo-input-" + _vm.identifier + " ondigo-checkbox"),attrs:{"label":_vm.label,"name":_vm.name,"value":_vm.checked ? true : false,"hide-details":"auto","off-icon":"mdi-checkbox-blank"},model:{value:(_vm.checked),callback:function ($$v) {_vm.checked=$$v},expression:"checked"}}),_vm._l((_vm.elements),function(element){return _c('child-dynamic-element',{key:element.identifier,attrs:{"element":Object.assign({}, {conditionalValue: _vm.checked}, element),"formName":_vm.formName}})})],2)}
-var condition_checkboxvue_type_template_id_6ef6615b_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1ca6af6a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/containers/condition_checkbox.vue?vue&type=template&id=5cfb8029&
+var condition_checkboxvue_type_template_id_5cfb8029_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('v-checkbox',{ref:'ref-' + _vm.identifier,staticClass:"ondigo-checkbox",class:("ondigo-input-" + _vm.identifier + " ondigo-checkbox"),attrs:{"label":_vm.label,"name":_vm.name,"value":_vm.checked ? true : false,"hide-details":"auto","off-icon":"mdi-checkbox-blank"},model:{value:(_vm.checked),callback:function ($$v) {_vm.checked=$$v},expression:"checked"}}),_vm._l((_vm.elements),function(element){return _c('child-dynamic-element',{key:element.identifier,attrs:{"element":Object.assign({}, {conditionalValue: _vm.checked}, element),"formName":_vm.formName}})})],2)}
+var condition_checkboxvue_type_template_id_5cfb8029_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/containers/condition_checkbox.vue?vue&type=template&id=6ef6615b&
+// CONCATENATED MODULE: ./src/components/containers/condition_checkbox.vue?vue&type=template&id=5cfb8029&
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/containers/condition_checkbox.vue?vue&type=script&lang=js&
 
@@ -41353,8 +44210,8 @@ var condition_checkboxvue_type_template_id_6ef6615b_staticRenderFns = []
 
 var condition_checkbox_component = normalizeComponent(
   containers_condition_checkboxvue_type_script_lang_js_,
-  condition_checkboxvue_type_template_id_6ef6615b_render,
-  condition_checkboxvue_type_template_id_6ef6615b_staticRenderFns,
+  condition_checkboxvue_type_template_id_5cfb8029_render,
+  condition_checkboxvue_type_template_id_5cfb8029_staticRenderFns,
   false,
   null,
   null,
@@ -41369,12 +44226,12 @@ var condition_checkbox_component = normalizeComponent(
 
 installComponents_default()(condition_checkbox_component, {VCheckbox: VCheckbox_VCheckbox})
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"222cafe2-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/containers/conditional_content.vue?vue&type=template&id=bf617baa&
-var conditional_contentvue_type_template_id_bf617baa_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.shouldRender())?_c('div',_vm._l((_vm.elements),function(element){return _c('child-dynamic-element',{key:element.identifier,attrs:{"element":element,"formName":_vm.formName}})}),1):_vm._e()}
-var conditional_contentvue_type_template_id_bf617baa_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1ca6af6a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/containers/conditional_content.vue?vue&type=template&id=47af8839&
+var conditional_contentvue_type_template_id_47af8839_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.shouldRender())?_c('div',_vm._l((_vm.elements),function(element){return _c('child-dynamic-element',{key:element.identifier,attrs:{"element":element,"formName":_vm.formName}})}),1):_vm._e()}
+var conditional_contentvue_type_template_id_47af8839_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/containers/conditional_content.vue?vue&type=template&id=bf617baa&
+// CONCATENATED MODULE: ./src/components/containers/conditional_content.vue?vue&type=template&id=47af8839&
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/containers/conditional_content.vue?vue&type=script&lang=js&
 
@@ -41477,8 +44334,8 @@ var conditional_contentvue_type_template_id_bf617baa_staticRenderFns = []
 
 var conditional_content_component = normalizeComponent(
   containers_conditional_contentvue_type_script_lang_js_,
-  conditional_contentvue_type_template_id_bf617baa_render,
-  conditional_contentvue_type_template_id_bf617baa_staticRenderFns,
+  conditional_contentvue_type_template_id_47af8839_render,
+  conditional_contentvue_type_template_id_47af8839_staticRenderFns,
   false,
   null,
   null,
@@ -41487,38 +44344,62 @@ var conditional_content_component = normalizeComponent(
 )
 
 /* harmony default export */ var conditional_content = (conditional_content_component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"222cafe2-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/textfield_telephone.vue?vue&type=template&id=483cc3f2&
-var textfield_telephonevue_type_template_id_483cc3f2_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('masked-text',_vm._g(_vm._b({attrs:{"mask-active":_vm.maskActive,"type":"tel"}},'masked-text',Object.assign({}, _vm.$attrs, _vm.$props),false),_vm.$listeners))}
-var textfield_telephonevue_type_template_id_483cc3f2_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1ca6af6a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/composed/textfield_telephone.vue?vue&type=template&id=77509873&
+var textfield_telephonevue_type_template_id_77509873_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('masked-text',_vm._g(_vm._b({attrs:{"properties":_vm.properties,"mask-active":_vm.maskActive,"type":"tel"}},'masked-text',_vm.$attrs,false),_vm.$listeners))}
+var textfield_telephonevue_type_template_id_77509873_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/fields/textfield_telephone.vue?vue&type=template&id=483cc3f2&
+// CONCATENATED MODULE: ./src/components/fields/composed/textfield_telephone.vue?vue&type=template&id=77509873&
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/textfield_telephone.vue?vue&type=script&lang=js&
-//
-//
-//
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/@vue/cli-plugin-typescript/node_modules/ts-loader??ref--13-3!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/composed/textfield_telephone.vue?vue&type=script&lang=ts&
 
-/* harmony default export */ var textfield_telephonevue_type_script_lang_js_ = ({
+
+
+
+
+var textfield_telephonevue_type_script_lang_ts_a;
+
+
+
+
+
+
+
+
+var textfield_telephonevue_type_script_lang_ts_OnTextFieldTelephone = /*#__PURE__*/function (_mixins) {
+  _inherits(OnTextFieldTelephone, _mixins);
+
+  var _super = _createSuper(OnTextFieldTelephone);
+
+  function OnTextFieldTelephone() {
+    _classCallCheck(this, OnTextFieldTelephone);
+
+    return _super.apply(this, arguments);
+  }
+
+  _createClass(OnTextFieldTelephone, [{
+    key: "maskActive",
+    get: function get() {
+      return !!this.properties.pattern && this.properties.pattern.length > 0;
+    }
+  }]);
+
+  return OnTextFieldTelephone;
+}(vue_class_component_esm_mixins(mixin_InputValueMixin));
+
+__decorate([Prop(), __metadata("design:type", typeof (textfield_telephonevue_type_script_lang_ts_a = typeof /* Cannot get final name for export "ElementProperties" in "./src/lib/FormDefinition.ts" (known exports: isFormDefinition, known reexports: ) */ undefined !== "undefined" && /* Cannot get final name for export "ElementProperties" in "./src/lib/FormDefinition.ts" (known exports: isFormDefinition, known reexports: ) */ undefined) === "function" ? textfield_telephonevue_type_script_lang_ts_a : Object)], textfield_telephonevue_type_script_lang_ts_OnTextFieldTelephone.prototype, "properties", void 0);
+
+textfield_telephonevue_type_script_lang_ts_OnTextFieldTelephone = __decorate([vue_class_component_esm({
   name: "OnTextfieldTelephone",
   components: {
     MaskedText: textfield_masked
-  },
-  props: {
-    properties: {
-      type: Object | Array,
-      required: true
-    }
-  },
-  computed: {
-    maskActive: function maskActive() {
-      return !!this.properties.pattern && this.properties.pattern.length > 0;
-    }
   }
-});
-// CONCATENATED MODULE: ./src/components/fields/textfield_telephone.vue?vue&type=script&lang=js&
- /* harmony default export */ var fields_textfield_telephonevue_type_script_lang_js_ = (textfield_telephonevue_type_script_lang_js_); 
-// CONCATENATED MODULE: ./src/components/fields/textfield_telephone.vue
+})], textfield_telephonevue_type_script_lang_ts_OnTextFieldTelephone);
+/* harmony default export */ var textfield_telephonevue_type_script_lang_ts_ = (textfield_telephonevue_type_script_lang_ts_OnTextFieldTelephone);
+;
+// CONCATENATED MODULE: ./src/components/fields/composed/textfield_telephone.vue?vue&type=script&lang=ts&
+ /* harmony default export */ var composed_textfield_telephonevue_type_script_lang_ts_ = (textfield_telephonevue_type_script_lang_ts_); 
+// CONCATENATED MODULE: ./src/components/fields/composed/textfield_telephone.vue
 
 
 
@@ -41527,9 +44408,9 @@ var textfield_telephonevue_type_template_id_483cc3f2_staticRenderFns = []
 /* normalize component */
 
 var textfield_telephone_component = normalizeComponent(
-  fields_textfield_telephonevue_type_script_lang_js_,
-  textfield_telephonevue_type_template_id_483cc3f2_render,
-  textfield_telephonevue_type_template_id_483cc3f2_staticRenderFns,
+  composed_textfield_telephonevue_type_script_lang_ts_,
+  textfield_telephonevue_type_template_id_77509873_render,
+  textfield_telephonevue_type_template_id_77509873_staticRenderFns,
   false,
   null,
   null,
@@ -41538,50 +44419,78 @@ var textfield_telephone_component = normalizeComponent(
 )
 
 /* harmony default export */ var textfield_telephone = (textfield_telephone_component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"222cafe2-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/textfield_url.vue?vue&type=template&id=b948f5f6&
-var textfield_urlvue_type_template_id_b948f5f6_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('text-field',_vm._g(_vm._b({attrs:{"type":"url"}},'text-field',Object.assign({}, _vm.$attrs, {rules: _vm.rules}),false),_vm.$listeners))}
-var textfield_urlvue_type_template_id_b948f5f6_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1ca6af6a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/composed/textfield_url.vue?vue&type=template&id=4fa5ed87&
+var textfield_urlvue_type_template_id_4fa5ed87_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('on-text-field',_vm._g(_vm._b({attrs:{"renderingOptions":_vm.renderingOptions,"validators":_vm.mergedValidators,"type":"url"}},'on-text-field',_vm.$attrs,false),_vm.$listeners))}
+var textfield_urlvue_type_template_id_4fa5ed87_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/fields/textfield_url.vue?vue&type=template&id=b948f5f6&
+// CONCATENATED MODULE: ./src/components/fields/composed/textfield_url.vue?vue&type=template&id=4fa5ed87&
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/textfield_url.vue?vue&type=script&lang=js&
-//
-//
-//
-//
-//
-//
-//
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/@vue/cli-plugin-typescript/node_modules/ts-loader??ref--13-3!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/composed/textfield_url.vue?vue&type=script&lang=ts&
 
-/* harmony default export */ var textfield_urlvue_type_script_lang_js_ = ({
-  name: "OnTextfieldUrl",
-  components: {
-    TextField: extended_text_field
-  },
-  props: {
-    renderingOptions: {
-      type: Object,
-      "default": {}
-    }
-  },
-  data: function data() {
-    var _this$renderingOption;
 
-    var urlErrorMessage = (_this$renderingOption = this.renderingOptions) === null || _this$renderingOption === void 0 ? void 0 : _this$renderingOption.urlErrorMessage;
-    return {
-      rules: {
-        url: function url(value) {
-          var pattern = /^((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+(:[0-9]+)?|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)$/;
-          return pattern.test(value) || urlErrorMessage || "Invalid URL";
-        }
-      }
-    };
+
+
+
+
+
+var textfield_urlvue_type_script_lang_ts_a;
+
+
+
+
+
+
+var textfield_urlvue_type_script_lang_ts_OnTextFieldUrl = /*#__PURE__*/function (_Vue) {
+  _inherits(OnTextFieldUrl, _Vue);
+
+  var _super = _createSuper(OnTextFieldUrl);
+
+  function OnTextFieldUrl() {
+    _classCallCheck(this, OnTextFieldUrl);
+
+    return _super.apply(this, arguments);
   }
-});
-// CONCATENATED MODULE: ./src/components/fields/textfield_url.vue?vue&type=script&lang=js&
- /* harmony default export */ var fields_textfield_urlvue_type_script_lang_js_ = (textfield_urlvue_type_script_lang_js_); 
-// CONCATENATED MODULE: ./src/components/fields/textfield_url.vue
+
+  _createClass(OnTextFieldUrl, [{
+    key: "mergedValidators",
+    get: function get() {
+      var _this$renderingOption;
+
+      var urlErrorMessage = (_this$renderingOption = this.renderingOptions) === null || _this$renderingOption === void 0 ? void 0 : _this$renderingOption.urlErrorMessage;
+      var urlValidator = {
+        "identifier": "Url",
+        "code": 1648217312,
+        "errorMessage": urlErrorMessage
+      };
+      return [].concat(_toConsumableArray(this.validators), [urlValidator]);
+    }
+  }]);
+
+  return OnTextFieldUrl;
+}(external_commonjs_vue_commonjs2_vue_root_Vue_default.a);
+
+__decorate([Prop({
+  "default": function _default() {}
+}), __metadata("design:type", typeof (textfield_urlvue_type_script_lang_ts_a = typeof /* Cannot get final name for export "ElementRenderingOptions" in "./src/lib/FormDefinition.ts" (known exports: isFormDefinition, known reexports: ) */ undefined !== "undefined" && /* Cannot get final name for export "ElementRenderingOptions" in "./src/lib/FormDefinition.ts" (known exports: isFormDefinition, known reexports: ) */ undefined) === "function" ? textfield_urlvue_type_script_lang_ts_a : Object)], textfield_urlvue_type_script_lang_ts_OnTextFieldUrl.prototype, "renderingOptions", void 0);
+
+__decorate([Prop({
+  "default": function _default() {
+    return [];
+  }
+}), __metadata("design:type", Array)], textfield_urlvue_type_script_lang_ts_OnTextFieldUrl.prototype, "validators", void 0);
+
+textfield_urlvue_type_script_lang_ts_OnTextFieldUrl = __decorate([vue_class_component_esm({
+  name: "OnTextFieldUrl",
+  components: {
+    OnTextField: composed_textfield
+  }
+})], textfield_urlvue_type_script_lang_ts_OnTextFieldUrl);
+/* harmony default export */ var textfield_urlvue_type_script_lang_ts_ = (textfield_urlvue_type_script_lang_ts_OnTextFieldUrl);
+;
+// CONCATENATED MODULE: ./src/components/fields/composed/textfield_url.vue?vue&type=script&lang=ts&
+ /* harmony default export */ var composed_textfield_urlvue_type_script_lang_ts_ = (textfield_urlvue_type_script_lang_ts_); 
+// CONCATENATED MODULE: ./src/components/fields/composed/textfield_url.vue
 
 
 
@@ -41590,9 +44499,9 @@ var textfield_urlvue_type_template_id_b948f5f6_staticRenderFns = []
 /* normalize component */
 
 var textfield_url_component = normalizeComponent(
-  fields_textfield_urlvue_type_script_lang_js_,
-  textfield_urlvue_type_template_id_b948f5f6_render,
-  textfield_urlvue_type_template_id_b948f5f6_staticRenderFns,
+  composed_textfield_urlvue_type_script_lang_ts_,
+  textfield_urlvue_type_template_id_4fa5ed87_render,
+  textfield_urlvue_type_template_id_4fa5ed87_staticRenderFns,
   false,
   null,
   null,
@@ -41601,7 +44510,7 @@ var textfield_url_component = normalizeComponent(
 )
 
 /* harmony default export */ var textfield_url = (textfield_url_component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"222cafe2-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/extended_multiselect.vue?vue&type=template&id=725b1ffd&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1ca6af6a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/extended_multiselect.vue?vue&type=template&id=725b1ffd&
 var extended_multiselectvue_type_template_id_725b1ffd_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('on-select',_vm._g(_vm._b({attrs:{"multiple":""},model:{value:(_vm.inputValue),callback:function ($$v) {_vm.inputValue=$$v},expression:"inputValue"}},'on-select',_vm.$attrs,false),_vm.$listeners)),_vm._l((_vm.selectedOptions),function(option){return _c('input',{key:option,attrs:{"type":"hidden","name":_vm.name.concat('[]')},domProps:{"value":option}})})],2)}
 var extended_multiselectvue_type_template_id_725b1ffd_staticRenderFns = []
 
@@ -41684,7 +44593,7 @@ var extended_multiselect_component = normalizeComponent(
 )
 
 /* harmony default export */ var extended_multiselect = (extended_multiselect_component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"222cafe2-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/multi_checkbox.vue?vue&type=template&id=d21eb668&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1ca6af6a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/multi_checkbox.vue?vue&type=template&id=d21eb668&
 var multi_checkboxvue_type_template_id_d21eb668_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_vm._l((Object.entries(_vm.properties.options)),function(option){return _c('v-checkbox',{key:option[0],ref:("ref-" + _vm.identifier + "-" + (option[0])),refInFor:true,staticClass:"ondigo-checkbox",class:("ondigo-input-" + _vm.identifier + "-" + (option[0]) + " ondigo-checkbox"),attrs:{"label":option[1],"identifier":_vm.identifier,"hide-details":"auto","off-icon":"mdi-checkbox-blank","rules":_vm.inputRules},model:{value:(_vm.checked[option[0]]),callback:function ($$v) {_vm.$set(_vm.checked, option[0], $$v)},expression:"checked[option[0]]"}})}),_vm._l((_vm.selectedOptions),function(option){return _c('input',{key:'val-'.concat(option),attrs:{"type":"hidden","name":_vm.name.concat('[]')},domProps:{"value":option}})})],2)}
 var multi_checkboxvue_type_template_id_d21eb668_staticRenderFns = []
 
@@ -41878,14 +44787,14 @@ var multi_checkbox_component = normalizeComponent(
 
 installComponents_default()(multi_checkbox_component, {VCheckbox: VCheckbox_VCheckbox})
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"222cafe2-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/content_element/content_element.vue?vue&type=template&id=0629ce60&
-var content_elementvue_type_template_id_0629ce60_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"ondigo-content-element-wrapper",attrs:{"identifier":_vm.identifier},domProps:{"innerHTML":_vm._s(_vm.properties.content)}})}
-var content_elementvue_type_template_id_0629ce60_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1ca6af6a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/other/content_element/content_element.vue?vue&type=template&id=ca01f382&
+var content_elementvue_type_template_id_ca01f382_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"ondigo-content-element-wrapper",attrs:{"identifier":_vm.identifier},domProps:{"innerHTML":_vm._s(_vm.properties.content)}})}
+var content_elementvue_type_template_id_ca01f382_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/fields/content_element/content_element.vue?vue&type=template&id=0629ce60&
+// CONCATENATED MODULE: ./src/components/fields/other/content_element/content_element.vue?vue&type=template&id=ca01f382&
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/content_element/content_element.vue?vue&type=script&lang=js&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/other/content_element/content_element.vue?vue&type=script&lang=js&
 //
 //
 //
@@ -41910,9 +44819,9 @@ var content_elementvue_type_template_id_0629ce60_staticRenderFns = []
     }
   }
 });
-// CONCATENATED MODULE: ./src/components/fields/content_element/content_element.vue?vue&type=script&lang=js&
+// CONCATENATED MODULE: ./src/components/fields/other/content_element/content_element.vue?vue&type=script&lang=js&
  /* harmony default export */ var content_element_content_elementvue_type_script_lang_js_ = (content_elementvue_type_script_lang_js_); 
-// CONCATENATED MODULE: ./src/components/fields/content_element/content_element.vue
+// CONCATENATED MODULE: ./src/components/fields/other/content_element/content_element.vue
 
 
 
@@ -41922,8 +44831,8 @@ var content_elementvue_type_template_id_0629ce60_staticRenderFns = []
 
 var content_element_component = normalizeComponent(
   content_element_content_elementvue_type_script_lang_js_,
-  content_elementvue_type_template_id_0629ce60_render,
-  content_elementvue_type_template_id_0629ce60_staticRenderFns,
+  content_elementvue_type_template_id_ca01f382_render,
+  content_elementvue_type_template_id_ca01f382_staticRenderFns,
   false,
   null,
   null,
@@ -41932,7 +44841,7 @@ var content_element_component = normalizeComponent(
 )
 
 /* harmony default export */ var content_element = (content_element_component.exports);
-// CONCATENATED MODULE: ./src/main.js
+// CONCATENATED MODULE: ./src/main.ts
 
  // CORE
 
@@ -41965,7 +44874,6 @@ var content_element_component = normalizeComponent(
 
 
  // INTERNAL ELEMENTS
-
 
  // PUBLIC OPTIONAL FUNCTIONS AND HELPERS
 

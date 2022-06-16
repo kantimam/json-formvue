@@ -248,7 +248,7 @@ function scrollToErrorCallback(firstInputWithError: HTMLElement){
 to be implemented
 
 ## Utility functions
-you can find useful utilty functions inside the lib folder formvue-json/src/lib/util.js  
+you can find useful utilty functions inside the lib folder formvue-json/src/lib/util.ts  
 Some of these functions will be re exported from the library root but otherwise you can grab them from src.  
 
 ### Important utility functions
@@ -282,6 +282,40 @@ implement
 implement
 ```
 
-
 # Extend - Create your own elements
+TODO
 
+# Develop
+## Conventions
+This project tries to follow the following structure:
+```
+src
+├── components (component root)
+│   ├── containers (components rendering other components)
+│   ├── fields
+│   │   ├── base ("atomic" components without store)
+│   │   ├── composed (components extending base components with store)
+│   │   └── ... (either components which are not yet compliant or other fields)
+│   ├── mixin
+│   └── ...
+├── stories (stories root)
+│   ├── base
+│   ├── composed
+│   ├── vuetify (stories about original vuetify components for reference)
+│   └── ...
+├── lib
+├── store (everything related to the data store)
+└── ...
+```
+
+## Base components
+Base components should not have anything related to store.
+They should only serve as vuetify wrapper.
+The goal behind base components is, that they can be embedded in other of our components without any problems.
+
+Generally, here are some criteria for base components:
++ they should not use the vuex store
++ Generally, it should be possible to bind `v-model` components extending the base component.
+You can use `InputValueMixin` to transitively bind the v-model.
+When extra handling / custom behaviour is needed in super components, one can overwrite the member functions of that mixin in the component.
++ they should be the minimal building parts of the library

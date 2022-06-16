@@ -53,8 +53,8 @@
 </template>
 
 <script>
-import {createInputRules, getPlaceholder, isRequired} from "../../lib/util";
-import MaskedText from "./textfield_masked.vue";
+import {createInputRules, getPlaceholder, isRequired} from "@/lib/util";
+import MaskedText from "./composed/textfield_masked.vue";
 import {
   compareDateTimes,
   formatISODateFromPattern,
@@ -63,7 +63,7 @@ import {
   isIsoFormatted,
   parseISODateFromPattern,
   toIsoFormatWithOffset
-} from "../../lib/time";
+} from "@/lib/time";
 
 export default {
   name: "DatePicker",

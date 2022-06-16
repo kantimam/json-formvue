@@ -117,7 +117,6 @@ export default {
       type: Function,
       required: false
     }
-
   },
   provide() {
     return {
