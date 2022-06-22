@@ -17922,28 +17922,28 @@ var _excluded = ["formData", "callbacksMap"];
 
 
 /**
- *
+ * @param ctx
  * @param knownCallbacks
  * @param requestedCallbacks
  * @returns {Promise<unknown[]> | undefined}
  */
 
-function generateCallbacksList() {
-  var knownCallbacks = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  var requestedCallbacks = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
+function generateCallbacksList(ctx) {
+  var knownCallbacks = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+  var requestedCallbacks = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : [];
   if (!knownCallbacks) return Promise.resolve();
   var callbacks = requestedCallbacks.map(function (cb) {
     var foundCallback = knownCallbacks[cb.action];
 
     if (foundCallback) {
-      return foundCallback(cb.arguments);
+      return foundCallback(cb.arguments, ctx);
     } else {
       console.warn("[Callback] Unknown callback '".concat(cb.action, "'"));
       return Promise.resolve();
     }
   });
   var defaultCallback = knownCallbacks['defaultCallback'];
-  if (defaultCallback) callbacks.push(defaultCallback(null));
+  if (defaultCallback) callbacks.push(defaultCallback(null, ctx));
   if (!callbacks || !callbacks.length) return Promise.resolve();
   return Promise.all(callbacks).then();
 }
@@ -18346,7 +18346,7 @@ function createStore(v, stateInit) {
                     break;
                   }
 
-                  callbacksList = generateCallbacksList(context.state.callbacksMap, requestedCallbacks);
+                  callbacksList = generateCallbacksList(context, context.state.callbacksMap, requestedCallbacks);
 
                   if (!callbacksList) {
                     _context2.next = 7;
