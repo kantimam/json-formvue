@@ -308,6 +308,10 @@ src
 └── ...
 ```
 
+### Versioning
+This package follows the [semantic versioning](https://semver.org/) policy.
+Add a Git tag to a commit to resolve it using npm.
+
 ## Base components
 Base components should not have anything related to store.
 They should only serve as vuetify wrapper.
