@@ -1,8 +1,8 @@
 import {replaceFormatSpecifiers, replacePluralizationTokens} from '@/lib/substitution';
 import Vue, {Component} from "vue";
-import Vuex from "vuex";
+import Vuex, {ActionContext} from "vuex";
 import ResponseInterceptor from "./response_interceptor";
-import {CallbackMap} from "@/lib/callbacks";
+import type {CallbackMap} from "@/lib/callbacks";
 import {
     CallbackDefinition,
     ElementDefinition,
@@ -60,19 +60,22 @@ export type StoreState = {
 }
 
 /**
- *
+ * @param ctx
  * @param knownCallbacks
  * @param requestedCallbacks
  * @returns {Promise<unknown[]> | undefined}
  */
-function generateCallbacksList(knownCallbacks: CallbackMap = {}, requestedCallbacks: CallbackDefinition<unknown>[] = []): Promise<void> {
+function generateCallbacksList(ctx: ActionContext<Partial<StoreState>, Partial<StoreState>>,
+                               knownCallbacks: CallbackMap = {},
+                               requestedCallbacks: CallbackDefinition<unknown>[] = []): Promise<void> {
+
     if (!knownCallbacks) return Promise.resolve();
 
     const callbacks = requestedCallbacks.map(cb => {
         const foundCallback = knownCallbacks[cb.action];
 
         if (foundCallback) {
-            return foundCallback(cb.arguments);
+            return foundCallback(cb.arguments, ctx);
         } else {
             console.warn(`[Callback] Unknown callback '${cb.action}'`);
             return Promise.resolve();
@@ -81,7 +84,7 @@ function generateCallbacksList(knownCallbacks: CallbackMap = {}, requestedCallba
 
     const defaultCallback = knownCallbacks['defaultCallback'];
     if (defaultCallback)
-        callbacks.push(defaultCallback(null));
+        callbacks.push(defaultCallback(null, ctx));
 
     if (!callbacks || !callbacks.length)
         return Promise.resolve();
@@ -444,7 +447,7 @@ function createStore(v: typeof Vuex, stateInit: FormStateInit) {
                 try {
                     const requestedCallbacks = isFormDefinition(successJson) ? successJson.api.callbacks : successJson.callbacks;
                     if (requestedCallbacks) {
-                        const callbacksList = generateCallbacksList(context.state.callbacksMap, requestedCallbacks);
+                        const callbacksList = generateCallbacksList(context, context.state.callbacksMap, requestedCallbacks);
                         if (callbacksList) {
                             await callbacksList;
                         }
