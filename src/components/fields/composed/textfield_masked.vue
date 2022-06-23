@@ -18,7 +18,11 @@
       @input="input"
       @focus="focus"
       @blur="blur"
-  />
+  >
+    <template slot="append">
+      <slot name="append-masked" />
+    </template>
+  </on-text-field-base>
 </template>
 <script lang="ts">
 import 'reflect-metadata' // infer vue prop type validation by ts-definition; import this before vue-property-decorator!
