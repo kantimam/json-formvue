@@ -15,9 +15,9 @@
             :placeholder="placeholder"
             ref="masked"
             :rules="menu ? [] : inputRules"
-            :class="`ondigo-input ondigo-textfield ondigo-input-${identifier}`"
+            :class="`ondigo-input ondigo-textfield ondigo-input-_${identifier}`"
             :inputBridge="inputBridge"
-            :identifier="identifier"
+            :identifier="'_' + identifier"
             :requiredLabel="requiredLabel"
             :name="name"
             v-bind="{
@@ -82,6 +82,7 @@ import {ValidatorMap} from "@/lib/validators";
       this.$store.commit("setFormDisabled", val);
     },
     date() {
+      if (!this.date) return;
       this.inputBridge = this.formatDate(this.date);
     },
     inputBridge(val) {
@@ -220,11 +221,12 @@ export default class OnDatePicker extends mixins(InputValueMixin) {
   }
 
   get inputBridge() {
-    return this.$store.getters.getCurrentInputValue(this.identifier) || "";
+    return this.$store.getters.getCurrentInputValue('_' + this.identifier) || "";
   }
 
   set inputBridge(value) {
-    this.$store.commit("updateInputValue", {key: this.identifier, value: value});
+    this.$store.commit("updateInputValue", {key: '_' + this.identifier, value: value});
+    this.$store.commit("updateInputValue", {key: this.identifier, value: this.formattedInput});
   }
 
   created() {
@@ -244,9 +246,7 @@ export default class OnDatePicker extends mixins(InputValueMixin) {
     (<any>this.$refs.menu)?.save(date);
   }
 
-  formatDate(date: string | null) {
-    if (!date) return null;
-
+  formatDate(date: string) {
     const now = new Date();
     return formatISODateFromPattern(date, this.maskPattern, {
       // additional mappings for hour, minute
