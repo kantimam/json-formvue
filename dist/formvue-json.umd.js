@@ -25165,7 +25165,7 @@ var validators_Validators;
     var errorMessage = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'this field must be alphanumeric (different alphabets need to be implemented)';
     return stringValidator(function (inputValue) {
       if (!inputValue.length) return true;
-      return /^[a-z0-9]+$/i.test(inputValue) || errorMessage;
+      return /^[a-z\d]+$/i.test(inputValue) || errorMessage;
     });
   }
 
@@ -36555,28 +36555,27 @@ var onCaptcha_component = normalizeComponent(
 
 installComponents_default()(onCaptcha_component, {VProgressCircular: VProgressCircular_VProgressCircular})
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1ca6af6a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/datepicker.vue?vue&type=template&id=1f9d1a2b&
-var datepickervue_type_template_id_1f9d1a2b_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.formattedInput),expression:"formattedInput"}],attrs:{"type":"hidden","name":_vm.name},domProps:{"value":(_vm.formattedInput)},on:{"input":function($event){if($event.target.composing){ return; }_vm.formattedInput=$event.target.value}}}),_c('v-menu',{ref:"menu",attrs:{"close-on-content-click":false,"transition":"scale-transition","offset-y":"","min-width":"auto"},scopedSlots:_vm._u([{key:"activator",fn:function(ref){
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1ca6af6a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/composed/datepicker.vue?vue&type=template&id=26bf1270&
+var datepickervue_type_template_id_26bf1270_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.formattedInput),expression:"formattedInput"}],attrs:{"type":"hidden","name":_vm.name},domProps:{"value":(_vm.formattedInput)},on:{"input":function($event){if($event.target.composing){ return; }_vm.formattedInput=$event.target.value}}}),_c('v-menu',{ref:"menu",attrs:{"close-on-content-click":false,"transition":"scale-transition","offset-y":"","min-width":"auto"},scopedSlots:_vm._u([{key:"activator",fn:function(ref){
 var on = ref.on;
 var attrs = ref.attrs;
-return [_c('masked-text',_vm._g(_vm._b({ref:"masked",class:("ondigo-input ondigo-textfield ondigo-input-" + _vm.identifier),attrs:{"mask-active":_vm.maskActive,"label":_vm.label,"placeholder":_vm.placeholder,"filled":_vm.filled,"rules":_vm.menu ? [] : _vm.inputRules,"inputBridge":_vm.inputBridge,"identifier":_vm.identifier}},'masked-text',Object.assign({}, _vm.$attrs,
-          {defaultValue: _vm.formattedDefaultValue,
-          name: undefined,
-          properties: Object.assign({}, _vm.properties,
-            // mixin generated MaskedText properties
-            {pattern: _vm.maskPattern,
-            placeholder: '_'})}),false),_vm.$listeners),[_c('template',{slot:"append-masked"},[_c('div',_vm._g(_vm._b({staticClass:"ondigo-icon-button"},'div',attrs,false),on),[_c('v-icon',{attrs:{"color":_vm.menu ? 'primary' : ''}},[_vm._v("mdi-calendar")])],1)])],2)]}}]),model:{value:(_vm.menu),callback:function ($$v) {_vm.menu=$$v},expression:"menu"}},[_c('v-date-picker',{attrs:{"active-picker":_vm.activePicker,"max":_vm.maxDate,"min":_vm.minDate,"locale":_vm.locale || _vm.navigator.language || 'en-US'},on:{"update:activePicker":function($event){_vm.activePicker=$event},"update:active-picker":function($event){_vm.activePicker=$event},"change":_vm.save},model:{value:(_vm.date),callback:function ($$v) {_vm.date=$$v},expression:"date"}})],1)],1)}
-var datepickervue_type_template_id_1f9d1a2b_staticRenderFns = []
+return [_c('masked-text',_vm._g(_vm._b({ref:"masked",class:("ondigo-input ondigo-textfield ondigo-input-" + _vm.identifier),attrs:{"mask-active":_vm.maskActive,"placeholder":_vm.placeholder,"rules":_vm.menu ? [] : _vm.inputRules,"inputBridge":_vm.inputBridge,"identifier":_vm.identifier,"requiredLabel":_vm.requiredLabel,"name":_vm.name}},'masked-text',Object.assign({}, _vm.$attrs,
+            {defaultValue: _vm.formattedDefaultValue,
+            properties: Object.assign({}, _vm.properties,
+              // mixin generated MaskedText properties
+              {pattern: _vm.maskPattern,
+              placeholder: '_'})}),false),_vm.$listeners),[_c('template',{slot:"append-masked"},[_c('div',_vm._g(_vm._b({staticClass:"ondigo-icon-button"},'div',attrs,false),on),[_c('v-icon',{attrs:{"color":_vm.menu ? 'primary' : ''}},[_vm._v("mdi-calendar")])],1)])],2)]}}]),model:{value:(_vm.menu),callback:function ($$v) {_vm.menu=$$v},expression:"menu"}},[_c('v-date-picker',{attrs:{"active-picker":_vm.activePicker,"max":_vm.maxDate,"min":_vm.minDate,"locale":_vm.locale || _vm.navigator.language || 'en-US'},on:{"update:activePicker":function($event){_vm.activePicker=$event},"update:active-picker":function($event){_vm.activePicker=$event},"change":_vm.save},model:{value:(_vm.date),callback:function ($$v) {_vm.date=$$v},expression:"date"}})],1)],1)}
+var datepickervue_type_template_id_26bf1270_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/fields/datepicker.vue?vue&type=template&id=1f9d1a2b&
+// CONCATENATED MODULE: ./src/components/fields/composed/datepicker.vue?vue&type=template&id=26bf1270&
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1ca6af6a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/composed/textfield_masked.vue?vue&type=template&id=2c078e6c&
-var textfield_maskedvue_type_template_id_2c078e6c_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('on-text-field-base',_vm._g(_vm._b({ref:"field",attrs:{"properties":_vm.properties,"identifier":_vm.identifier,"required":_vm.isRequired,"requiredLabel":_vm.requiredLabel,"placeholder":_vm.placeholder,"errorMessages":_vm.inputError,"rules":_vm.inputRules},on:{"input":_vm.input,"focus":_vm.focus,"blur":_vm.blur},model:{value:(_vm.inputValue),callback:function ($$v) {_vm.inputValue=$$v},expression:"inputValue"}},'on-text-field-base',_vm.$attrs,false),_vm.$listeners))}
-var textfield_maskedvue_type_template_id_2c078e6c_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1ca6af6a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/composed/textfield_masked.vue?vue&type=template&id=d2e50b10&
+var textfield_maskedvue_type_template_id_d2e50b10_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('on-text-field-base',_vm._g(_vm._b({ref:"field",attrs:{"properties":_vm.properties,"identifier":_vm.identifier,"required":_vm.isRequired,"requiredLabel":_vm.internalRequiredLabel,"placeholder":_vm.placeholder,"errorMessages":_vm.inputError,"rules":_vm.inputRules},on:{"input":_vm.input,"focus":_vm.focus,"blur":_vm.blur},model:{value:(_vm.inputValue),callback:function ($$v) {_vm.inputValue=$$v},expression:"inputValue"}},'on-text-field-base',_vm.$attrs,false),_vm.$listeners))}
+var textfield_maskedvue_type_template_id_d2e50b10_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/fields/composed/textfield_masked.vue?vue&type=template&id=2c078e6c&
+// CONCATENATED MODULE: ./src/components/fields/composed/textfield_masked.vue?vue&type=template&id=d2e50b10&
 
 // CONCATENATED MODULE: ./node_modules/@ondigo-internal/imask/esm/_rollupPluginBabelHelpers-a0b34764.js
 function _rollupPluginBabelHelpers_a0b34764_typeof(obj) {
@@ -41021,8 +41020,9 @@ var textfield_maskedvue_type_script_lang_ts_OnTextFieldMasked = /*#__PURE__*/fun
       return isRequired(this.properties);
     }
   }, {
-    key: "requiredLabel",
+    key: "internalRequiredLabel",
     get: function get() {
+      if (this.requiredLabel) return this.requiredLabel;
       if (!this.validators || !this.validators.length) return "required";
       var notEmptyValidator = this.validators.find(function (v) {
         return v.identifier === "NotEmpty";
@@ -41217,6 +41217,10 @@ __decorate([Prop({
   required: false
 }), __metadata("design:type", String)], textfield_maskedvue_type_script_lang_ts_OnTextFieldMasked.prototype, "inputBridge", void 0);
 
+__decorate([Prop({
+  required: false
+}), __metadata("design:type", String)], textfield_maskedvue_type_script_lang_ts_OnTextFieldMasked.prototype, "requiredLabel", void 0);
+
 __decorate([Inject('validatorsMap'), __metadata("design:type", typeof (textfield_maskedvue_type_script_lang_ts_b = typeof /* Cannot get final name for export "ValidatorMap" in "./src/lib/validators.ts" (known exports: Validators, known reexports: ) */ undefined !== "undefined" && /* Cannot get final name for export "ValidatorMap" in "./src/lib/validators.ts" (known exports: Validators, known reexports: ) */ undefined) === "function" ? textfield_maskedvue_type_script_lang_ts_b : Object)], textfield_maskedvue_type_script_lang_ts_OnTextFieldMasked.prototype, "validatorsMap", void 0);
 
 textfield_maskedvue_type_script_lang_ts_OnTextFieldMasked = __decorate([vue_class_component_esm({
@@ -41250,8 +41254,8 @@ textfield_maskedvue_type_script_lang_ts_OnTextFieldMasked = __decorate([vue_clas
 
 var textfield_masked_component = normalizeComponent(
   composed_textfield_maskedvue_type_script_lang_ts_,
-  textfield_maskedvue_type_template_id_2c078e6c_render,
-  textfield_maskedvue_type_template_id_2c078e6c_staticRenderFns,
+  textfield_maskedvue_type_template_id_d2e50b10_render,
+  textfield_maskedvue_type_template_id_d2e50b10_staticRenderFns,
   false,
   null,
   null,
@@ -41260,7 +41264,7 @@ var textfield_masked_component = normalizeComponent(
 )
 
 /* harmony default export */ var textfield_masked = (textfield_masked_component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/datepicker.vue?vue&type=script&lang=js&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/@vue/cli-plugin-typescript/node_modules/ts-loader??ref--13-3!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/composed/datepicker.vue?vue&type=script&lang=ts&
 
 
 
@@ -41274,111 +41278,186 @@ var textfield_masked_component = normalizeComponent(
 
 
 
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 
-/* harmony default export */ var datepickervue_type_script_lang_js_ = ({
-  name: "DatePicker",
-  components: {
-    MaskedText: textfield_masked
-  },
-  data: function data() {
-    return {
-      activePicker: null,
-      date: null,
-      menu: false,
-      formattedInput: null
-    };
-  },
-  watch: {
-    menu: function menu(val) {
-      var _this = this;
 
-      val && setTimeout(function () {
-        return _this.activePicker = "YEAR";
-      });
-      this.$store.commit("setFormDisabled", val);
-    },
-    date: function date() {
-      this.inputBridge = this.formatDate(this.date);
-    },
-    inputBridge: function inputBridge(val) {
-      this.updateFormattedValue(val);
+
+
+var datepickervue_type_script_lang_ts_a, datepickervue_type_script_lang_ts_b;
+
+
+ // infer vue prop type validation by ts-definition; import this before vue-property-decorator!
+
+
+
+
+
+
+
+
+
+
+var datepickervue_type_script_lang_ts_OnDatePicker = /*#__PURE__*/function (_mixins) {
+  _inherits(OnDatePicker, _mixins);
+
+  var _super = _createSuper(OnDatePicker);
+
+  function OnDatePicker() {
+    var _this;
+
+    _classCallCheck(this, OnDatePicker);
+
+    _this = _super.apply(this, arguments);
+    _this.activePicker = null;
+    _this.date = null;
+    _this.menu = false;
+    _this.formattedInput = null;
+    return _this;
+  }
+
+  _createClass(OnDatePicker, [{
+    key: "inputRules",
+    get: function get() {
+      if (this.rules && Array.isArray(this.rules)) return this.rules;else return createInputRules(this.isRequired, this.validators, _objectSpread2(_objectSpread2({}, this.properties), {}, {
+        pattern: this.maskPattern
+      }), true, this.validatorsMap);
     }
-  },
-  created: function created() {
-    var stored = this.$store.getters.getCurrentInputValue(this.identifier);
-    if (!stored) return; // when default values are set, they are in ISO format, but we need our masked format for this component.
-    // fix it via the formattedDefaultValue property
+  }, {
+    key: "isRequired",
+    get: function get() {
+      return isRequired(this.properties);
+    }
+  }, {
+    key: "requiredLabel",
+    get: function get() {
+      return createRequiredLabel(this.validators);
+    }
+  }, {
+    key: "placeholder",
+    get: function get() {
+      return getPlaceholder(this.properties);
+    }
+  }, {
+    key: "maskActive",
+    get: function get() {
+      return !!this.properties.enableMask;
+    }
+  }, {
+    key: "formattedDefaultValue",
+    get: function get() {
+      if (!this.defaultValue || !this.maskPattern) return '';
+      var date = new Date(this.defaultValue);
+      var dateStr = getShortIsoString(date);
+      var now = new Date();
+      return formatISODateFromPattern(dateStr, this.maskPattern, {
+        // additional mappings for hour, minute
+        H: String(now.getHours()).padStart(2, "0"),
+        i: String(now.getMinutes()).padStart(2, "0")
+      });
+    }
+  }, {
+    key: "minDate",
+    get: function get() {
+      var _validator$options;
 
-    if (isIsoFormatted(stored)) {
+      if (!this.validators) return undefined;
+      var validator = this.validators.find(function (v) {
+        return v.identifier === "DateInterval";
+      });
+      if (!validator) return undefined;
+      var minDate = (_validator$options = validator.options) === null || _validator$options === void 0 ? void 0 : _validator$options.minDate;
+      if (!minDate) return undefined;
+      var interpreted = interpretTime(minDate); // parse date with date
+
+      var date = Date.parse(interpreted);
+      return !isNaN(date) ? interpreted : undefined;
+    }
+  }, {
+    key: "maxDate",
+    get: function get() {
+      var _validator$options2;
+
+      if (!this.validators) return undefined;
+      var validator = this.validators.find(function (v) {
+        return v.identifier === "DateInterval";
+      });
+      if (!validator) return undefined;
+      var maxDate = (_validator$options2 = validator.options) === null || _validator$options2 === void 0 ? void 0 : _validator$options2.maxDate;
+      if (!maxDate) return undefined;
+      var interpreted = interpretTime(maxDate); // parse date with date
+
+      var date = Date.parse(interpreted);
+      return !isNaN(date) ? interpreted : undefined;
+    }
+  }, {
+    key: "maskPattern",
+    get: function get() {
+      if (!this.maskActive) return "";
+      var format = this.properties.dateFormat;
+      if (!format) return "dd.mm.YYYY"; // fallback value
+      // In PHP a format would be something like Y-m-d, but the mask pattern needs to be mapped to, in this case YYYY-mm-dd
+
+      Object.entries({
+        // Supported PHP format specifiers
+        d: "dd",
+        m: "mm",
+        Y: "YYYY",
+        H: "HH",
+        i: "ii"
+      }).forEach(function (_ref) {
+        var _ref2 = _slicedToArray(_ref, 2),
+            from = _ref2[0],
+            to = _ref2[1];
+
+        return format = format.replace(from, to);
+      });
+      return format; // is now pattern
+    }
+  }, {
+    key: "locale",
+    get: function get() {
+      var _this$$store$getters$;
+
+      return (_this$$store$getters$ = this.$store.getters.getCurrentSchema) === null || _this$$store$getters$ === void 0 ? void 0 : _this$$store$getters$.i18n;
+    }
+  }, {
+    key: "inputBridge",
+    get: function get() {
+      return this.$store.getters.getCurrentInputValue(this.identifier) || "";
+    },
+    set: function set(value) {
       this.$store.commit("updateInputValue", {
         key: this.identifier,
-        value: this.formattedDefaultValue
+        value: value
       });
-    } else {
-      this.updateFormattedValue(stored);
     }
-  },
-  methods: {
-    save: function save(date) {
-      this.$refs.menu.save(date);
-    },
-    formatDate: function formatDate(date) {
+  }, {
+    key: "created",
+    value: function created() {
+      var stored = this.$store.getters.getCurrentInputValue(this.identifier);
+      if (!stored) return; // when default values are set, they are in ISO format, but we need our masked format for this component.
+      // fix it via the formattedDefaultValue property
+
+      if (isIsoFormatted(stored)) {
+        this.$store.commit("updateInputValue", {
+          key: this.identifier,
+          value: this.formattedDefaultValue
+        });
+      } else {
+        this.updateFormattedValue(stored);
+      }
+    }
+  }, {
+    key: "save",
+    value: function save(date) {
+      var _this$$refs$menu;
+
+      (_this$$refs$menu = this.$refs.menu) === null || _this$$refs$menu === void 0 ? void 0 : _this$$refs$menu.save(date);
+    }
+  }, {
+    key: "formatDate",
+    value: function formatDate(date) {
       if (!date) return null;
       var now = new Date();
       return formatISODateFromPattern(date, this.maskPattern, {
@@ -41386,10 +41465,13 @@ var textfield_masked_component = normalizeComponent(
         H: String(now.getHours()).padStart(2, "0"),
         i: String(now.getMinutes()).padStart(2, "0")
       });
-    },
-    updateFormattedValue: function updateFormattedValue(val) {
+    }
+  }, {
+    key: "updateFormattedValue",
+    value: function updateFormattedValue(val) {
       var parsed = this.parseDate(val);
-      if (parsed && parsed !== this.date) this.date = parsed;
+      if (!parsed) return;
+      if (parsed !== this.date) this.date = parsed;
       var time = Date.parse(parsed);
 
       if (isNaN(time)) {
@@ -41398,8 +41480,10 @@ var textfield_masked_component = normalizeComponent(
       }
 
       this.formattedInput = toIsoFormatWithOffset(new Date(time));
-    },
-    parseDate: function parseDate(date) {
+    }
+  }, {
+    key: "parseDate",
+    value: function parseDate(date) {
       var _this2 = this;
 
       if (!date) return null;
@@ -41427,8 +41511,10 @@ var textfield_masked_component = normalizeComponent(
       }, // Interceptor, ensures invalid dates are not set
       function (year, month, day) {
         // check if date components are in allowed ranges
-        if (month < 1 || month > 12 || day < 1 || day > 31 || year < 1000 || year > 9999) return [null, true]; // invalid date, override with null
-        // check if date components are in given min/max range (to prevent vuetify error throw)
+        if (!year || !month || !day || month < 1 || month > 12 || day < 1 || day > 31 || year < 1000 || year > 9999) {
+          return [null, true]; // invalid date, override with null
+        } // check if date components are in given min/max range (to prevent vuetify error throw)
+
 
         var inputDate = [year, month, day];
 
@@ -41443,156 +41529,57 @@ var textfield_masked_component = normalizeComponent(
         return [null, false]; // do not override
       });
     }
+  }]);
+
+  return OnDatePicker;
+}(vue_class_component_esm_mixins(mixin_InputValueMixin));
+
+__decorate([Prop({
+  "default": function _default() {
+    return [];
+  }
+}), __metadata("design:type", Array)], datepickervue_type_script_lang_ts_OnDatePicker.prototype, "validators", void 0);
+
+__decorate([Prop(), __metadata("design:type", typeof (datepickervue_type_script_lang_ts_a = typeof /* Cannot get final name for export "ElementProperties" in "./src/lib/FormDefinition.ts" (known exports: isFormDefinition, known reexports: ) */ undefined !== "undefined" && /* Cannot get final name for export "ElementProperties" in "./src/lib/FormDefinition.ts" (known exports: isFormDefinition, known reexports: ) */ undefined) === "function" ? datepickervue_type_script_lang_ts_a : Object)], datepickervue_type_script_lang_ts_OnDatePicker.prototype, "properties", void 0);
+
+__decorate([Prop(), __metadata("design:type", String)], datepickervue_type_script_lang_ts_OnDatePicker.prototype, "identifier", void 0);
+
+__decorate([Prop(), __metadata("design:type", String)], datepickervue_type_script_lang_ts_OnDatePicker.prototype, "defaultValue", void 0);
+
+__decorate([Prop(), __metadata("design:type", String)], datepickervue_type_script_lang_ts_OnDatePicker.prototype, "name", void 0);
+
+__decorate([Prop({
+  "default": function _default() {}
+}), __metadata("design:type", Array)], datepickervue_type_script_lang_ts_OnDatePicker.prototype, "rules", void 0);
+
+__decorate([Inject('validatorsMap'), __metadata("design:type", typeof (datepickervue_type_script_lang_ts_b = typeof /* Cannot get final name for export "ValidatorMap" in "./src/lib/validators.ts" (known exports: Validators, known reexports: ) */ undefined !== "undefined" && /* Cannot get final name for export "ValidatorMap" in "./src/lib/validators.ts" (known exports: Validators, known reexports: ) */ undefined) === "function" ? datepickervue_type_script_lang_ts_b : Object)], datepickervue_type_script_lang_ts_OnDatePicker.prototype, "validatorsMap", void 0);
+
+datepickervue_type_script_lang_ts_OnDatePicker = __decorate([vue_class_component_esm({
+  name: "OnDatePicker",
+  components: {
+    MaskedText: textfield_masked
   },
-  props: {
-    defaultValue: {
-      type: String,
-      required: false
-    },
-    focused: {
-      type: Boolean,
-      "default": false
-    },
-    identifier: {
-      type: String,
-      required: true
-    },
-    name: {
-      type: String
-    },
-    inputmode: {
-      type: String,
-      "default": null
-    },
-    label: {
-      type: String,
-      "default": null
-    },
-    filled: {
-      type: Boolean,
-      "default": false
-    },
-    properties: {
-      type: Object | Array,
-      required: true
-    },
-    rules: {
-      type: [Object, Array],
-      "default": function _default() {
-        return {} || [];
-      }
-    },
-    type: {
-      type: String,
-      "default": "text"
-    },
-    value: {
-      type: [String, Number],
-      "default": null
-    },
-    validators: {
-      type: Array,
-      required: false
-    }
-  },
-  computed: {
-    required: function required() {
-      return isRequired(this.properties);
-    },
-    placeholder: function placeholder() {
-      return getPlaceholder(this.properties);
-    },
-    maskActive: function maskActive() {
-      return !!this.properties.enableMask;
-    },
-    formattedDefaultValue: function formattedDefaultValue() {
-      if (!this.defaultValue || !this.maskPattern) return '';
-      var date = new Date(this.defaultValue);
-      var dateStr = getShortIsoString(date);
-      var now = new Date();
-      return formatISODateFromPattern(dateStr, this.maskPattern, {
-        // additional mappings for hour, minute
-        H: String(now.getHours()).padStart(2, "0"),
-        i: String(now.getMinutes()).padStart(2, "0")
+  watch: {
+    menu: function menu(val) {
+      var _this3 = this;
+
+      val && setTimeout(function () {
+        return _this3.activePicker = "YEAR";
       });
+      this.$store.commit("setFormDisabled", val);
     },
-    minDate: function minDate() {
-      var _validator$options;
-
-      if (!this.validators) return undefined;
-      var validator = this.validators.find(function (v) {
-        return v.identifier === "DateInterval";
-      });
-      if (!validator) return undefined;
-      var minDate = (_validator$options = validator.options) === null || _validator$options === void 0 ? void 0 : _validator$options.minDate;
-      if (!minDate) return undefined;
-      var interpreted = interpretTime(minDate); // parse date with date
-
-      var date = Date.parse(interpreted);
-      return !isNaN(date) ? interpreted : undefined;
+    date: function date() {
+      this.inputBridge = this.formatDate(this.date);
     },
-    maxDate: function maxDate() {
-      var _validator$options2;
-
-      if (!this.validators) return undefined;
-      var validator = this.validators.find(function (v) {
-        return v.identifier === "DateInterval";
-      });
-      if (!validator) return undefined;
-      var maxDate = (_validator$options2 = validator.options) === null || _validator$options2 === void 0 ? void 0 : _validator$options2.maxDate;
-      if (!maxDate) return undefined;
-      var interpreted = interpretTime(maxDate); // parse date with date
-
-      var date = Date.parse(interpreted);
-      return !isNaN(date) ? interpreted : undefined;
-    },
-    maskPattern: function maskPattern() {
-      if (!this.maskActive) return "";
-      var format = this.properties.dateFormat;
-      if (!format) return "dd.mm.YYYY"; // fallback value
-      // In PHP a format would be something like Y-m-d, but the mask pattern needs to be mapped to, in this case YYYY-mm-dd
-
-      Object.entries({
-        // Supported PHP format specifiers
-        d: "dd",
-        m: "mm",
-        Y: "YYYY",
-        H: "HH",
-        i: "ii"
-      }).forEach(function (_ref) {
-        var _ref2 = _slicedToArray(_ref, 2),
-            from = _ref2[0],
-            to = _ref2[1];
-
-        return format = format.replace(from, to);
-      });
-      return format; // is now pattern
-    },
-    locale: function locale() {
-      var _this$$store$getters$;
-
-      return (_this$$store$getters$ = this.$store.getters.getCurrentSchema) === null || _this$$store$getters$ === void 0 ? void 0 : _this$$store$getters$.i18n;
-    },
-    inputRules: function inputRules() {
-      return createInputRules(this.required, this.validators, _objectSpread2(_objectSpread2({}, this.properties), {}, {
-        pattern: this.maskPattern
-      }));
-    },
-    inputBridge: {
-      get: function get() {
-        return this.$store.getters.getCurrentInputValue(this.identifier) || "";
-      },
-      set: function set(value) {
-        this.$store.commit("updateInputValue", {
-          key: this.identifier,
-          value: value
-        });
-      }
+    inputBridge: function inputBridge(val) {
+      this.updateFormattedValue(val);
     }
   }
-});
-// CONCATENATED MODULE: ./src/components/fields/datepicker.vue?vue&type=script&lang=js&
- /* harmony default export */ var fields_datepickervue_type_script_lang_js_ = (datepickervue_type_script_lang_js_); 
+})], datepickervue_type_script_lang_ts_OnDatePicker);
+/* harmony default export */ var datepickervue_type_script_lang_ts_ = (datepickervue_type_script_lang_ts_OnDatePicker);
+;
+// CONCATENATED MODULE: ./src/components/fields/composed/datepicker.vue?vue&type=script&lang=ts&
+ /* harmony default export */ var composed_datepickervue_type_script_lang_ts_ = (datepickervue_type_script_lang_ts_); 
 // EXTERNAL MODULE: ./node_modules/vuetify/src/components/VDatePicker/VDatePickerTitle.sass
 var VDatePickerTitle = __webpack_require__("d951");
 
@@ -43943,7 +43930,7 @@ function timestamp_createNativeLocaleFormatter(locale, getOptions) {
     return this.genPicker('v-picker--date');
   }
 }));
-// CONCATENATED MODULE: ./src/components/fields/datepicker.vue
+// CONCATENATED MODULE: ./src/components/fields/composed/datepicker.vue
 
 
 
@@ -43952,9 +43939,9 @@ function timestamp_createNativeLocaleFormatter(locale, getOptions) {
 /* normalize component */
 
 var datepicker_component = normalizeComponent(
-  fields_datepickervue_type_script_lang_js_,
-  datepickervue_type_template_id_1f9d1a2b_render,
-  datepickervue_type_template_id_1f9d1a2b_staticRenderFns,
+  composed_datepickervue_type_script_lang_ts_,
+  datepickervue_type_template_id_26bf1270_render,
+  datepickervue_type_template_id_26bf1270_staticRenderFns,
   false,
   null,
   null,
