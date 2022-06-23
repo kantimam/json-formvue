@@ -48,13 +48,15 @@
       }}</span></template
     >
     <template slot="append">
-      <div
-          @click="menu = !menu"
-          v-if="isTouchDevice && !!$slots.info"
-          class="v-input__info"
-      >
-        <v-icon color="primary">mdi-information-outline</v-icon>
-      </div>
+      <slot name="append">
+        <div
+            @click="menu = !menu"
+            v-if="isTouchDevice && !!$slots.info"
+            class="v-input__info"
+        >
+          <v-icon color="primary">mdi-information-outline</v-icon>
+        </div>
+      </slot>
     </template>
   </v-text-field>
 </template>

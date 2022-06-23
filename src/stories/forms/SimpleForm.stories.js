@@ -1,4 +1,4 @@
-import {VApp, VBtn, VDatePicker, VForm, VMenu, VTextField} from "vuetify/lib/components";
+import {VApp, VBtn, VDatePicker, VForm, VMenu, VTextField, VIcon} from "vuetify/lib/components";
 
 import Vue from "vue";
 import Vuetify from 'vuetify/lib/framework';
@@ -22,6 +22,7 @@ Vue.component('v-btn', VBtn);
 Vue.component('v-date-picker', VDatePicker);
 Vue.component('v-form', VForm);
 Vue.component('v-app', VApp);
+Vue.component('v-icon', VIcon);
 
 export default {
     title: 'Formvue/Forms/Simple',
