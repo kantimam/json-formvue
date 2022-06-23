@@ -3,6 +3,7 @@ import OnDatePicker from '@/components/fields/composed/datepicker.vue';
 import Vue from "vue";
 import Vuetify from 'vuetify/lib/framework';
 import {defaultProps, createDummyValidator} from "@/stories/helper";
+import {createDummyRequiredValidator} from "../helper";
 
 Vue.use(Vuetify);
 const vuetify = new Vuetify({});
@@ -44,7 +45,7 @@ let requiredProps = defaultProps('DatePicker', 'datepicker', false, true);
 requiredProps.properties.maskPattern = 'd.m.y'
 requiredProps.properties.placeholder = '_'
 requiredProps.properties.enableMask = true;
-requiredProps.validators = [createDummyValidator('MaskComplete', 'Please complete your input')];
+requiredProps.validators = [createDummyRequiredValidator(), createDummyValidator('MaskComplete', 'Please complete your input')];
 
 Required.args = requiredProps;
 

@@ -9,7 +9,7 @@
       :identifier="identifier"
 
       :required="isRequired"
-      :requiredLabel="requiredLabel"
+      :requiredLabel="internalRequiredLabel"
       :placeholder="placeholder"
       :errorMessages="inputError"
       :rules="inputRules"
@@ -77,6 +77,11 @@ export default class OnTextFieldMasked extends mixins(InputValueMixin) {
   })
   inputBridge?: string
 
+  @Prop({
+    required: false
+  })
+  requiredLabel?: string
+
   @Inject('validatorsMap')
   readonly validatorsMap!: ValidatorMap
 
@@ -91,7 +96,9 @@ export default class OnTextFieldMasked extends mixins(InputValueMixin) {
     return isRequired(this.properties);
   }
 
-  get requiredLabel() {
+  get internalRequiredLabel() {
+    if (this.requiredLabel) return this.requiredLabel;
+
     if (!this.validators || !this.validators.length) return "required";
     const notEmptyValidator = this.validators.find(v => v.identifier === "NotEmpty");
     return (notEmptyValidator && notEmptyValidator.errorMessage) || "required";

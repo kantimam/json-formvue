@@ -22,7 +22,7 @@ import AdvancedPassword from "./components/fields/advanced_password.vue";
 import FileUpload from "./components/fields/file_upload.vue";
 import StaticText from "./components/fields/other/static_text/static_text.vue";
 import OnCaptcha from "./components/fields/onCaptcha/onCaptcha.vue";
-import DatePicker from "./components/fields/datepicker.vue";
+import DatePicker from "./components/fields/composed/datepicker.vue";
 import MaskedText from "./components/fields/composed/textfield_masked.vue";
 import ConditionRadio from "./components/containers/condition_radio.vue";
 import ConditionCheckbox from "./components/containers/condition_checkbox.vue";

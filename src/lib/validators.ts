@@ -47,7 +47,7 @@ export namespace Validators {
         return stringValidator(inputValue => {
             if (!inputValue.length) return true;
 
-            return /^[a-z0-9]+$/i.test(inputValue) || errorMessage
+            return /^[a-z\d]+$/i.test(inputValue) || errorMessage
         });
     }
 

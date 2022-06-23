@@ -31,6 +31,8 @@
         top: $text-field-filled-full-width-label-top;
     }
 
+    $text-field-filled-full-width-label-active-transform: scale(.75) !default;
+
     .v-input__label-required,
     .v-input__label-optional {
         left: $text-field-label-optional-left;
@@ -47,6 +49,7 @@
         position: absolute;
         top: $text-field-filled-full-width-label-top - 4px;
         transform: $text-field-filled-full-width-label-active-transform;
+        transform-origin: top left;
 
         @mixin ltr() {
             transform-origin: top left
@@ -63,7 +66,10 @@
 
     .v-input__label-required {
         opacity: 0;
-        left: -6px;  // weird bug
+    }
+
+    .v-input__label-required, .v-input__label-optional {
+        left: $v-input-slot-padding;
     }
 
     &.error--text {
