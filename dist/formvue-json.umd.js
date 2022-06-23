@@ -36555,20 +36555,20 @@ var onCaptcha_component = normalizeComponent(
 
 installComponents_default()(onCaptcha_component, {VProgressCircular: VProgressCircular_VProgressCircular})
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1ca6af6a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/composed/datepicker.vue?vue&type=template&id=26bf1270&
-var datepickervue_type_template_id_26bf1270_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.formattedInput),expression:"formattedInput"}],attrs:{"type":"hidden","name":_vm.name},domProps:{"value":(_vm.formattedInput)},on:{"input":function($event){if($event.target.composing){ return; }_vm.formattedInput=$event.target.value}}}),_c('v-menu',{ref:"menu",attrs:{"close-on-content-click":false,"transition":"scale-transition","offset-y":"","min-width":"auto"},scopedSlots:_vm._u([{key:"activator",fn:function(ref){
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1ca6af6a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/composed/datepicker.vue?vue&type=template&id=0c3912ae&
+var datepickervue_type_template_id_0c3912ae_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.formattedInput),expression:"formattedInput"}],attrs:{"type":"hidden","name":_vm.name},domProps:{"value":(_vm.formattedInput)},on:{"input":function($event){if($event.target.composing){ return; }_vm.formattedInput=$event.target.value}}}),_c('v-menu',{ref:"menu",attrs:{"close-on-content-click":false,"transition":"scale-transition","offset-y":"","min-width":"auto"},scopedSlots:_vm._u([{key:"activator",fn:function(ref){
 var on = ref.on;
 var attrs = ref.attrs;
-return [_c('masked-text',_vm._g(_vm._b({ref:"masked",class:("ondigo-input ondigo-textfield ondigo-input-" + _vm.identifier),attrs:{"mask-active":_vm.maskActive,"placeholder":_vm.placeholder,"rules":_vm.menu ? [] : _vm.inputRules,"inputBridge":_vm.inputBridge,"identifier":_vm.identifier,"requiredLabel":_vm.requiredLabel,"name":_vm.name}},'masked-text',Object.assign({}, _vm.$attrs,
+return [_c('masked-text',_vm._g(_vm._b({ref:"masked",class:("ondigo-input ondigo-textfield ondigo-input-_" + _vm.identifier),attrs:{"mask-active":_vm.maskActive,"placeholder":_vm.placeholder,"rules":_vm.menu ? [] : _vm.inputRules,"inputBridge":_vm.inputBridge,"identifier":'_' + _vm.identifier,"requiredLabel":_vm.requiredLabel,"name":_vm.name}},'masked-text',Object.assign({}, _vm.$attrs,
             {defaultValue: _vm.formattedDefaultValue,
             properties: Object.assign({}, _vm.properties,
               // mixin generated MaskedText properties
               {pattern: _vm.maskPattern,
               placeholder: '_'})}),false),_vm.$listeners),[_c('template',{slot:"append-masked"},[_c('div',_vm._g(_vm._b({staticClass:"ondigo-icon-button"},'div',attrs,false),on),[_c('v-icon',{attrs:{"color":_vm.menu ? 'primary' : ''}},[_vm._v("mdi-calendar")])],1)])],2)]}}]),model:{value:(_vm.menu),callback:function ($$v) {_vm.menu=$$v},expression:"menu"}},[_c('v-date-picker',{attrs:{"active-picker":_vm.activePicker,"max":_vm.maxDate,"min":_vm.minDate,"locale":_vm.locale || _vm.navigator.language || 'en-US'},on:{"update:activePicker":function($event){_vm.activePicker=$event},"update:active-picker":function($event){_vm.activePicker=$event},"change":_vm.save},model:{value:(_vm.date),callback:function ($$v) {_vm.date=$$v},expression:"date"}})],1)],1)}
-var datepickervue_type_template_id_26bf1270_staticRenderFns = []
+var datepickervue_type_template_id_0c3912ae_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/fields/composed/datepicker.vue?vue&type=template&id=26bf1270&
+// CONCATENATED MODULE: ./src/components/fields/composed/datepicker.vue?vue&type=template&id=0c3912ae&
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1ca6af6a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/composed/textfield_masked.vue?vue&type=template&id=d2e50b10&
 var textfield_maskedvue_type_template_id_d2e50b10_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('on-text-field-base',_vm._g(_vm._b({ref:"field",attrs:{"properties":_vm.properties,"identifier":_vm.identifier,"required":_vm.isRequired,"requiredLabel":_vm.internalRequiredLabel,"placeholder":_vm.placeholder,"errorMessages":_vm.inputError,"rules":_vm.inputRules},on:{"input":_vm.input,"focus":_vm.focus,"blur":_vm.blur},model:{value:(_vm.inputValue),callback:function ($$v) {_vm.inputValue=$$v},expression:"inputValue"}},'on-text-field-base',_vm.$attrs,false),_vm.$listeners))}
@@ -41424,12 +41424,16 @@ var datepickervue_type_script_lang_ts_OnDatePicker = /*#__PURE__*/function (_mix
   }, {
     key: "inputBridge",
     get: function get() {
-      return this.$store.getters.getCurrentInputValue(this.identifier) || "";
+      return this.$store.getters.getCurrentInputValue('_' + this.identifier) || "";
     },
     set: function set(value) {
       this.$store.commit("updateInputValue", {
-        key: this.identifier,
+        key: '_' + this.identifier,
         value: value
+      });
+      this.$store.commit("updateInputValue", {
+        key: this.identifier,
+        value: this.formattedInput
       });
     }
   }, {
@@ -41458,7 +41462,6 @@ var datepickervue_type_script_lang_ts_OnDatePicker = /*#__PURE__*/function (_mix
   }, {
     key: "formatDate",
     value: function formatDate(date) {
-      if (!date) return null;
       var now = new Date();
       return formatISODateFromPattern(date, this.maskPattern, {
         // additional mappings for hour, minute
@@ -41569,6 +41572,7 @@ datepickervue_type_script_lang_ts_OnDatePicker = __decorate([vue_class_component
       this.$store.commit("setFormDisabled", val);
     },
     date: function date() {
+      if (!this.date) return;
       this.inputBridge = this.formatDate(this.date);
     },
     inputBridge: function inputBridge(val) {
@@ -43940,8 +43944,8 @@ function timestamp_createNativeLocaleFormatter(locale, getOptions) {
 
 var datepicker_component = normalizeComponent(
   composed_datepickervue_type_script_lang_ts_,
-  datepickervue_type_template_id_26bf1270_render,
-  datepickervue_type_template_id_26bf1270_staticRenderFns,
+  datepickervue_type_template_id_0c3912ae_render,
+  datepickervue_type_template_id_0c3912ae_staticRenderFns,
   false,
   null,
   null,
