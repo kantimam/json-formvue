@@ -17,9 +17,10 @@
             :rules="menu ? [] : inputRules"
             :class="`ondigo-input ondigo-textfield ondigo-input-_${identifier}`"
             :inputBridge="inputBridge"
-            :identifier="'_' + identifier"
+            :identifier="subIdentifier"
             :requiredLabel="requiredLabel"
-            :name="name"
+            :name="subInputName"
+            :formName="formName"
             v-bind="{
               ...$attrs,
               defaultValue: formattedDefaultValue,
@@ -53,7 +54,7 @@
 
 <script lang="ts">
 import 'reflect-metadata' // infer vue prop type validation by ts-definition; import this before vue-property-decorator!
-import {createInputRules, createRequiredLabel, getPlaceholder, isRequired} from "@/lib/util";
+import {createInputName, createInputRules, createRequiredLabel, getPlaceholder, isRequired} from "@/lib/util";
 import {Component, Inject, Prop, Vue} from "vue-property-decorator";
 import {mixins} from "vue-class-component";
 import InputValueMixin from "@/components/mixin/InputValueMixin";
@@ -109,6 +110,9 @@ export default class OnDatePicker extends mixins(InputValueMixin) {
   @Prop()
   readonly name!: string
 
+  @Prop()
+  readonly formName!: string
+
   @Prop({
     default: () => {
     }
@@ -126,6 +130,14 @@ export default class OnDatePicker extends mixins(InputValueMixin) {
   date: string | null = null
   menu = false;
   formattedInput: string | null = null
+
+  get subIdentifier() {
+    return '_' + this.identifier;
+  }
+
+  get subInputName() {
+    return createInputName(this.formName, '_' + this.identifier);
+  }
 
   get inputRules() {
     if (this.rules && Array.isArray(this.rules)) return this.rules;
@@ -221,11 +233,11 @@ export default class OnDatePicker extends mixins(InputValueMixin) {
   }
 
   get inputBridge() {
-    return this.$store.getters.getCurrentInputValue('_' + this.identifier) || "";
+    return this.$store.getters.getCurrentInputValue(this.subIdentifier) || "";
   }
 
   set inputBridge(value) {
-    this.$store.commit("updateInputValue", {key: '_' + this.identifier, value: value});
+    this.$store.commit("updateInputValue", {key: this.subIdentifier, value: value});
     this.$store.commit("updateInputValue", {key: this.identifier, value: this.formattedInput});
   }
 
