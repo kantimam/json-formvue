@@ -56,7 +56,6 @@
         <v-icon color="primary">mdi-information-outline</v-icon>
       </div>
     </template>
-    <template slot="append-outer"><slot name="append"></slot></template>
   </v-text-field>
 </template>
 
