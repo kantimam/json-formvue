@@ -25658,12 +25658,12 @@ var base_input_component = normalizeComponent(
 )
 
 /* harmony default export */ var base_input = (base_input_component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1ca6af6a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/composed/textfield.vue?vue&type=template&id=42a23b04&
-var textfieldvue_type_template_id_42a23b04_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('on-text-field-base',_vm._g(_vm._b({attrs:{"properties":_vm.properties,"identifier":_vm.identifier,"required":_vm.isRequired,"requiredLabel":_vm.requiredLabel,"placeholder":_vm.placeholder,"errorMessages":_vm.inputError,"rules":_vm.inputRules},model:{value:(_vm.inputValue),callback:function ($$v) {_vm.inputValue=$$v},expression:"inputValue"}},'on-text-field-base',_vm.$attrs,false),_vm.$listeners))}
-var textfieldvue_type_template_id_42a23b04_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1ca6af6a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/composed/textfield.vue?vue&type=template&id=12206e4a&
+var textfieldvue_type_template_id_12206e4a_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('on-text-field-base',_vm._g(_vm._b({attrs:{"properties":_vm.properties,"identifier":_vm.identifier,"required":_vm.isRequired,"requiredLabel":_vm.requiredLabel,"placeholder":_vm.placeholder,"errorMessages":_vm.inputError,"rules":_vm.inputRules},model:{value:(_vm.inputValue),callback:function ($$v) {_vm.inputValue=$$v},expression:"inputValue"}},'on-text-field-base',_vm.$attrs,false),_vm.$listeners))}
+var textfieldvue_type_template_id_12206e4a_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/fields/composed/textfield.vue?vue&type=template&id=42a23b04&
+// CONCATENATED MODULE: ./src/components/fields/composed/textfield.vue?vue&type=template&id=12206e4a&
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1ca6af6a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/base/textfield/textfield.vue?vue&type=template&id=dcedc4e6&
 var textfieldvue_type_template_id_dcedc4e6_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('v-text-field',{ref:'ref-' + _vm.identifier,class:{
@@ -28388,10 +28388,11 @@ installComponents_default()(textfield_component, {VIcon: components_VIcon_VIcon,
 
 
 
-var textfieldvue_type_script_lang_ts_a;
+var textfieldvue_type_script_lang_ts_a, textfieldvue_type_script_lang_ts_b;
 
 
  // infer vue prop type validation by ts-definition; import this before vue-property-decorator!
+
 
 
 
@@ -28424,7 +28425,7 @@ var textfieldvue_type_script_lang_ts_OnTextField = /*#__PURE__*/function (_mixin
   }, {
     key: "inputRules",
     get: function get() {
-      return createInputRules(this.isRequired, this.validators, this.properties, true);
+      return createInputRules(this.isRequired, this.validators, this.properties, true, this.validatorsMap);
     }
   }, {
     key: "inputValue",
@@ -28462,6 +28463,8 @@ __decorate([Prop(), __metadata("design:type", typeof (textfieldvue_type_script_l
 
 __decorate([Prop(), __metadata("design:type", String)], textfieldvue_type_script_lang_ts_OnTextField.prototype, "identifier", void 0);
 
+__decorate([Inject('validatorsMap'), __metadata("design:type", typeof (textfieldvue_type_script_lang_ts_b = typeof /* Cannot get final name for export "ValidatorMap" in "./src/lib/validators.ts" (known exports: Validators, known reexports: ) */ undefined !== "undefined" && /* Cannot get final name for export "ValidatorMap" in "./src/lib/validators.ts" (known exports: Validators, known reexports: ) */ undefined) === "function" ? textfieldvue_type_script_lang_ts_b : Object)], textfieldvue_type_script_lang_ts_OnTextField.prototype, "validatorsMap", void 0);
+
 textfieldvue_type_script_lang_ts_OnTextField = __decorate([vue_class_component_esm({
   name: "OnTextField",
   components: {
@@ -28482,8 +28485,8 @@ textfieldvue_type_script_lang_ts_OnTextField = __decorate([vue_class_component_e
 
 var composed_textfield_component = normalizeComponent(
   fields_composed_textfieldvue_type_script_lang_ts_,
-  textfieldvue_type_template_id_42a23b04_render,
-  textfieldvue_type_template_id_42a23b04_staticRenderFns,
+  textfieldvue_type_template_id_12206e4a_render,
+  textfieldvue_type_template_id_12206e4a_staticRenderFns,
   false,
   null,
   null,

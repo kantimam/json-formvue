@@ -18,10 +18,11 @@
 import 'reflect-metadata' // infer vue prop type validation by ts-definition; import this before vue-property-decorator!
 import {createInputRules, createRequiredLabel, getPlaceholder, isRequired,} from "@/lib/util";
 import OnTextFieldBase from "../base/textfield/textfield.vue";
-import {Component, Prop} from "vue-property-decorator";
+import {Component, Inject, Prop} from "vue-property-decorator";
 import {mixins} from "vue-class-component";
 import InputValueMixin from "@/components/mixin/InputValueMixin";
 import {ElementProperties, InputValidator} from "@/lib/FormDefinition";
+import {ValidatorMap} from "@/lib/validators";
 
 @Component<OnTextField>({
   name: "OnTextField",
@@ -41,6 +42,9 @@ export default class OnTextField extends mixins(InputValueMixin) {
   @Prop()
   readonly identifier!: string
 
+  @Inject('validatorsMap')
+  readonly validatorsMap!: ValidatorMap
+
   get isRequired() {
     return isRequired(this.properties);
   }
@@ -50,7 +54,7 @@ export default class OnTextField extends mixins(InputValueMixin) {
   }
 
   get inputRules() {
-    return createInputRules(this.isRequired, this.validators, this.properties, true);
+    return createInputRules(this.isRequired, this.validators, this.properties, true, this.validatorsMap);
   }
 
   get inputValue() {
