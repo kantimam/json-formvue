@@ -18174,7 +18174,12 @@ function createStore(v, stateInit) {
           context.commit('setFormErrors', []);
           var formId = context.state.id;
           var formData = new FormData(vuetifyForm.$el); // parse formdata from underlying form element
-          // quickfix - radio buttons SOMETIMES not getting put into form data?!
+
+          console.log('native', formData);
+          formData.forEach(function (entry, key) {
+            console.log(key, entry);
+          });
+          console.log('Mixin:'); // quickfix - radio buttons SOMETIMES not getting put into form data?!
 
           var model = context.getters.getCurrentModel;
           model && Object.entries(model).forEach(function (_ref) {
@@ -18184,6 +18189,7 @@ function createStore(v, stateInit) {
 
             var mappedKey = "tx_form_formframework[".concat(formId, "][").concat(key, "]");
             if (value.hasError || key.startsWith('__') || value.value.length <= 0 || formData.has(mappedKey)) return;
+            console.log('synthetic', mappedKey, value.value);
             formData.append(mappedKey, value.value);
           }); // append all hidden fields to form data
 
@@ -18191,11 +18197,13 @@ function createStore(v, stateInit) {
           var hiddenFields = currentSchema === null || currentSchema === void 0 ? void 0 : (_currentSchema$elemen = currentSchema.elements) === null || _currentSchema$elemen === void 0 ? void 0 : _currentSchema$elemen.filter(function (element) {
             return element.type === 'Hidden';
           });
+          console.log('hidden fields', hiddenFields);
           hiddenFields && hiddenFields.forEach(function (field) {
             if (field.identifier === '__trustedProperties') {
               // trusted properties has a different naming convention for whatever reason, maybe fix that in the backend later...
               formData.append('tx_form_formframework[__trustedProperties]', field.defaultValue);
             } else {
+              console.log(field.name, field.defaultValue);
               formData.append(field.name, field.defaultValue);
             }
           });
@@ -18228,6 +18236,10 @@ function createStore(v, stateInit) {
       },
       handleSuccessResponse: function handleSuccessResponse(context, successJson) {
         return _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+          var _successJson$api;
+
+          var _successJson$api2;
+
           return regeneratorRuntime.wrap(function _callee$(_context) {
             while (1) {
               switch (_context.prev = _context.next) {
@@ -18252,12 +18264,17 @@ function createStore(v, stateInit) {
                   return _context.abrupt("return");
 
                 case 6:
-                  if (!(successJson.error || successJson.errors && successJson.errors.length > 0)) {
+                  if (!(successJson.error || successJson.errors && successJson.errors.length > 0 || (_successJson$api = successJson.api) !== null && _successJson$api !== void 0 && _successJson$api.errors)) {
                     _context.next = 9;
                     break;
                   }
 
-                  context.commit('setFormErrors', successJson.error ? [successJson.error] : successJson.errors);
+                  if ((_successJson$api2 = successJson.api) !== null && _successJson$api2 !== void 0 && _successJson$api2.errors) {
+                    context.commit('setFormErrors', successJson.api.errors);
+                  } else {
+                    context.commit('setFormErrors', successJson.error ? [successJson.error] : successJson.errors);
+                  }
+
                   return _context.abrupt("return", context.commit('setLoading', false));
 
                 case 9:

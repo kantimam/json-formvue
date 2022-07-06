@@ -343,11 +343,20 @@ function createStore(v: typeof Vuex, stateInit: FormStateInit) {
                     const formId = context.state.id;
                     const formData = new FormData(vuetifyForm.$el); // parse formdata from underlying form element
 
+                    console.log('native', formData);
+                    formData.forEach((entry, key) => {
+                        console.log(key, entry);
+                    })
+
+                    console.log('Mixin:')
+
                     // quickfix - radio buttons SOMETIMES not getting put into form data?!
                     const model = context.getters.getCurrentModel as (Record<string, StoreEntry> | undefined);
                     model && Object.entries(model).forEach(([key, value]) => {
                         const mappedKey = `tx_form_formframework[${formId}][${key}]`;
                         if (value.hasError || key.startsWith('__') || value.value.length <= 0 || formData.has(mappedKey)) return;
+
+                        console.log('synthetic', mappedKey, value.value);
 
                         formData.append(mappedKey, value.value);
                     });
@@ -356,11 +365,14 @@ function createStore(v: typeof Vuex, stateInit: FormStateInit) {
                     const currentSchema = context.getters.getCurrentSchema as (Readonly<FormDefinition> | undefined);
                     const hiddenFields = currentSchema?.elements?.filter(element => element.type === 'Hidden');
 
+                    console.log('hidden fields', hiddenFields)
+
                     hiddenFields && hiddenFields.forEach(field => {
                         if (field.identifier === '__trustedProperties') {
                             // trusted properties has a different naming convention for whatever reason, maybe fix that in the backend later...
                             formData.append('tx_form_formframework[__trustedProperties]', field.defaultValue)
                         } else {
+                            console.log(field.name, field.defaultValue);
                             formData.append(field.name, field.defaultValue);
                         }
                     })
