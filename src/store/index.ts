@@ -12,6 +12,7 @@ import {
     FormWrapper,
     isFormDefinition
 } from "@/lib/FormDefinition";
+import RequestModifier from "@/store/request_modifier";
 
 export type StoreEntry = {
     id: string,
@@ -240,7 +241,6 @@ function createStore(v: typeof Vuex, stateInit: FormStateInit) {
                 state.loading = false;
             },
             setFormErrors(state, errorMessages) {
-                console.log('set form errors');
                 state.formErrors = errorMessages;
             },
             setLoading(state, isLoading) {
@@ -381,6 +381,8 @@ function createStore(v: typeof Vuex, stateInit: FormStateInit) {
 
                     const currentAction = (context.getters.getCurrentStep as FormStepConfig | undefined)?.formAction;
                     if (!currentAction) return;
+
+                    RequestModifier.modifyRequest(context, formData);
 
                     fetch(currentAction, {
                         method: "POST",

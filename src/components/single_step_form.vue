@@ -58,7 +58,6 @@ export default {
       return this.$store.getters.getErrorLabel;
     },
     formErrors() {
-      console.log('get form errors:', this.$store.getters.getFormErrors);
       return this.$store.getters.getFormErrors;
     },
     loading() {
