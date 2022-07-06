@@ -405,8 +405,15 @@ function createStore(v: typeof Vuex, stateInit: FormStateInit) {
 
                 if (await ResponseInterceptor.handleResponse(context, successJson)) return;
 
-                if (successJson.error || (successJson.errors && successJson.errors.length > 0)) {
-                    context.commit('setFormErrors', successJson.error ? [successJson.error] : successJson.errors);
+                if (successJson.error
+                    || (successJson.errors && successJson.errors.length > 0)
+                    || (successJson.api?.errors)) {
+
+                    if (successJson.api?.errors) {
+                        context.commit('setFormErrors', successJson.api.errors);
+                    } else {
+                        context.commit('setFormErrors', successJson.error ? [successJson.error] : successJson.errors);
+                    }
                     return context.commit('setLoading', false);
                 }
                 // handle redirect on success
