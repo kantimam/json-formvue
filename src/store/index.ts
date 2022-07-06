@@ -420,24 +420,19 @@ function createStore(v: typeof Vuex, stateInit: FormStateInit) {
 
                 if (await ResponseInterceptor.handleResponse(context, successJson)) return;
 
-                if (successJson.error
-                    || (successJson.errors && successJson.errors.length > 0)
-                    || (successJson.api?.errors)) {
-
-                    if (successJson.api?.errors) {
-                        console.log('set api errors', successJson.api.errors);
-                        context.commit('setFormErrors', successJson.api.errors);
-                    } else {
-                        context.commit('setFormErrors', successJson.error ? [successJson.error] : successJson.errors);
-                    }
+                if (successJson.error || (successJson.errors && successJson.errors.length > 0)) {
+                    context.commit('setFormErrors', successJson.error ? [successJson.error] : successJson.errors);
                     return context.commit('setLoading', false);
                 }
+                console.log('is not root error')
                 // handle redirect on success
                 if (successJson.status === 301 && successJson.redirectUri) {
                     await context.dispatch('handleResponseCallbacks', successJson);
                     window.location = successJson.redirectUri;
                     return;
                 }
+
+                console.log('is not root redirect')
 
                 // handle replace content with success message
                 if (successJson.status === 200 && successJson.content) {
@@ -450,8 +445,13 @@ function createStore(v: typeof Vuex, stateInit: FormStateInit) {
                     return context.commit('setFormFinished');
                 }
 
+                console.log('is not root content success')
+
+                console.log(!!successJson.api);
+
                 // handle loading next page after finishing callbacks if needed
                 if (successJson.api) {
+                    console.log('api', successJson.api);
                     if (successJson.api.status === 'failure') {
                         context.commit('setModelErrors', successJson.api.errors);
                         context.commit('setLoading', false);
