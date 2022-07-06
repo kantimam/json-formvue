@@ -18286,10 +18286,6 @@ function createStore(v, stateInit) {
       },
       handleSuccessResponse: function handleSuccessResponse(context, successJson) {
         return _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
-          var _successJson$api;
-
-          var _successJson$api2;
-
           return regeneratorRuntime.wrap(function _callee$(_context) {
             while (1) {
               switch (_context.prev = _context.next) {
@@ -18314,57 +18310,60 @@ function createStore(v, stateInit) {
                   return _context.abrupt("return");
 
                 case 6:
-                  if (!(successJson.error || successJson.errors && successJson.errors.length > 0 || (_successJson$api = successJson.api) !== null && _successJson$api !== void 0 && _successJson$api.errors)) {
+                  if (!(successJson.error || successJson.errors && successJson.errors.length > 0)) {
                     _context.next = 9;
                     break;
                   }
 
-                  if ((_successJson$api2 = successJson.api) !== null && _successJson$api2 !== void 0 && _successJson$api2.errors) {
-                    console.log('set api errors', successJson.api.errors);
-                    context.commit('setFormErrors', successJson.api.errors);
-                  } else {
-                    context.commit('setFormErrors', successJson.error ? [successJson.error] : successJson.errors);
-                  }
-
+                  context.commit('setFormErrors', successJson.error ? [successJson.error] : successJson.errors);
                   return _context.abrupt("return", context.commit('setLoading', false));
 
                 case 9:
+                  console.log('is not root error'); // handle redirect on success
+
                   if (!(successJson.status === 301 && successJson.redirectUri)) {
-                    _context.next = 14;
+                    _context.next = 15;
                     break;
                   }
 
-                  _context.next = 12;
+                  _context.next = 13;
                   return context.dispatch('handleResponseCallbacks', successJson);
 
-                case 12:
+                case 13:
                   window.location = successJson.redirectUri;
                   return _context.abrupt("return");
 
-                case 14:
+                case 15:
+                  console.log('is not root redirect'); // handle replace content with success message
+
                   if (!(successJson.status === 200 && successJson.content)) {
-                    _context.next = 19;
+                    _context.next = 21;
                     break;
                   }
 
-                  _context.next = 17;
+                  _context.next = 19;
                   return context.dispatch('handleResponseCallbacks', successJson);
 
-                case 17:
+                case 19:
                   context.commit('setFormResponse', {
                     error: 'success' in successJson ? !successJson.success : false,
                     html: successJson.content
                   });
                   return _context.abrupt("return", context.commit('setFormFinished'));
 
-                case 19:
+                case 21:
+                  console.log('is not root content success');
+                  console.log(!!successJson.api); // handle loading next page after finishing callbacks if needed
+
                   if (!successJson.api) {
-                    _context.next = 27;
+                    _context.next = 32;
                     break;
                   }
 
+                  console.log('api', successJson.api);
+
                   if (!(successJson.api.status === 'failure')) {
-                    _context.next = 24;
+                    _context.next = 29;
                     break;
                   }
 
@@ -18372,17 +18371,17 @@ function createStore(v, stateInit) {
                   context.commit('setLoading', false);
                   return _context.abrupt("return");
 
-                case 24:
-                  _context.next = 26;
+                case 29:
+                  _context.next = 31;
                   return context.dispatch('handleResponseCallbacks', successJson);
 
-                case 26:
+                case 31:
                   return _context.abrupt("return", context.commit('setFormStep', successJson));
 
-                case 27:
+                case 32:
                   context.commit('setLoading', false);
 
-                case 28:
+                case 33:
                 case "end":
                   return _context.stop();
               }
