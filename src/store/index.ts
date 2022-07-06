@@ -240,6 +240,7 @@ function createStore(v: typeof Vuex, stateInit: FormStateInit) {
                 state.loading = false;
             },
             setFormErrors(state, errorMessages) {
+                console.log('set form errors');
                 state.formErrors = errorMessages;
             },
             setLoading(state, isLoading) {
@@ -422,6 +423,7 @@ function createStore(v: typeof Vuex, stateInit: FormStateInit) {
                     || (successJson.api?.errors)) {
 
                     if (successJson.api?.errors) {
+                        console.log('set api errors', successJson.api.errors);
                         context.commit('setFormErrors', successJson.api.errors);
                     } else {
                         context.commit('setFormErrors', successJson.error ? [successJson.error] : successJson.errors);
