@@ -18223,12 +18223,7 @@ function createStore(v, stateInit) {
           context.commit('setFormErrors', []);
           var formId = context.state.id;
           var formData = new FormData(vuetifyForm.$el); // parse formdata from underlying form element
-
-          console.log('native', formData);
-          formData.forEach(function (entry, key) {
-            console.log(key, entry);
-          });
-          console.log('Mixin:'); // quickfix - radio buttons SOMETIMES not getting put into form data?!
+          // quickfix - radio buttons SOMETIMES not getting put into form data?!
 
           var model = context.getters.getCurrentModel;
           model && Object.entries(model).forEach(function (_ref) {
@@ -18238,7 +18233,6 @@ function createStore(v, stateInit) {
 
             var mappedKey = "tx_form_formframework[".concat(formId, "][").concat(key, "]");
             if (value.hasError || key.startsWith('__') || value.value.length <= 0 || formData.has(mappedKey)) return;
-            console.log('synthetic', mappedKey, value.value);
             formData.append(mappedKey, value.value);
           }); // append all hidden fields to form data
 
@@ -18246,13 +18240,11 @@ function createStore(v, stateInit) {
           var hiddenFields = currentSchema === null || currentSchema === void 0 ? void 0 : (_currentSchema$elemen = currentSchema.elements) === null || _currentSchema$elemen === void 0 ? void 0 : _currentSchema$elemen.filter(function (element) {
             return element.type === 'Hidden';
           });
-          console.log('hidden fields', hiddenFields);
           hiddenFields && hiddenFields.forEach(function (field) {
             if (field.identifier === '__trustedProperties') {
               // trusted properties has a different naming convention for whatever reason, maybe fix that in the backend later...
               formData.append('tx_form_formframework[__trustedProperties]', field.defaultValue);
             } else {
-              console.log(field.name, field.defaultValue);
               formData.append(field.name, field.defaultValue);
             }
           });
@@ -18319,51 +18311,42 @@ function createStore(v, stateInit) {
                   return _context.abrupt("return", context.commit('setLoading', false));
 
                 case 9:
-                  console.log('is not root error'); // handle redirect on success
-
                   if (!(successJson.status === 301 && successJson.redirectUri)) {
-                    _context.next = 15;
+                    _context.next = 14;
                     break;
                   }
 
-                  _context.next = 13;
+                  _context.next = 12;
                   return context.dispatch('handleResponseCallbacks', successJson);
 
-                case 13:
+                case 12:
                   window.location = successJson.redirectUri;
                   return _context.abrupt("return");
 
-                case 15:
-                  console.log('is not root redirect'); // handle replace content with success message
-
+                case 14:
                   if (!(successJson.status === 200 && successJson.content)) {
-                    _context.next = 21;
+                    _context.next = 19;
                     break;
                   }
 
-                  _context.next = 19;
+                  _context.next = 17;
                   return context.dispatch('handleResponseCallbacks', successJson);
 
-                case 19:
+                case 17:
                   context.commit('setFormResponse', {
                     error: 'success' in successJson ? !successJson.success : false,
                     html: successJson.content
                   });
                   return _context.abrupt("return", context.commit('setFormFinished'));
 
-                case 21:
-                  console.log('is not root content success');
-                  console.log(!!successJson.api); // handle loading next page after finishing callbacks if needed
-
+                case 19:
                   if (!successJson.api) {
-                    _context.next = 32;
+                    _context.next = 27;
                     break;
                   }
 
-                  console.log('api', successJson.api);
-
                   if (!(successJson.api.status === 'failure')) {
-                    _context.next = 29;
+                    _context.next = 24;
                     break;
                   }
 
@@ -18371,17 +18354,17 @@ function createStore(v, stateInit) {
                   context.commit('setLoading', false);
                   return _context.abrupt("return");
 
-                case 29:
-                  _context.next = 31;
+                case 24:
+                  _context.next = 26;
                   return context.dispatch('handleResponseCallbacks', successJson);
 
-                case 31:
+                case 26:
                   return _context.abrupt("return", context.commit('setFormStep', successJson));
 
-                case 32:
+                case 27:
                   context.commit('setLoading', false);
 
-                case 33:
+                case 28:
                 case "end":
                   return _context.stop();
               }
@@ -28730,15 +28713,15 @@ var textfield_password_component = normalizeComponent(
 )
 
 /* harmony default export */ var textfield_password = (textfield_password_component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1ca6af6a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/hiddenfield_honeypot.vue?vue&type=template&id=2ba222ec&scoped=true&
-var hiddenfield_honeypotvue_type_template_id_2ba222ec_scoped_true_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('input',{style:({
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1ca6af6a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/hiddenfield_honeypot.vue?vue&type=template&id=7075f102&scoped=true&
+var hiddenfield_honeypotvue_type_template_id_7075f102_scoped_true_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('input',{style:({
       position: 'absolute',
       margin: '0 0 0 -999em',
-    }),attrs:{"type":"text","name":_vm.name,"autocomplete":"false","tabindex":"-1","aria-hidden":"true"}})])}
-var hiddenfield_honeypotvue_type_template_id_2ba222ec_scoped_true_staticRenderFns = []
+    }),attrs:{"type":"text","name":_vm.name,"autocomplete":"chrome-off","tabindex":"-1","aria-hidden":"true"}})])}
+var hiddenfield_honeypotvue_type_template_id_7075f102_scoped_true_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/fields/hiddenfield_honeypot.vue?vue&type=template&id=2ba222ec&scoped=true&
+// CONCATENATED MODULE: ./src/components/fields/hiddenfield_honeypot.vue?vue&type=template&id=7075f102&scoped=true&
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/hiddenfield_honeypot.vue?vue&type=script&lang=js&
 //
@@ -28781,11 +28764,11 @@ var hiddenfield_honeypotvue_type_template_id_2ba222ec_scoped_true_staticRenderFn
 
 var hiddenfield_honeypot_component = normalizeComponent(
   fields_hiddenfield_honeypotvue_type_script_lang_js_,
-  hiddenfield_honeypotvue_type_template_id_2ba222ec_scoped_true_render,
-  hiddenfield_honeypotvue_type_template_id_2ba222ec_scoped_true_staticRenderFns,
+  hiddenfield_honeypotvue_type_template_id_7075f102_scoped_true_render,
+  hiddenfield_honeypotvue_type_template_id_7075f102_scoped_true_staticRenderFns,
   false,
   null,
-  "2ba222ec",
+  "7075f102",
   null
   
 )
