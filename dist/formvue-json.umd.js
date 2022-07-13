@@ -18226,14 +18226,12 @@ function createStore(v, stateInit) {
           // quickfix - radio buttons SOMETIMES not getting put into form data?!
 
           var model = context.getters.getCurrentModel;
-          console.log(model);
           model && Object.entries(model).forEach(function (_ref) {
             var _ref2 = _slicedToArray(_ref, 2),
                 key = _ref2[0],
                 value = _ref2[1];
 
             var mappedKey = "tx_form_formframework[".concat(formId, "][").concat(key, "]");
-            if (!value.value) console.log('store entry is null:', key, value);
             if (value.hasError || key.startsWith('__') || !(value !== null && value !== void 0 && value.value) || value.value.length <= 0 || formData.has(mappedKey)) return;
             formData.append(mappedKey, value.value);
           }); // append all hidden fields to form data

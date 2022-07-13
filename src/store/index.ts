@@ -346,10 +346,8 @@ function createStore(v: typeof Vuex, stateInit: FormStateInit) {
 
                     // quickfix - radio buttons SOMETIMES not getting put into form data?!
                     const model = context.getters.getCurrentModel as (Record<string, StoreEntry> | undefined);
-                    console.log(model);
                     model && Object.entries(model).forEach(([key, value]) => {
                         const mappedKey = `tx_form_formframework[${formId}][${key}]`;
-                        if (!value.value) console.log('store entry is null:', key, value)
                         if (value.hasError || key.startsWith('__') || !value?.value || value.value.length <= 0 || formData.has(mappedKey)) return;
 
                         formData.append(mappedKey, value.value);
