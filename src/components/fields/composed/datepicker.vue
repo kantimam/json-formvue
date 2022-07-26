@@ -248,7 +248,10 @@ export default class OnDatePicker extends mixins(InputValueMixin) {
     // when default values are set, they are in ISO format, but we need our masked format for this component.
     // fix it via the formattedDefaultValue property
     if (isIsoFormatted(stored)) {
-      this.$store.commit("updateInputValue", {key: this.identifier, value: this.formattedDefaultValue});
+      this.$store.commit("updateInputValue", {key: this.identifier, value: stored});
+      this.$store.commit("updateInputValue", {key: this.subIdentifier, value: this.formattedDefaultValue});
+
+      this.formattedInput = toIsoFormatWithOffset(new Date(stored));
     } else {
       this.updateFormattedValue(stored);
     }
@@ -269,7 +272,6 @@ export default class OnDatePicker extends mixins(InputValueMixin) {
 
   updateFormattedValue(val: string) {
     const parsed = this.parseDate(val);
-
     if (!parsed) return;
 
     if (parsed !== this.date) this.date = parsed;

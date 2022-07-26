@@ -7,6 +7,7 @@
         position: 'absolute',
         margin: '0 0 0 -999em',
       }"
+      autocomplete="chrome-off"
       tabindex="-1"
       aria-hidden="true"
     />

@@ -12,6 +12,7 @@ import {
     FormWrapper,
     isFormDefinition
 } from "@/lib/FormDefinition";
+import RequestModifier from "@/store/request_modifier";
 
 export type StoreEntry = {
     id: string,
@@ -347,7 +348,7 @@ function createStore(v: typeof Vuex, stateInit: FormStateInit) {
                     const model = context.getters.getCurrentModel as (Record<string, StoreEntry> | undefined);
                     model && Object.entries(model).forEach(([key, value]) => {
                         const mappedKey = `tx_form_formframework[${formId}][${key}]`;
-                        if (value.hasError || key.startsWith('__') || value.value.length <= 0 || formData.has(mappedKey)) return;
+                        if (value.hasError || key.startsWith('__') || !value?.value || value.value.length <= 0 || formData.has(mappedKey)) return;
 
                         formData.append(mappedKey, value.value);
                     });
@@ -368,6 +369,8 @@ function createStore(v: typeof Vuex, stateInit: FormStateInit) {
 
                     const currentAction = (context.getters.getCurrentStep as FormStepConfig | undefined)?.formAction;
                     if (!currentAction) return;
+
+                    RequestModifier.modifyRequest(context, formData);
 
                     fetch(currentAction, {
                         method: "POST",

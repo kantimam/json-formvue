@@ -17231,6 +17231,7 @@ __webpack_require__.d(__webpack_exports__, "MultiCheckbox", function() { return 
 __webpack_require__.d(__webpack_exports__, "DatePicker", function() { return /* reexport */ datepicker; });
 __webpack_require__.d(__webpack_exports__, "ContentElement", function() { return /* reexport */ content_element; });
 __webpack_require__.d(__webpack_exports__, "registerResponseInterceptor", function() { return /* reexport */ registerResponseInterceptor; });
+__webpack_require__.d(__webpack_exports__, "registerRequestModifier", function() { return /* reexport */ registerRequestModifier; });
 
 // NAMESPACE OBJECT: ./node_modules/vuetify/lib/services/goto/easing-patterns.js
 var easing_patterns_namespaceObject = {};
@@ -17893,6 +17894,44 @@ var response_interceptor_ResponseInterceptor;
 function isFormDefinition(obj) {
   return 'api' in obj;
 }
+// CONCATENATED MODULE: ./src/store/request_modifier.ts
+
+function registerRequestModifier(handler) {
+  return request_modifier_RequestModifier.register(handler);
+}
+var request_modifier_RequestModifier;
+
+(function (RequestModifier) {
+  var requestModifiers = [];
+
+  function register(handler) {
+    requestModifiers.push(handler);
+  }
+
+  RequestModifier.register = register;
+
+  function modifyRequest(context, formData) {
+    var _iterator = _createForOfIteratorHelper(requestModifiers),
+        _step;
+
+    try {
+      for (_iterator.s(); !(_step = _iterator.n()).done;) {
+        var interceptor = _step.value;
+        interceptor(context, formData);
+      }
+    } catch (err) {
+      _iterator.e(err);
+    } finally {
+      _iterator.f();
+    }
+
+    return false;
+  }
+
+  RequestModifier.modifyRequest = modifyRequest;
+})(request_modifier_RequestModifier || (request_modifier_RequestModifier = {}));
+
+/* harmony default export */ var request_modifier = (request_modifier_RequestModifier);
 // CONCATENATED MODULE: ./src/store/index.ts
 
 
@@ -17900,6 +17939,7 @@ function isFormDefinition(obj) {
 
 
 var _excluded = ["formData", "callbacksMap"];
+
 
 
 
@@ -18192,7 +18232,7 @@ function createStore(v, stateInit) {
                 value = _ref2[1];
 
             var mappedKey = "tx_form_formframework[".concat(formId, "][").concat(key, "]");
-            if (value.hasError || key.startsWith('__') || value.value.length <= 0 || formData.has(mappedKey)) return;
+            if (value.hasError || key.startsWith('__') || !(value !== null && value !== void 0 && value.value) || value.value.length <= 0 || formData.has(mappedKey)) return;
             formData.append(mappedKey, value.value);
           }); // append all hidden fields to form data
 
@@ -18210,6 +18250,7 @@ function createStore(v, stateInit) {
           });
           var currentAction = (_context$getters$getC = context.getters.getCurrentStep) === null || _context$getters$getC === void 0 ? void 0 : _context$getters$getC.formAction;
           if (!currentAction) return;
+          request_modifier.modifyRequest(context, formData);
           fetch(currentAction, {
             method: "POST",
             body: formData
@@ -25658,12 +25699,12 @@ var base_input_component = normalizeComponent(
 )
 
 /* harmony default export */ var base_input = (base_input_component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1ca6af6a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/composed/textfield.vue?vue&type=template&id=42a23b04&
-var textfieldvue_type_template_id_42a23b04_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('on-text-field-base',_vm._g(_vm._b({attrs:{"properties":_vm.properties,"identifier":_vm.identifier,"required":_vm.isRequired,"requiredLabel":_vm.requiredLabel,"placeholder":_vm.placeholder,"errorMessages":_vm.inputError,"rules":_vm.inputRules},model:{value:(_vm.inputValue),callback:function ($$v) {_vm.inputValue=$$v},expression:"inputValue"}},'on-text-field-base',_vm.$attrs,false),_vm.$listeners))}
-var textfieldvue_type_template_id_42a23b04_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1ca6af6a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/composed/textfield.vue?vue&type=template&id=12206e4a&
+var textfieldvue_type_template_id_12206e4a_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('on-text-field-base',_vm._g(_vm._b({attrs:{"properties":_vm.properties,"identifier":_vm.identifier,"required":_vm.isRequired,"requiredLabel":_vm.requiredLabel,"placeholder":_vm.placeholder,"errorMessages":_vm.inputError,"rules":_vm.inputRules},model:{value:(_vm.inputValue),callback:function ($$v) {_vm.inputValue=$$v},expression:"inputValue"}},'on-text-field-base',_vm.$attrs,false),_vm.$listeners))}
+var textfieldvue_type_template_id_12206e4a_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/fields/composed/textfield.vue?vue&type=template&id=42a23b04&
+// CONCATENATED MODULE: ./src/components/fields/composed/textfield.vue?vue&type=template&id=12206e4a&
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1ca6af6a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/base/textfield/textfield.vue?vue&type=template&id=dcedc4e6&
 var textfieldvue_type_template_id_dcedc4e6_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('v-text-field',{ref:'ref-' + _vm.identifier,class:{
@@ -28388,10 +28429,11 @@ installComponents_default()(textfield_component, {VIcon: components_VIcon_VIcon,
 
 
 
-var textfieldvue_type_script_lang_ts_a;
+var textfieldvue_type_script_lang_ts_a, textfieldvue_type_script_lang_ts_b;
 
 
  // infer vue prop type validation by ts-definition; import this before vue-property-decorator!
+
 
 
 
@@ -28424,7 +28466,7 @@ var textfieldvue_type_script_lang_ts_OnTextField = /*#__PURE__*/function (_mixin
   }, {
     key: "inputRules",
     get: function get() {
-      return createInputRules(this.isRequired, this.validators, this.properties, true);
+      return createInputRules(this.isRequired, this.validators, this.properties, true, this.validatorsMap);
     }
   }, {
     key: "inputValue",
@@ -28462,6 +28504,8 @@ __decorate([Prop(), __metadata("design:type", typeof (textfieldvue_type_script_l
 
 __decorate([Prop(), __metadata("design:type", String)], textfieldvue_type_script_lang_ts_OnTextField.prototype, "identifier", void 0);
 
+__decorate([Inject('validatorsMap'), __metadata("design:type", typeof (textfieldvue_type_script_lang_ts_b = typeof /* Cannot get final name for export "ValidatorMap" in "./src/lib/validators.ts" (known exports: Validators, known reexports: ) */ undefined !== "undefined" && /* Cannot get final name for export "ValidatorMap" in "./src/lib/validators.ts" (known exports: Validators, known reexports: ) */ undefined) === "function" ? textfieldvue_type_script_lang_ts_b : Object)], textfieldvue_type_script_lang_ts_OnTextField.prototype, "validatorsMap", void 0);
+
 textfieldvue_type_script_lang_ts_OnTextField = __decorate([vue_class_component_esm({
   name: "OnTextField",
   components: {
@@ -28482,8 +28526,8 @@ textfieldvue_type_script_lang_ts_OnTextField = __decorate([vue_class_component_e
 
 var composed_textfield_component = normalizeComponent(
   fields_composed_textfieldvue_type_script_lang_ts_,
-  textfieldvue_type_template_id_42a23b04_render,
-  textfieldvue_type_template_id_42a23b04_staticRenderFns,
+  textfieldvue_type_template_id_12206e4a_render,
+  textfieldvue_type_template_id_12206e4a_staticRenderFns,
   false,
   null,
   null,
@@ -28669,17 +28713,18 @@ var textfield_password_component = normalizeComponent(
 )
 
 /* harmony default export */ var textfield_password = (textfield_password_component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1ca6af6a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/hiddenfield_honeypot.vue?vue&type=template&id=528d740e&scoped=true&
-var hiddenfield_honeypotvue_type_template_id_528d740e_scoped_true_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('input',{style:({
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1ca6af6a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/hiddenfield_honeypot.vue?vue&type=template&id=7075f102&scoped=true&
+var hiddenfield_honeypotvue_type_template_id_7075f102_scoped_true_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('input',{style:({
       position: 'absolute',
       margin: '0 0 0 -999em',
-    }),attrs:{"type":"text","name":_vm.name,"tabindex":"-1","aria-hidden":"true"}})])}
-var hiddenfield_honeypotvue_type_template_id_528d740e_scoped_true_staticRenderFns = []
+    }),attrs:{"type":"text","name":_vm.name,"autocomplete":"chrome-off","tabindex":"-1","aria-hidden":"true"}})])}
+var hiddenfield_honeypotvue_type_template_id_7075f102_scoped_true_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/fields/hiddenfield_honeypot.vue?vue&type=template&id=528d740e&scoped=true&
+// CONCATENATED MODULE: ./src/components/fields/hiddenfield_honeypot.vue?vue&type=template&id=7075f102&scoped=true&
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/hiddenfield_honeypot.vue?vue&type=script&lang=js&
+//
 //
 //
 //
@@ -28719,11 +28764,11 @@ var hiddenfield_honeypotvue_type_template_id_528d740e_scoped_true_staticRenderFn
 
 var hiddenfield_honeypot_component = normalizeComponent(
   fields_hiddenfield_honeypotvue_type_script_lang_js_,
-  hiddenfield_honeypotvue_type_template_id_528d740e_scoped_true_render,
-  hiddenfield_honeypotvue_type_template_id_528d740e_scoped_true_staticRenderFns,
+  hiddenfield_honeypotvue_type_template_id_7075f102_scoped_true_render,
+  hiddenfield_honeypotvue_type_template_id_7075f102_scoped_true_staticRenderFns,
   false,
   null,
-  "528d740e",
+  "7075f102",
   null
   
 )
@@ -36557,8 +36602,8 @@ var onCaptcha_component = normalizeComponent(
 
 installComponents_default()(onCaptcha_component, {VProgressCircular: VProgressCircular_VProgressCircular})
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1ca6af6a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/composed/datepicker.vue?vue&type=template&id=3079dc56&
-var datepickervue_type_template_id_3079dc56_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.formattedInput),expression:"formattedInput"}],attrs:{"type":"hidden","name":_vm.name},domProps:{"value":(_vm.formattedInput)},on:{"input":function($event){if($event.target.composing){ return; }_vm.formattedInput=$event.target.value}}}),_c('v-menu',{ref:"menu",attrs:{"close-on-content-click":false,"transition":"scale-transition","offset-y":"","min-width":"auto"},scopedSlots:_vm._u([{key:"activator",fn:function(ref){
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1ca6af6a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/composed/datepicker.vue?vue&type=template&id=397d5bcb&
+var datepickervue_type_template_id_397d5bcb_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.formattedInput),expression:"formattedInput"}],attrs:{"type":"hidden","name":_vm.name},domProps:{"value":(_vm.formattedInput)},on:{"input":function($event){if($event.target.composing){ return; }_vm.formattedInput=$event.target.value}}}),_c('v-menu',{ref:"menu",attrs:{"close-on-content-click":false,"transition":"scale-transition","offset-y":"","min-width":"auto"},scopedSlots:_vm._u([{key:"activator",fn:function(ref){
 var on = ref.on;
 var attrs = ref.attrs;
 return [_c('masked-text',_vm._g(_vm._b({ref:"masked",class:("ondigo-input ondigo-textfield ondigo-input-_" + _vm.identifier),attrs:{"mask-active":_vm.maskActive,"placeholder":_vm.placeholder,"rules":_vm.menu ? [] : _vm.inputRules,"inputBridge":_vm.inputBridge,"identifier":_vm.subIdentifier,"requiredLabel":_vm.requiredLabel,"name":_vm.subInputName,"formName":_vm.formName}},'masked-text',Object.assign({}, _vm.$attrs,
@@ -36567,10 +36612,10 @@ return [_c('masked-text',_vm._g(_vm._b({ref:"masked",class:("ondigo-input ondigo
               // mixin generated MaskedText properties
               {pattern: _vm.maskPattern,
               placeholder: '_'})}),false),_vm.$listeners),[_c('template',{slot:"append-masked"},[_c('div',_vm._g(_vm._b({staticClass:"ondigo-icon-button"},'div',attrs,false),on),[_c('v-icon',{attrs:{"color":_vm.menu ? 'primary' : ''}},[_vm._v("mdi-calendar")])],1)])],2)]}}]),model:{value:(_vm.menu),callback:function ($$v) {_vm.menu=$$v},expression:"menu"}},[_c('v-date-picker',{attrs:{"active-picker":_vm.activePicker,"max":_vm.maxDate,"min":_vm.minDate,"locale":_vm.locale || _vm.navigator.language || 'en-US'},on:{"update:activePicker":function($event){_vm.activePicker=$event},"update:active-picker":function($event){_vm.activePicker=$event},"change":_vm.save},model:{value:(_vm.date),callback:function ($$v) {_vm.date=$$v},expression:"date"}})],1)],1)}
-var datepickervue_type_template_id_3079dc56_staticRenderFns = []
+var datepickervue_type_template_id_397d5bcb_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/fields/composed/datepicker.vue?vue&type=template&id=3079dc56&
+// CONCATENATED MODULE: ./src/components/fields/composed/datepicker.vue?vue&type=template&id=397d5bcb&
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1ca6af6a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/fields/composed/textfield_masked.vue?vue&type=template&id=0141350a&
 var textfield_maskedvue_type_template_id_0141350a_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('on-text-field-base',_vm._g(_vm._b({ref:"field",attrs:{"properties":_vm.properties,"identifier":_vm.identifier,"required":_vm.isRequired,"requiredLabel":_vm.internalRequiredLabel,"placeholder":_vm.placeholder,"errorMessages":_vm.inputError,"rules":_vm.inputRules},on:{"input":_vm.input,"focus":_vm.focus,"blur":_vm.blur},model:{value:(_vm.inputValue),callback:function ($$v) {_vm.inputValue=$$v},expression:"inputValue"}},'on-text-field-base',_vm.$attrs,false),_vm.$listeners),[_c('template',{slot:"append"},[_vm._t("append-masked")],2)],2)}
@@ -41458,8 +41503,13 @@ var datepickervue_type_script_lang_ts_OnDatePicker = /*#__PURE__*/function (_mix
       if (isIsoFormatted(stored)) {
         this.$store.commit("updateInputValue", {
           key: this.identifier,
+          value: stored
+        });
+        this.$store.commit("updateInputValue", {
+          key: this.subIdentifier,
           value: this.formattedDefaultValue
         });
+        this.formattedInput = toIsoFormatWithOffset(new Date(stored));
       } else {
         this.updateFormattedValue(stored);
       }
@@ -43958,8 +44008,8 @@ function timestamp_createNativeLocaleFormatter(locale, getOptions) {
 
 var datepicker_component = normalizeComponent(
   composed_datepickervue_type_script_lang_ts_,
-  datepickervue_type_template_id_3079dc56_render,
-  datepickervue_type_template_id_3079dc56_staticRenderFns,
+  datepickervue_type_template_id_397d5bcb_render,
+  datepickervue_type_template_id_397d5bcb_staticRenderFns,
   false,
   null,
   null,
@@ -44886,6 +44936,7 @@ var content_element_component = normalizeComponent(
  // PUBLIC OPTIONAL FUNCTIONS AND HELPERS
 
  // re export all public modules
+
 
 
 

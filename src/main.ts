@@ -84,4 +84,5 @@ export {
 }
 
 export { registerResponseInterceptor } from '@/store/response_interceptor';
+export { registerRequestModifier } from '@/store/request_modifier';
 
