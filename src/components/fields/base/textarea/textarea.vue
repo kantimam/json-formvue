@@ -38,6 +38,7 @@
       @focus="focus"
       @change="change"
       @input="input"
+      v-model="inputValue"
   >
     <template slot="prepend-outer"><slot name="prepend"></slot></template>
     <template slot="prepend-inner" v-if="!required">
@@ -57,6 +58,8 @@
 <script lang="ts">
 import {Component, Vue} from 'vue-property-decorator';
 import './textarea.scss';
+import InputValueMixin from "@/components/mixin/InputValueMixin";
+import {mixins} from "vue-class-component";
 
 const Props = Vue.extend({
   props: {
@@ -194,7 +197,7 @@ const Props = Vue.extend({
     },
   }
 })
-export default class OnTextareaBase extends Props {
+export default class OnTextareaBase extends mixins(Props, InputValueMixin) {
   readonly $refs!: Partial<Record<string, HTMLElement>>
 
   updated = false
