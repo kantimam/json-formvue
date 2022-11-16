@@ -11,11 +11,6 @@ It is tailored to be used with another Typo3 library "[Extended Form Framework](
 - install the newest version of formvue-json via npm.
 - register the custom registry url for @ondigo-internal npm packages (see `.npmrc`)
 
-Install command while this repository is private
-
-```
-npm i git+https://formvue-json:yb77VU1nUyPe9Sx5FpDo@git.ondigo.io/proj-typo3/formvue-json.git#1.8.2
-```
 
 Most noteably this will install Vue version 2.6.11, Vuetify 2.4.0 and Vuex 3.4.0  
 Already having different versions of these libraries in your project could lead to problems.   
